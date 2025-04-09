@@ -9,7 +9,8 @@ import {
   CarouselContent, 
   CarouselItem, 
   CarouselNext, 
-  CarouselPrevious 
+  CarouselPrevious,
+  type CarouselApi
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -147,7 +148,7 @@ const FeaturesSection = () => {
               loop: true,
             }}
             className="w-full"
-            onSelect={(api) => {
+            onSelect={(api: CarouselApi) => {
               if (api) {
                 setActiveFeature(api.selectedScrollSnap());
               }
