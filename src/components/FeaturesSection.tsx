@@ -2,8 +2,18 @@
 import { 
   LayoutDashboard, MessageSquareText, Calendar, Bell, 
   Briefcase, FileText, GraduationCap, Users, Target, 
-  LineChart, CalendarClock, Medal, Handshake, Globe
+  LineChart, CalendarClock, Medal, Globe, ChevronLeft, ChevronRight
 } from "lucide-react";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const features = [
   {
@@ -84,13 +94,6 @@ const features = [
     textColor: "text-fuchsia-700"
   },
   {
-    title: "Team Huddle",
-    description: "Foster better collaboration and problem solving with your team.",
-    icon: Users,
-    color: "bg-lime-100",
-    textColor: "text-lime-700"
-  },
-  {
     title: "Gamification & Badges",
     description: "Track your progress, earn digital rewards, and showcase your expertise.",
     icon: Medal,
@@ -107,6 +110,8 @@ const features = [
 ];
 
 const FeaturesSection = () => {
+  const [activeFeature, setActiveFeature] = useState(0);
+
   return (
     <div id="features" className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,8 +124,8 @@ const FeaturesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {features.map((feature, index) => (
+        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
+          {features.slice(0, 8).map((feature, index) => (
             <div 
               key={index} 
               className="feature-card group"
@@ -134,8 +139,59 @@ const FeaturesSection = () => {
           ))}
         </div>
 
+        {/* Horizontal Carousel for Features */}
+        <div className="mb-16">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+            onSelect={(api) => {
+              if (api) {
+                setActiveFeature(api.selectedScrollSnap());
+              }
+            }}
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {features.map((feature, index) => (
+                <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                  <div className="p-1">
+                    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 h-full">
+                      <CardContent className="flex flex-col items-center p-6">
+                        <div className={cn(
+                          feature.color,
+                          feature.textColor,
+                          "rounded-full w-16 h-16 flex items-center justify-center mb-5 transition-transform hover:scale-110"
+                        )}>
+                          <feature.icon size={32} />
+                        </div>
+                        <h3 className="text-xl font-semibold mb-3 text-center">{feature.title}</h3>
+                        <p className="text-gray-600 text-center">{feature.description}</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="hidden md:flex justify-center mt-4 gap-1">
+              {features.map((_, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "h-2 w-2 rounded-full transition-all duration-300",
+                    activeFeature === index ? "bg-synapse-primary w-4" : "bg-gray-300"
+                  )}
+                />
+              ))}
+            </div>
+            <CarouselPrevious className="absolute left-4 top-1/3" />
+            <CarouselNext className="absolute right-4 top-1/3" />
+          </Carousel>
+        </div>
+
         {/* Feature focus modal - similar to the image shared */}
-        <div className="mt-20 bg-gray-900 rounded-xl shadow-xl overflow-hidden">
+        <div className="mt-10 bg-gray-900 rounded-xl shadow-xl overflow-hidden">
           <div className="grid md:grid-cols-7 gap-0">
             <div className="md:col-span-5 p-6 md:p-10 bg-gradient-to-br from-gray-900 to-gray-800">
               <h3 className="text-xl md:text-2xl font-bold text-white mb-4">Regulatory Analysis through AI</h3>

@@ -7,8 +7,23 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import FAQSection from "../components/FAQSection";
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
+import { useEffect } from "react";
 
 const Index = () => {
+  // Ensure embla carousel is properly initialized on page load
+  useEffect(() => {
+    const handleResize = () => {
+      window.dispatchEvent(new Event('resize'));
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Navbar />
