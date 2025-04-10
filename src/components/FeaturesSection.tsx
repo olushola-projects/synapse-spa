@@ -1,6 +1,8 @@
+
 import { 
-  DollarSign, LineChart, FileText, Users, History, 
-  ArrowRight, Mail, Play, ChevronLeft, ChevronRight
+  LayoutDashboard, Bot, Calendar, Newspaper, Briefcase, FilePen,
+  BookOpen, Users, Mic, Lightbulb, Rocket, UsersRound, 
+  Award, Globe, ChevronLeft, ChevronRight, Play
 } from "lucide-react";
 import { 
   Carousel, 
@@ -15,61 +17,110 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useState, useCallback, useEffect } from "react";
 
-// Features data based on the image
+// GRC professional features data
 const features = [
   {
-    title: "Live Pricing",
-    description: "Real-time stock prices and market data to help you make timely investment decisions.",
-    icon: DollarSign,
+    title: "Customizable Dashboards",
+    description: "Personalize your workspace to focus on the information that matters most to you.",
+    icon: LayoutDashboard,
     color: "bg-blue-900/20",
     textColor: "text-blue-400"
   },
   {
-    title: "Analyst Estimates",
-    description: "Get insights from top Wall Street analysts and see consensus recommendations.",
-    icon: LineChart,
+    title: "Regulatory Analysis Chatbot",
+    description: "Leverage Dara, our AI copilot, for instant regulatory insights and actionable compliance recommendations.",
+    icon: Bot,
     color: "bg-purple-900/20",
     textColor: "text-purple-400"
   },
   {
-    title: "Company Financials",
-    description: "Deep dive into balance sheets, income statements, and cash flows for comprehensive analysis.",
-    icon: FileText,
+    title: "Regulatory Calendar",
+    description: "Stay current with scheduled deadlines and breaking regulatory news.",
+    icon: Calendar,
     color: "bg-emerald-900/20",
     textColor: "text-emerald-400"
   },
   {
-    title: "Peer Analysis",
-    description: "Compare companies within the same industry to identify relative strengths and weaknesses.",
-    icon: Users,
+    title: "Daily Regulatory Insights",
+    description: "Receive timely, bite-sized updates to keep you informed.",
+    icon: Newspaper,
     color: "bg-amber-900/20",
     textColor: "text-amber-400"
   },
   {
-    title: "Historical Earnings",
-    description: "Explore past performance with detailed historical earnings data. Track company growth and spot patterns over time.",
-    icon: History,
+    title: "Job Matching",
+    description: "Discover career opportunities that align with your expertise.",
+    icon: Briefcase,
     color: "bg-red-900/20",
     textColor: "text-red-400"
   },
   {
-    title: "Insider Transactions",
-    description: "Follow buying and selling patterns of company executives and major shareholders.",
-    icon: ArrowRight,
+    title: "CV Surgery",
+    description: "Elevate your professional profile with expert guidance.",
+    icon: FilePen,
     color: "bg-indigo-900/20",
     textColor: "text-indigo-400"
   },
   {
-    title: "Email Updates",
-    description: "Stay informed with customizable email alerts for price movements, news, and more.",
-    icon: Mail,
+    title: "Classes",
+    description: "Experience immersive learning with interactive voiceovers.",
+    icon: BookOpen,
     color: "bg-cyan-900/20",
     textColor: "text-cyan-400"
+  },
+  {
+    title: "Networking & Forum",
+    description: "Connect with peers, share knowledge, and ask the community for advice.",
+    icon: Users,
+    color: "bg-teal-900/20",
+    textColor: "text-teal-400"
+  },
+  {
+    title: "Interview Preparation",
+    description: "Combine AI insights with human coaching for interview success.",
+    icon: Mic,
+    color: "bg-pink-900/20",
+    textColor: "text-pink-400"
+  },
+  {
+    title: "Career Insights",
+    description: "Gain personalized advice and plan your next steps.",
+    icon: Lightbulb,
+    color: "bg-orange-900/20",
+    textColor: "text-orange-400"
+  },
+  {
+    title: "Events & Projects",
+    description: "Engage in live discussions and collaborate on real-time initiatives.",
+    icon: Rocket,
+    color: "bg-violet-900/20",
+    textColor: "text-violet-400"
+  },
+  {
+    title: "Team Huddle",
+    description: "Foster better collaboration and problem solving with your team.",
+    icon: UsersRound,
+    color: "bg-green-900/20",
+    textColor: "text-green-400"
+  },
+  {
+    title: "Gamification & Badges",
+    description: "Track your progress, earn digital rewards, and showcase your expertise.",
+    icon: Award,
+    color: "bg-yellow-900/20",
+    textColor: "text-yellow-400"
+  },
+  {
+    title: "Mentorship & Translation",
+    description: "Access expert mentorship and multilingual support for a global perspective.",
+    icon: Globe,
+    color: "bg-blue-900/20",
+    textColor: "text-blue-400"
   }
 ];
 
 const FeaturesSection = () => {
-  const [activeFeature, setActiveFeature] = useState(4); // Start with Historical Earnings selected
+  const [activeFeature, setActiveFeature] = useState(4); // Start with Job Matching selected 
   const [api, setApi] = useState<CarouselApi>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -103,7 +154,7 @@ const FeaturesSection = () => {
     setApi(newApi);
     onApiChange(newApi);
 
-    // Initialize to Historical Earnings (index 4)
+    // Initialize to Job Matching (index 4)
     setTimeout(() => {
       newApi.scrollTo(4, false);
     }, 100);
@@ -114,10 +165,10 @@ const FeaturesSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">
-            Powerful Analysis Tools for Investors
+            Powerful GRC Tools for Compliance Professionals
           </h2>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            Get comprehensive data and insights to make informed investment decisions.
+            Get comprehensive regulatory insights and career development tools designed for GRC professionals.
           </p>
         </div>
 
@@ -163,7 +214,7 @@ const FeaturesSection = () => {
                           
                           {/* Preview button at bottom */}
                           <Button variant="ghost" className="w-fit text-gray-300 gap-2 mt-4 group">
-                            <span>Preview {feature.title.toLowerCase()}</span>
+                            <span>Learn about {feature.title.toLowerCase()}</span>
                             <Play className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                           </Button>
                         </div>
@@ -204,7 +255,7 @@ const FeaturesSection = () => {
           </Carousel>
         </div>
 
-        {/* We'll keep the existing feature section for desktop non-dark mode */}
+        {/* Grid layout for desktop */}
         <div className="hidden md:block mt-20">
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
@@ -215,8 +266,8 @@ const FeaturesSection = () => {
                 <div className={`${feature.color} ${feature.textColor} rounded-full w-12 h-12 flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
                   <feature.icon size={24} />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
               </div>
             ))}
           </div>
