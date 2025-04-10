@@ -1,8 +1,6 @@
-
 import { 
-  LayoutDashboard, MessageSquareText, Calendar, Bell, 
-  Briefcase, FileText, GraduationCap, Users, Target, 
-  LineChart, CalendarClock, Medal, Globe, ChevronLeft, ChevronRight
+  DollarSign, LineChart, FileText, Users, History, 
+  ArrowRight, Mail, Play, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { 
   Carousel, 
@@ -12,107 +10,76 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
+// Features data based on the image
 const features = [
   {
-    title: "Customizable Dashboards",
-    description: "Personalize your workspace to focus on the information that matters most to you.",
-    icon: LayoutDashboard,
-    color: "bg-blue-100",
-    textColor: "text-blue-700"
+    title: "Live Pricing",
+    description: "Real-time stock prices and market data to help you make timely investment decisions.",
+    icon: DollarSign,
+    color: "bg-blue-900/20",
+    textColor: "text-blue-400"
   },
   {
-    title: "Regulatory Analysis Chatbot",
-    description: "Leverage Dara, our AI copilot, for instant regulatory insights and actionable compliance recommendations.",
-    icon: MessageSquareText,
-    color: "bg-purple-100",
-    textColor: "text-purple-700"
-  },
-  {
-    title: "Regulatory Calendar & Updates",
-    description: "Stay current with scheduled deadlines and breaking regulatory news.",
-    icon: Calendar,
-    color: "bg-emerald-100",
-    textColor: "text-emerald-700"
-  },
-  {
-    title: "Daily Regulatory Insights",
-    description: "Receive timely, bite-sized updates to keep you informed.",
-    icon: Bell,
-    color: "bg-amber-100",
-    textColor: "text-amber-700"
-  },
-  {
-    title: "Job Matching",
-    description: "Discover career opportunities that align with your expertise.",
-    icon: Briefcase,
-    color: "bg-red-100",
-    textColor: "text-red-700"
-  },
-  {
-    title: "CV Surgery",
-    description: "Elevate your professional profile with expert guidance from TealHQ.com.",
-    icon: FileText,
-    color: "bg-teal-100",
-    textColor: "text-teal-700"
-  },
-  {
-    title: "Interactive Classes",
-    description: "Experience immersive learning with interactive voiceovers powered by Speechma.com.",
-    icon: GraduationCap,
-    color: "bg-indigo-100",
-    textColor: "text-indigo-700"
-  },
-  {
-    title: "Networking & Forum",
-    description: "Connect with peers, share knowledge, and ask the community for advice.",
-    icon: Users,
-    color: "bg-cyan-100",
-    textColor: "text-cyan-700"
-  },
-  {
-    title: "Interview Prep",
-    description: "Combine AI insights with human coaching for interview success.",
-    icon: Target,
-    color: "bg-violet-100",
-    textColor: "text-violet-700"
-  },
-  {
-    title: "Career Insights",
-    description: "Gain personalized advice and plan your next steps.",
+    title: "Analyst Estimates",
+    description: "Get insights from top Wall Street analysts and see consensus recommendations.",
     icon: LineChart,
-    color: "bg-pink-100",
-    textColor: "text-pink-700"
+    color: "bg-purple-900/20",
+    textColor: "text-purple-400"
   },
   {
-    title: "Events & Projects",
-    description: "Engage in live discussions and collaborate on real-time initiatives.",
-    icon: CalendarClock,
-    color: "bg-fuchsia-100",
-    textColor: "text-fuchsia-700"
+    title: "Company Financials",
+    description: "Deep dive into balance sheets, income statements, and cash flows for comprehensive analysis.",
+    icon: FileText,
+    color: "bg-emerald-900/20",
+    textColor: "text-emerald-400"
   },
   {
-    title: "Gamification & Badges",
-    description: "Track your progress, earn digital rewards, and showcase your expertise.",
-    icon: Medal,
-    color: "bg-orange-100",
-    textColor: "text-orange-700"
+    title: "Peer Analysis",
+    description: "Compare companies within the same industry to identify relative strengths and weaknesses.",
+    icon: Users,
+    color: "bg-amber-900/20",
+    textColor: "text-amber-400"
   },
   {
-    title: "Mentorship & Translation",
-    description: "Access expert mentorship and multilingual support with DeepL for a global perspective.",
-    icon: Globe,
-    color: "bg-blue-100",
-    textColor: "text-blue-700"
+    title: "Historical Earnings",
+    description: "Explore past performance with detailed historical earnings data. Track company growth and spot patterns over time.",
+    icon: History,
+    color: "bg-red-900/20",
+    textColor: "text-red-400"
+  },
+  {
+    title: "Insider Transactions",
+    description: "Follow buying and selling patterns of company executives and major shareholders.",
+    icon: ArrowRight,
+    color: "bg-indigo-900/20",
+    textColor: "text-indigo-400"
+  },
+  {
+    title: "Email Updates",
+    description: "Stay informed with customizable email alerts for price movements, news, and more.",
+    icon: Mail,
+    color: "bg-cyan-900/20",
+    textColor: "text-cyan-400"
   }
 ];
 
 const FeaturesSection = () => {
-  const [activeFeature, setActiveFeature] = useState(0);
+  const [activeFeature, setActiveFeature] = useState(4); // Start with Historical Earnings selected
   const [api, setApi] = useState<CarouselApi>();
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Setup callback to handle carousel API change
   const onApiChange = useCallback((api: CarouselApi | null) => {
@@ -135,121 +102,128 @@ const FeaturesSection = () => {
   const handleApiChange = (newApi: CarouselApi) => {
     setApi(newApi);
     onApiChange(newApi);
+
+    // Initialize to Historical Earnings (index 4)
+    setTimeout(() => {
+      newApi.scrollTo(4, false);
+    }, 100);
   };
 
   return (
-    <div id="features" className="py-20 bg-white">
+    <div id="features" className="py-20 bg-gray-950">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            Powerful Features for GRC Professionals
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">
+            Powerful Analysis Tools for Investors
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Synapse combines intelligent tools, specialized knowledge, and a vibrant community to help you navigate complex regulatory landscapes.
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            Get comprehensive data and insights to make informed investment decisions.
           </p>
         </div>
 
-        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
-          {features.slice(0, 8).map((feature, index) => (
-            <div 
-              key={index} 
-              className="feature-card group"
-            >
-              <div className={`${feature.color} ${feature.textColor} rounded-full w-12 h-12 flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
-                <feature.icon size={24} />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Horizontal Carousel for Features */}
-        <div className="mb-16">
+        {/* Dark themed stacked cards carousel */}
+        <div className="max-w-5xl mx-auto">
           <Carousel
             opts={{
-              align: "start",
+              align: "center",
               loop: true,
+              dragFree: true,
             }}
             className="w-full"
             setApi={handleApiChange}
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {features.map((feature, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                  <div className="p-1">
-                    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 h-full">
-                      <CardContent className="flex flex-col items-center p-6">
-                        <div className={cn(
-                          feature.color,
-                          feature.textColor,
-                          "rounded-full w-16 h-16 flex items-center justify-center mb-5 transition-transform hover:scale-110"
-                        )}>
-                          <feature.icon size={32} />
+                <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-auto">
+                  <Card className={cn(
+                    "border-0 bg-gray-900 transition-all duration-300",
+                    activeFeature === index 
+                      ? "w-[280px] sm:w-[300px] md:w-[400px] h-[300px] md:h-[320px] z-20"
+                      : "w-[80px] sm:w-[100px] h-[300px] md:h-[320px] opacity-80 z-10"
+                  )}>
+                    <CardContent className={cn(
+                      "flex flex-col h-full p-4",
+                      activeFeature === index ? "justify-between" : "justify-center"
+                    )}>
+                      {activeFeature === index ? (
+                        // Expanded card view
+                        <div className="flex flex-col h-full justify-between">
+                          {/* Title and Icon at the top */}
+                          <div>
+                            <div className={cn(
+                              feature.color,
+                              feature.textColor,
+                              "rounded-full w-12 h-12 flex items-center justify-center mb-4"
+                            )}>
+                              <feature.icon size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold mb-4 text-white">{feature.title}</h3>
+                            <p className="text-gray-300">{feature.description}</p>
+                          </div>
+                          
+                          {/* Preview button at bottom */}
+                          <Button variant="ghost" className="w-fit text-gray-300 gap-2 mt-4 group">
+                            <span>Preview {feature.title.toLowerCase()}</span>
+                            <Play className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          </Button>
                         </div>
-                        <h3 className="text-xl font-semibold mb-3 text-center">{feature.title}</h3>
-                        <p className="text-gray-600 text-center">{feature.description}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
+                      ) : (
+                        // Collapsed card view - vertical text along the side
+                        <div className="flex items-center justify-center h-full">
+                          <div className="rotate-90 whitespace-nowrap text-gray-400 text-sm font-medium uppercase tracking-wider">
+                            {feature.title}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="hidden md:flex justify-center mt-4 gap-1">
-              {features.map((_, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    "h-2 w-2 rounded-full transition-all duration-300",
-                    activeFeature === index ? "bg-synapse-primary w-4" : "bg-gray-300"
-                  )}
-                />
-              ))}
+            
+            <div className="flex justify-center mt-8 gap-4">
+              <Button 
+                onClick={() => api?.scrollPrev()} 
+                variant="outline" 
+                size="icon" 
+                className="bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700 hover:text-white"
+              >
+                <ChevronLeft className="h-5 w-5" />
+                <span className="sr-only">Previous feature</span>
+              </Button>
+              <Button 
+                onClick={() => api?.scrollNext()} 
+                variant="outline" 
+                size="icon"
+                className="bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700 hover:text-white"
+              >
+                <ChevronRight className="h-5 w-5" />
+                <span className="sr-only">Next feature</span>
+              </Button>
             </div>
-            <CarouselPrevious className="absolute left-4 top-1/3" />
-            <CarouselNext className="absolute right-4 top-1/3" />
           </Carousel>
         </div>
 
-        {/* Feature focus modal - similar to the image shared */}
-        <div className="mt-10 bg-gray-900 rounded-xl shadow-xl overflow-hidden">
-          <div className="grid md:grid-cols-7 gap-0">
-            <div className="md:col-span-5 p-6 md:p-10 bg-gradient-to-br from-gray-900 to-gray-800">
-              <h3 className="text-xl md:text-2xl font-bold text-white mb-4">Regulatory Analysis through AI</h3>
-              <p className="text-gray-300 max-w-lg">
-                Explore current regulations with detailed insights powered by our AI assistant Dara. 
-                Track compliance requirements and spot patterns across jurisdictions.
-              </p>
-              <button className="mt-6 flex items-center gap-2 text-sm font-medium text-synapse-primary hover:text-synapse-secondary transition-colors">
-                <span>Preview Dara in action</span>
-                <ArrowRightIcon />
-              </button>
-            </div>
-            <div className="md:col-span-2 p-6 bg-gray-800 flex flex-col min-h-[200px] justify-between">
-              <FeatureTab active={true} name="Regulatory Analysis" />
-              <FeatureTab active={false} name="Smart Calendar" />
-              <FeatureTab active={false} name="Career Matching" />
-              <FeatureTab active={false} name="Compliance Tools" />
-            </div>
+        {/* We'll keep the existing feature section for desktop non-dark mode */}
+        <div className="hidden md:block mt-20">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <div 
+                key={index} 
+                className="feature-card group"
+              >
+                <div className={`${feature.color} ${feature.textColor} rounded-full w-12 h-12 flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
+                  <feature.icon size={24} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-const ArrowRightIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3.33337 8H12.6667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M8.66669 4L12.6667 8L8.66669 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const FeatureTab = ({ active, name }: { active: boolean; name: string }) => (
-  <div className={`py-2 px-4 flex items-center ${active ? 'text-white' : 'text-gray-400'}`}>
-    <div className={`w-2 h-2 rounded-full mr-3 ${active ? 'bg-synapse-primary' : 'bg-gray-600'}`}></div>
-    <span className="text-sm font-medium">{name}</span>
-  </div>
-);
 
 export default FeaturesSection;

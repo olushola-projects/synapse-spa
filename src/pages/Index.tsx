@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 import { useEffect } from "react";
 
 const Index = () => {
-  // Ensure embla carousel is properly initialized on page load
+  // Ensure embla carousel is properly initialized on page load and reinit on resize
   useEffect(() => {
     const handleResize = () => {
       window.dispatchEvent(new Event('resize'));
@@ -19,8 +19,24 @@ const Index = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
     
+    // Additional initialization if needed
+    const carouselInit = () => {
+      // Force reflow for any carousels on the page
+      document.querySelectorAll('[aria-roledescription="carousel"]').forEach(
+        (carousel) => {
+          // Trigger reflow
+          carousel.getBoundingClientRect();
+        }
+      );
+    };
+    
+    // Call it now and on load
+    carouselInit();
+    window.addEventListener('load', carouselInit);
+    
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('load', carouselInit);
     };
   }, []);
 
