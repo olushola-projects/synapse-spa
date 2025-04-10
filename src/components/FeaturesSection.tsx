@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 const features = [
   {
@@ -112,6 +112,30 @@ const features = [
 
 const FeaturesSection = () => {
   const [activeFeature, setActiveFeature] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+
+  // Setup callback to handle carousel API change
+  const onApiChange = useCallback((api: CarouselApi | null) => {
+    if (!api) return;
+    
+    const handleSelect = () => {
+      setActiveFeature(api.selectedScrollSnap());
+    };
+
+    api.on("select", handleSelect);
+    handleSelect();
+
+    // Cleanup
+    return () => {
+      api.off("select", handleSelect);
+    };
+  }, []);
+
+  // Update the API state when carousel is mounted
+  const handleApiChange = (newApi: CarouselApi) => {
+    setApi(newApi);
+    onApiChange(newApi);
+  };
 
   return (
     <div id="features" className="py-20 bg-white">
@@ -148,11 +172,7 @@ const FeaturesSection = () => {
               loop: true,
             }}
             className="w-full"
-            onSelect={(api: CarouselApi) => {
-              if (api) {
-                setActiveFeature(api.selectedScrollSnap());
-              }
-            }}
+            setApi={handleApiChange}
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {features.map((feature, index) => (
