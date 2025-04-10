@@ -15,104 +15,104 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
-// GRC professional features data
+// GRC professional features data with enhanced descriptions
 const features = [
   {
     title: "Customizable Dashboards",
-    description: "Personalize your workspace to focus on the information that matters most to you.",
+    description: "Create personalized workspaces with drag-and-drop widgets, custom notification settings, and regulatory focus areas tailored to your industry. Monitor everything from regulatory changes to compliance deadlines in one central interface.",
     icon: LayoutDashboard,
     color: "bg-blue-900/20",
     textColor: "text-blue-400"
   },
   {
     title: "Regulatory Analysis Chatbot",
-    description: "Leverage Dara, our AI copilot, for instant regulatory insights and actionable compliance recommendations.",
+    description: "Dara, our AI copilot, analyzes complex regulations in seconds, providing actionable insights, compliance recommendations, and potential risk alerts. Ask questions in plain language and receive expert-level guidance instantly.",
     icon: Bot,
     color: "bg-purple-900/20",
     textColor: "text-purple-400"
   },
   {
     title: "Regulatory Calendar",
-    description: "Stay current with scheduled deadlines and breaking regulatory news.",
+    description: "Never miss critical deadlines with our intelligent regulatory calendar. Receive automatic updates on industry-specific regulations, upcoming changes, and implementation timelines with customizable alerts and integration with your work calendar.",
     icon: Calendar,
     color: "bg-emerald-900/20",
     textColor: "text-emerald-400"
   },
   {
     title: "Daily Regulatory Insights",
-    description: "Receive timely, bite-sized updates to keep you informed.",
+    description: "Start each day with curated, relevant regulatory news and analysis delivered in bite-sized formats. Our AI filters the noise to deliver only what matters to your role, with severity ratings and impact assessments for your organization.",
     icon: Newspaper,
     color: "bg-amber-900/20",
     textColor: "text-amber-400"
   },
   {
     title: "Job Matching",
-    description: "Discover career opportunities that align with your expertise.",
+    description: "Our proprietary algorithm matches your GRC skills and experience with opportunities from top employers. Receive personalized job recommendations with compatibility scores, salary insights, and career growth potential analysis.",
     icon: Briefcase,
     color: "bg-red-900/20",
     textColor: "text-red-400"
   },
   {
     title: "CV Surgery",
-    description: "Elevate your professional profile with expert guidance.",
+    description: "Transform your professional profile with our expert CV analysis. Receive personalized feedback on how to highlight your GRC expertise, certification recommendations, and tailored suggestions to stand out in competitive compliance roles.",
     icon: FilePen,
     color: "bg-indigo-900/20",
     textColor: "text-indigo-400"
   },
   {
     title: "Classes",
-    description: "Experience immersive learning with interactive voiceovers.",
+    description: "Access immersive learning experiences with interactive voiceovers, practical case studies, and certification preparation. Our courses are designed by industry experts and cover everything from foundational compliance to advanced regulatory strategies.",
     icon: BookOpen,
     color: "bg-cyan-900/20",
     textColor: "text-cyan-400"
   },
   {
     title: "Networking & Forum",
-    description: "Connect with peers, share knowledge, and ask the community for advice.",
+    description: "Connect with over 10,000 GRC professionals worldwide. Share best practices, discuss regulatory challenges, and build meaningful professional relationships through moderated forums, virtual meetups, and expert panel discussions.",
     icon: Users,
     color: "bg-teal-900/20",
     textColor: "text-teal-400"
   },
   {
     title: "Interview Preparation",
-    description: "Combine AI insights with human coaching for interview success.",
+    description: "Prepare for your next career move with tailored interview coaching combining AI-powered practice sessions with human expert feedback. Practice answering industry-specific questions and receive real-time performance analytics.",
     icon: Mic,
     color: "bg-pink-900/20",
     textColor: "text-pink-400"
   },
   {
     title: "Career Insights",
-    description: "Gain personalized advice and plan your next steps.",
+    description: "Map your GRC career trajectory with personalized development plans. Identify skill gaps, certification opportunities, and advancement strategies based on your career goals and industry trends in compliance and risk management.",
     icon: Lightbulb,
     color: "bg-orange-900/20",
     textColor: "text-orange-400"
   },
   {
     title: "Events & Projects",
-    description: "Engage in live discussions and collaborate on real-time initiatives.",
+    description: "Participate in live discussions, webinars, and collaborative compliance projects with industry pioneers. Stay at the forefront of regulatory developments through exclusive access to thought leadership events and networking opportunities.",
     icon: Rocket,
     color: "bg-violet-900/20",
     textColor: "text-violet-400"
   },
   {
     title: "Team Huddle",
-    description: "Foster better collaboration and problem solving with your team.",
+    description: "Enhance team collaboration with integrated compliance workflows, document sharing, and project tracking. Streamline communication across compliance, legal, and operations teams with dedicated channels and task management tools.",
     icon: UsersRound,
     color: "bg-green-900/20",
     textColor: "text-green-400"
   },
   {
     title: "Gamification & Badges",
-    description: "Track your progress, earn digital rewards, and showcase your expertise.",
+    description: "Make compliance engaging through achievement systems, leaderboards, and digital credentials. Track your progress, earn recognition for regulatory expertise, and showcase your professional development through shareable certification badges.",
     icon: Award,
     color: "bg-yellow-900/20",
     textColor: "text-yellow-400"
   },
   {
     title: "Mentorship & Translation",
-    description: "Access expert mentorship and multilingual support for a global perspective.",
+    description: "Access guidance from senior GRC professionals and overcome language barriers with our multilingual support. Connect with mentors who match your career aspirations and translate complex regulations into actionable insights in your preferred language.",
     icon: Globe,
     color: "bg-blue-900/20",
     textColor: "text-blue-400"
@@ -123,6 +123,9 @@ const FeaturesSection = () => {
   const [activeFeature, setActiveFeature] = useState(4); // Start with Job Matching selected 
   const [api, setApi] = useState<CarouselApi>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [autoPlayEnabled, setAutoPlayEnabled] = useState(true);
+  const autoPlayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   // Check if we're on mobile
   useEffect(() => {
@@ -131,6 +134,46 @@ const FeaturesSection = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (!api || !autoPlayEnabled) return;
+    
+    const startAutoPlay = () => {
+      if (autoPlayIntervalRef.current) {
+        clearInterval(autoPlayIntervalRef.current);
+      }
+      
+      autoPlayIntervalRef.current = setInterval(() => {
+        api?.scrollNext();
+      }, 5000); // Slow rhythm - 5 seconds per card
+    };
+    
+    startAutoPlay();
+    
+    return () => {
+      if (autoPlayIntervalRef.current) {
+        clearInterval(autoPlayIntervalRef.current);
+      }
+    };
+  }, [api, autoPlayEnabled]);
+
+  // Setup mouse interactions for pausing autoplay
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    
+    const handleMouseEnter = () => setAutoPlayEnabled(false);
+    const handleMouseLeave = () => setAutoPlayEnabled(true);
+    
+    carousel.addEventListener('mouseenter', handleMouseEnter);
+    carousel.addEventListener('mouseleave', handleMouseLeave);
+    
+    return () => {
+      carousel.removeEventListener('mouseenter', handleMouseEnter);
+      carousel.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [carouselRef]);
 
   // Setup callback to handle carousel API change
   const onApiChange = useCallback((api: CarouselApi | null) => {
@@ -150,7 +193,7 @@ const FeaturesSection = () => {
   }, []);
 
   // Update the API state when carousel is mounted
-  const handleApiChange = (newApi: CarouselApi) => {
+  const handleApiChange = useCallback((newApi: CarouselApi) => {
     setApi(newApi);
     onApiChange(newApi);
 
@@ -158,7 +201,7 @@ const FeaturesSection = () => {
     setTimeout(() => {
       newApi.scrollTo(4, false);
     }, 100);
-  };
+  }, [onApiChange]);
 
   return (
     <div id="features" className="py-20 bg-gray-950">
@@ -173,7 +216,7 @@ const FeaturesSection = () => {
         </div>
 
         {/* Dark themed stacked cards carousel */}
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto" ref={carouselRef}>
           <Carousel
             opts={{
               align: "center",
@@ -189,8 +232,8 @@ const FeaturesSection = () => {
                   <Card className={cn(
                     "border-0 bg-gray-900 transition-all duration-300",
                     activeFeature === index 
-                      ? "w-[280px] sm:w-[300px] md:w-[400px] h-[300px] md:h-[320px] z-20"
-                      : "w-[80px] sm:w-[100px] h-[300px] md:h-[320px] opacity-80 z-10"
+                      ? "w-[280px] sm:w-[300px] md:w-[400px] h-[320px] md:h-[340px] z-20"
+                      : "w-[80px] sm:w-[100px] h-[320px] md:h-[340px] opacity-80 z-10"
                   )}>
                     <CardContent className={cn(
                       "flex flex-col h-full p-4",
@@ -209,7 +252,7 @@ const FeaturesSection = () => {
                               <feature.icon size={24} />
                             </div>
                             <h3 className="text-xl font-bold mb-4 text-white">{feature.title}</h3>
-                            <p className="text-gray-300">{feature.description}</p>
+                            <p className="text-gray-300 text-sm">{feature.description}</p>
                           </div>
                           
                           {/* Preview button at bottom */}
@@ -267,7 +310,7 @@ const FeaturesSection = () => {
                   <feature.icon size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <p className="text-gray-400 text-sm">{feature.description}</p>
               </div>
             ))}
           </div>

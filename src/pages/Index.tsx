@@ -19,7 +19,7 @@ const Index = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
     
-    // Additional initialization if needed
+    // Additional initialization for carousels
     const carouselInit = () => {
       // Force reflow for any carousels on the page
       document.querySelectorAll('[aria-roledescription="carousel"]').forEach(

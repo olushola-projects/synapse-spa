@@ -100,6 +100,7 @@ const Carousel = React.forwardRef<
       [scrollPrev, scrollNext]
     )
 
+    // Call setApi with the carousel API when it's available
     React.useEffect(() => {
       if (!api || !setApi) {
         return
@@ -108,6 +109,7 @@ const Carousel = React.forwardRef<
       setApi(api)
     }, [api, setApi])
 
+    // Listen for carousel events
     React.useEffect(() => {
       if (!api) {
         return
@@ -118,7 +120,8 @@ const Carousel = React.forwardRef<
       api.on("select", onSelect)
 
       return () => {
-        api?.off("select", onSelect)
+        api.off("reInit", onSelect)
+        api.off("select", onSelect)
       }
     }, [api, onSelect])
 
