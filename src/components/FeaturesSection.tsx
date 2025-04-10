@@ -297,24 +297,6 @@ const FeaturesSection = () => {
             </div>
           </Carousel>
         </div>
-
-        {/* Grid layout for desktop */}
-        <div className="hidden md:block mt-20">
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="feature-card group"
-              >
-                <div className={`${feature.color} ${feature.textColor} rounded-full w-12 h-12 flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
-                  <feature.icon size={24} />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
-                <p className="text-gray-400 text-sm">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
