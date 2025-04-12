@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -93,125 +92,132 @@ const HeroSection = () => {
           {/* Hero Image - GRC Platform Dashboard Mockup */}
           <div className="md:w-3/5 relative">
             <div className="relative w-full max-w-3xl mx-auto">
-              {/* MacBook Pro Display */}
-              <div className="aspect-[16/10] mb-2 bg-gradient-to-b from-gray-200 to-gray-300 rounded-t-xl overflow-hidden shadow-2xl border-[12px] border-gray-200">
-                {/* MacBook Screen Content */}
-                <div className="aspect-[16/10] bg-[#F1F0FB] rounded-lg overflow-hidden border border-gray-100 relative">
+              {/* New MacBook Pro Display with new image */}
+              <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
+                {/* New MacBook Pro Image */}
+                <img 
+                  src="/lovable-uploads/c5b1f529-364b-4a3f-9e4e-29fe1862e7b3.png" 
+                  alt="MacBook Pro" 
+                  className="w-full h-auto"
+                />
+                
+                {/* Dashboard Screen Content - Positioned absolutely over the laptop image */}
+                <div className="absolute top-[5%] left-[10%] right-[10%] bottom-[10%] bg-[#F1F0FB] rounded-md overflow-hidden">
                   {/* Header Bar */}
-                  <div className="h-10 bg-white flex items-center px-3 border-b border-gray-200">
+                  <div className="h-[6%] bg-white flex items-center px-3 border-b border-gray-200">
                     <div className="flex gap-1.5">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     </div>
-                    <div className="ml-4 text-gray-800 text-sm font-medium">SYNAPSES GRC Intelligence Platform</div>
+                    <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">SYNAPSES GRC Intelligence Platform</div>
                   </div>
                   
                   {/* Dashboard Content */}
-                  <div className="p-4 flex h-full bg-[#F1F0FB]">
+                  <div className="p-2 flex h-[94%] bg-[#F1F0FB]">
                     {/* Sidebar */}
-                    <div className="w-[80px] h-full bg-white rounded-lg border border-gray-200 flex flex-col items-center py-4 gap-6">
-                      <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <div className="w-6 h-6 bg-indigo-500 rounded-md"></div>
+                    <div className="w-[8%] h-full bg-white rounded-lg border border-gray-200 flex flex-col items-center py-2 gap-3">
+                      <div className="w-[60%] h-5 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <div className="w-3 h-3 bg-indigo-500 rounded-md"></div>
                       </div>
-                      <div className="w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center">
-                        <MessageSquare size={16} className="text-white" />
+                      <div className="w-4 h-4 bg-indigo-500 rounded-md flex items-center justify-center">
+                        <MessageSquare size={8} className="text-white" />
                       </div>
-                      <div className="w-8 h-8 bg-indigo-100 rounded-md flex items-center justify-center">
-                        <Calendar size={16} className="text-indigo-500" />
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                        <Calendar size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-8 h-8 bg-indigo-100 rounded-md flex items-center justify-center">
-                        <Bell size={16} className="text-indigo-500" />
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                        <Bell size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-8 h-8 bg-indigo-100 rounded-md flex items-center justify-center">
-                        <Briefcase size={16} className="text-indigo-500" />
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                        <Briefcase size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-8 h-8 bg-indigo-100 rounded-md flex items-center justify-center">
-                        <BookOpen size={16} className="text-indigo-500" />
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                        <BookOpen size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-8 h-8 bg-indigo-100 rounded-md flex items-center justify-center">
-                        <ShieldAlert size={16} className="text-indigo-500" />
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                        <ShieldAlert size={8} className="text-indigo-500" />
                       </div>
                     </div>
                     
                     {/* Main Content */}
-                    <div className="flex-1 pl-4 flex flex-col gap-4">
+                    <div className="flex-1 pl-1 flex flex-col gap-1">
                       {/* Header */}
-                      <div className="h-8 flex justify-between items-center">
-                        <div className="text-gray-800 text-base font-medium">Regulatory Intelligence Dashboard</div>
-                        <div className="flex gap-3 items-center">
-                          <div className="text-xs text-gray-500">April 12, 2025</div>
-                          <div className="flex items-center gap-2">
-                            <div className="text-xs text-gray-500">Hi, Phoebe Banks</div>
+                      <div className="h-4 flex justify-between items-center">
+                        <div className="text-gray-800 text-[6px] sm:text-[8px] font-medium">Regulatory Intelligence Dashboard</div>
+                        <div className="flex gap-2 items-center">
+                          <div className="text-[5px] sm:text-[6px] text-gray-500">April 12, 2025</div>
+                          <div className="flex items-center gap-1">
+                            <div className="text-[5px] sm:text-[6px] text-gray-500">Hi, Phoebe Banks</div>
                             <img 
                               src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
                               alt="Phoebe Banks" 
-                              className="w-7 h-7 rounded-full object-cover border border-gray-200"
+                              className="w-3 h-3 rounded-full object-cover border border-gray-200"
                             />
                           </div>
                         </div>
                       </div>
                       
                       {/* KPI Row */}
-                      <div className="flex gap-3 h-[70px]">
-                        <div className="flex-1 bg-white rounded-lg p-3 border border-gray-100 shadow-sm">
-                          <div className="flex items-center gap-1.5">
-                            <Clock size={16} className="text-blue-500" />
-                            <div className="text-xs text-gray-600">Regulatory Updates</div>
+                      <div className="flex gap-1 h-[15%]">
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="flex items-center gap-0.5">
+                            <Clock size={6} className="text-blue-500" />
+                            <div className="text-[5px] text-gray-600">Regulatory Updates</div>
                           </div>
-                          <div className="text-gray-800 text-lg font-medium mt-1">12 New</div>
-                          <div className="h-1.5 w-full mt-2 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full"></div>
+                          <div className="text-gray-800 text-[8px] font-medium">12 New</div>
+                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full"></div>
                         </div>
-                        <div className="flex-1 bg-white rounded-lg p-3 border border-gray-100 shadow-sm">
-                          <div className="flex items-center gap-1.5">
-                            <Calendar size={16} className="text-purple-500" />
-                            <div className="text-xs text-gray-600">Compliance Deadlines</div>
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="flex items-center gap-0.5">
+                            <Calendar size={6} className="text-purple-500" />
+                            <div className="text-[5px] text-gray-600">Compliance Deadlines</div>
                           </div>
-                          <div className="text-gray-800 text-lg font-medium mt-1">3 Due</div>
-                          <div className="h-1.5 w-full mt-2 bg-gradient-to-r from-purple-300 to-purple-500 rounded-full"></div>
+                          <div className="text-gray-800 text-[8px] font-medium">3 Due</div>
+                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-purple-300 to-purple-500 rounded-full"></div>
                         </div>
-                        <div className="flex-1 bg-white rounded-lg p-3 border border-gray-100 shadow-sm">
-                          <div className="flex items-center gap-1.5">
-                            <MessageSquare size={16} className="text-emerald-500" />
-                            <div className="text-xs text-gray-600">AI Assists Used</div>
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="flex items-center gap-0.5">
+                            <MessageSquare size={6} className="text-emerald-500" />
+                            <div className="text-[5px] text-gray-600">AI Assists Used</div>
                           </div>
-                          <div className="text-gray-800 text-lg font-medium mt-1">24 Today</div>
-                          <div className="h-1.5 w-full mt-2 bg-gradient-to-r from-emerald-300 to-emerald-500 rounded-full"></div>
+                          <div className="text-gray-800 text-[8px] font-medium">24 Today</div>
+                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-emerald-300 to-emerald-500 rounded-full"></div>
                         </div>
-                        <div className="flex-1 bg-white rounded-lg p-3 border border-gray-100 shadow-sm">
-                          <div className="flex items-center gap-1.5">
-                            <AlertTriangle size={16} className="text-amber-500" />
-                            <div className="text-xs text-gray-600">Risk Alerts</div>
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="flex items-center gap-0.5">
+                            <AlertTriangle size={6} className="text-amber-500" />
+                            <div className="text-[5px] text-gray-600">Risk Alerts</div>
                           </div>
-                          <div className="text-gray-800 text-lg font-medium mt-1">5 High</div>
-                          <div className="h-1.5 w-full mt-2 bg-gradient-to-r from-amber-300 to-amber-500 rounded-full"></div>
+                          <div className="text-gray-800 text-[8px] font-medium">5 High</div>
+                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-amber-300 to-amber-500 rounded-full"></div>
                         </div>
                       </div>
                       
                       {/* Main Widgets Area */}
-                      <div className="flex gap-4 flex-1">
+                      <div className="flex gap-1 flex-1">
                         {/* Left Column */}
-                        <div className="flex-1 flex flex-col gap-4">
+                        <div className="flex-1 flex flex-col gap-1">
                           {/* AMLD6 Content */}
-                          <div className="flex-1 bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <ShieldAlert size={18} className="text-red-500" />
-                                <div className="text-gray-800 text-base font-medium">AMLD6 Penalty Analysis</div>
+                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center gap-1">
+                                <ShieldAlert size={8} className="text-red-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">AMLD6 Penalty Analysis</div>
                               </div>
-                              <div className="text-red-500 text-xs px-2 py-1 bg-red-50 rounded-full">High Priority</div>
+                              <div className="text-red-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-red-50 rounded-full">High Priority</div>
                             </div>
                             
-                            <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                              <h3 className="text-gray-800 text-sm font-bold mb-2">What is the Penalty under AMLD6 and criminal liability extension?</h3>
-                              <p className="text-gray-600 text-xs leading-relaxed">
+                            <div className="bg-gray-50 rounded-md p-1 border border-gray-100">
+                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">What is the Penalty under AMLD6 and criminal liability extension?</h3>
+                              <p className="text-gray-600 text-[4px] sm:text-[5px] leading-tight">
                                 One of the key aspects of AMLD6 is the aggressive expansion of liability to legal entities and company executives who aid and abet money laundering, either through negligence or deliberate actions. Penalties under AMLD6 are severe, and fines can reach into the hundreds of millions of euros. The AMLD6 has set a precedent for stricter AML oversight and amplified penalties.
                               </p>
-                              <div className="mt-3 flex items-center gap-2">
-                                <Button variant="outline" size="sm" className="h-7 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200">
+                              <div className="mt-1 flex items-center gap-1">
+                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200 px-1 py-0">
                                   View Details
                                 </Button>
-                                <Button variant="outline" size="sm" className="h-7 text-xs bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200">
+                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200 px-1 py-0">
                                   Ask Dara
                                 </Button>
                               </div>
@@ -219,66 +225,66 @@ const HeroSection = () => {
                           </div>
                           
                           {/* Calendar Widget */}
-                          <div className="h-[180px] bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <Calendar size={18} className="text-blue-500" />
-                                <div className="text-gray-800 text-base font-medium">Regulatory Calendar</div>
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center gap-1">
+                                <Calendar size={8} className="text-blue-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Regulatory Calendar</div>
                               </div>
-                              <div className="text-gray-500 text-xs">This Week</div>
+                              <div className="text-gray-500 text-[4px] sm:text-[5px]">This Week</div>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-3 h-[120px] overflow-y-auto">
-                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100">
-                                <div className="w-2 h-2 rounded-full bg-yellow-500 mt-1.5 mr-2"></div>
+                            <div className="grid grid-cols-2 gap-1 h-[80%] overflow-y-auto">
+                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
+                                <div className="w-1 h-1 rounded-full bg-yellow-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-xs font-medium mb-1">Apr 14 - GDPR Update</div>
-                                  <div className="text-gray-500 text-[10px]">Review privacy policy changes</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 14 - GDPR Update</div>
+                                  <div className="text-gray-500 text-[4px]">Review privacy policy changes</div>
                                 </div>
                               </div>
-                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100">
-                                <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 mr-2"></div>
+                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
+                                <div className="w-1 h-1 rounded-full bg-red-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-xs font-medium mb-1">Apr 15 - AMLD6 Deadline</div>
-                                  <div className="text-gray-500 text-[10px]">Submit compliance report</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 15 - AMLD6 Deadline</div>
+                                  <div className="text-gray-500 text-[4px]">Submit compliance report</div>
                                 </div>
                               </div>
-                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100">
-                                <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 mr-2"></div>
+                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
+                                <div className="w-1 h-1 rounded-full bg-green-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-xs font-medium mb-1">Apr 16 - Training</div>
-                                  <div className="text-gray-500 text-[10px]">AML compliance workshop</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 16 - Training</div>
+                                  <div className="text-gray-500 text-[4px]">AML compliance workshop</div>
                                 </div>
                               </div>
-                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100">
-                                <div className="w-2 h-2 rounded-full bg-purple-500 mt-1.5 mr-2"></div>
+                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
+                                <div className="w-1 h-1 rounded-full bg-purple-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-xs font-medium mb-1">Apr 18 - DORA Review</div>
-                                  <div className="text-gray-500 text-[10px]">ESAs roadmap discussion</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 18 - DORA Review</div>
+                                  <div className="text-gray-500 text-[4px]">ESAs roadmap discussion</div>
                                 </div>
                               </div>
                             </div>
                           </div>
 
                           {/* Pie Chart */}
-                          <div className="h-[180px] bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <PieChart size={18} className="text-violet-500" />
-                                <div className="text-gray-800 text-base font-medium">Regulatory Focus Areas</div>
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <div className="flex items-center gap-1">
+                                <PieChart size={8} className="text-violet-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Regulatory Focus Areas</div>
                               </div>
-                              <div className="text-gray-500 text-xs">Distribution</div>
+                              <div className="text-gray-500 text-[4px] sm:text-[5px]">Distribution</div>
                             </div>
                             
-                            <div className="h-[120px] flex">
+                            <div className="h-[80%] flex">
                               <div className="w-2/3 h-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                   <ReChartPie
                                     data={pieChartData}
                                     cx="50%"
                                     cy="50%"
-                                    innerRadius={30}
-                                    outerRadius={50}
+                                    innerRadius={15}
+                                    outerRadius={25}
                                   >
                                     {pieChartData.map((entry, index) => (
                                       <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -286,10 +292,10 @@ const HeroSection = () => {
                                   </ReChartPie>
                                 </ResponsiveContainer>
                               </div>
-                              <div className="w-1/3 flex flex-col justify-center space-y-1">
+                              <div className="w-1/3 flex flex-col justify-center space-y-0.5">
                                 {pieChartData.map((entry, index) => (
-                                  <div key={index} className="flex items-center text-[10px]">
-                                    <div className="w-2 h-2 rounded-full mr-1" style={{ backgroundColor: entry.fill }}></div>
+                                  <div key={index} className="flex items-center text-[4px]">
+                                    <div className="w-1 h-1 rounded-full mr-0.5" style={{ backgroundColor: entry.fill }}></div>
                                     <span className="text-gray-700">{entry.name}</span>
                                     <span className="ml-auto text-gray-500">{entry.value}%</span>
                                   </div>
@@ -300,27 +306,27 @@ const HeroSection = () => {
                         </div>
                         
                         {/* Right Column */}
-                        <div className="flex-1 flex flex-col gap-4">
+                        <div className="flex-1 flex flex-col gap-1">
                           {/* DORA Content */}
-                          <div className="flex-1 bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <FileText size={18} className="text-blue-500" />
-                                <div className="text-gray-800 text-base font-medium">DORA Regulatory Update</div>
+                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center gap-1">
+                                <FileText size={8} className="text-blue-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">DORA Regulatory Update</div>
                               </div>
-                              <div className="text-blue-500 text-xs px-2 py-1 bg-blue-50 rounded-full">New</div>
+                              <div className="text-blue-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-blue-50 rounded-full">New</div>
                             </div>
                             
-                            <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                              <h3 className="text-gray-800 text-sm font-bold mb-2">The ESAs provide a roadmap towards the designation of CTPPs under DORA</h3>
-                              <p className="text-gray-600 text-xs leading-relaxed">
+                            <div className="bg-gray-50 rounded-md p-1 border border-gray-100">
+                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">The ESAs provide a roadmap towards the designation of CTPPs under DORA</h3>
+                              <p className="text-gray-600 text-[4px] sm:text-[5px] leading-tight">
                                 The European Supervisory Authorities (ESAs) have published their joint roadmap outlining the process and timeline for designating Critical Third-Party Providers (CTPPs) under the Digital Operational Resilience Act (DORA). Financial entities should review this roadmap to understand how their third-party technology partners may be affected.
                               </p>
-                              <div className="mt-3 flex items-center gap-2">
-                                <Button variant="outline" size="sm" className="h-7 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200">
+                              <div className="mt-1 flex items-center gap-1">
+                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200 px-1 py-0">
                                   View Report
                                 </Button>
-                                <Button variant="outline" size="sm" className="h-7 text-xs bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200">
+                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200 px-1 py-0">
                                   Impact Analysis
                                 </Button>
                               </div>
@@ -328,16 +334,16 @@ const HeroSection = () => {
                           </div>
                           
                           {/* Colorful Area Chart */}
-                          <div className="h-[180px] bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <BarChart3 size={18} className="text-indigo-500" />
-                                <div className="text-gray-800 text-base font-medium">Regulatory Compliance Trends</div>
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <div className="flex items-center gap-1">
+                                <BarChart3 size={8} className="text-indigo-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Regulatory Compliance Trends</div>
                               </div>
-                              <div className="text-gray-500 text-xs">H1 2025</div>
+                              <div className="text-gray-500 text-[4px] sm:text-[5px]">H1 2025</div>
                             </div>
                             
-                            <div className="h-[120px] w-full">
+                            <div className="h-[80%] w-full">
                               <ResponsiveContainer width="100%" height="100%">
                                 <AreaChart data={areaChartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                                   <defs>
@@ -358,7 +364,7 @@ const HeroSection = () => {
                                       <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.1}/>
                                     </linearGradient>
                                   </defs>
-                                  <XAxis dataKey="name" tick={{ fontSize: 8 }} />
+                                  <XAxis dataKey="name" tick={{ fontSize: 4 }} />
                                   <Tooltip />
                                   <Area type="monotone" dataKey="gdpr" stroke="#4F46E5" fillOpacity={1} fill="url(#gdpr)" />
                                   <Area type="monotone" dataKey="aml" stroke="#EC4899" fillOpacity={1} fill="url(#aml)" />
@@ -367,70 +373,58 @@ const HeroSection = () => {
                                 </AreaChart>
                               </ResponsiveContainer>
                             </div>
-                            <div className="flex justify-between mt-1 px-1">
-                              <div className="flex items-center text-[9px]">
-                                <div className="w-2 h-2 bg-indigo-500 rounded-full mr-1"></div>
+                            <div className="flex justify-between mt-0.5 px-0.5">
+                              <div className="flex items-center text-[3px] sm:text-[4px]">
+                                <div className="w-1 h-1 bg-indigo-500 rounded-full mr-0.5"></div>
                                 <span className="text-gray-500">GDPR</span>
                               </div>
-                              <div className="flex items-center text-[9px]">
-                                <div className="w-2 h-2 bg-pink-500 rounded-full mr-1"></div>
+                              <div className="flex items-center text-[3px] sm:text-[4px]">
+                                <div className="w-1 h-1 bg-pink-500 rounded-full mr-0.5"></div>
                                 <span className="text-gray-500">AMLD6</span>
                               </div>
-                              <div className="flex items-center text-[9px]">
-                                <div className="w-2 h-2 bg-emerald-500 rounded-full mr-1"></div>
+                              <div className="flex items-center text-[3px] sm:text-[4px]">
+                                <div className="w-1 h-1 bg-emerald-500 rounded-full mr-0.5"></div>
                                 <span className="text-gray-500">DORA</span>
                               </div>
-                              <div className="flex items-center text-[9px]">
-                                <div className="w-2 h-2 bg-amber-500 rounded-full mr-1"></div>
+                              <div className="flex items-center text-[3px] sm:text-[4px]">
+                                <div className="w-1 h-1 bg-amber-500 rounded-full mr-0.5"></div>
                                 <span className="text-gray-500">PSD2</span>
                               </div>
                             </div>
                           </div>
 
                           {/* Job Matching */}
-                          <div className="h-[180px] bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <Briefcase size={18} className="text-purple-500" />
-                                <div className="text-gray-800 text-base font-medium">Job Opportunities</div>
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center gap-1">
+                                <Briefcase size={8} className="text-purple-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Job Opportunities</div>
                               </div>
-                              <div className="text-purple-500 text-xs px-2 py-1 bg-purple-50 rounded-full">Tailored</div>
+                              <div className="text-purple-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-purple-50 rounded-full">Tailored</div>
                             </div>
                             
-                            <div className="grid grid-cols-1 gap-2 h-[120px] overflow-y-auto">
-                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
-                                <div className="flex-shrink-0 w-7 h-7 bg-blue-100 rounded-md flex items-center justify-center mr-2">
-                                  <UserCheck size={14} className="text-blue-600" />
+                            <div className="grid grid-cols-1 gap-1 h-[80%] overflow-y-auto">
+                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
+                                <div className="flex-shrink-0 w-3 h-3 bg-blue-100 rounded-sm flex items-center justify-center mr-1">
+                                  <UserCheck size={6} className="text-blue-600" />
                                 </div>
                                 <div className="flex-1">
-                                  <div className="text-gray-800 text-xs font-medium">GRC Manager - Fintech</div>
-                                  <div className="text-gray-500 text-[9px] flex items-center justify-between">
+                                  <div className="text-gray-800 text-[5px] font-medium">GRC Manager - Fintech</div>
+                                  <div className="text-gray-500 text-[4px] flex items-center justify-between">
                                     <span>London • £90k-£110k</span>
-                                    <span className="bg-green-100 text-green-700 px-1 rounded text-[8px]">95% Match</span>
+                                    <span className="bg-green-100 text-green-700 px-0.5 rounded text-[3px]">95% Match</span>
                                   </div>
                                 </div>
                               </div>
-                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
-                                <div className="flex-shrink-0 w-7 h-7 bg-purple-100 rounded-md flex items-center justify-center mr-2">
-                                  <BadgeCheck size={14} className="text-purple-600" />
+                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
+                                <div className="flex-shrink-0 w-3 h-3 bg-purple-100 rounded-sm flex items-center justify-center mr-1">
+                                  <BadgeCheck size={6} className="text-purple-600" />
                                 </div>
                                 <div className="flex-1">
-                                  <div className="text-gray-800 text-xs font-medium">Compliance Director - Banking</div>
-                                  <div className="text-gray-500 text-[9px] flex items-center justify-between">
+                                  <div className="text-gray-800 text-[5px] font-medium">Compliance Director - Banking</div>
+                                  <div className="text-gray-500 text-[4px] flex items-center justify-between">
                                     <span>Remote • £120k-£150k</span>
-                                    <span className="bg-green-100 text-green-700 px-1 rounded text-[8px]">90% Match</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
-                                <div className="flex-shrink-0 w-7 h-7 bg-amber-100 rounded-md flex items-center justify-center mr-2">
-                                  <Compass size={14} className="text-amber-600" />
-                                </div>
-                                <div className="flex-1">
-                                  <div className="text-gray-800 text-xs font-medium">AML Specialist - Cryptocurrency</div>
-                                  <div className="text-gray-500 text-[9px] flex items-center justify-between">
-                                    <span>Berlin • €70k-€90k</span>
-                                    <span className="bg-green-100 text-green-700 px-1 rounded text-[8px]">88% Match</span>
+                                    <span className="bg-green-100 text-green-700 px-0.5 rounded text-[3px]">90% Match</span>
                                   </div>
                                 </div>
                               </div>
@@ -442,165 +436,41 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-              {/* MacBook Stand */}
-              <div className="h-3 bg-gradient-to-b from-gray-300 to-gray-400 rounded-b-xl mx-auto w-2/3"></div>
-              <div className="h-1 bg-gradient-to-b from-gray-300 to-gray-400 rounded-b-xl mx-auto w-1/4"></div>
               
               {/* Mobile App Mockup */}
-              <div className="absolute -right-6 -bottom-12 transform rotate-6 w-[160px] h-[320px] bg-white rounded-[24px] border-4 border-gray-200 shadow-xl overflow-hidden">
+              <div className="absolute -right-6 -bottom-12 transform rotate-6 w-[120px] h-[240px] bg-white rounded-[18px] border-4 border-gray-200 shadow-xl overflow-hidden">
                 {/* Status Bar */}
-                <div className="h-6 bg-gray-100 flex justify-between items-center px-2.5 text-[8px] text-gray-800">
+                <div className="h-4 bg-gray-100 flex justify-between items-center px-2 text-[6px] text-gray-800">
                   <span>9:41</span>
-                  <div className="flex gap-1 items-center">
-                    <div className="w-2 h-2 rounded-full bg-gray-600"></div>
-                    <div className="w-2 h-2 rounded-full bg-gray-600"></div>
-                    <div className="w-2 h-2 rounded-full bg-gray-600"></div>
+                  <div className="flex gap-0.5 items-center">
+                    <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+                    <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+                    <div className="w-1 h-1 rounded-full bg-gray-600"></div>
                   </div>
                 </div>
                 
                 {/* Mobile App Content */}
-                <div className="p-2 bg-[#F1F0FB]">
+                <div className="p-1 bg-[#F1F0FB]">
                   {/* App Header */}
-                  <div className="h-6 flex justify-between items-center mb-2">
-                    <div className="h-3 w-16 bg-indigo-500 rounded-sm flex items-center justify-center">
-                      <span className="text-[8px] text-white">SYNAPSES GRC</span>
+                  <div className="h-4 flex justify-between items-center mb-1">
+                    <div className="h-2 w-12 bg-indigo-500 rounded-sm flex items-center justify-center">
+                      <span className="text-[5px] text-white">SYNAPSES</span>
                     </div>
                     <img 
                       src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
                       alt="User" 
-                      className="w-5 h-5 rounded-full object-cover"
+                      className="w-3 h-3 rounded-full object-cover"
                     />
                   </div>
                   
                   {/* Dashboard Elements */}
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {/* Alert Widget */}
-                    <div className="h-20 bg-red-50 rounded-lg p-2 border border-red-100">
-                      <div className="flex items-center gap-1 mb-1">
-                        <ShieldAlert size={10} className="text-red-500" />
-                        <div className="text-[8px] text-red-700 font-medium">AMLD6 Priority Alert</div>
+                    <div className="h-16 bg-red-50 rounded-md p-1 border border-red-100">
+                      <div className="flex items-center gap-0.5 mb-0.5">
+                        <ShieldAlert size={6} className="text-red-500" />
+                        <div className="text-[5px] text-red-700 font-medium">AMLD6 Priority Alert</div>
                       </div>
-                      <div className="h-11 rounded flex flex-col justify-center p-1">
-                        <div className="text-[7px] text-gray-800 font-medium">Criminal Liability Extension</div>
-                        <div className="text-[6px] text-gray-600 mt-0.5 leading-tight">
-                          Penalties under AMLD6 are severe, and fines can reach into the hundreds of millions of euros. Review compliance measures immediately.
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* DORA Update */}
-                    <div className="h-20 bg-blue-50 rounded-lg p-2 border border-blue-100">
-                      <div className="flex items-center gap-1 mb-1">
-                        <FileText size={10} className="text-blue-500" />
-                        <div className="text-[8px] text-blue-700 font-medium">DORA Update</div>
-                      </div>
-                      
-                      <div className="text-[7px] text-gray-800 font-medium">ESAs Roadmap for CTPPs</div>
-                      <div className="text-[6px] text-gray-600 mt-0.5 leading-tight">
-                        The European Supervisory Authorities have published their joint roadmap for Critical Third-Party Providers designation under DORA.
-                      </div>
-                    </div>
-                    
-                    {/* Calendar Widget */}
-                    <div className="h-16 bg-white rounded-lg p-2 border border-gray-100">
-                      <div className="flex items-center gap-1 mb-1">
-                        <Calendar size={10} className="text-purple-500" />
-                        <div className="text-[8px] text-gray-800 font-medium">Today's Deadlines</div>
-                      </div>
-                      
-                      <div className="space-y-1">
-                        <div className="h-4 px-1.5 bg-gray-50 rounded flex items-center">
-                          <div className="h-1.5 w-1.5 rounded-full bg-red-500 mr-1"></div>
-                          <div className="text-[6px] text-gray-700">AMLD6 Compliance Report Due</div>
-                          <div className="ml-auto text-[6px] text-gray-500">Today</div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Mini Compliance Chart */}
-                    <div className="h-16 bg-white rounded-lg p-2 border border-gray-100">
-                      <div className="flex items-center gap-1 mb-1">
-                        <PieChart size={10} className="text-indigo-500" />
-                        <div className="text-[8px] text-gray-800 font-medium">Regulatory Focus</div>
-                      </div>
-                      <div className="flex h-8">
-                        <div className="w-1/2">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <ReChartPie
-                              data={pieChartData}
-                              innerRadius={8}
-                              outerRadius={15}
-                            >
-                              {pieChartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.fill} />
-                              ))}
-                            </ReChartPie>
-                          </ResponsiveContainer>
-                        </div>
-                        <div className="w-1/2 flex flex-col justify-center">
-                          <div className="flex items-center text-[5px]">
-                            <div className="w-1 h-1 bg-indigo-500 rounded-full mr-0.5"></div>
-                            <span className="text-gray-700">GDPR</span>
-                          </div>
-                          <div className="flex items-center text-[5px]">
-                            <div className="w-1 h-1 bg-pink-500 rounded-full mr-0.5"></div>
-                            <span className="text-gray-700">AMLD6</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Bottom Tabs */}
-                    <div className="h-8 bg-white rounded-lg mt-auto flex justify-around items-center border border-gray-100">
-                      <MessageSquare size={12} className="text-purple-500" />
-                      <Calendar size={12} className="text-gray-400" />
-                      <Bell size={12} className="text-gray-400" />
-                      <ShieldAlert size={12} className="text-gray-400" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Floating Regulatory Alert */}
-              <div className="absolute -top-12 -left-8 bg-white rounded-xl shadow-lg p-3 -rotate-6 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center text-red-500">
-                    <ShieldAlert size={20} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm">Urgent AMLD6 Alert</p>
-                    <p className="text-xs text-gray-500">Criminal liability extension requires action</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Feature Labels with more detailed text */}
-              <div className="absolute top-1/3 -right-32 hidden md:block">
-                <div className="flex items-center gap-2">
-                  <div className="h-0.5 w-14 bg-indigo-400"></div>
-                  <div className="text-sm font-medium text-indigo-600">Real-time Regulatory Analysis</div>
-                </div>
-              </div>
-              
-              <div className="absolute bottom-1/3 -left-32 hidden md:block">
-                <div className="flex items-center gap-2">
-                  <div className="text-sm font-medium text-indigo-600">Compliance Calendar & Alerts</div>
-                  <div className="h-0.5 w-14 bg-indigo-400"></div>
-                </div>
-              </div>
-              
-              <div className="absolute -right-44 bottom-16 hidden md:block">
-                <div className="flex items-center gap-2">
-                  <div className="h-0.5 w-14 bg-indigo-400"></div>
-                  <div className="text-sm font-medium text-indigo-600">Mobile Regulatory Intelligence</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default HeroSection;
+                      <div className="h-10 rounded flex flex-col justify-center p-0.5">
+                        <div className="text-[4px] text-gray-800 font-medium">Criminal Liability Extension</div>
+                        <div className="text-[3px] text-gray-600 mt
