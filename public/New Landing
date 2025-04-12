@@ -1,0 +1,51 @@
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ArrowRightIcon, ShieldCheckIcon, BriefcaseIcon, UsersIcon, MailIcon, TwitterIcon, LinkedinIcon } from 'lucide-react';
+
+export default function LandingPage() {
+  return (
+    <div className="bg-white font-sans min-h-screen">
+      {/* Stripe-Inspired Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <h1 className="text-xl font-bold text-blue-700 tracking-tight">Synapse</h1>
+          <nav className="hidden md:flex gap-8 text-sm text-gray-700">
+            <a href="#features" className="hover:text-blue-700">Features</a>
+            <a href="#how-it-works" className="hover:text-blue-700">How It Works</a>
+            <a href="#testimonials" className="hover:text-blue-700">Testimonials</a>
+            <a href="#faq" className="hover:text-blue-700">FAQ</a>
+          </nav>
+          <Button className="bg-blue-700 hover:bg-blue-800 text-white text-sm px-4 py-2">Join Waitlist</Button>
+        </div>
+      </header>
+
+      {/* Hero Section - Refined Color + Layout */}
+      <section className="bg-gradient-to-br from-[#eef4ff] via-white to-[#f8faff] px-6 pt-24 pb-12 md:pt-32 md:pb-20">
+        <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-12">
+          <div className="md:w-1/2 text-center md:text-left">
+            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight">
+              The Future of <span className="text-blue-700">GRC</span> is Connected
+            </h1>
+            <p className="mt-6 text-gray-600 text-lg">
+              SYNAPSES empowers GRC professionals with intelligent tools, specialized knowledge, and a vibrant community to navigate complex regulatory landscapes.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row sm:justify-start gap-4 justify-center">
+              <Button size="lg" className="bg-blue-700 hover:bg-blue-800 text-white">Join Waitlist <ArrowRightIcon className="ml-2 h-4 w-4" /></Button>
+              <Button size="lg" variant="outline" className="border-blue-700 text-blue-700 hover:bg-blue-50">Learn More</Button>
+            </div>
+            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-500 justify-center md:justify-start">
+              <span className="text-green-600 font-medium">● Early Access</span>
+              <span>300+ Professionals Joined</span>
+            </div>
+          </div>
+
+          <div className="md:w-1/2">
+            <img src="/images/hero-dashboard.png" alt="Synapses GRC Intelligence Dashboard" className="rounded-xl shadow-xl w-full" />
+          </div>
+        </div>
+      </section>
+
+      {/* Remaining layout (features, CTA, footer) unchanged */}
+    </div>
+  );
+}
