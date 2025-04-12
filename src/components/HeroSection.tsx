@@ -1,16 +1,36 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart } from "lucide-react";
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass } from "lucide-react";
+import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
-// Sample data for the colorful chart
-const chartData = [
+// Sample data for the colorful area chart
+const areaChartData = [
   { name: 'Jan', gdpr: 30, aml: 40, psd2: 20, dora: 27 },
   { name: 'Feb', gdpr: 25, aml: 43, psd2: 25, dora: 30 },
   { name: 'Mar', gdpr: 32, aml: 38, psd2: 20, dora: 35 },
   { name: 'Apr', gdpr: 35, aml: 43, psd2: 30, dora: 38 },
   { name: 'May', gdpr: 30, aml: 48, psd2: 25, dora: 40 },
   { name: 'Jun', gdpr: 40, aml: 50, psd2: 35, dora: 43 },
+];
+
+// Sample data for the pie chart
+const pieChartData = [
+  { name: 'GDPR', value: 35, fill: '#4F46E5' },
+  { name: 'AMLD6', value: 25, fill: '#EC4899' },
+  { name: 'DORA', value: 20, fill: '#10B981' },
+  { name: 'PSD2', value: 15, fill: '#F59E0B' },
+  { name: 'NIS2', value: 5, fill: '#8B5CF6' },
+];
+
+// Feature icons configuration
+const featureIcons = [
+  { title: "Regulatory Analysis", icon: <MessageSquare className="text-synapse-primary" size={20} /> },
+  { title: "Regulatory Calendar", icon: <Calendar className="text-purple-500" size={20} /> },
+  { title: "Regulatory Updates", icon: <Bell className="text-blue-500" size={20} /> },
+  { title: "CV Surgery", icon: <FileText className="text-emerald-500" size={20} /> },
+  { title: "Job Matching", icon: <Briefcase className="text-amber-500" size={20} /> },
+  { title: "Classes", icon: <BookOpen className="text-rose-500" size={20} /> },
 ];
 
 const HeroSection = () => {
@@ -53,15 +73,30 @@ const HeroSection = () => {
                 300+ Professionals Joined
               </span>
             </div>
+
+            {/* Feature Icons */}
+            <div className="mt-8 grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0">
+              {featureIcons.map((feature, index) => (
+                <div 
+                  key={index} 
+                  className="flex flex-col items-center p-3 rounded-lg bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                >
+                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
+                    {feature.icon}
+                  </div>
+                  <span className="text-xs text-gray-700 text-center font-medium">{feature.title}</span>
+                </div>
+              ))}
+            </div>
           </div>
           
           {/* Hero Image - GRC Platform Dashboard Mockup */}
           <div className="md:w-3/5 relative">
-            <div className="relative w-full max-w-2xl mx-auto">
+            <div className="relative w-full max-w-3xl mx-auto">
               {/* MacBook Pro Display */}
-              <div className="aspect-video mb-2 bg-gradient-to-b from-gray-800 to-gray-900 rounded-t-xl overflow-hidden shadow-2xl border-8 border-gray-800">
+              <div className="aspect-[16/10] mb-2 bg-gradient-to-b from-gray-200 to-gray-300 rounded-t-xl overflow-hidden shadow-2xl border-[12px] border-gray-200">
                 {/* MacBook Screen Content */}
-                <div className="aspect-[16/10] bg-[#F1F0FB] rounded-lg overflow-hidden border border-gray-200 relative">
+                <div className="aspect-[16/10] bg-[#F1F0FB] rounded-lg overflow-hidden border border-gray-100 relative">
                   {/* Header Bar */}
                   <div className="h-10 bg-white flex items-center px-3 border-b border-gray-200">
                     <div className="flex gap-1.5">
@@ -108,7 +143,11 @@ const HeroSection = () => {
                           <div className="text-xs text-gray-500">April 12, 2025</div>
                           <div className="flex items-center gap-2">
                             <div className="text-xs text-gray-500">Hi, Phoebe Banks</div>
-                            <div className="w-7 h-7 bg-purple-500 rounded-full flex items-center justify-center text-sm text-white">PB</div>
+                            <img 
+                              src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
+                              alt="Phoebe Banks" 
+                              className="w-7 h-7 rounded-full object-cover border border-gray-200"
+                            />
                           </div>
                         </div>
                       </div>
@@ -220,6 +259,44 @@ const HeroSection = () => {
                               </div>
                             </div>
                           </div>
+
+                          {/* Pie Chart */}
+                          <div className="h-[180px] bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <PieChart size={18} className="text-violet-500" />
+                                <div className="text-gray-800 text-base font-medium">Regulatory Focus Areas</div>
+                              </div>
+                              <div className="text-gray-500 text-xs">Distribution</div>
+                            </div>
+                            
+                            <div className="h-[120px] flex">
+                              <div className="w-2/3 h-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                  <ReChartPie
+                                    data={pieChartData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={30}
+                                    outerRadius={50}
+                                  >
+                                    {pieChartData.map((entry, index) => (
+                                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                                    ))}
+                                  </ReChartPie>
+                                </ResponsiveContainer>
+                              </div>
+                              <div className="w-1/3 flex flex-col justify-center space-y-1">
+                                {pieChartData.map((entry, index) => (
+                                  <div key={index} className="flex items-center text-[10px]">
+                                    <div className="w-2 h-2 rounded-full mr-1" style={{ backgroundColor: entry.fill }}></div>
+                                    <span className="text-gray-700">{entry.name}</span>
+                                    <span className="ml-auto text-gray-500">{entry.value}%</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
                         </div>
                         
                         {/* Right Column */}
@@ -250,7 +327,7 @@ const HeroSection = () => {
                             </div>
                           </div>
                           
-                          {/* Colorful Chart */}
+                          {/* Colorful Area Chart */}
                           <div className="h-[180px] bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
@@ -262,7 +339,7 @@ const HeroSection = () => {
                             
                             <div className="h-[120px] w-full">
                               <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                                <AreaChart data={areaChartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                                   <defs>
                                     <linearGradient id="gdpr" x1="0" y1="0" x2="0" y2="1">
                                       <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.8}/>
@@ -309,6 +386,56 @@ const HeroSection = () => {
                               </div>
                             </div>
                           </div>
+
+                          {/* Job Matching */}
+                          <div className="h-[180px] bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <Briefcase size={18} className="text-purple-500" />
+                                <div className="text-gray-800 text-base font-medium">Job Opportunities</div>
+                              </div>
+                              <div className="text-purple-500 text-xs px-2 py-1 bg-purple-50 rounded-full">Tailored</div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 gap-2 h-[120px] overflow-y-auto">
+                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
+                                <div className="flex-shrink-0 w-7 h-7 bg-blue-100 rounded-md flex items-center justify-center mr-2">
+                                  <UserCheck size={14} className="text-blue-600" />
+                                </div>
+                                <div className="flex-1">
+                                  <div className="text-gray-800 text-xs font-medium">GRC Manager - Fintech</div>
+                                  <div className="text-gray-500 text-[9px] flex items-center justify-between">
+                                    <span>London • £90k-£110k</span>
+                                    <span className="bg-green-100 text-green-700 px-1 rounded text-[8px]">95% Match</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
+                                <div className="flex-shrink-0 w-7 h-7 bg-purple-100 rounded-md flex items-center justify-center mr-2">
+                                  <BadgeCheck size={14} className="text-purple-600" />
+                                </div>
+                                <div className="flex-1">
+                                  <div className="text-gray-800 text-xs font-medium">Compliance Director - Banking</div>
+                                  <div className="text-gray-500 text-[9px] flex items-center justify-between">
+                                    <span>Remote • £120k-£150k</span>
+                                    <span className="bg-green-100 text-green-700 px-1 rounded text-[8px]">90% Match</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="bg-gray-50 rounded-md flex items-start p-2.5 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
+                                <div className="flex-shrink-0 w-7 h-7 bg-amber-100 rounded-md flex items-center justify-center mr-2">
+                                  <Compass size={14} className="text-amber-600" />
+                                </div>
+                                <div className="flex-1">
+                                  <div className="text-gray-800 text-xs font-medium">AML Specialist - Cryptocurrency</div>
+                                  <div className="text-gray-500 text-[9px] flex items-center justify-between">
+                                    <span>Berlin • €70k-€90k</span>
+                                    <span className="bg-green-100 text-green-700 px-1 rounded text-[8px]">88% Match</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -316,10 +443,11 @@ const HeroSection = () => {
                 </div>
               </div>
               {/* MacBook Stand */}
-              <div className="h-3 bg-gradient-to-b from-gray-700 to-gray-900 rounded-b-xl mx-auto w-1/3"></div>
+              <div className="h-3 bg-gradient-to-b from-gray-300 to-gray-400 rounded-b-xl mx-auto w-2/3"></div>
+              <div className="h-1 bg-gradient-to-b from-gray-300 to-gray-400 rounded-b-xl mx-auto w-1/4"></div>
               
               {/* Mobile App Mockup */}
-              <div className="absolute -right-8 -bottom-16 transform rotate-6 w-[160px] h-[320px] bg-white rounded-[24px] border-4 border-gray-200 shadow-xl overflow-hidden">
+              <div className="absolute -right-6 -bottom-12 transform rotate-6 w-[160px] h-[320px] bg-white rounded-[24px] border-4 border-gray-200 shadow-xl overflow-hidden">
                 {/* Status Bar */}
                 <div className="h-6 bg-gray-100 flex justify-between items-center px-2.5 text-[8px] text-gray-800">
                   <span>9:41</span>
@@ -337,9 +465,11 @@ const HeroSection = () => {
                     <div className="h-3 w-16 bg-indigo-500 rounded-sm flex items-center justify-center">
                       <span className="text-[8px] text-white">SYNAPSES GRC</span>
                     </div>
-                    <div className="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
-                      <span className="text-[8px] text-white">PB</span>
-                    </div>
+                    <img 
+                      src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
+                      alt="User" 
+                      className="w-5 h-5 rounded-full object-cover"
+                    />
                   </div>
                   
                   {/* Dashboard Elements */}
@@ -387,6 +517,39 @@ const HeroSection = () => {
                       </div>
                     </div>
                     
+                    {/* Mini Compliance Chart */}
+                    <div className="h-16 bg-white rounded-lg p-2 border border-gray-100">
+                      <div className="flex items-center gap-1 mb-1">
+                        <PieChart size={10} className="text-indigo-500" />
+                        <div className="text-[8px] text-gray-800 font-medium">Regulatory Focus</div>
+                      </div>
+                      <div className="flex h-8">
+                        <div className="w-1/2">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <ReChartPie
+                              data={pieChartData}
+                              innerRadius={8}
+                              outerRadius={15}
+                            >
+                              {pieChartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                              ))}
+                            </ReChartPie>
+                          </ResponsiveContainer>
+                        </div>
+                        <div className="w-1/2 flex flex-col justify-center">
+                          <div className="flex items-center text-[5px]">
+                            <div className="w-1 h-1 bg-indigo-500 rounded-full mr-0.5"></div>
+                            <span className="text-gray-700">GDPR</span>
+                          </div>
+                          <div className="flex items-center text-[5px]">
+                            <div className="w-1 h-1 bg-pink-500 rounded-full mr-0.5"></div>
+                            <span className="text-gray-700">AMLD6</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
                     {/* Bottom Tabs */}
                     <div className="h-8 bg-white rounded-lg mt-auto flex justify-around items-center border border-gray-100">
                       <MessageSquare size={12} className="text-purple-500" />
@@ -399,7 +562,7 @@ const HeroSection = () => {
               </div>
               
               {/* Floating Regulatory Alert */}
-              <div className="absolute -top-8 -left-8 bg-white rounded-xl shadow-lg p-3 -rotate-6 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+              <div className="absolute -top-12 -left-8 bg-white rounded-xl shadow-lg p-3 -rotate-6 animate-fade-in" style={{ animationDelay: "0.3s" }}>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center text-red-500">
                     <ShieldAlert size={20} />
