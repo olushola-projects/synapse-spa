@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -65,16 +65,28 @@ const HeroSection = () => {
                     <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
                       <div className="w-6 h-6 bg-indigo-400 rounded-md"></div>
                     </div>
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className="w-8 h-8 bg-white/5 rounded-md"></div>
-                    ))}
+                    <div className="w-8 h-8 bg-white/30 rounded-md flex items-center justify-center">
+                      <MessageSquare size={16} className="text-white/80" />
+                    </div>
+                    <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center">
+                      <Calendar size={16} className="text-white/80" />
+                    </div>
+                    <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center">
+                      <Bell size={16} className="text-white/80" />
+                    </div>
+                    <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center">
+                      <Briefcase size={16} className="text-white/80" />
+                    </div>
+                    <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center">
+                      <BookOpen size={16} className="text-white/80" />
+                    </div>
                   </div>
                   
                   {/* Main Content */}
                   <div className="flex-1 pl-3 flex flex-col gap-3">
                     {/* Header */}
                     <div className="h-8 flex justify-between items-center">
-                      <div className="text-white text-sm font-medium">Regulatory Dashboard</div>
+                      <div className="text-white text-sm font-medium">Regulatory Intelligence Dashboard</div>
                       <div className="flex gap-2 items-center">
                         <div className="w-6 h-6 bg-white/10 rounded-full"></div>
                       </div>
@@ -82,13 +94,38 @@ const HeroSection = () => {
                     
                     {/* KPI Row */}
                     <div className="flex gap-2 h-[60px]">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="flex-1 bg-white/5 rounded-lg p-2">
-                          <div className="h-2 w-16 bg-white/20 rounded mb-2"></div>
-                          <div className="h-3 w-10 bg-white/30 rounded"></div>
-                          <div className="h-2 w-full mt-2 bg-gradient-to-r from-blue-500/50 to-purple-500/50 rounded-full"></div>
+                      <div className="flex-1 bg-white/5 rounded-lg p-2">
+                        <div className="flex items-center gap-1.5">
+                          <Clock size={14} className="text-blue-400" />
+                          <div className="h-2 w-16 bg-white/20 rounded text-xs text-white/60">Updates</div>
                         </div>
-                      ))}
+                        <div className="h-3 w-10 bg-white/30 rounded mt-1 text-xs text-white font-medium">12 New</div>
+                        <div className="h-2 w-full mt-2 bg-gradient-to-r from-blue-500/50 to-purple-500/50 rounded-full"></div>
+                      </div>
+                      <div className="flex-1 bg-white/5 rounded-lg p-2">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar size={14} className="text-purple-400" />
+                          <div className="h-2 w-16 bg-white/20 rounded text-xs text-white/60">Deadlines</div>
+                        </div>
+                        <div className="h-3 w-10 bg-white/30 rounded mt-1 text-xs text-white font-medium">3 Due</div>
+                        <div className="h-2 w-full mt-2 bg-gradient-to-r from-purple-500/50 to-pink-500/50 rounded-full"></div>
+                      </div>
+                      <div className="flex-1 bg-white/5 rounded-lg p-2">
+                        <div className="flex items-center gap-1.5">
+                          <MessageSquare size={14} className="text-emerald-400" />
+                          <div className="h-2 w-16 bg-white/20 rounded text-xs text-white/60">AI Assists</div>
+                        </div>
+                        <div className="h-3 w-10 bg-white/30 rounded mt-1 text-xs text-white font-medium">24 Used</div>
+                        <div className="h-2 w-full mt-2 bg-gradient-to-r from-emerald-500/50 to-teal-500/50 rounded-full"></div>
+                      </div>
+                      <div className="flex-1 bg-white/5 rounded-lg p-2">
+                        <div className="flex items-center gap-1.5">
+                          <Briefcase size={14} className="text-amber-400" />
+                          <div className="h-2 w-16 bg-white/20 rounded text-xs text-white/60">Jobs</div>
+                        </div>
+                        <div className="h-3 w-10 bg-white/30 rounded mt-1 text-xs text-white font-medium">5 Matches</div>
+                        <div className="h-2 w-full mt-2 bg-gradient-to-r from-amber-500/50 to-orange-500/50 rounded-full"></div>
+                      </div>
                     </div>
                     
                     {/* Main Widgets Area */}
@@ -96,27 +133,68 @@ const HeroSection = () => {
                       {/* Left Column */}
                       <div className="flex-1 flex flex-col gap-3">
                         <div className="flex-1 bg-white/5 rounded-lg p-3">
-                          <div className="h-2 w-20 bg-white/20 rounded mb-3"></div>
-                          <div className="flex-1 h-20 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 rounded-lg flex items-center justify-center">
-                            <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center relative">
-                              <div className="h-12 w-12 flex items-center justify-center">
-                                <svg viewBox="0 0 100 100" className="w-full h-full">
-                                  <circle cx="50" cy="50" r="40" fill="none" stroke="#4338CA30" strokeWidth="10" />
-                                  <circle cx="50" cy="50" r="40" fill="none" stroke="#6366F1" strokeWidth="10" strokeDasharray="251.2" strokeDashoffset="62.8" transform="rotate(-90 50 50)" />
-                                </svg>
-                                <div className="absolute text-xs text-white">75%</div>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <MessageSquare size={16} className="text-indigo-400" />
+                              <div className="text-white text-xs font-medium">AI Assistant</div>
+                            </div>
+                            <div className="text-white/40 text-[10px]">Ask Dara</div>
+                          </div>
+                          
+                          <div className="flex-1 h-20 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center p-2">
+                            <div className="bg-black/30 rounded-lg p-2 w-full">
+                              <div className="flex gap-2">
+                                <div className="w-6 h-6 rounded-full bg-purple-500/30 flex items-center justify-center">
+                                  <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
+                                </div>
+                                <div className="flex-1">
+                                  <div className="h-2 w-3/4 bg-white/20 rounded mb-1"></div>
+                                  <div className="h-2 w-1/2 bg-white/10 rounded"></div>
+                                </div>
                               </div>
+                              <div className="mt-2 h-px bg-white/10 w-full"></div>
+                              <div className="mt-2 h-2 w-full bg-white/5 rounded"></div>
                             </div>
                           </div>
                         </div>
                         <div className="h-36 bg-white/5 rounded-lg p-3">
-                          <div className="h-2 w-20 bg-white/20 rounded mb-2"></div>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <Calendar size={16} className="text-blue-400" />
+                              <div className="text-white text-xs font-medium">Regulatory Calendar</div>
+                            </div>
+                            <div className="text-white/40 text-[10px]">This Week</div>
+                          </div>
+                          
                           <div className="grid grid-cols-2 gap-2 h-[80px]">
-                            {[1, 2, 3, 4].map((i) => (
-                              <div key={i} className="bg-white/10 rounded-md flex items-center justify-center">
-                                <div className="h-4 w-4 rounded-full bg-indigo-400/50"></div>
+                            <div className="bg-white/10 rounded-md flex items-start p-2">
+                              <div className="w-2 h-2 rounded-full bg-yellow-400 mt-1 mr-1.5"></div>
+                              <div>
+                                <div className="h-2 w-12 bg-white/30 rounded mb-1"></div>
+                                <div className="h-1.5 w-20 bg-white/20 rounded"></div>
                               </div>
-                            ))}
+                            </div>
+                            <div className="bg-white/10 rounded-md flex items-start p-2">
+                              <div className="w-2 h-2 rounded-full bg-red-400 mt-1 mr-1.5"></div>
+                              <div>
+                                <div className="h-2 w-12 bg-white/30 rounded mb-1"></div>
+                                <div className="h-1.5 w-20 bg-white/20 rounded"></div>
+                              </div>
+                            </div>
+                            <div className="bg-white/10 rounded-md flex items-start p-2">
+                              <div className="w-2 h-2 rounded-full bg-green-400 mt-1 mr-1.5"></div>
+                              <div>
+                                <div className="h-2 w-12 bg-white/30 rounded mb-1"></div>
+                                <div className="h-1.5 w-20 bg-white/20 rounded"></div>
+                              </div>
+                            </div>
+                            <div className="bg-white/10 rounded-md flex items-start p-2">
+                              <div className="w-2 h-2 rounded-full bg-purple-400 mt-1 mr-1.5"></div>
+                              <div>
+                                <div className="h-2 w-12 bg-white/30 rounded mb-1"></div>
+                                <div className="h-1.5 w-20 bg-white/20 rounded"></div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -124,19 +202,42 @@ const HeroSection = () => {
                       {/* Right Column */}
                       <div className="flex-1 flex flex-col gap-3">
                         <div className="h-40 bg-white/5 rounded-lg p-3">
-                          <div className="h-2 w-20 bg-white/20 rounded mb-4"></div>
-                          <div className="flex justify-between h-[80px]">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                              <div key={i} className="w-[15%] bg-gradient-to-t from-teal-500/20 to-teal-500/60 rounded-sm" style={{ height: `${20 + i * 15}%` }}></div>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <BarChart3 size={16} className="text-teal-400" />
+                              <div className="text-white text-xs font-medium">Compliance Metrics</div>
+                            </div>
+                            <div className="text-white/40 text-[10px]">Monthly</div>
+                          </div>
+                          
+                          <div className="flex justify-between items-end h-[80px] pt-4">
+                            {[65, 40, 75, 50, 60].map((height, i) => (
+                              <div key={i} className="w-[15%] bg-gradient-to-t from-teal-500/20 to-teal-500/60 rounded-sm" style={{ height: `${height}%` }}></div>
+                            ))}
+                          </div>
+                          <div className="flex justify-between mt-2">
+                            {["GDPR", "PCI", "SOX", "HIPAA", "AML"].map((text, i) => (
+                              <div key={i} className="text-[8px] text-white/50">{text}</div>
                             ))}
                           </div>
                         </div>
                         <div className="flex-1 bg-white/5 rounded-lg p-3">
-                          <div className="h-2 w-20 bg-white/20 rounded mb-2"></div>
-                          <div className="flex gap-1 flex-wrap">
-                            {[1, 2, 3, 4].map((i) => (
-                              <div key={i} className="h-6 flex-1 min-w-[60px] bg-white/10 rounded-md flex items-center px-2">
-                                <div className="h-2 w-full bg-white/20 rounded"></div>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <FileText size={16} className="text-amber-400" />
+                              <div className="text-white text-xs font-medium">Daily Insights</div>
+                            </div>
+                            <div className="text-white/40 text-[10px]">5 New</div>
+                          </div>
+                          
+                          <div className="space-y-1.5">
+                            {[1, 2, 3].map((i) => (
+                              <div key={i} className="h-6 px-2 bg-white/10 rounded flex items-center justify-between">
+                                <div className="flex items-center gap-1.5">
+                                  <div className={`w-1.5 h-1.5 rounded-full ${i === 1 ? "bg-red-400" : i === 2 ? "bg-yellow-400" : "bg-blue-400"}`}></div>
+                                  <div className="h-1.5 w-24 bg-white/20 rounded-sm"></div>
+                                </div>
+                                <div className="h-1.5 w-6 bg-white/10 rounded-sm"></div>
                               </div>
                             ))}
                           </div>
@@ -169,28 +270,40 @@ const HeroSection = () => {
                   
                   {/* Dashboard Elements */}
                   <div className="space-y-2">
-                    {/* Chart */}
+                    {/* Chat with Dara */}
                     <div className="h-24 bg-white/5 rounded-lg p-2">
-                      <div className="h-1.5 w-10 bg-white/20 rounded-sm mb-2"></div>
-                      <div className="h-14 bg-gradient-to-r from-teal-500/30 to-blue-500/30 rounded flex items-center justify-center">
-                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                          <div className="w-6 h-6 rounded-full border-2 border-teal-400 border-t-transparent"></div>
+                      <div className="flex items-center gap-1 mb-1">
+                        <MessageSquare size={8} className="text-purple-400" />
+                        <div className="h-1.5 w-12 bg-white/20 rounded-sm text-[6px] text-white">Dara</div>
+                      </div>
+                      <div className="h-14 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded flex flex-col justify-center p-1.5">
+                        <div className="flex gap-1 items-start mb-1">
+                          <div className="w-3 h-3 rounded-full bg-purple-500/30 flex-shrink-0"></div>
+                          <div className="h-1 w-full bg-white/20 rounded-sm"></div>
+                        </div>
+                        <div className="h-1 w-3/4 bg-white/10 rounded-sm ml-4 mb-1"></div>
+                        <div className="h-1 w-1/2 bg-white/10 rounded-sm ml-4"></div>
+                        <div className="h-3 mt-1 flex">
+                          <div className="h-1 w-full bg-white/5 rounded-sm"></div>
                         </div>
                       </div>
                     </div>
                     
-                    {/* Alert Cards */}
+                    {/* Regulatory Alerts */}
                     <div className="h-20 bg-white/5 rounded-lg p-2">
-                      <div className="flex justify-between mb-1">
-                        <div className="h-1.5 w-12 bg-white/20 rounded-sm"></div>
-                        <div className="h-1.5 w-4 bg-white/20 rounded-sm"></div>
+                      <div className="flex items-center gap-1 mb-1">
+                        <Bell size={8} className="text-amber-400" />
+                        <div className="h-1.5 w-16 bg-white/20 rounded-sm text-[6px] text-white">Alerts</div>
                       </div>
                       
                       <div className="space-y-1.5">
                         {[1, 2].map((i) => (
                           <div key={i} className="h-6 px-1.5 bg-white/10 rounded flex justify-between items-center">
-                            <div className="h-1.5 w-8 bg-white/20 rounded-sm"></div>
-                            <div className="h-3 w-3 rounded-full bg-yellow-500/50"></div>
+                            <div className="flex items-center gap-1">
+                              <div className={`h-1.5 w-1.5 rounded-full ${i === 1 ? "bg-red-500/50" : "bg-yellow-500/50"}`}></div>
+                              <div className="h-1 w-12 bg-white/20 rounded-sm"></div>
+                            </div>
+                            <div className="h-1 w-6 bg-white/10 rounded-sm"></div>
                           </div>
                         ))}
                       </div>
@@ -198,19 +311,20 @@ const HeroSection = () => {
                     
                     {/* Bottom Tabs */}
                     <div className="h-6 bg-black/30 rounded-lg mt-auto flex justify-around items-center">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="w-3 h-3 bg-white/20 rounded-sm"></div>
-                      ))}
+                      <MessageSquare size={10} className="text-purple-400" />
+                      <Calendar size={10} className="text-white/40" />
+                      <Bell size={10} className="text-white/40" />
+                      <Briefcase size={10} className="text-white/40" />
                     </div>
                   </div>
                 </div>
               </div>
               
-              {/* Floating Element */}
+              {/* Floating Compliance Alert */}
               <div className="absolute -top-6 -left-6 bg-white rounded-xl shadow-lg p-3 -rotate-6 animate-fade-in" style={{ animationDelay: "0.3s" }}>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 font-bold text-xs">
-                    !
+                  <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                    <Bell size={16} />
                   </div>
                   <div>
                     <p className="font-medium text-xs">Compliance Alert</p>
@@ -220,24 +334,24 @@ const HeroSection = () => {
               </div>
               
               {/* Feature Labels */}
-              <div className="absolute top-1/4 -right-24 hidden md:block">
+              <div className="absolute top-1/3 -right-28 hidden md:block">
                 <div className="flex items-center gap-2">
                   <div className="h-0.5 w-12 bg-indigo-400"></div>
-                  <div className="text-xs font-medium text-indigo-600">Advanced AI Orchestration</div>
+                  <div className="text-xs font-medium text-indigo-600">AI-Powered Analysis</div>
                 </div>
               </div>
               
-              <div className="absolute bottom-1/4 -left-24 hidden md:block">
+              <div className="absolute bottom-1/3 -left-28 hidden md:block">
                 <div className="flex items-center gap-2">
-                  <div className="text-xs font-medium text-indigo-600">Enterprise Innovation</div>
+                  <div className="text-xs font-medium text-indigo-600">Regulatory Calendar</div>
                   <div className="h-0.5 w-12 bg-indigo-400"></div>
                 </div>
               </div>
               
-              <div className="absolute -right-36 bottom-12 hidden md:block">
+              <div className="absolute -right-40 bottom-12 hidden md:block">
                 <div className="flex items-center gap-2">
                   <div className="h-0.5 w-12 bg-indigo-400"></div>
-                  <div className="text-xs font-medium text-indigo-600">Multi Device Access</div>
+                  <div className="text-xs font-medium text-indigo-600">Mobile Compliance Access</div>
                 </div>
               </div>
             </div>
