@@ -5,7 +5,7 @@ import {
   MessageSquareCode, Bot, Calendar, RefreshCw, Lightbulb, 
   Briefcase, Scissors, FilePen, Headphones, Users, 
   MessageSquare, Folder, School, Award, Badge, 
-  UserCheck, Handshake, Translate
+  UserCheck, Handshake, Globe
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -135,7 +135,7 @@ const solutions: Solution[] = [
     id: "translation",
     title: "Multilingual Support",
     description: "Break language barriers with expert translation services.",
-    icon: Translate,
+    icon: Globe,
     color: "from-blue-600 to-indigo-700",
   }
 ];
