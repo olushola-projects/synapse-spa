@@ -2,8 +2,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
-  FileCheck2, BarChart3, Lightbulb, Shield, PieChart, 
-  Calendar, BookOpen, Users, AlertCircle
+  MessageSquareCode, Bot, Calendar, RefreshCw, Lightbulb, 
+  Briefcase, Scissors, FilePen, Headphones, Users, 
+  MessageSquare, Folder, School, Award, Badge, 
+  UserCheck, Handshake, Translate
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,68 +20,124 @@ type Solution = {
 
 const solutions: Solution[] = [
   {
-    id: "compliance",
-    title: "Compliance Management",
-    description: "Track and manage all your regulatory obligations with automated workflows, task assignments, and deadline reminders.",
-    icon: FileCheck2,
-    color: "from-blue-600 to-indigo-600",
+    id: "dara-chatbot",
+    title: "Regulatory Analysis Chatbot - Dara",
+    description: "AI-powered insights for complex regulatory interpretation and guidance.",
+    icon: Bot,
+    color: "from-purple-600 to-indigo-600",
   },
   {
-    id: "analytics",
-    title: "Risk Analytics",
-    description: "Visualize your compliance landscape with powerful dashboards, heat maps, and trend analysis to identify emerging risks.",
-    icon: BarChart3,
-    color: "from-amber-500 to-orange-600",
-  },
-  {
-    id: "intelligence",
-    title: "Regulatory Intelligence",
-    description: "Stay ahead with AI-powered insights on changing regulations, impact analysis, and actionable recommendations.",
-    icon: Lightbulb,
+    id: "regulatory-calendar",
+    title: "Regulatory Calendar",
+    description: "Track critical regulatory deadlines and upcoming changes with precision.",
+    icon: Calendar,
     color: "from-emerald-500 to-teal-600",
   },
   {
-    id: "security",
-    title: "Data Protection",
-    description: "Ensure GDPR, CCPA, and other privacy compliance with data mapping, subject access requests, and breach management tools.",
-    icon: Shield,
-    color: "from-purple-600 to-fuchsia-600",
+    id: "regulatory-updates",
+    title: "Regulatory Updates",
+    description: "Stay informed with real-time regulatory change notifications.",
+    icon: RefreshCw,
+    color: "from-blue-500 to-cyan-600",
   },
   {
-    id: "reporting",
-    title: "Executive Reporting",
-    description: "Generate board-ready reports with compliance metrics, risk exposures, and attestation status across your organization.",
-    icon: PieChart,
-    color: "from-rose-500 to-red-600",
+    id: "daily-insights",
+    title: "Daily Regulatory Insights",
+    description: "Curated, bite-sized regulatory news tailored to your industry.",
+    icon: Lightbulb,
+    color: "from-amber-500 to-orange-600",
   },
   {
-    id: "training",
-    title: "Certification Training",
-    description: "Access industry-recognized GRC certification courses with interactive learning modules and practice examinations.",
-    icon: BookOpen,
+    id: "job-matching",
+    title: "Job Matching",
+    description: "Personalized career opportunities aligned with your GRC expertise.",
+    icon: Briefcase,
+    color: "from-red-500 to-pink-600",
+  },
+  {
+    id: "cv-surgery",
+    title: "CV Surgery",
+    description: "AI-powered resume optimization for GRC professionals.",
+    icon: FilePen,
+    color: "from-indigo-500 to-purple-600",
+  },
+  {
+    id: "coaching-training",
+    title: "Coaching & Training",
+    description: "Comprehensive learning paths with AI and expert-guided training.",
+    icon: Headphones,
     color: "from-cyan-500 to-blue-600",
   },
   {
-    id: "calendar",
-    title: "Regulatory Calendar",
-    description: "Track implementation dates, comment periods, and effective dates for regulations affecting your industry.",
-    icon: Calendar,
+    id: "networking",
+    title: "Networking",
+    description: "Connect with 10,000+ global GRC professionals.",
+    icon: Users,
     color: "from-green-500 to-emerald-600",
   },
   {
-    id: "community",
-    title: "Expert Network",
-    description: "Connect with compliance leaders for peer benchmarking, best practices, and collaborative problem-solving.",
-    icon: Users,
-    color: "from-violet-600 to-purple-700",
+    id: "interview-coaching",
+    title: "AI + Human Interview Coaching",
+    description: "Tailored interview preparation with advanced performance analytics.",
+    icon: MessageSquareCode,
+    color: "from-rose-500 to-pink-600",
   },
   {
-    id: "alerts",
-    title: "Regulatory Alerts",
-    description: "Receive timely notifications about regulatory changes tailored to your specific industry and jurisdictions.",
-    icon: AlertCircle, 
+    id: "community-forum",
+    title: "Community Forum",
+    description: "Collaborative platform to discuss regulatory challenges.",
+    icon: MessageSquare,
+    color: "from-sky-500 to-blue-600",
+  },
+  {
+    id: "career-insights",
+    title: "Career Insights",
+    description: "Personalized career development strategies and counseling.",
+    icon: Folder,
+    color: "from-violet-500 to-fuchsia-600",
+  },
+  {
+    id: "events-projects",
+    title: "Events & Projects",
+    description: "Engage in collaborative compliance initiatives and networking events.",
+    icon: School,
+    color: "from-orange-500 to-red-600",
+  },
+  {
+    id: "team-huddle",
+    title: "Team Huddle",
+    description: "Streamline compliance workflows and team collaboration.",
+    icon: Users,
+    color: "from-teal-500 to-green-600",
+  },
+  {
+    id: "gamification",
+    title: "Gamification",
+    description: "Earn badges, track progress, and make compliance engaging.",
+    icon: Award,
+    color: "from-yellow-500 to-amber-600",
+  },
+  {
+    id: "badges",
+    title: "Professional Badges",
+    description: "Showcase your compliance expertise with verifiable digital credentials.",
+    icon: Badge,
+    color: "from-lime-500 to-green-600",
+  },
+  {
+    id: "mentorship",
+    title: "Mentorship",
+    description: "Connect with senior GRC professionals for personalized guidance.",
+    icon: UserCheck,
     color: "from-pink-500 to-rose-600",
   },
+  {
+    id: "translation",
+    title: "Multilingual Support",
+    description: "Break language barriers with expert translation services.",
+    icon: Translate,
+    color: "from-blue-600 to-indigo-700",
+  }
 ];
 
 const ModularSolutionsSection = () => {
@@ -101,22 +159,22 @@ const ModularSolutionsSection = () => {
             Modular Solutions
           </h2>
           <p className="text-lg text-slate-700 max-w-2xl mx-auto">
-            A fully integrated suite of GRC products and services designed to streamline compliance workflows
+            A comprehensive ecosystem of tools designed to elevate your GRC professional journey
           </p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Solutions nav - left sidebar on desktop, horizontal scrolling tabs on mobile */}
-          <div className="lg:col-span-3">
-            <div className="flex lg:flex-col overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 gap-2">
+          {/* Solutions nav - scrollable on mobile, sidebar on desktop */}
+          <div className="lg:col-span-3 max-h-[600px] overflow-y-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-2">
               {solutions.map((solution) => (
                 <Button
                   key={solution.id}
                   variant="ghost"
-                  size="lg"
+                  size="sm"
                   className={cn(
-                    "justify-start gap-3 rounded-lg px-4 py-2 text-left",
-                    "border border-transparent transition-colors whitespace-nowrap",
+                    "justify-start gap-3 rounded-lg px-3 py-2 text-left w-full",
+                    "border border-transparent transition-colors whitespace-nowrap text-xs",
                     activeSolution === solution.id
                       ? "bg-slate-100 border-slate-200"
                       : "hover:bg-slate-50 hover:border-slate-100"
@@ -124,9 +182,9 @@ const ModularSolutionsSection = () => {
                   onClick={() => setActiveSolution(solution.id)}
                 >
                   <div className={`rounded-md p-1 bg-gradient-to-br ${solution.color} text-white`}>
-                    <solution.icon className="h-4 w-4" />
+                    <solution.icon className="h-3 w-3" />
                   </div>
-                  <span>{solution.title}</span>
+                  <span className="truncate">{solution.title}</span>
                 </Button>
               ))}
             </div>
@@ -134,15 +192,15 @@ const ModularSolutionsSection = () => {
           
           {/* Solution details - animates when selection changes */}
           <div className="lg:col-span-9">
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 h-full">
-              <motion.div
-                key={activeSolution} 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="flex flex-col md:flex-row md:items-start gap-8"
-              >
+            <motion.div
+              key={activeSolution} 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-2xl shadow-lg border border-slate-100 p-8"
+            >
+              <div className="flex flex-col md:flex-row md:items-start gap-8">
                 {/* Solution icon */}
                 <div className={`hidden md:flex items-center justify-center w-24 h-24 rounded-xl bg-gradient-to-br ${activeSolutionData.color} text-white shadow-lg`}>
                   <activeSolutionData.icon className="h-10 w-10" />
@@ -158,31 +216,6 @@ const ModularSolutionsSection = () => {
                     {activeSolutionData.description}
                   </p>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Solution features */}
-                    {Array.from({ length: 4 }).map((_, i) => (
-                      <motion.div
-                        key={`feature-${activeSolution}-${i}`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 * i }}
-                        className="bg-slate-50 rounded-lg p-4 border border-slate-100"
-                      >
-                        <div className="flex gap-3 items-start">
-                          <div className={`rounded-md p-1 bg-gradient-to-br ${activeSolutionData.color} text-white`}>
-                            <activeSolutionData.icon className="h-4 w-4" />
-                          </div>
-                          <div>
-                            <h4 className="font-medium">Feature {i + 1}</h4>
-                            <p className="text-sm text-slate-500">
-                              {`Enhance your ${activeSolutionData.title.toLowerCase()} with integrated tools and analytics.`}
-                            </p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-
                   <div className="mt-8">
                     <Button
                       className={`bg-gradient-to-r ${activeSolutionData.color} text-white hover:shadow-md transition-shadow`}
@@ -191,8 +224,8 @@ const ModularSolutionsSection = () => {
                     </Button>
                   </div>
                 </div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
