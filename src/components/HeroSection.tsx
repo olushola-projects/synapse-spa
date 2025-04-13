@@ -1,7 +1,9 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { useState, useEffect } from "react";
 
 // Sample data for the colorful area chart
 const areaChartData = [
@@ -33,31 +35,54 @@ const featureIcons = [
 ];
 
 const HeroSection = () => {
+  // Animation states for staggered animations
+  const [animateContent, setAnimateContent] = useState(false);
+  const [animateImage, setAnimateImage] = useState(false);
+  const [animateFeatures, setAnimateFeatures] = useState(false);
+
+  // Trigger animations on component mount
+  useEffect(() => {
+    const timer1 = setTimeout(() => setAnimateContent(true), 100);
+    const timer2 = setTimeout(() => setAnimateImage(true), 300);
+    const timer3 = setTimeout(() => setAnimateFeatures(true), 600);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
   return (
     <div className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 to-indigo-50"></div>
       <div className="absolute inset-0 -z-10 bg-gradient-radial from-indigo-200/30 via-transparent to-transparent"></div>
-      <div className="absolute top-1/3 right-0 w-72 h-72 bg-synapse-accent/10 rounded-full filter blur-3xl -z-10"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-synapse-primary/10 rounded-full filter blur-3xl -z-10"></div>
+      <div className="absolute top-1/3 right-0 w-72 h-72 bg-synapse-accent/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-synapse-primary/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
+      
+      {/* Animated gradient background stripe-like */}
+      <div className="absolute inset-x-0 top-40 h-[500px] -z-10 transform -skew-y-6 opacity-10">
+        <div className="h-full w-full bg-gradient-stripe from-purple-300 via-blue-300 to-indigo-300 animate-gradient-shift"></div>
+      </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center">
-          {/* Text Content */}
-          <div className="md:w-2/5 pb-10 md:pb-0 text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight">
+          {/* Text Content with animations */}
+          <div className={`md:w-2/5 pb-10 md:pb-0 text-center md:text-left transition-all duration-700 ease-out ${animateContent ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+            <h1 className="heading-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700">
               The Future of <span className="text-synapse-primary">GRC</span> is Connected
             </h1>
             
-            <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl mx-auto md:mx-0">
-              SYNAPSES empowers GRC professionals with intelligent tools, specialized knowledge, and a vibrant community to navigate complex regulatory landscapes.
+            <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl mx-auto md:mx-0 leading-relaxed">
+              Synapses empowers GRC professionals with intelligent tools, specialized knowledge, and a vibrant community to navigate complex regulatory landscapes.
             </p>
             
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button className="text-white bg-synapse-primary hover:bg-synapse-secondary px-8 py-6 text-lg rounded-lg flex items-center gap-2">
+              <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
                 Join Waitlist <ArrowRight size={18} />
               </Button>
-              <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg">
+              <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg hover-lift">
                 Learn More
               </Button>
             </div>
@@ -73,12 +98,13 @@ const HeroSection = () => {
               </span>
             </div>
 
-            {/* Feature Icons */}
-            <div className="mt-8 grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0">
+            {/* Feature Icons with staggered animation */}
+            <div className={`mt-8 grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0 transition-all duration-700 ease-out ${animateFeatures ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
               {featureIcons.map((feature, index) => (
                 <div 
                   key={index} 
-                  className="flex flex-col items-center p-3 rounded-lg bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                  className="flex flex-col items-center p-3 rounded-lg bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md hover-lift transition-all"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
                     {feature.icon}
@@ -89,12 +115,12 @@ const HeroSection = () => {
             </div>
           </div>
           
-          {/* Hero Image - GRC Platform Dashboard Mockup */}
-          <div className="md:w-3/5 relative">
+          {/* Hero Image - GRC Platform Dashboard Mockup with animation */}
+          <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
             <div className="relative w-full max-w-3xl mx-auto">
-              {/* New MacBook Pro Display with new image */}
+              {/* MacBook Pro Display with new image */}
               <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
-                {/* New MacBook Pro Image */}
+                {/* MacBook Pro Image */}
                 <img 
                   src="/lovable-uploads/c5b1f529-364b-4a3f-9e4e-29fe1862e7b3.png" 
                   alt="MacBook Pro" 
@@ -110,7 +136,7 @@ const HeroSection = () => {
                       <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     </div>
-                    <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">SYNAPSES GRC Intelligence Platform</div>
+                    <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">Synapses GRC Intelligence Platform</div>
                   </div>
                   
                   {/* Dashboard Content */}
@@ -437,8 +463,8 @@ const HeroSection = () => {
                 </div>
               </div>
               
-              {/* Mobile App Mockup */}
-              <div className="absolute -right-6 -bottom-12 transform rotate-6 w-[120px] h-[240px] bg-white rounded-[18px] border-4 border-gray-200 shadow-xl overflow-hidden">
+              {/* Mobile App Mockup with animation */}
+              <div className="absolute -right-6 -bottom-12 transform rotate-6 w-[120px] h-[240px] bg-white rounded-[18px] border-4 border-gray-200 shadow-xl overflow-hidden animate-float">
                 {/* Status Bar */}
                 <div className="h-4 bg-gray-100 flex justify-between items-center px-2 text-[6px] text-gray-800">
                   <span>9:41</span>
@@ -473,4 +499,35 @@ const HeroSection = () => {
                       </div>
                       <div className="h-10 rounded flex flex-col justify-center p-0.5">
                         <div className="text-[4px] text-gray-800 font-medium">Criminal Liability Extension</div>
-                        <div className="text-[3px] text-gray-600 mt
+                        <div className="text-[3px] text-gray-600 mt-0.5">Review recent updates to criminal liability provisions under AMLD6 that may affect your organization's compliance requirements.</div>
+                      </div>
+                    </div>
+                    
+                    {/* Calendar Item */}
+                    <div className="h-10 bg-white rounded-md p-1 border border-gray-100">
+                      <div className="flex items-center gap-0.5 mb-0.5">
+                        <Calendar size={6} className="text-blue-500" />
+                        <div className="text-[5px] text-blue-700 font-medium">Upcoming Deadline</div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-[4px] text-gray-800 font-medium">AMLD6 Report</div>
+                          <div className="text-[3px] text-gray-600">Due in 3 days</div>
+                        </div>
+                        <Button size="sm" className="h-2 text-[3px] bg-blue-500 hover:bg-blue-600 text-white px-1 py-0">
+                          View
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HeroSection;
