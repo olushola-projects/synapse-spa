@@ -1,143 +1,66 @@
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Handle scroll effects
   useEffect(() => {
     const handleScroll = () => {
-      // Update navbar appearance based on scroll
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-      
-      // Handle active section highlighting
-      const sections = ['features', 'how-it-works', 'testimonials', 'faq'];
-      let currentSection = '';
-      
-      sections.forEach((section) => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            currentSection = section;
-          }
-        }
-      });
-      
-      setActiveSection(currentSection);
+      setIsScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Click handler for navigation links
-  const handleNavClick = (sectionId: string) => {
-    setIsMobileMenuOpen(false);
-    setActiveSection(sectionId);
-    
-    // Smooth scroll to section
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
-    }`}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-4">
-          {/* Logo with subtle animation */}
-          <div className="flex items-center">
-            <a href="#" className="text-2xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 transition-all duration-300">
-              Synapses
-            </a>
-          </div>
+    <header className={`sticky top-0 z-50 w-full ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"} transition-all duration-200`}>
+      <div className="container mx-auto flex items-center justify-between p-4">
+        <a href="/" className="text-xl font-bold text-blue-700 flex items-center gap-2">
+          <img src="/lovable-uploads/6856e5f8-5b1a-4520-bdc7-da986d98d082.png" alt="Logo" className="h-8 w-auto" />
+          Synapse
+        </a>
+        
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          <a href="/" className="text-gray-700 hover:text-blue-700 transition-colors">Home</a>
+          <a href="/#features" className="text-gray-700 hover:text-blue-700 transition-colors">Features</a>
+          <a href="/#how-it-works" className="text-gray-700 hover:text-blue-700 transition-colors">How It Works</a>
+          <a href="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</a>
+          <Button size="sm">Join Waitlist</Button>
+        </nav>
 
-          {/* Desktop Navigation with active state and hover effects */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {['features', 'how-it-works', 'testimonials', 'faq'].map((item) => (
-              <a 
-                key={item}
-                href={`#${item}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item);
-                }}
-                className={`text-sm font-medium relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 hover:after:origin-bottom-left hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                  activeSection === item
-                    ? 'text-synapse-primary after:bg-synapse-primary after:scale-x-100'
-                    : 'text-synapse-dark hover:text-synapse-primary after:bg-synapse-primary'
-                }`}
-              >
-                {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-              </a>
-            ))}
-          </nav>
-
-          {/* Desktop CTA with enhanced hover effect */}
-          <div className="hidden md:block">
-            <Button 
-              className="bg-synapse-primary hover:bg-synapse-secondary text-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-[2px]"
-            >
-              Join Waitlist
-            </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-synapse-dark hover:text-synapse-primary hover:bg-transparent"
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
-        </div>
+        {/* Mobile Menu Button */}
+        <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMobileMenu}>
+          <Menu className="h-6 w-6" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
       </div>
-
-      {/* Mobile Navigation with animations */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white py-4 px-4 shadow-lg animate-fade-in border-t border-gray-100">
-          <nav className="flex flex-col space-y-4">
-            {['features', 'how-it-works', 'testimonials', 'faq'].map((item, index) => (
-              <a 
-                key={item}
-                href={`#${item}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item);
-                }}
-                className={`text-base font-medium transition-all duration-300 ${
-                  activeSection === item
-                    ? 'text-synapse-primary'
-                    : 'text-synapse-dark hover:text-synapse-primary'
-                }`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-              </a>
-            ))}
-            <Button 
-              className="w-full bg-synapse-primary hover:bg-synapse-secondary text-white mt-2 animate-fade-in"
-              style={{ animationDelay: '400ms' }}
-            >
-              Join Waitlist
-            </Button>
+      
+      {/* Mobile Navigation */}
+      {mobileMenuOpen && (
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className="md:hidden bg-white border-b shadow-lg"
+        >
+          <nav className="container mx-auto p-4 flex flex-col gap-4">
+            <a href="/" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Home</a>
+            <a href="/#features" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Features</a>
+            <a href="/#how-it-works" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">How It Works</a>
+            <a href="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</a>
+            <Button className="mt-2">Join Waitlist</Button>
           </nav>
-        </div>
+        </motion.div>
       )}
     </header>
   );
