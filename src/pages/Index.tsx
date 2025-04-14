@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
-import VideoSection from "../components/VideoSection";
+import VideoSection from "../components/VideoSection"; // Add this import
 import ModularSolutionsSection from "../components/ModularSolutionsSection";
 import HowItWorksSection from "../components/HowItWorksSection";
 import TestimonialsSection from "../components/TestimonialsSection";
@@ -15,7 +15,7 @@ const Index = () => {
   // State for tracking which sections are visible for animations
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
     features: false,
-    video: false,
+    video: false, // Add this new section
     modularSolutions: false,
     howItWorks: false,
     testimonials: false,
@@ -102,6 +102,7 @@ const Index = () => {
         <FeaturesSection />
       </div>
       
+      {/* Add Video Section between Features and ModularSolutions */}
       <div id="video" className={`transition-opacity duration-1000 ${visibleSections.video ? 'opacity-100' : 'opacity-0'}`}>
         <VideoSection />
       </div>
