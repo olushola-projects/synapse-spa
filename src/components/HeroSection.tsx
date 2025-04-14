@@ -4,6 +4,7 @@ import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChar
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 // Sample data for the colorful area chart
 const areaChartData = [
@@ -26,12 +27,36 @@ const pieChartData = [
 
 // Feature icons configuration
 const featureIcons = [
-  { title: "Regulatory Analysis", icon: <MessageSquare className="text-synapse-primary" size={20} /> },
-  { title: "Regulatory Calendar", icon: <Calendar className="text-purple-500" size={20} /> },
-  { title: "Regulatory Updates", icon: <Bell className="text-blue-500" size={20} /> },
-  { title: "CV Surgery", icon: <FileText className="text-emerald-500" size={20} /> },
-  { title: "Job Matching", icon: <Briefcase className="text-amber-500" size={20} /> },
-  { title: "Classes", icon: <BookOpen className="text-rose-500" size={20} /> },
+  { title: "Regulatory Analysis", icon: <MessageSquare className="text-synapse-primary" size={20} />, content: {
+    title: "AI-Powered Regulatory Analysis",
+    description: "Get instant insights on complex regulations with our advanced AI analysis tool.",
+    details: "Our regulatory analysis tool uses natural language processing to break down complex legal text into actionable insights. It can compare regulations across jurisdictions, highlight key compliance requirements, and identify potential conflicts or gaps in your existing compliance framework."
+  } },
+  { title: "Regulatory Calendar", icon: <Calendar className="text-purple-500" size={20} />, content: {
+    title: "Smart Regulatory Calendar",
+    description: "Never miss important deadlines with our intelligent tracking system.",
+    details: "Our calendar integrates with global regulatory databases to provide real-time updates on compliance deadlines, consultation periods, and implementation timelines. Set custom alerts, assign tasks to team members, and track progress all in one place."
+  } },
+  { title: "Regulatory Updates", icon: <Bell className="text-blue-500" size={20} />, content: {
+    title: "Customized Regulatory Updates",
+    description: "Stay informed with tailored alerts on regulatory changes relevant to your organization.",
+    details: "Our regulatory update system monitors changes across multiple jurisdictions and sectors, filtering information based on your compliance profile. Receive daily or weekly digests, prioritized by impact level and organized by compliance domain."
+  } },
+  { title: "CV Surgery", icon: <FileText className="text-emerald-500" size={20} />, content: {
+    title: "Professional CV Enhancement",
+    description: "Optimize your career profile with expert guidance from GRC specialists.",
+    details: "Our CV Surgery service combines AI analysis with human expertise to help you present your GRC skills and experience in the most effective way. Get personalized feedback, industry-specific terminology suggestions, and formatting advice tailored to regulatory compliance roles."
+  } },
+  { title: "Job Matching", icon: <Briefcase className="text-amber-500" size={20} />, content: {
+    title: "Intelligent Job Matching",
+    description: "Find the perfect role with our AI-powered matching algorithm.",
+    details: "Our job matching system goes beyond keywords to analyze your skills, experience, and career aspirations against the detailed requirements of open positions. Receive compatibility scores, salary insights, and personalized application advice for each opportunity."
+  } },
+  { title: "Classes", icon: <BookOpen className="text-rose-500" size={20} />, content: {
+    title: "Specialized GRC Training",
+    description: "Enhance your expertise with courses designed by industry leaders.",
+    details: "Our training platform offers courses ranging from foundational compliance knowledge to advanced regulatory strategy. All content is developed by practicing GRC experts, updated regularly to reflect regulatory changes, and presented in engaging, interactive formats."
+  } },
 ];
 
 const HeroSection = () => {
@@ -39,6 +64,60 @@ const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
   const [animateImage, setAnimateImage] = useState(false);
   const [animateFeatures, setAnimateFeatures] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState<number | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openAmlDialog, setOpenAmlDialog] = useState(false);
+  const [chatResponse, setChatResponse] = useState("");
+
+  // AMLD6 penalty information
+  const amldInfo = {
+    title: "AMLD6 Penalties and Criminal Liability Extension",
+    description: "Understanding the Sixth Anti-Money Laundering Directive's enhanced penalties and criminal liability provisions",
+    content: `
+      <h3 class="text-lg font-semibold mb-3">Extended Criminal Liability Under AMLD6</h3>
+      
+      <p class="mb-4">The Sixth Anti-Money Laundering Directive (AMLD6) significantly expands criminal liability to legal entities and individuals who aid and abet money laundering, either through negligence or deliberate actions.</p>
+      
+      <h4 class="text-md font-medium mb-2">Key Penalty Provisions:</h4>
+      <ul class="list-disc pl-5 mb-4 space-y-1">
+        <li>Maximum imprisonment term for money laundering offenses increased to at least 4 years</li>
+        <li>Fines can reach into the hundreds of millions of euros</li>
+        <li>Additional sanctions include exclusion from public benefits and temporary/permanent bans from conducting business</li>
+        <li>Corporate liability for "lack of supervision" that enables money laundering</li>
+      </ul>
+      
+      <h4 class="text-md font-medium mb-2">Regulatory References:</h4>
+      <ul class="list-disc pl-5 mb-4 space-y-1">
+        <li>Article 5: Effective and dissuasive penalties with a maximum term of at least 4 years imprisonment</li>
+        <li>Article 6: Aggravating circumstances for offenses committed within criminal organizations or in abuse of professional position</li>
+        <li>Article 7: Liability of legal persons for lack of supervision or control</li>
+        <li>Article 10: Jurisdiction established when offense is committed in whole or part within territory</li>
+      </ul>
+      
+      <h4 class="text-md font-medium mb-2">Real-World Scenario:</h4>
+      <div class="bg-blue-50 p-3 rounded-md mb-4">
+        <p class="italic text-sm">A financial institution failed to implement adequate customer due diligence procedures, resulting in several high-risk transactions going undetected. Under AMLD6, both the financial institution (as a legal entity) and its compliance officer (as an individual) face criminal liability. The institution faces fines of €10M or 5% of annual turnover, while the officer faces potential imprisonment and a prohibition from holding management positions in financial institutions.</p>
+      </div>
+      
+      <h4 class="text-md font-medium mb-2">Compliance Recommendations:</h4>
+      <ol class="list-decimal pl-5 space-y-1">
+        <li>Conduct a thorough review of existing AML frameworks</li>
+        <li>Update risk assessment methodologies to incorporate AMLD6 requirements</li>
+        <li>Enhance transaction monitoring systems</li>
+        <li>Implement comprehensive training programs for staff</li>
+        <li>Establish clear lines of responsibility for AML compliance</li>
+      </ol>
+    `
+  };
+
+  // Simulated Dara chat response
+  useEffect(() => {
+    if (openAmlDialog) {
+      setTimeout(() => {
+        setChatResponse("The penalties under AMLD6 are significantly more severe than previous directives. Legal entities and individuals who enable money laundering can face criminal liability, with maximum imprisonment terms of at least 4 years and fines that can reach hundreds of millions of euros. The directive extends criminal liability to those who aid and abet money laundering through either negligence or deliberate actions.");
+      }, 800);
+    }
+  }, [openAmlDialog]);
 
   // Trigger animations on component mount
   useEffect(() => {
@@ -53,10 +132,17 @@ const HeroSection = () => {
     };
   }, []);
 
+  const handleFeatureClick = (index: number) => {
+    setSelectedFeature(index);
+    setOpenDialog(true);
+  };
+
   return (
     <div className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 to-indigo-50"></div>
+      {/* Fluid background effects */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4f1ff,#e9e8ff,#f4e8ff,#e9e8ff,#e4f1ff)] animate-gradient-x"></div>
+      </div>
       <div className="absolute inset-0 -z-10 bg-gradient-radial from-indigo-200/30 via-transparent to-transparent"></div>
       <div className="absolute top-1/3 right-0 w-72 h-72 bg-synapse-accent/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-synapse-primary/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
@@ -71,11 +157,11 @@ const HeroSection = () => {
           {/* Text Content with animations */}
           <div className={`md:w-2/5 pb-10 md:pb-0 text-center md:text-left transition-all duration-700 ease-out ${animateContent ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
             <h1 className="heading-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700">
-              The Future of <span className="text-synapse-primary">GRC</span> is Connected
+              GRC Infrastructure for Modern Professionals
             </h1>
             
             <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl mx-auto md:mx-0 leading-relaxed">
-              Synapses empowers GRC professionals with intelligent tools, specialized knowledge, and a vibrant community to navigate complex regulatory landscapes.
+              Join a global network of professionals using Synapses to navigate regulations, adopt regtech, grow careers, connect with mentors, leverage artificial intelligence, and future-proof compliance operations.
             </p>
             
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
@@ -103,8 +189,9 @@ const HeroSection = () => {
               {featureIcons.map((feature, index) => (
                 <div 
                   key={index} 
-                  className="flex flex-col items-center p-3 rounded-lg bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md hover-lift transition-all"
+                  className="flex flex-col items-center p-3 rounded-lg bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md hover-lift transition-all cursor-pointer"
                   style={{ animationDelay: `${index * 100}ms` }}
+                  onClick={() => handleFeatureClick(index)}
                 >
                   <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
                     {feature.icon}
@@ -118,17 +205,10 @@ const HeroSection = () => {
           {/* Hero Image - GRC Platform Dashboard Mockup with animation */}
           <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
             <div className="relative w-full max-w-3xl mx-auto">
-              {/* MacBook Pro Display with new image */}
+              {/* MacBook Pro Display with new image - transparent background */}
               <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
-                {/* MacBook Pro Image */}
-                <img 
-                  src="/lovable-uploads/c5b1f529-364b-4a3f-9e4e-29fe1862e7b3.png" 
-                  alt="MacBook Pro" 
-                  className="w-full h-auto"
-                />
-                
-                {/* Dashboard Screen Content - Positioned absolutely over the laptop image */}
-                <div className="absolute top-[5%] left-[10%] right-[10%] bottom-[10%] bg-[#F1F0FB] rounded-md overflow-hidden">
+                {/* Dashboard Screen Content - Positioned absolutely */}
+                <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
                   {/* Header Bar */}
                   <div className="h-[6%] bg-white flex items-center px-3 border-b border-gray-200">
                     <div className="flex gap-1.5">
@@ -136,7 +216,7 @@ const HeroSection = () => {
                       <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     </div>
-                    <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">Synapses GRC Intelligence Platform</div>
+                    <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">Synapses</div>
                   </div>
                   
                   {/* Dashboard Content */}
@@ -146,22 +226,22 @@ const HeroSection = () => {
                       <div className="w-[60%] h-5 bg-indigo-100 rounded-lg flex items-center justify-center">
                         <div className="w-3 h-3 bg-indigo-500 rounded-md"></div>
                       </div>
-                      <div className="w-4 h-4 bg-indigo-500 rounded-md flex items-center justify-center">
+                      <div className="w-4 h-4 bg-indigo-500 rounded-md flex items-center justify-center cursor-pointer" onClick={() => setOpenAmlDialog(true)}>
                         <MessageSquare size={8} className="text-white" />
                       </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <Calendar size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <Bell size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <Briefcase size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <BookOpen size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center">
+                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <ShieldAlert size={8} className="text-indigo-500" />
                       </div>
                     </div>
@@ -172,7 +252,7 @@ const HeroSection = () => {
                       <div className="h-4 flex justify-between items-center">
                         <div className="text-gray-800 text-[6px] sm:text-[8px] font-medium">Regulatory Intelligence Dashboard</div>
                         <div className="flex gap-2 items-center">
-                          <div className="text-[5px] sm:text-[6px] text-gray-500">April 12, 2025</div>
+                          <div className="text-[5px] sm:text-[6px] text-gray-500">April 14, 2025</div>
                           <div className="flex items-center gap-1">
                             <div className="text-[5px] sm:text-[6px] text-gray-500">Hi, Phoebe Banks</div>
                             <img 
@@ -186,7 +266,7 @@ const HeroSection = () => {
                       
                       {/* KPI Row */}
                       <div className="flex gap-1 h-[15%]">
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
                             <Clock size={6} className="text-blue-500" />
                             <div className="text-[5px] text-gray-600">Regulatory Updates</div>
@@ -194,7 +274,7 @@ const HeroSection = () => {
                           <div className="text-gray-800 text-[8px] font-medium">12 New</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full"></div>
                         </div>
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
                             <Calendar size={6} className="text-purple-500" />
                             <div className="text-[5px] text-gray-600">Compliance Deadlines</div>
@@ -202,7 +282,7 @@ const HeroSection = () => {
                           <div className="text-gray-800 text-[8px] font-medium">3 Due</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-purple-300 to-purple-500 rounded-full"></div>
                         </div>
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
                             <MessageSquare size={6} className="text-emerald-500" />
                             <div className="text-[5px] text-gray-600">AI Assists Used</div>
@@ -210,7 +290,7 @@ const HeroSection = () => {
                           <div className="text-gray-800 text-[8px] font-medium">24 Today</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-emerald-300 to-emerald-500 rounded-full"></div>
                         </div>
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
                             <AlertTriangle size={6} className="text-amber-500" />
                             <div className="text-[5px] text-gray-600">Risk Alerts</div>
@@ -225,7 +305,7 @@ const HeroSection = () => {
                         {/* Left Column */}
                         <div className="flex-1 flex flex-col gap-1">
                           {/* AMLD6 Content */}
-                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer" onClick={() => setOpenAmlDialog(true)}>
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
                                 <ShieldAlert size={8} className="text-red-500" />
@@ -251,7 +331,7 @@ const HeroSection = () => {
                           </div>
                           
                           {/* Calendar Widget */}
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
                                 <Calendar size={8} className="text-blue-500" />
@@ -293,7 +373,7 @@ const HeroSection = () => {
                           </div>
 
                           {/* Pie Chart */}
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1">
                                 <PieChart size={8} className="text-violet-500" />
@@ -334,7 +414,7 @@ const HeroSection = () => {
                         {/* Right Column */}
                         <div className="flex-1 flex flex-col gap-1">
                           {/* DORA Content */}
-                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
                                 <FileText size={8} className="text-blue-500" />
@@ -360,7 +440,7 @@ const HeroSection = () => {
                           </div>
                           
                           {/* Colorful Area Chart */}
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1">
                                 <BarChart3 size={8} className="text-indigo-500" />
@@ -420,7 +500,7 @@ const HeroSection = () => {
                           </div>
 
                           {/* Job Matching */}
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm">
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
                                 <Briefcase size={8} className="text-purple-500" />
@@ -492,14 +572,42 @@ const HeroSection = () => {
                   {/* Dashboard Elements */}
                   <div className="space-y-1">
                     {/* Alert Widget */}
-                    <div className="h-16 bg-red-50 rounded-md p-1 border border-red-100">
+                    <div className="h-10 bg-red-50 rounded-md p-1 border border-red-100">
                       <div className="flex items-center gap-0.5 mb-0.5">
                         <ShieldAlert size={6} className="text-red-500" />
                         <div className="text-[5px] text-red-700 font-medium">AMLD6 Priority Alert</div>
                       </div>
-                      <div className="h-10 rounded flex flex-col justify-center p-0.5">
+                      <div className="h-6 rounded flex flex-col justify-center p-0.5">
                         <div className="text-[4px] text-gray-800 font-medium">Criminal Liability Extension</div>
-                        <div className="text-[3px] text-gray-600 mt-0.5">Review recent updates to criminal liability provisions under AMLD6 that may affect your organization's compliance requirements.</div>
+                        <div className="text-[3px] text-gray-600 mt-0.5">Review recent updates to criminal liability provisions.</div>
+                      </div>
+                    </div>
+                    
+                    {/* Chart for Mobile */}
+                    <div className="h-14 bg-white rounded-md p-1 border border-gray-100">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-0.5">
+                          <BarChart3 size={6} className="text-indigo-500" />
+                          <div className="text-[5px] text-indigo-700 font-medium">Compliance Trends</div>
+                        </div>
+                      </div>
+                      <div className="h-8 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={areaChartData.slice(0,4)} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                            <defs>
+                              <linearGradient id="mobilegdpr" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#4F46E5" stopOpacity={0.1}/>
+                              </linearGradient>
+                              <linearGradient id="mobileaml" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#EC4899" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#EC4899" stopOpacity={0.1}/>
+                              </linearGradient>
+                            </defs>
+                            <Area type="monotone" dataKey="gdpr" stroke="#4F46E5" fillOpacity={1} fill="url(#mobilegdpr)" />
+                            <Area type="monotone" dataKey="aml" stroke="#EC4899" fillOpacity={1} fill="url(#mobileaml)" />
+                          </AreaChart>
+                        </ResponsiveContainer>
                       </div>
                     </div>
                     
@@ -526,6 +634,116 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Feature Modal Dialog */}
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="sm:max-w-md">
+          {selectedFeature !== null && featureIcons[selectedFeature] && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={`p-2 rounded-full ${selectedFeature === 0 ? 'bg-blue-100 text-blue-600' : 
+                                  selectedFeature === 1 ? 'bg-purple-100 text-purple-600' : 
+                                  selectedFeature === 2 ? 'bg-blue-100 text-blue-600' : 
+                                  selectedFeature === 3 ? 'bg-emerald-100 text-emerald-600' : 
+                                  selectedFeature === 4 ? 'bg-amber-100 text-amber-600' : 
+                                  'bg-rose-100 text-rose-600'}`}>
+                    {featureIcons[selectedFeature].icon}
+                  </div>
+                  <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
+                </div>
+                <DialogDescription>
+                  {featureIcons[selectedFeature].content.description}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <p className="text-gray-700">{featureIcons[selectedFeature].content.details}</p>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                  <h4 className="font-semibold text-sm mb-2">Coming in Beta Release</h4>
+                  <p className="text-sm text-gray-600">This feature will be available in our upcoming beta release. Join the waitlist to be among the first to try it out.</p>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" onClick={() => setOpenDialog(false)}>Close</Button>
+                  <Button>Join Waitlist</Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* AMLD6 Info Dialog */}
+      <Dialog open={openAmlDialog} onOpenChange={setOpenAmlDialog}>
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 rounded-full bg-red-100 text-red-600">
+                <ShieldAlert className="h-5 w-5" />
+              </div>
+              <DialogTitle>{amldInfo.title}</DialogTitle>
+            </div>
+            <DialogDescription>
+              {amldInfo.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {/* Chat Interface with Dara */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">
+                <MessageSquare className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-sm">Dara AI Assistant</h4>
+                <p className="text-xs text-gray-500">Regulatory Intelligence Bot</p>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-3 mb-3">
+              <p className="text-gray-700 text-sm">What is the penalty under AMLD6 and criminal liability extension?</p>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="w-8 h-8 flex-shrink-0 rounded-full bg-indigo-600 flex items-center justify-center">
+                <MessageSquare className="h-4 w-4 text-white" />
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-3 text-gray-800 text-sm">
+                {chatResponse || (
+                  <div className="flex gap-2 items-center h-6">
+                    <div className="h-2 w-2 rounded-full bg-indigo-300 animate-bounce [animation-delay:0ms]"></div>
+                    <div className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce [animation-delay:150ms]"></div>
+                    <div className="h-2 w-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:300ms]"></div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div dangerouslySetInnerHTML={{ __html: amldInfo.content }} className="prose prose-sm max-w-none" />
+            
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+              <h4 className="font-semibold text-sm mb-2 flex items-center gap-1">
+                <Zap className="h-4 w-4 text-blue-600" /> AI-Generated Analysis
+              </h4>
+              <p className="text-sm text-gray-700">Synapses has analyzed 248 sources including the official AMLD6 directive, legal commentaries, and recent enforcement actions to provide this summary. Our AI continuously monitors for updates to ensure you have the most current information.</p>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2 text-gray-500 text-xs">
+                <Calendar className="h-3 w-3" />
+                <span>Last updated: April 12, 2025</span>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button variant="outline">Save to Library</Button>
+                <Button>Ask Follow-up Question</Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 };

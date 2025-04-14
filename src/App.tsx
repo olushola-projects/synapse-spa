@@ -8,7 +8,14 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Partners from "./pages/Partners";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      retry: 1,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

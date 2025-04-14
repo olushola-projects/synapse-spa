@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
-import ModularSolutionsSection from "../components/ModularSolutionsSection"; // Add this import
+import VideoSection from "../components/VideoSection"; // Add this import
+import ModularSolutionsSection from "../components/ModularSolutionsSection";
 import HowItWorksSection from "../components/HowItWorksSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import FAQSection from "../components/FAQSection";
@@ -14,7 +15,8 @@ const Index = () => {
   // State for tracking which sections are visible for animations
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
     features: false,
-    modularSolutions: false, // Add this new section
+    video: false, // Add this new section
+    modularSolutions: false,
     howItWorks: false,
     testimonials: false,
     faq: false,
@@ -42,7 +44,7 @@ const Index = () => {
     }, observerOptions);
 
     // Observe each section element
-    const sections = ['features', 'modular-solutions', 'how-it-works', 'testimonials', 'faq', 'cta'];
+    const sections = ['features', 'video', 'modular-solutions', 'how-it-works', 'testimonials', 'faq', 'cta'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -98,6 +100,11 @@ const Index = () => {
       
       <div id="features" className={`transition-opacity duration-1000 ${visibleSections.features ? 'opacity-100' : 'opacity-0'}`}>
         <FeaturesSection />
+      </div>
+      
+      {/* Add Video Section between Features and ModularSolutions */}
+      <div id="video" className={`transition-opacity duration-1000 ${visibleSections.video ? 'opacity-100' : 'opacity-0'}`}>
+        <VideoSection />
       </div>
       
       <div id="modular-solutions" className={`transition-opacity duration-1000 ${visibleSections.modularSolutions ? 'opacity-100' : 'opacity-0'}`}>
