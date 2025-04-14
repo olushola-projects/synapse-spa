@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
@@ -44,8 +45,6 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --font-display: 'Poppins', sans-serif;
-    --font-body: 'Inter', sans-serif;
   }
 
   body {
@@ -84,14 +83,14 @@
   
   /* Enhanced text styling */
   .heading-xl {
-    @apply font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight;
-    font-family: var(--font-display);
+    @apply font-bold text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight;
+    font-family: theme('fontFamily.display');
     letter-spacing: -0.02em;
   }
   
   .heading-lg {
-    @apply font-display font-semibold text-3xl md:text-4xl leading-tight tracking-tight;
-    font-family: var(--font-display);
+    @apply font-semibold text-3xl md:text-4xl leading-tight tracking-tight;
+    font-family: theme('fontFamily.display');
     letter-spacing: -0.01em;
   }
   
