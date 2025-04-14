@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
@@ -78,7 +79,7 @@ const CTASection = () => {
                     Join Waitlist
                   </Button>
                   <p className="text-xs text-center opacity-70">
-                    By signing up, you agree to our Terms of Service and Privacy Policy
+                    By signing up, you agree to our <Link to="/legal/terms" className="underline">Terms of Service</Link> and <Link to="/legal/privacy" className="underline">Privacy Policy</Link>
                   </p>
                 </form>
               </div>
