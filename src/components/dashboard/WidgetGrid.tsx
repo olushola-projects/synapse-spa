@@ -1,14 +1,14 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { Lucide } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 // Define the widget type
 export interface WidgetType {
   id: string;
   name: string;
   description: string;
-  icon: Lucide;
+  icon: LucideIcon;
 }
 
 // Context for the dashboard

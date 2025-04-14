@@ -4,7 +4,7 @@ import { Widget } from '../dashboard/WidgetGrid';
 import { Button } from '@/components/ui/button';
 import { Award, Trophy, Medal, Star, Gift, Flag, Target, Zap } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { GamificationComponent } from '@/components/GamificationComponent';
+import GamificationComponent from '@/components/GamificationComponent';
 
 interface GamificationWidgetProps {
   onRemove?: () => void;
