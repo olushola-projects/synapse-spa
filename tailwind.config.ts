@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -106,6 +105,10 @@ export default {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-stripe": "linear-gradient(-45deg, var(--tw-gradient-stops))",
       },
+      fontFamily: {
+        display: ['Poppins', 'sans-serif'],
+        body: ['Inter', 'sans-serif']
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
