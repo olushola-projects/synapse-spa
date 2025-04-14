@@ -1,12 +1,10 @@
-
-import { Button } from "@/components/ui/button";
+import { Button, Link } from "@/components/ui/button";
 import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
-// Sample data for the colorful area chart
 const areaChartData = [
   { name: 'Jan', gdpr: 30, aml: 40, psd2: 20, dora: 27 },
   { name: 'Feb', gdpr: 25, aml: 43, psd2: 25, dora: 30 },
@@ -16,7 +14,6 @@ const areaChartData = [
   { name: 'Jun', gdpr: 40, aml: 50, psd2: 35, dora: 43 },
 ];
 
-// Sample data for the pie chart
 const pieChartData = [
   { name: 'GDPR', value: 35, fill: '#4F46E5' },
   { name: 'AMLD6', value: 25, fill: '#EC4899' },
@@ -25,7 +22,6 @@ const pieChartData = [
   { name: 'NIS2', value: 5, fill: '#8B5CF6' },
 ];
 
-// Feature icons configuration
 const featureIcons = [
   { title: "Regulatory Analysis", icon: <MessageSquare className="text-synapse-primary" size={20} />, content: {
     title: "AI-Powered Regulatory Analysis",
@@ -60,7 +56,6 @@ const featureIcons = [
 ];
 
 const HeroSection = () => {
-  // Animation states for staggered animations
   const [animateContent, setAnimateContent] = useState(false);
   const [animateImage, setAnimateImage] = useState(false);
   const [animateFeatures, setAnimateFeatures] = useState(false);
@@ -69,7 +64,6 @@ const HeroSection = () => {
   const [openAmlDialog, setOpenAmlDialog] = useState(false);
   const [chatResponse, setChatResponse] = useState("");
 
-  // AMLD6 penalty information
   const amldInfo = {
     title: "AMLD6 Penalties and Criminal Liability Extension",
     description: "Understanding the Sixth Anti-Money Laundering Directive's enhanced penalties and criminal liability provisions",
@@ -110,7 +104,6 @@ const HeroSection = () => {
     `
   };
 
-  // Simulated Dara chat response
   useEffect(() => {
     if (openAmlDialog) {
       setTimeout(() => {
@@ -119,7 +112,6 @@ const HeroSection = () => {
     }
   }, [openAmlDialog]);
 
-  // Trigger animations on component mount
   useEffect(() => {
     const timer1 = setTimeout(() => setAnimateContent(true), 100);
     const timer2 = setTimeout(() => setAnimateImage(true), 300);
@@ -139,7 +131,6 @@ const HeroSection = () => {
 
   return (
     <div className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
-      {/* Fluid background effects */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4f1ff,#e9e8ff,#f4e8ff,#e9e8ff,#e4f1ff)] animate-gradient-x"></div>
       </div>
@@ -147,17 +138,17 @@ const HeroSection = () => {
       <div className="absolute top-1/3 right-0 w-72 h-72 bg-synapse-accent/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-synapse-primary/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
       
-      {/* Animated gradient background stripe-like */}
       <div className="absolute inset-x-0 top-40 h-[500px] -z-10 transform -skew-y-6 opacity-10">
         <div className="h-full w-full bg-gradient-stripe from-purple-300 via-blue-300 to-indigo-300 animate-gradient-shift"></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center">
-          {/* Text Content with animations */}
           <div className={`md:w-2/5 pb-10 md:pb-0 text-center md:text-left transition-all duration-700 ease-out ${animateContent ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-            <h1 className="heading-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700">
-              GRC Infrastructure for Modern Professionals
+            <h1 className="heading-xl">
+              <span className="inline-block animate-text bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">
+                GRC Infrastructure for Modern Professionals
+              </span>
             </h1>
             
             <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl mx-auto md:mx-0 leading-relaxed">
@@ -165,12 +156,16 @@ const HeroSection = () => {
             </p>
             
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
-                Join Waitlist <ArrowRight size={18} />
-              </Button>
-              <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg hover-lift">
-                Learn More
-              </Button>
+              <Link to="#cta">
+                <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
+                  Join Waitlist <ArrowRight size={18} />
+                </Button>
+              </Link>
+              <Link to="#features">
+                <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg hover-lift">
+                  Learn More
+                </Button>
+              </Link>
             </div>
             
             <div className="mt-8 flex items-center justify-center md:justify-start text-sm text-gray-500">
@@ -184,7 +179,6 @@ const HeroSection = () => {
               </span>
             </div>
 
-            {/* Feature Icons with staggered animation */}
             <div className={`mt-8 grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0 transition-all duration-700 ease-out ${animateFeatures ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
               {featureIcons.map((feature, index) => (
                 <div 
@@ -202,14 +196,10 @@ const HeroSection = () => {
             </div>
           </div>
           
-          {/* Hero Image - GRC Platform Dashboard Mockup with animation */}
           <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
             <div className="relative w-full max-w-3xl mx-auto">
-              {/* MacBook Pro Display with new image - transparent background */}
               <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
-                {/* Dashboard Screen Content - Positioned absolutely */}
                 <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
-                  {/* Header Bar */}
                   <div className="h-[6%] bg-white flex items-center px-3 border-b border-gray-200">
                     <div className="flex gap-1.5">
                       <div className="w-2 h-2 bg-red-500 rounded-full"></div>
@@ -219,9 +209,7 @@ const HeroSection = () => {
                     <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">Synapses</div>
                   </div>
                   
-                  {/* Dashboard Content */}
                   <div className="p-2 flex h-[94%] bg-[#F1F0FB]">
-                    {/* Sidebar */}
                     <div className="w-[8%] h-full bg-white rounded-lg border border-gray-200 flex flex-col items-center py-2 gap-3">
                       <div className="w-[60%] h-5 bg-indigo-100 rounded-lg flex items-center justify-center">
                         <div className="w-3 h-3 bg-indigo-500 rounded-md"></div>
@@ -246,9 +234,7 @@ const HeroSection = () => {
                       </div>
                     </div>
                     
-                    {/* Main Content */}
                     <div className="flex-1 pl-1 flex flex-col gap-1">
-                      {/* Header */}
                       <div className="h-4 flex justify-between items-center">
                         <div className="text-gray-800 text-[6px] sm:text-[8px] font-medium">Regulatory Intelligence Dashboard</div>
                         <div className="flex gap-2 items-center">
@@ -264,7 +250,6 @@ const HeroSection = () => {
                         </div>
                       </div>
                       
-                      {/* KPI Row */}
                       <div className="flex gap-1 h-[15%]">
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
@@ -300,11 +285,8 @@ const HeroSection = () => {
                         </div>
                       </div>
                       
-                      {/* Main Widgets Area */}
                       <div className="flex gap-1 flex-1">
-                        {/* Left Column */}
                         <div className="flex-1 flex flex-col gap-1">
-                          {/* AMLD6 Content */}
                           <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer" onClick={() => setOpenAmlDialog(true)}>
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
@@ -330,7 +312,6 @@ const HeroSection = () => {
                             </div>
                           </div>
                           
-                          {/* Calendar Widget */}
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
@@ -372,7 +353,6 @@ const HeroSection = () => {
                             </div>
                           </div>
 
-                          {/* Pie Chart */}
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1">
@@ -411,9 +391,7 @@ const HeroSection = () => {
                           </div>
                         </div>
                         
-                        {/* Right Column */}
                         <div className="flex-1 flex flex-col gap-1">
-                          {/* DORA Content */}
                           <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
@@ -439,7 +417,6 @@ const HeroSection = () => {
                             </div>
                           </div>
                           
-                          {/* Colorful Area Chart */}
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1">
@@ -499,7 +476,6 @@ const HeroSection = () => {
                             </div>
                           </div>
 
-                          {/* Job Matching */}
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
@@ -543,9 +519,7 @@ const HeroSection = () => {
                 </div>
               </div>
               
-              {/* Mobile App Mockup with animation */}
               <div className="absolute -right-6 -bottom-12 transform rotate-6 w-[120px] h-[240px] bg-white rounded-[18px] border-4 border-gray-200 shadow-xl overflow-hidden animate-float">
-                {/* Status Bar */}
                 <div className="h-4 bg-gray-100 flex justify-between items-center px-2 text-[6px] text-gray-800">
                   <span>9:41</span>
                   <div className="flex gap-0.5 items-center">
@@ -555,9 +529,7 @@ const HeroSection = () => {
                   </div>
                 </div>
                 
-                {/* Mobile App Content */}
                 <div className="p-1 bg-[#F1F0FB]">
-                  {/* App Header */}
                   <div className="h-4 flex justify-between items-center mb-1">
                     <div className="h-2 w-12 bg-indigo-500 rounded-sm flex items-center justify-center">
                       <span className="text-[5px] text-white">SYNAPSES</span>
@@ -569,9 +541,7 @@ const HeroSection = () => {
                     />
                   </div>
                   
-                  {/* Dashboard Elements */}
                   <div className="space-y-1">
-                    {/* Alert Widget */}
                     <div className="h-10 bg-red-50 rounded-md p-1 border border-red-100">
                       <div className="flex items-center gap-0.5 mb-0.5">
                         <ShieldAlert size={6} className="text-red-500" />
@@ -583,7 +553,6 @@ const HeroSection = () => {
                       </div>
                     </div>
                     
-                    {/* Chart for Mobile */}
                     <div className="h-14 bg-white rounded-md p-1 border border-gray-100">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-0.5">
@@ -611,7 +580,6 @@ const HeroSection = () => {
                       </div>
                     </div>
                     
-                    {/* Calendar Item */}
                     <div className="h-10 bg-white rounded-md p-1 border border-gray-100">
                       <div className="flex items-center gap-0.5 mb-0.5">
                         <Calendar size={6} className="text-blue-500" />
@@ -635,44 +603,40 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Feature Modal Dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogContent className="sm:max-w-md">
-          {selectedFeature !== null && featureIcons[selectedFeature] && (
-            <>
-              <DialogHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className={`p-2 rounded-full ${selectedFeature === 0 ? 'bg-blue-100 text-blue-600' : 
-                                  selectedFeature === 1 ? 'bg-purple-100 text-purple-600' : 
-                                  selectedFeature === 2 ? 'bg-blue-100 text-blue-600' : 
-                                  selectedFeature === 3 ? 'bg-emerald-100 text-emerald-600' : 
-                                  selectedFeature === 4 ? 'bg-amber-100 text-amber-600' : 
-                                  'bg-rose-100 text-rose-600'}`}>
-                    {featureIcons[selectedFeature].icon}
-                  </div>
-                  <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
+        {selectedFeature !== null && featureIcons[selectedFeature] && (
+          <>
+            <DialogHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`p-2 rounded-full ${selectedFeature === 0 ? 'bg-blue-100 text-blue-600' : 
+                                    selectedFeature === 1 ? 'bg-purple-100 text-purple-600' : 
+                                    selectedFeature === 2 ? 'bg-blue-100 text-blue-600' : 
+                                    selectedFeature === 3 ? 'bg-emerald-100 text-emerald-600' : 
+                                    selectedFeature === 4 ? 'bg-amber-100 text-amber-600' : 
+                                    'bg-rose-100 text-rose-600'}`}>
+                  {featureIcons[selectedFeature].icon}
                 </div>
-                <DialogDescription>
-                  {featureIcons[selectedFeature].content.description}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <p className="text-gray-700">{featureIcons[selectedFeature].content.details}</p>
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                  <h4 className="font-semibold text-sm mb-2">Coming in Beta Release</h4>
-                  <p className="text-sm text-gray-600">This feature will be available in our upcoming beta release. Join the waitlist to be among the first to try it out.</p>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setOpenDialog(false)}>Close</Button>
-                  <Button>Join Waitlist</Button>
-                </div>
+                <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
               </div>
-            </>
-          )}
-        </DialogContent>
+              <DialogDescription>
+                {featureIcons[selectedFeature].content.description}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-gray-700">{featureIcons[selectedFeature].content.details}</p>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                <h4 className="font-semibold text-sm mb-2">Coming in Beta Release</h4>
+                <p className="text-sm text-gray-600">This feature will be available in our upcoming beta release. Join the waitlist to be among the first to try it out.</p>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setOpenDialog(false)}>Close</Button>
+                <Button>Join Waitlist</Button>
+              </div>
+            </div>
+          </>
+        )}
       </Dialog>
 
-      {/* AMLD6 Info Dialog */}
       <Dialog open={openAmlDialog} onOpenChange={setOpenAmlDialog}>
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -687,7 +651,6 @@ const HeroSection = () => {
             </DialogDescription>
           </DialogHeader>
           
-          {/* Chat Interface with Dara */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">

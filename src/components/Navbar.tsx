@@ -26,7 +26,7 @@ const Navbar = () => {
     <header className={`sticky top-0 z-50 w-full ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"} transition-all duration-200`}>
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link to="/" className="text-xl font-bold text-blue-700 flex items-center gap-2">
-          Synapse
+          Synapses
         </Link>
         
         {/* Desktop Navigation */}

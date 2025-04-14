@@ -44,7 +44,7 @@ const Index = () => {
     }, observerOptions);
 
     // Observe each section element
-    const sections = ['features', 'video', 'modular-solutions', 'how-it-works', 'testimonials', 'faq', 'cta'];
+    const sections = ['features', 'video', 'how-it-works', 'testimonials', 'faq', 'cta'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {

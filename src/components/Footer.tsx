@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
             <div className="col-span-2">
               <Link to="/" className="text-2xl font-display font-bold text-synapse-primary">
-                Synapse
+                Synapses
               </Link>
               <p className="mt-4 text-gray-600 max-w-xs">
                 The global ecosystem where GRC professionals connect, grow, and shape the future of compliance.
@@ -75,7 +75,7 @@ const Footer = () => {
         
         <div className="py-6 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Synapse Technologies Ltd. All rights reserved.
+            &copy; {new Date().getFullYear()} Synapses Technologies Ltd. All rights reserved.
           </p>
           <div className="mt-4 md:mt-0">
             <Link to="/legal/privacy" className="text-sm text-gray-500 hover:text-synapse-primary">
