@@ -12,6 +12,11 @@ import AskDara from "./pages/AskDara";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Platform from "./pages/Platform";
+import Resources from "./pages/Resources";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Security from "./pages/Security";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient({
@@ -33,6 +38,11 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/partners" element={<Partners />} />
+            <Route path="/platform" element={<Platform />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/security" element={<Security />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/ask-dara" element={<AskDara />} />
             <Route path="/login" element={<Login />} />

@@ -6,6 +6,9 @@ import {
   AccordionItem,
   AccordionTrigger
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
 
 const faqs = [
   {
@@ -63,15 +66,39 @@ const FAQSection = () => {
             ))}
           </Accordion>
 
-          <div className="mt-12 p-6 bg-white rounded-lg shadow-sm border border-gray-100 text-center">
-            <h3 className="text-lg font-semibold mb-2">Still have questions?</h3>
-            <p className="text-gray-600 mb-6">Our team is ready to help you with any questions about Synapse.</p>
-            <a 
-              href="mailto:contact@synapse-platform.com" 
-              className="text-synapse-primary hover:text-synapse-secondary font-medium"
-            >
-              Contact Us
-            </a>
+          <div className="mt-16 rounded-xl bg-white shadow-md border p-8">
+            <h3 className="text-2xl font-bold mb-3">Get advice and collaborate</h3>
+            <p className="text-gray-600 mb-6">Connect & network in the community posts hub</p>
+            
+            <Button variant="default" className="bg-gray-800 hover:bg-gray-900 mb-10">
+              Ask a question
+            </Button>
+            
+            <div className="space-y-8">
+              {/* First conversation bubble */}
+              <div className="flex items-start gap-4">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src="/lovable-uploads/060bbe27-b661-428f-9df7-1da684cf6f43.png" alt="Profile" />
+                  <AvatarFallback>TC</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 bg-gray-100 p-4 rounded-lg">
+                  <p className="font-medium">Hey guys, I'm looking for people to collaborate with. Anyone interested?</p>
+                </div>
+              </div>
+              
+              {/* Second conversation bubble */}
+              <div className="flex items-start gap-4">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300" alt="Profile" />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 bg-gray-100 p-4 rounded-lg">
+                  <p className="font-medium">
+                    Freelancers: do you ever feel lonely or isolated when working alone, and what do you do to overcome this?
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
