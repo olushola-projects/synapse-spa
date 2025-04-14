@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const VideoSection = () => {
   return (
@@ -15,7 +16,7 @@ const VideoSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-gray-900">
-            See Synapses in Action
+            See Synapse in Action
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Discover how our platform is transforming the GRC landscape for professionals worldwide.
@@ -32,7 +33,18 @@ const VideoSection = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">
               <div className="absolute bottom-6 left-6 text-white text-left max-w-md">
                 <h3 className="text-xl font-bold">GRC Infrastructure for Modern Professionals</h3>
-                <p className="text-sm mt-2 text-gray-200">Learn how Synapses is transforming compliance workflows</p>
+                <p className="text-sm mt-2 text-gray-200">Learn how Synapse is transforming compliance workflows</p>
+                
+                <div className="flex items-center mt-4">
+                  <Avatar className="h-8 w-8 border-2 border-white">
+                    <AvatarImage src="/placeholder.svg" alt="Product Manager" />
+                    <AvatarFallback>JD</AvatarFallback>
+                  </Avatar>
+                  <div className="ml-2">
+                    <p className="text-sm font-medium">Jane Doe</p>
+                    <p className="text-xs opacity-80">Product Manager</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -43,7 +55,7 @@ const VideoSection = () => {
               width="100%"
               height="100%"
               src="https://www.youtube.com/embed/your-video-id-here"
-              title="Synapses Demo Video"
+              title="Synapse Demo Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

@@ -26,7 +26,6 @@ const Navbar = () => {
     <header className={`sticky top-0 z-50 w-full ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"} transition-all duration-200`}>
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link to="/" className="text-xl font-bold text-blue-700 flex items-center gap-2">
-          <img src="/lovable-uploads/6856e5f8-5b1a-4520-bdc7-da986d98d082.png" alt="Logo" className="h-8 w-auto" />
           Synapse
         </Link>
         
@@ -36,7 +35,9 @@ const Navbar = () => {
           <Link to="/#features" className="text-gray-700 hover:text-blue-700 transition-colors">Features</Link>
           <Link to="/#how-it-works" className="text-gray-700 hover:text-blue-700 transition-colors">How It Works</Link>
           <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</Link>
-          <Button size="sm">Join Waitlist</Button>
+          <Link to="/#cta" className="text-gray-700 hover:text-blue-700 transition-colors">
+            <Button size="sm">Join Waitlist</Button>
+          </Link>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -60,7 +61,9 @@ const Navbar = () => {
             <Link to="/#features" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Features</Link>
             <Link to="/#how-it-works" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">How It Works</Link>
             <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</Link>
-            <Button className="mt-2">Join Waitlist</Button>
+            <Link to="/#cta" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">
+              <Button className="mt-2">Join Waitlist</Button>
+            </Link>
           </nav>
         </motion.div>
       )}

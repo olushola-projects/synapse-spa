@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 
 const CTASection = () => {
   return (
-    <div className="py-20 bg-gradient-to-br from-synapse-primary to-synapse-secondary text-white">
+    <div id="cta" className="py-20 bg-gradient-to-br from-synapse-primary to-synapse-secondary text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -67,12 +67,12 @@ const CTASection = () => {
                     <select
                       className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 placeholder-white/50 text-white"
                     >
-                      <option value="">Select your role</option>
-                      <option value="Compliance Officer">Compliance Officer</option>
-                      <option value="Risk Manager">Risk Manager</option>
-                      <option value="Legal Counsel">Legal Counsel</option>
-                      <option value="Auditor">Auditor</option>
-                      <option value="Other">Other</option>
+                      <option value="" className="bg-gray-800">Select your role</option>
+                      <option value="Compliance Officer" className="bg-gray-800">Compliance Officer</option>
+                      <option value="Risk Manager" className="bg-gray-800">Risk Manager</option>
+                      <option value="Legal Counsel" className="bg-gray-800">Legal Counsel</option>
+                      <option value="Auditor" className="bg-gray-800">Auditor</option>
+                      <option value="Other" className="bg-gray-800">Other</option>
                     </select>
                   </div>
                   <Button className="w-full bg-white hover:bg-white/90 text-synapse-primary font-medium py-6">

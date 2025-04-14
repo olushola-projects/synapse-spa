@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Linkedin, Instagram, Github } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -34,10 +34,10 @@ const Footer = () => {
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Platform</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/#features" className="text-gray-600 hover:text-synapse-primary">Features</Link></li>
-                <li><Link to="/#pricing" className="text-gray-600 hover:text-synapse-primary">Pricing</Link></li>
+                <li><Link to="/platform/features" className="text-gray-600 hover:text-synapse-primary">Features</Link></li>
+                <li><Link to="/platform/solutions" className="text-gray-600 hover:text-synapse-primary">Solutions</Link></li>
                 <li><Link to="/#integrations" className="text-gray-600 hover:text-synapse-primary">Integrations</Link></li>
-                <li><Link to="/#enterprise" className="text-gray-600 hover:text-synapse-primary">Enterprise</Link></li>
+                <li><Link to="/ask-dara" className="text-gray-600 hover:text-synapse-primary">AI Copilot</Link></li>
               </ul>
             </div>
             

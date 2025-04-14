@@ -6,6 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger
 } from "@/components/ui/accordion";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { UserRound, MessageCircle } from "lucide-react";
 
 const faqs = [
   {
@@ -34,6 +36,14 @@ const faqs = [
   }
 ];
 
+// Support team profiles
+const supportTeam = [
+  { name: "Alex Rivera", role: "Compliance Specialist", avatar: "/placeholder.svg" },
+  { name: "Sarah Chen", role: "GRC Advisor", avatar: "/placeholder.svg" },
+  { name: "Michael Okoye", role: "Support Lead", avatar: "/placeholder.svg" },
+  { name: "Taylor Mason", role: "Regulatory Expert", avatar: "/placeholder.svg" },
+];
+
 const FAQSection = () => {
   const [openItem, setOpenItem] = useState<string | undefined>(undefined);
 
@@ -50,7 +60,7 @@ const FAQSection = () => {
         </div>
 
         <div className="max-w-3xl mx-auto">
-          <Accordion type="single" collapsible>
+          <Accordion type="single" collapsible className="mb-12">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-lg font-medium text-left">
@@ -63,15 +73,45 @@ const FAQSection = () => {
             ))}
           </Accordion>
 
-          <div className="mt-12 p-6 bg-white rounded-lg shadow-sm border border-gray-100 text-center">
-            <h3 className="text-lg font-semibold mb-2">Still have questions?</h3>
-            <p className="text-gray-600 mb-6">Our team is ready to help you with any questions about Synapse.</p>
-            <a 
-              href="mailto:contact@synapse-platform.com" 
-              className="text-synapse-primary hover:text-synapse-secondary font-medium"
-            >
-              Contact Us
-            </a>
+          <div className="p-6 bg-white rounded-lg shadow-sm border border-gray-100">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold mb-2">Still have questions?</h3>
+              <p className="text-gray-600">
+                Our expert team is ready to help with any questions about Synapse.
+              </p>
+            </div>
+            
+            {/* Support Team Avatars */}
+            <div className="flex justify-center mb-6">
+              <div className="flex -space-x-2">
+                {supportTeam.map((member, index) => (
+                  <Avatar key={index} className="border-2 border-white w-12 h-12 transition-transform hover:scale-110 hover:z-10">
+                    <AvatarImage src={member.avatar} alt={member.name} />
+                    <AvatarFallback className="bg-synapse-primary text-white">
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+              </div>
+            </div>
+            
+            {/* Contact Button */}
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <a 
+                href="mailto:contact@synapse-platform.com" 
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-synapse-primary text-white hover:bg-synapse-primary/90 transition-colors"
+              >
+                <MessageCircle size={18} />
+                Contact Support Team
+              </a>
+              <a 
+                href="#" 
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg border border-synapse-primary text-synapse-primary hover:bg-synapse-primary/10 transition-colors"
+              >
+                <UserRound size={18} />
+                Schedule a Demo
+              </a>
+            </div>
           </div>
         </div>
       </div>
