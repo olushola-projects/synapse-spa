@@ -16,9 +16,9 @@ const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
     features: false,
     video: false,
+    testimonials: false,
     modularSolutions: false,
     howItWorks: false,
-    testimonials: false,
     faq: false,
     cta: false
   });
@@ -44,7 +44,7 @@ const Index = () => {
     }, observerOptions);
 
     // Observe each section element
-    const sections = ['features', 'video', 'how-it-works', 'testimonials', 'faq', 'cta'];
+    const sections = ['features', 'video', 'testimonials', 'how-it-works', 'faq', 'cta'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -106,12 +106,12 @@ const Index = () => {
         <VideoSection />
       </div>
       
-      <div id="how-it-works" className={`transition-opacity duration-1000 ${visibleSections.howItWorks ? 'opacity-100' : 'opacity-0'}`}>
-        <HowItWorksSection />
-      </div>
-      
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
         <TestimonialsSection />
+      </div>
+      
+      <div id="how-it-works" className={`transition-opacity duration-1000 ${visibleSections.howItWorks ? 'opacity-100' : 'opacity-0'}`}>
+        <HowItWorksSection />
       </div>
       
       <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>

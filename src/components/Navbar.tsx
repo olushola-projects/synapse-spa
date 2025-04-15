@@ -28,6 +28,17 @@ const Navbar = () => {
     setShowWaitlistDialog(true);
   };
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -80; // Account for header height
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <header className={`sticky top-0 z-50 w-full ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"} transition-all duration-200`}>
@@ -39,8 +50,20 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors">Home</Link>
-            <Link to="/#features" className="text-gray-700 hover:text-blue-700 transition-colors">Features</Link>
-            <Link to="/#how-it-works" className="text-gray-700 hover:text-blue-700 transition-colors">How It Works</Link>
+            <a 
+              href="/#features" 
+              className="text-gray-700 hover:text-blue-700 transition-colors"
+              onClick={(e) => handleNavClick(e, "features")}
+            >
+              Features
+            </a>
+            <a 
+              href="/#how-it-works" 
+              className="text-gray-700 hover:text-blue-700 transition-colors"
+              onClick={(e) => handleNavClick(e, "how-it-works")}
+            >
+              How It Works
+            </a>
             <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</Link>
             <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors cursor-pointer">
               <Button size="sm">Join Waitlist</Button>
@@ -65,8 +88,20 @@ const Navbar = () => {
           >
             <nav className="container mx-auto p-4 flex flex-col gap-4">
               <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Home</Link>
-              <Link to="/#features" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Features</Link>
-              <Link to="/#how-it-works" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">How It Works</Link>
+              <a 
+                href="/#features" 
+                className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100"
+                onClick={(e) => handleNavClick(e, "features")}
+              >
+                Features
+              </a>
+              <a 
+                href="/#how-it-works" 
+                className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100"
+                onClick={(e) => handleNavClick(e, "how-it-works")}
+              >
+                How It Works
+              </a>
               <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</Link>
               <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
                 <Button className="mt-2">Join Waitlist</Button>

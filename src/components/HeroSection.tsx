@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass, GamepadIcon } from "lucide-react";
+import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass, GamepadIcon, Cpu } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useState, useEffect } from "react";
@@ -25,6 +25,21 @@ const pieChartData = [
   { name: 'NIS2', value: 5, fill: '#8B5CF6' },
 ];
 
+// New chart data for donut pie chart
+const donutPieData = [
+  { name: 'High Risk', value: 22, fill: '#ef4444' },
+  { name: 'Medium Risk', value: 38, fill: '#f97316' },
+  { name: 'Low Risk', value: 40, fill: '#22c55e' },
+];
+
+// New control status data
+const controlStatusData = [
+  { name: 'In-Progress', value: 97, fill: '#cbd5e1' },
+  { name: 'Cancelled', value: 1, fill: '#e2e8f0' },
+  { name: 'On Approval', value: 7, fill: '#fdba74' },
+  { name: 'Overdue', value: 19, fill: '#ef4444' },
+];
+
 const featureIcons = [
   { title: "Regulatory Analysis", icon: <MessageSquare className="text-synapse-primary" size={20} />, content: {
     title: "AI-Powered Regulatory Analysis",
@@ -44,11 +59,6 @@ const featureIcons = [
   { title: "Job Matching", icon: <Briefcase className="text-emerald-500" size={20} />, content: {
     title: "Intelligent Job Matching",
     description: "Find the perfect role with our AI-powered matching algorithm and personalized career insights.",
-    details: "Our job matching system goes beyond keywords to analyze your skills, experience, and career aspirations against the detailed requirements of open positions. Receive compatibility scores, salary insights, and personalized application advice for each opportunity."
-  } },
-  { title: "Job Matching", icon: <Briefcase className="text-amber-500" size={20} />, content: {
-    title: "Intelligent Job Matching",
-    description: "Find the perfect role with our AI-powered matching algorithm.",
     details: "Our job matching system goes beyond keywords to analyze your skills, experience, and career aspirations against the detailed requirements of open positions. Receive compatibility scores, salary insights, and personalized application advice for each opportunity."
   } },
   { title: "Games", icon: <GamepadIcon className="text-rose-500" size={20} />, content: {
@@ -137,6 +147,16 @@ const HeroSection = () => {
     setShowWaitlistDialog(true);
   };
 
+  const handleLearnMoreClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      const yOffset = -80; // Account for header height
+      const y = featuresSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
       <div className="absolute inset-0 -z-10">
@@ -155,12 +175,12 @@ const HeroSection = () => {
           <div className={`md:w-2/5 pb-10 md:pb-0 text-center md:text-left transition-all duration-700 ease-out ${animateContent ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
             <h1 className="heading-xl">
               <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent animate-text">
-                <span className="animate-gradient-text">GRC Infrastructure for Modern Professionals</span>
+                <span className="animate-gradient-text">Become a Trusted Expert in the Age of AI-Driven GRC</span>
               </span>
             </h1>
             
             <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl mx-auto md:mx-0 leading-relaxed">
-              Become a trusted expert in the age of AI-driven Governance, Risk, and Compliance. Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
+              Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
             </p>
             
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
@@ -169,11 +189,11 @@ const HeroSection = () => {
                   Join Waitlist <ArrowRight size={18} />
                 </Button>
               </div>
-              <Link to="/#features">
+              <a href="#features" onClick={handleLearnMoreClick}>
                 <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg hover-lift">
                   Learn More
                 </Button>
-              </Link>
+              </a>
             </div>
             
             <div className="mt-8 flex items-center justify-center md:justify-start text-sm text-gray-500">
@@ -261,27 +281,19 @@ const HeroSection = () => {
                       <div className="flex gap-1 h-[15%]">
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
-                            <Clock size={6} className="text-blue-500" />
-                            <div className="text-[5px] text-gray-600">Regulatory Updates</div>
+                            <Bell size={6} className="text-blue-500" />
+                            <div className="text-[5px] text-gray-600">Notification</div>
                           </div>
                           <div className="text-gray-800 text-[8px] font-medium">12 New</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full"></div>
                         </div>
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
-                            <Calendar size={6} className="text-purple-500" />
-                            <div className="text-[5px] text-gray-600">Compliance Deadlines</div>
+                            <GamepadIcon size={6} className="text-purple-500" />
+                            <div className="text-[5px] text-gray-600">Gamification</div>
                           </div>
-                          <div className="text-gray-800 text-[8px] font-medium">3 Due</div>
+                          <div className="text-gray-800 text-[8px] font-medium">New Games</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-purple-300 to-purple-500 rounded-full"></div>
-                        </div>
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                          <div className="flex items-center gap-0.5">
-                            <GamepadIcon size={6} className="text-emerald-500" />
-                            <div className="text-[5px] text-gray-600">New SFDR Game</div>
-                          </div>
-                          <div className="text-gray-800 text-[8px] font-medium">Available</div>
-                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-emerald-300 to-emerald-500 rounded-full"></div>
                         </div>
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
@@ -404,120 +416,90 @@ const HeroSection = () => {
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
                                 <FileText size={8} className="text-blue-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">DORA Regulatory Update</div>
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">SFDR Educational Game</div>
                               </div>
                               <div className="text-blue-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-blue-50 rounded-full">New</div>
                             </div>
                             
                             <div className="bg-gray-50 rounded-md p-1 border border-gray-100">
-                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">The ESAs provide a roadmap towards the designation of CTPPs under DORA</h3>
+                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">Test your knowledge on Sustainable Finance Disclosure Regulation</h3>
                               <p className="text-gray-600 text-[4px] sm:text-[5px] leading-tight">
-                                The European Supervisory Authorities (ESAs) have published their joint roadmap outlining the process and timeline for designating Critical Third-Party Providers (CTPPs) under the Digital Operational Resilience Act (DORA). Financial entities should review this roadmap to understand how their third-party technology partners may be affected.
+                                Our new interactive game helps you understand the complexities of SFDR through engaging scenarios and challenges. Complete the game to earn the 'SFDR Expert' badge and improve your competitive edge in sustainable finance compliance.
                               </p>
                               <div className="mt-1 flex items-center gap-1">
                                 <Button variant="outline" size="sm" className="h-3 text-[4px] bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200 px-1 py-0">
-                                  View Report
+                                  Play Game
                                 </Button>
                                 <Button variant="outline" size="sm" className="h-3 text-[4px] bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200 px-1 py-0">
-                                  Impact Analysis
+                                  Learn More
                                 </Button>
                               </div>
                             </div>
                           </div>
                           
+                          {/* Enhanced Compliance Status Chart - Donut Chart */}
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1">
                                 <BarChart3 size={8} className="text-indigo-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Regulatory Compliance Trends</div>
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Compliance Risk Profile</div>
                               </div>
-                              <div className="text-gray-500 text-[4px] sm:text-[5px]">H1 2025</div>
+                              <div className="text-gray-500 text-[4px] sm:text-[5px]">Q2 2025</div>
                             </div>
                             
                             <div className="h-[80%] w-full">
                               <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={areaChartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                                  <defs>
-                                    <linearGradient id="gdpr" x1="0" y1="0" x2="0" y2="1">
-                                      <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.8}/>
-                                      <stop offset="95%" stopColor="#4F46E5" stopOpacity={0.1}/>
-                                    </linearGradient>
-                                    <linearGradient id="aml" x1="0" y1="0" x2="0" y2="1">
-                                      <stop offset="5%" stopColor="#EC4899" stopOpacity={0.8}/>
-                                      <stop offset="95%" stopColor="#EC4899" stopOpacity={0.1}/>
-                                    </linearGradient>
-                                    <linearGradient id="dora" x1="0" y1="0" x2="0" y2="1">
-                                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.8}/>
-                                      <stop offset="95%" stopColor="#10B981" stopOpacity={0.1}/>
-                                    </linearGradient>
-                                    <linearGradient id="psd2" x1="0" y1="0" x2="0" y2="1">
-                                      <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.8}/>
-                                      <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.1}/>
-                                    </linearGradient>
-                                  </defs>
-                                  <XAxis dataKey="name" tick={{ fontSize: 4 }} />
-                                  <Tooltip />
-                                  <Area type="monotone" dataKey="gdpr" stroke="#4F46E5" fillOpacity={1} fill="url(#gdpr)" />
-                                  <Area type="monotone" dataKey="aml" stroke="#EC4899" fillOpacity={1} fill="url(#aml)" />
-                                  <Area type="monotone" dataKey="dora" stroke="#10B981" fillOpacity={1} fill="url(#dora)" />
-                                  <Area type="monotone" dataKey="psd2" stroke="#F59E0B" fillOpacity={1} fill="url(#psd2)" />
-                                </AreaChart>
+                                <ReChartPie
+                                  data={donutPieData}
+                                  cx="50%"
+                                  cy="50%"
+                                  innerRadius={20}
+                                  outerRadius={30}
+                                  startAngle={90}
+                                  endAngle={-270}
+                                >
+                                  {donutPieData.map((entry, index) => (
+                                    <Cell key={`donut-cell-${index}`} fill={entry.fill} />
+                                  ))}
+                                </ReChartPie>
                               </ResponsiveContainer>
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="text-center">
+                                  <div className="text-gray-800 text-[6px] font-bold">72</div>
+                                  <div className="text-gray-500 text-[4px]">Score</div>
+                                </div>
+                              </div>
                             </div>
-                            <div className="flex justify-between mt-0.5 px-0.5">
-                              <div className="flex items-center text-[3px] sm:text-[4px]">
-                                <div className="w-1 h-1 bg-indigo-500 rounded-full mr-0.5"></div>
-                                <span className="text-gray-500">GDPR</span>
-                              </div>
-                              <div className="flex items-center text-[3px] sm:text-[4px]">
-                                <div className="w-1 h-1 bg-pink-500 rounded-full mr-0.5"></div>
-                                <span className="text-gray-500">AMLD6</span>
-                              </div>
-                              <div className="flex items-center text-[3px] sm:text-[4px]">
-                                <div className="w-1 h-1 bg-emerald-500 rounded-full mr-0.5"></div>
-                                <span className="text-gray-500">DORA</span>
-                              </div>
-                              <div className="flex items-center text-[3px] sm:text-[4px]">
-                                <div className="w-1 h-1 bg-amber-500 rounded-full mr-0.5"></div>
-                                <span className="text-gray-500">PSD2</span>
-                              </div>
+                            <div className="flex justify-between mt-1 px-0.5">
+                              {donutPieData.map((entry, index) => (
+                                <div key={index} className="flex items-center text-[3px] sm:text-[4px]">
+                                  <div className="w-1 h-1 rounded-full mr-0.5" style={{ backgroundColor: entry.fill }}></div>
+                                  <span className="text-gray-700">{entry.name}</span>
+                                  <span className="ml-1 text-gray-500">{entry.value}%</span>
+                                </div>
+                              ))}
                             </div>
                           </div>
 
+                          {/* Control Status Chart */}
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
-                                <Briefcase size={8} className="text-purple-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Job Opportunities</div>
+                                <ShieldAlert size={8} className="text-purple-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Control Test Status</div>
                               </div>
-                              <div className="text-purple-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-purple-50 rounded-full">Tailored</div>
+                              <div className="text-purple-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-purple-50 rounded-full">Updated</div>
                             </div>
                             
-                            <div className="grid grid-cols-1 gap-1 h-[80%] overflow-y-auto">
-                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
-                                <div className="flex-shrink-0 w-3 h-3 bg-blue-100 rounded-sm flex items-center justify-center mr-1">
-                                  <UserCheck size={6} className="text-blue-600" />
-                                </div>
-                                <div className="flex-1">
-                                  <div className="text-gray-800 text-[5px] font-medium">GRC Manager - Fintech</div>
-                                  <div className="text-gray-500 text-[4px] flex items-center justify-between">
-                                    <span>London • £90k-£110k</span>
-                                    <span className="bg-green-100 text-green-700 px-0.5 rounded text-[3px]">95% Match</span>
+                            <div className="flex items-center justify-around h-[70%]">
+                              {controlStatusData.map((item, index) => (
+                                <div key={index} className="flex flex-col items-center">
+                                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: item.fill }}>
+                                    <span className="text-[5px] font-semibold">{item.value}</span>
                                   </div>
+                                  <span className="text-[3px] text-gray-600 mt-0.5">{item.name}</span>
                                 </div>
-                              </div>
-                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100 hover:bg-gray-100 cursor-pointer transition-colors">
-                                <div className="flex-shrink-0 w-3 h-3 bg-purple-100 rounded-sm flex items-center justify-center mr-1">
-                                  <BadgeCheck size={6} className="text-purple-600" />
-                                </div>
-                                <div className="flex-1">
-                                  <div className="text-gray-800 text-[5px] font-medium">Compliance Director - Banking</div>
-                                  <div className="text-gray-500 text-[4px] flex items-center justify-between">
-                                    <span>Remote • £120k-£150k</span>
-                                    <span className="bg-green-100 text-green-700 px-0.5 rounded text-[3px]">90% Match</span>
-                                  </div>
-                                </div>
-                              </div>
+                              ))}
                             </div>
                           </div>
                         </div>
@@ -606,7 +588,6 @@ const HeroSection = () => {
                                     selectedFeature === 1 ? 'bg-purple-100 text-purple-600' : 
                                     selectedFeature === 2 ? 'bg-blue-100 text-blue-600' : 
                                     selectedFeature === 3 ? 'bg-emerald-100 text-emerald-600' : 
-                                    selectedFeature === 4 ? 'bg-amber-100 text-amber-600' : 
                                     'bg-rose-100 text-rose-600'}`}>
                   {featureIcons[selectedFeature].icon}
                 </div>

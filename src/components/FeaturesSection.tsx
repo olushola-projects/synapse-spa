@@ -55,7 +55,7 @@ const features = [
     textColor: "text-red-400"
   },
   {
-    title: "Job Matching",
+    title: "CV Surgery",
     description: "Transform your professional profile with our expert CV analysis. Receive personalized feedback on how to highlight your GRC expertise, certification recommendations, and tailored suggestions to stand out in competitive compliance roles.",
     icon: FilePen,
     color: "bg-indigo-900/20",
@@ -63,7 +63,7 @@ const features = [
   },
   {
     title: "Games",
-    description: "Access immersive learning experiences with personalized games for individuals and group games for huddles, events, and ice breakers. Earn badges as you progress through educational challenges on topics like SFDR and other regulatory frameworks.",
+    description: "Access immersive learning experiences with personalized games for individual learning as well as group games for huddles, events, and ice breakers. Earn badges as you progress through educational challenges on topics like SFDR and other regulatory frameworks.",
     icon: GamepadIcon,
     color: "bg-cyan-900/20",
     textColor: "text-cyan-400"
@@ -218,7 +218,7 @@ const FeaturesSection = () => {
             Powerful GRC Tools for Compliance Professionals
           </h2>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            Synapses provide powerful tools and community to navigate regulations, shape future technologies, and lead the way in AI-driven compliance
+            Synapses provide the tools and community to navigate regulations, shape future technologies, and lead the way in AI-driven compliance.
           </p>
         </div>
 
