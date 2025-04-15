@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowRight, Check } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const WaitlistForm = () => {
   const { toast } = useToast();
@@ -14,13 +15,26 @@ const WaitlistForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Store the waitlist entry in Supabase
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([
+          { 
+            email, 
+            name, 
+            company, 
+            role,
+            created_at: new Date().toISOString() 
+          }
+        ]);
+      
+      if (error) throw error;
+      
       setIsSubmitted(true);
       
       toast({
@@ -34,7 +48,17 @@ const WaitlistForm = () => {
       setName("");
       setCompany("");
       setRole("");
-    }, 1500);
+    } catch (error: any) {
+      console.error("Error submitting to waitlist:", error);
+      
+      toast({
+        title: "Something went wrong",
+        description: "We couldn't add you to the waitlist. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

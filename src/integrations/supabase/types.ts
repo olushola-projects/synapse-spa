@@ -9,7 +9,158 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          user_id: string
+        }
+        Insert: {
+          user_id: string
+        }
+        Update: {
+          user_id?: string
+        }
+        Relationships: []
+      }
+      badges: {
+        Row: {
+          description: string
+          icon_url: string | null
+          id: string
+          name: string
+          points: number
+        }
+        Insert: {
+          description: string
+          icon_url?: string | null
+          id?: string
+          name: string
+          points?: number
+        }
+        Update: {
+          description?: string
+          icon_url?: string | null
+          id?: string
+          name?: string
+          points?: number
+        }
+        Relationships: []
+      }
+      forum_posts: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          jurisdiction: string[] | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          jurisdiction?: string[] | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          jurisdiction?: string[] | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      regulatory_updates: {
+        Row: {
+          description: string
+          id: string
+          is_featured: boolean | null
+          jurisdiction: string
+          published_at: string
+          title: string
+          url: string | null
+        }
+        Insert: {
+          description: string
+          id?: string
+          is_featured?: boolean | null
+          jurisdiction: string
+          published_at?: string
+          title: string
+          url?: string | null
+        }
+        Update: {
+          description?: string
+          id?: string
+          is_featured?: boolean | null
+          jurisdiction?: string
+          published_at?: string
+          title?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      user_badges: {
+        Row: {
+          awarded_at: string
+          badge_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          badge_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string
+          badge_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
