@@ -69,7 +69,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         <div className="flex flex-col flex-1 min-h-0 bg-white border-r border-gray-200">
           <div className="flex items-center h-16 flex-shrink-0 px-4 border-b border-gray-200">
             <Link to="/" className="flex items-center">
-              <h1 className="text-xl font-bold text-blue-700 tracking-tight">Synapse</h1>
+              <h1 className="text-xl font-bold text-blue-700 tracking-tight">Synapses</h1>
             </Link>
           </div>
           <div className="flex-1 flex flex-col overflow-y-auto pt-5 pb-4">
@@ -126,7 +126,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <div className="flex items-center justify-between h-16 px-4">
             {/* Mobile Logo */}
             <Link to="/" className="flex items-center">
-              <h1 className="text-xl font-bold text-blue-700 tracking-tight">Synapse</h1>
+              <h1 className="text-xl font-bold text-blue-700 tracking-tight">Synapses</h1>
             </Link>
 
             {/* Mobile Menu Button */}
