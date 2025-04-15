@@ -1,11 +1,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass } from "lucide-react";
+import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass, GamepadIcon } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import JoinWaitlistDialog from "./JoinWaitlistDialog";
 
 const areaChartData = [
   { name: 'Jan', gdpr: 30, aml: 40, psd2: 20, dora: 27 },
@@ -40,20 +41,20 @@ const featureIcons = [
     description: "Stay informed with tailored alerts on regulatory changes relevant to your organization.",
     details: "Our regulatory update system monitors changes across multiple jurisdictions and sectors, filtering information based on your compliance profile. Receive daily or weekly digests, prioritized by impact level and organized by compliance domain."
   } },
-  { title: "CV Surgery", icon: <FileText className="text-emerald-500" size={20} />, content: {
-    title: "Professional CV Enhancement",
-    description: "Optimize your career profile with expert guidance from GRC specialists.",
-    details: "Our CV Surgery service combines AI analysis with human expertise to help you present your GRC skills and experience in the most effective way. Get personalized feedback, industry-specific terminology suggestions, and formatting advice tailored to regulatory compliance roles."
+  { title: "Job Matching", icon: <Briefcase className="text-emerald-500" size={20} />, content: {
+    title: "Intelligent Job Matching",
+    description: "Find the perfect role with our AI-powered matching algorithm and personalized career insights.",
+    details: "Our job matching system goes beyond keywords to analyze your skills, experience, and career aspirations against the detailed requirements of open positions. Receive compatibility scores, salary insights, and personalized application advice for each opportunity."
   } },
   { title: "Job Matching", icon: <Briefcase className="text-amber-500" size={20} />, content: {
     title: "Intelligent Job Matching",
     description: "Find the perfect role with our AI-powered matching algorithm.",
     details: "Our job matching system goes beyond keywords to analyze your skills, experience, and career aspirations against the detailed requirements of open positions. Receive compatibility scores, salary insights, and personalized application advice for each opportunity."
   } },
-  { title: "Classes", icon: <BookOpen className="text-rose-500" size={20} />, content: {
-    title: "Specialized GRC Training",
-    description: "Enhance your expertise with courses designed by industry leaders.",
-    details: "Our training platform offers courses ranging from foundational compliance knowledge to advanced regulatory strategy. All content is developed by practicing GRC experts, updated regularly to reflect regulatory changes, and presented in engaging, interactive formats."
+  { title: "Games", icon: <GamepadIcon className="text-rose-500" size={20} />, content: {
+    title: "Personalized GRC Games",
+    description: "Learn compliance concepts through interactive individual and group gameplay.",
+    details: "Our gamification platform offers personalized games for individual learning as well as group games for huddles, events, and ice breakers. Earn badges as you progress, turning complex compliance topics into engaging interactive experiences."
   } },
 ];
 
@@ -65,6 +66,7 @@ const HeroSection = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openAmlDialog, setOpenAmlDialog] = useState(false);
   const [chatResponse, setChatResponse] = useState("");
+  const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
 
   const amldInfo = {
     title: "AMLD6 Penalties and Criminal Liability Extension",
@@ -131,6 +133,10 @@ const HeroSection = () => {
     setOpenDialog(true);
   };
 
+  const openWaitlistDialog = () => {
+    setShowWaitlistDialog(true);
+  };
+
   return (
     <div className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
       <div className="absolute inset-0 -z-10">
@@ -148,22 +154,22 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row items-center">
           <div className={`md:w-2/5 pb-10 md:pb-0 text-center md:text-left transition-all duration-700 ease-out ${animateContent ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
             <h1 className="heading-xl">
-              <span className="inline-block animate-text bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">
-                GRC Infrastructure for Modern Professionals
+              <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent animate-text">
+                <span className="animate-gradient-text">GRC Infrastructure for Modern Professionals</span>
               </span>
             </h1>
             
             <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl mx-auto md:mx-0 leading-relaxed">
-              Join a global network of professionals using Synapses to navigate regulations, adopt regtech, grow careers, connect with mentors, leverage artificial intelligence, and future-proof compliance operations.
+              Become a trusted expert in the age of AI-driven Governance, Risk, and Compliance. Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
             </p>
             
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Link to="#cta">
+              <div onClick={openWaitlistDialog} className="cursor-pointer">
                 <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
                   Join Waitlist <ArrowRight size={18} />
                 </Button>
-              </Link>
-              <Link to="#features">
+              </div>
+              <Link to="/#features">
                 <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg hover-lift">
                   Learn More
                 </Button>
@@ -222,14 +228,14 @@ const HeroSection = () => {
                       <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <Calendar size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
-                        <Bell size={8} className="text-indigo-500" />
+                      <div className="w-4 h-4 bg-amber-500 rounded-md flex items-center justify-center cursor-pointer">
+                        <Bell size={8} className="text-white" />
                       </div>
                       <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <Briefcase size={8} className="text-indigo-500" />
                       </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
-                        <BookOpen size={8} className="text-indigo-500" />
+                      <div className="w-4 h-4 bg-green-500 rounded-md flex items-center justify-center cursor-pointer">
+                        <GamepadIcon size={8} className="text-white" />
                       </div>
                       <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <ShieldAlert size={8} className="text-indigo-500" />
@@ -271,16 +277,16 @@ const HeroSection = () => {
                         </div>
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
-                            <MessageSquare size={6} className="text-emerald-500" />
-                            <div className="text-[5px] text-gray-600">AI Assists Used</div>
+                            <GamepadIcon size={6} className="text-emerald-500" />
+                            <div className="text-[5px] text-gray-600">New SFDR Game</div>
                           </div>
-                          <div className="text-gray-800 text-[8px] font-medium">24 Today</div>
+                          <div className="text-gray-800 text-[8px] font-medium">Available</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-emerald-300 to-emerald-500 rounded-full"></div>
                         </div>
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
                             <AlertTriangle size={6} className="text-amber-500" />
-                            <div className="text-[5px] text-gray-600">Risk Alerts</div>
+                            <div className="text-[5px] text-gray-600">High Compliance Alert</div>
                           </div>
                           <div className="text-gray-800 text-[8px] font-medium">5 High</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-amber-300 to-amber-500 rounded-full"></div>
@@ -558,27 +564,13 @@ const HeroSection = () => {
                     <div className="h-14 bg-white rounded-md p-1 border border-gray-100">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-0.5">
-                          <BarChart3 size={6} className="text-indigo-500" />
-                          <div className="text-[5px] text-indigo-700 font-medium">Compliance Trends</div>
+                          <GamepadIcon size={6} className="text-indigo-500" />
+                          <div className="text-[5px] text-indigo-700 font-medium">New SFDR Game</div>
                         </div>
                       </div>
-                      <div className="h-8 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart data={areaChartData.slice(0,4)} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                            <defs>
-                              <linearGradient id="mobilegdpr" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="#4F46E5" stopOpacity={0.1}/>
-                              </linearGradient>
-                              <linearGradient id="mobileaml" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#EC4899" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="#EC4899" stopOpacity={0.1}/>
-                              </linearGradient>
-                            </defs>
-                            <Area type="monotone" dataKey="gdpr" stroke="#4F46E5" fillOpacity={1} fill="url(#mobilegdpr)" />
-                            <Area type="monotone" dataKey="aml" stroke="#EC4899" fillOpacity={1} fill="url(#mobileaml)" />
-                          </AreaChart>
-                        </ResponsiveContainer>
+                      <div className="bg-gray-50 rounded-sm p-1 border border-gray-100">
+                        <div className="text-[4px] text-gray-800 font-medium">Test your SFDR knowledge</div>
+                        <div className="text-[3px] text-gray-600 mt-0.5">Complete the game to earn the 'SFDR Expert' badge</div>
                       </div>
                     </div>
                     
@@ -632,7 +624,7 @@ const HeroSection = () => {
               </div>
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setOpenDialog(false)}>Close</Button>
-                <Button>Join Waitlist</Button>
+                <Button onClick={openWaitlistDialog}>Join Waitlist</Button>
               </div>
             </div>
           </>
@@ -709,6 +701,7 @@ const HeroSection = () => {
         </DialogContent>
       </Dialog>
 
+      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
     </div>
   );
 };

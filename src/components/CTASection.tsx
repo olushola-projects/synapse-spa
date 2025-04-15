@@ -4,8 +4,15 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WaitlistForm from "./WaitlistForm";
 import { Link } from "react-router-dom";
+import JoinWaitlistDialog from "./JoinWaitlistDialog";
 
 const CTASection = () => {
+  const [showWaitlistDialog, setShowWaitlistDialog] = React.useState(false);
+
+  const openWaitlistDialog = () => {
+    setShowWaitlistDialog(true);
+  };
+
   return (
     <div id="cta" className="py-20 relative overflow-hidden">
       {/* Animated gradient background */}
@@ -27,7 +34,7 @@ const CTASection = () => {
               Join the Regulatory Evolution with Synapses
             </h2>
             <p className="text-lg md:text-xl text-gray-600 mb-6">
-              Be among the first to experience the future of GRC infrastructure. Sign up for early access and stay updated on our launch.
+              Become a trusted expert in the age of AI-driven Governance, Risk, and Compliance. Be among the first to experience the future of GRC infrastructure.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -70,8 +77,8 @@ const CTASection = () => {
                 <p>GDPR compliance in progress</p>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <p>ISO 27001 certified</p>
+                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                <p>ISO 27001 compliance in progress</p>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
                 <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
@@ -87,9 +94,16 @@ const CTASection = () => {
           <div className="md:w-1/2 bg-white rounded-xl border border-gray-200 p-6 md:p-8 shadow-sm">
             <h3 className="text-xl font-bold mb-6 text-center">Join Our Waitlist</h3>
             <WaitlistForm />
+            <div className="mt-4 text-center">
+              <Button onClick={openWaitlistDialog} variant="outline" className="w-full">
+                Or continue with social accounts
+              </Button>
+            </div>
           </div>
         </div>
       </div>
+
+      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
     </div>
   );
 };

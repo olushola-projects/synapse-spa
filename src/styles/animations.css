@@ -1,0 +1,19 @@
+
+@keyframes gradient-text {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-text {
+  background-size: 300%;
+  animation: gradient-text 6s ease infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+}

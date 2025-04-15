@@ -13,7 +13,7 @@ const Footer = () => {
                 Synapses
               </Link>
               <p className="mt-4 text-gray-600 max-w-xs">
-                The global ecosystem where GRC professionals connect, grow, and shape the future of compliance.
+                The global ecosystem where Governance, Risk, and Compliance professionals connect, grow, and shape the future of compliance.
               </p>
               <div className="mt-6 flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-synapse-primary transition-colors">
@@ -73,18 +73,34 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="py-6 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Synapses Technologies Ltd. All rights reserved.
-          </p>
-          <div className="mt-4 md:mt-0">
-            <Link to="/legal/privacy" className="text-sm text-gray-500 hover:text-synapse-primary">
-              Privacy Policy
-            </Link>
-            <span className="mx-2 text-gray-300">|</span>
-            <Link to="/legal/terms" className="text-sm text-gray-500 hover:text-synapse-primary">
-              Terms of Service
-            </Link>
+        <div className="py-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <p className="text-sm text-gray-500">
+              &copy; {new Date().getFullYear()} Synapses Technologies Ltd. All rights reserved.
+            </p>
+            <div className="flex items-center gap-2">
+              <Link to="/legal/privacy" className="text-sm text-gray-500 hover:text-synapse-primary">
+                Privacy Policy
+              </Link>
+              <span className="text-gray-300">|</span>
+              <Link to="/legal/terms" className="text-sm text-gray-500 hover:text-synapse-primary">
+                Terms of Service
+              </Link>
+            </div>
+          </div>
+          
+          <div className="mt-4 md:mt-0 bg-gray-50 p-3 rounded-lg border border-gray-100">
+            <div className="text-xs text-center text-gray-600 mb-2">Compliance Status</div>
+            <div className="flex flex-col text-xs">
+              <div className="flex items-center mb-1">
+                <div className="w-2 h-2 bg-amber-500 rounded-full mr-2"></div>
+                <span>ISO 27001 compliance in progress</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-2 h-2 bg-amber-500 rounded-full mr-2"></div>
+                <span>SOC 2 compliance in progress</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

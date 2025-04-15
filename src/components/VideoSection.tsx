@@ -20,7 +20,7 @@ const VideoSection = () => {
             See Synapses in Action
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover how our platform is transforming the GRC landscape for professionals worldwide.
+            Discover how our platform is transforming the Governance, Risk, and Compliance landscape for professionals worldwide.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ const VideoSection = () => {
                 
                 <div className="flex items-center mt-4">
                   <Avatar className="h-8 w-8 border-2 border-white">
-                    <AvatarImage src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" alt="Product Manager" />
+                    <AvatarImage src="/lovable-uploads/db02338b-7e4e-46d0-bfe8-e9b9d9005d3f.png" alt="Product Manager" />
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                   <div className="ml-2">

@@ -1,8 +1,8 @@
 
 import { 
   LayoutDashboard, Bot, Calendar, Newspaper, Briefcase, FilePen,
-  BookOpen, Users, Mic, Lightbulb, Rocket, UsersRound, 
-  Award, Globe, ChevronLeft, ChevronRight, Play
+  GamepadIcon, Users, Mic, Lightbulb, Rocket, UsersRound, 
+  Award, Globe, ChevronLeft, ChevronRight, Play, Cpu
 } from "lucide-react";
 import { 
   Carousel, 
@@ -55,16 +55,16 @@ const features = [
     textColor: "text-red-400"
   },
   {
-    title: "CV Surgery",
+    title: "Job Matching",
     description: "Transform your professional profile with our expert CV analysis. Receive personalized feedback on how to highlight your GRC expertise, certification recommendations, and tailored suggestions to stand out in competitive compliance roles.",
     icon: FilePen,
     color: "bg-indigo-900/20",
     textColor: "text-indigo-400"
   },
   {
-    title: "Classes",
-    description: "Access immersive learning experiences with interactive voiceovers, practical case studies, and certification preparation. Our courses are designed by industry experts and cover everything from foundational compliance to advanced regulatory strategies.",
-    icon: BookOpen,
+    title: "Games",
+    description: "Access immersive learning experiences with personalized games for individuals and group games for huddles, events, and ice breakers. Earn badges as you progress through educational challenges on topics like SFDR and other regulatory frameworks.",
+    icon: GamepadIcon,
     color: "bg-cyan-900/20",
     textColor: "text-cyan-400"
   },
@@ -116,6 +116,13 @@ const features = [
     icon: Globe,
     color: "bg-blue-900/20",
     textColor: "text-blue-400"
+  },
+  {
+    title: "Regulatory Technology",
+    description: "Exclusive access to future AI solutions in the Governance, Risk, and Compliance space. By signing up, you'll be able to lead the way in shaping the future of GRC by beta testing and providing feedback on cutting-edge regulatory technology.",
+    icon: Cpu,
+    color: "bg-indigo-900/20",
+    textColor: "text-indigo-400"
   }
 ];
 
@@ -211,7 +218,7 @@ const FeaturesSection = () => {
             Powerful GRC Tools for Compliance Professionals
           </h2>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            Get comprehensive regulatory insights and career development tools designed for GRC professionals.
+            Synapses provide powerful tools and community to navigate regulations, shape future technologies, and lead the way in AI-driven compliance
           </p>
         </div>
 
