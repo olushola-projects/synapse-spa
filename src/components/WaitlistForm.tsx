@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,15 +22,13 @@ const WaitlistForm = () => {
       // Store the waitlist entry in Supabase
       const { error } = await supabase
         .from('waitlist')
-        .insert([
-          { 
-            email, 
-            name, 
-            company, 
-            role,
-            created_at: new Date().toISOString() 
-          }
-        ]);
+        .insert({
+          email,
+          name,
+          company,
+          role,
+          created_at: new Date().toISOString()
+        });
       
       if (error) throw error;
       
