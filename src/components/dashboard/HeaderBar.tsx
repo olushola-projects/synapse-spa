@@ -77,7 +77,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ user, onLogout }) => {
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
                   <Link to="/profile">
-                    <User className="mr-2 h-4 w-4" />
+                    <UserIcon className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </Link>
                 </DropdownMenuItem>
