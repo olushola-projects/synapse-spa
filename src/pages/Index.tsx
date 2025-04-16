@@ -4,11 +4,10 @@ import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
 import VideoSection from "../components/VideoSection";
-import ModularSolutionsSection from "../components/ModularSolutionsSection";
-import HowItWorksSection from "../components/HowItWorksSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import FAQSection from "../components/FAQSection";
 import CTASection from "../components/CTASection";
+import HowItWorksSection from "../components/HowItWorksSection";
 import Footer from "../components/Footer";
 
 const Index = () => {
@@ -17,7 +16,6 @@ const Index = () => {
     features: false,
     video: false,
     testimonials: false,
-    modularSolutions: false,
     howItWorks: false,
     faq: false,
     cta: false
@@ -110,7 +108,7 @@ const Index = () => {
         <TestimonialsSection />
       </div>
       
-      {/* Rearranged to move FAQ and CTA up after testimonials */}
+      {/* Reordered sections to move FAQ and CTA up */}
       <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>
         <FAQSection />
       </div>
