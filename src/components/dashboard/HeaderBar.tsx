@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { 
   Bell, 
-  User, 
+  User as UserIcon, 
   LogOut, 
   Search, 
   LayoutDashboard,
@@ -20,10 +20,10 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { User as UserType } from "@/contexts/AuthContext";
+import { User } from "@/contexts/AuthContext";
 
 interface HeaderBarProps {
-  user: UserType;
+  user: User;
   onLogout: () => void;
 }
 

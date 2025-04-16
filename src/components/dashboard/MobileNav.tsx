@@ -1,18 +1,10 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { LayoutDashboard, MessageSquare, Settings, Users, LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { User } from "@/contexts/AuthContext";
-
-// Navigation items for the mobile nav
-const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: MessageSquare, label: "Ask Dara", href: "/ask-dara" },
-  { icon: Users, label: "Partners", href: "/partners" },
-  { icon: Settings, label: "Settings", href: "/profile" },
-];
+import { navItems } from "./navItems";
 
 interface MobileNavProps {
   user: User;

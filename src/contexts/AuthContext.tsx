@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from "@/components/ui/use-toast";
 
 // Define types
-interface User {
+export interface User {
   id: string;
   email: string;
   name: string;
