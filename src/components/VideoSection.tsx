@@ -6,8 +6,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 
 const VideoSection = () => {
+  // Function to handle video play (in a real implementation, this would show the actual video)
+  const handlePlayVideo = () => {
+    console.log("Playing video");
+    // In a real implementation, this would trigger the video to play
+  };
+
   return (
-    <div className="py-12 bg-white relative overflow-hidden">
+    <div className="py-12 bg-white relative overflow-hidden" id="how-it-works">
       {/* Fluid background like Stripe */}
       <div className="absolute inset-0 -z-10 bg-gradient-radial from-blue-50 via-indigo-50 to-purple-50"></div>
       <div className="absolute inset-0 -z-10 opacity-30">
@@ -26,7 +32,7 @@ const VideoSection = () => {
 
         <div className="relative max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-xl">
           {/* YouTube placeholder with play button overlay */}
-          <div className="absolute inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center group cursor-pointer">
+          <div className="absolute inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center group cursor-pointer" onClick={handlePlayVideo}>
             <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
               <Play className="h-8 w-8 text-blue-600 ml-1" />
             </div>
@@ -49,30 +55,17 @@ const VideoSection = () => {
               </div>
             </div>
           </div>
-          
-          {/* YouTube iframe - hidden initially, would be shown on click in a real implementation */}
-          <div className="hidden">
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/your-video-id-here"
-              title="Synapses Demo Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
 
           {/* Placeholder image for the video thumbnail */}
           <img 
             src="/placeholder.svg" 
-            alt="Video Thumbnail" 
+            alt="Synapses Demo Video" 
             className="w-full h-full object-cover"
           />
         </div>
 
         <div className="mt-8 flex justify-center">
-          <Button size="lg" className="bg-blue-700 hover:bg-blue-800 text-white flex items-center gap-2">
+          <Button size="lg" className="bg-blue-700 hover:bg-blue-800 text-white flex items-center gap-2" onClick={handlePlayVideo}>
             Watch Full Demo <Play className="h-4 w-4" />
           </Button>
         </div>

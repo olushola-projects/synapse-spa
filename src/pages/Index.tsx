@@ -7,7 +7,6 @@ import VideoSection from "../components/VideoSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import FAQSection from "../components/FAQSection";
 import CTASection from "../components/CTASection";
-import HowItWorksSection from "../components/HowItWorksSection";
 import Footer from "../components/Footer";
 
 const Index = () => {
@@ -16,7 +15,6 @@ const Index = () => {
     features: false,
     video: false,
     testimonials: false,
-    howItWorks: false,
     faq: false,
     cta: false
   });
@@ -42,7 +40,7 @@ const Index = () => {
     }, observerOptions);
 
     // Observe each section element
-    const sections = ['features', 'video', 'testimonials', 'faq', 'cta', 'how-it-works'];
+    const sections = ['features', 'video', 'testimonials', 'faq', 'cta'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -91,6 +89,31 @@ const Index = () => {
     };
   }, []);
 
+  // Handle "How It Works" navigation to redirect to Video Section
+  useEffect(() => {
+    const handleHowItWorksClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const isHowItWorksLink = target.textContent?.includes('How It Works') || 
+                               target.closest('a')?.textContent?.includes('How It Works');
+      
+      if (isHowItWorksLink) {
+        e.preventDefault();
+        const videoSection = document.getElementById('video');
+        if (videoSection) {
+          const yOffset = -80;
+          const y = videoSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }
+    };
+    
+    document.addEventListener('click', handleHowItWorksClick);
+    
+    return () => {
+      document.removeEventListener('click', handleHowItWorksClick);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -108,17 +131,14 @@ const Index = () => {
         <TestimonialsSection />
       </div>
       
-      {/* Reordered sections to move FAQ and CTA up */}
+      {/* FAQ moved up to directly after Testimonials */}
       <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>
         <FAQSection />
       </div>
       
+      {/* CTA moved up to after FAQ */}
       <div id="cta" className={`transition-opacity duration-1000 ${visibleSections.cta ? 'opacity-100' : 'opacity-0'}`}>
         <CTASection />
-      </div>
-      
-      <div id="how-it-works" className={`transition-opacity duration-1000 ${visibleSections.howItWorks ? 'opacity-100' : 'opacity-0'}`}>
-        <HowItWorksSection />
       </div>
       
       <Footer />

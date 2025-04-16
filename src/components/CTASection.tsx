@@ -68,26 +68,6 @@ const CTASection = () => {
                 <p className="ml-3 text-gray-600">Influence product development</p>
               </div>
             </div>
-            
-            {/* Legal compliance status */}
-            <div className="mt-10 bg-blue-50 border border-blue-100 rounded-lg p-4">
-              <h3 className="font-bold mb-2">Current Compliance Status</h3>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                <p>GDPR compliance in progress</p>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                <p>ISO 27001 compliance in progress</p>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                <p>SOC 2 compliance in progress</p>
-              </div>
-              <div className="mt-3 text-xs text-gray-500">
-                View our <Link to="/legal/security" className="text-blue-600 hover:underline">Security Policy</Link> to learn more.
-              </div>
-            </div>
           </div>
           
           {/* Right side: Waitlist form */}
