@@ -44,7 +44,7 @@ const Index = () => {
     }, observerOptions);
 
     // Observe each section element
-    const sections = ['features', 'video', 'testimonials', 'how-it-works', 'faq', 'cta'];
+    const sections = ['features', 'video', 'testimonials', 'faq', 'cta', 'how-it-works'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -110,16 +110,17 @@ const Index = () => {
         <TestimonialsSection />
       </div>
       
-      <div id="how-it-works" className={`transition-opacity duration-1000 ${visibleSections.howItWorks ? 'opacity-100' : 'opacity-0'}`}>
-        <HowItWorksSection />
-      </div>
-      
+      {/* Rearranged to move FAQ and CTA up after testimonials */}
       <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>
         <FAQSection />
       </div>
       
       <div id="cta" className={`transition-opacity duration-1000 ${visibleSections.cta ? 'opacity-100' : 'opacity-0'}`}>
         <CTASection />
+      </div>
+      
+      <div id="how-it-works" className={`transition-opacity duration-1000 ${visibleSections.howItWorks ? 'opacity-100' : 'opacity-0'}`}>
+        <HowItWorksSection />
       </div>
       
       <Footer />

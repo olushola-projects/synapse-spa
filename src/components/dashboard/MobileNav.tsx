@@ -38,7 +38,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ user, onLogout }) => {
 
         {/* Mobile Menu */}
         {isMobileNavOpen && (
-          <div className="bg-white border-b border-gray-200 px-2 py-3">
+          <div className="bg-white border-b border-gray-200 px-2 py-3 max-h-[85vh] overflow-y-auto">
             <nav className="grid gap-1">
               {navItems.map((item) => (
                 <Link

@@ -88,20 +88,6 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-          
-          <div className="mt-4 md:mt-0 bg-gray-50 p-3 rounded-lg border border-gray-100">
-            <div className="text-xs text-center text-gray-600 mb-2">Compliance Status</div>
-            <div className="flex flex-col text-xs">
-              <div className="flex items-center mb-1">
-                <div className="w-2 h-2 bg-amber-500 rounded-full mr-2"></div>
-                <span>ISO 27001 compliance in progress</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-amber-500 rounded-full mr-2"></div>
-                <span>SOC 2 compliance in progress</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </footer>

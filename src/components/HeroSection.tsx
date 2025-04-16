@@ -1,7 +1,6 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, FileText, BarChart3, BookOpen, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, Users, BookMarked, BadgeCheck, UserCheck, Compass, GamepadIcon, Cpu } from "lucide-react";
+import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, GamepadIcon, Cpu, Users, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, BadgeCheck, UserCheck, Compass, BookMarked } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useState, useEffect } from "react";
@@ -40,8 +39,9 @@ const controlStatusData = [
   { name: 'Overdue', value: 19, fill: '#ef4444' },
 ];
 
+// Updated feature icons to match the image
 const featureIcons = [
-  { title: "Regulatory Analysis", icon: <MessageSquare className="text-synapse-primary" size={20} />, content: {
+  { title: "Regulatory Analysis", icon: <MessageSquare className="text-indigo-600" size={20} />, content: {
     title: "AI-Powered Regulatory Analysis",
     description: "Get instant insights on complex regulations with our advanced AI analysis tool.",
     details: "Our regulatory analysis tool uses natural language processing to break down complex legal text into actionable insights. It can compare regulations across jurisdictions, highlight key compliance requirements, and identify potential conflicts or gaps in your existing compliance framework."
@@ -65,6 +65,11 @@ const featureIcons = [
     title: "Personalized GRC Games",
     description: "Learn compliance concepts through interactive individual and group gameplay.",
     details: "Our gamification platform offers personalized games for individual learning as well as group games for huddles, events, and ice breakers. Earn badges as you progress, turning complex compliance topics into engaging interactive experiences."
+  } },
+  { title: "AI Integration", icon: <Cpu className="text-amber-500" size={20} />, content: {
+    title: "Advanced AI Integration",
+    description: "Leverage cutting-edge AI to streamline compliance workflows and enhance decision making.",
+    details: "Our AI integration capabilities allow you to automate routine compliance tasks, generate intelligent insights from regulatory data, and create predictive models to anticipate compliance risks before they materialize."
   } },
 ];
 
@@ -481,210 +486,4 @@ const HeroSection = () => {
                             </div>
                           </div>
 
-                          {/* Control Status Chart */}
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center gap-1">
-                                <ShieldAlert size={8} className="text-purple-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Control Test Status</div>
-                              </div>
-                              <div className="text-purple-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-purple-50 rounded-full">Updated</div>
-                            </div>
-                            
-                            <div className="flex items-center justify-around h-[70%]">
-                              {controlStatusData.map((item, index) => (
-                                <div key={index} className="flex flex-col items-center">
-                                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: item.fill }}>
-                                    <span className="text-[5px] font-semibold">{item.value}</span>
-                                  </div>
-                                  <span className="text-[3px] text-gray-600 mt-0.5">{item.name}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="absolute -right-6 -bottom-12 transform rotate-6 w-[120px] h-[240px] bg-white rounded-[18px] border-4 border-gray-200 shadow-xl overflow-hidden animate-float">
-                <div className="h-4 bg-gray-100 flex justify-between items-center px-2 text-[6px] text-gray-800">
-                  <span>9:41</span>
-                  <div className="flex gap-0.5 items-center">
-                    <div className="w-1 h-1 rounded-full bg-gray-600"></div>
-                    <div className="w-1 h-1 rounded-full bg-gray-600"></div>
-                    <div className="w-1 h-1 rounded-full bg-gray-600"></div>
-                  </div>
-                </div>
-                
-                <div className="p-1 bg-[#F1F0FB]">
-                  <div className="h-4 flex justify-between items-center mb-1">
-                    <div className="h-2 w-12 bg-indigo-500 rounded-sm flex items-center justify-center">
-                      <span className="text-[5px] text-white">SYNAPSES</span>
-                    </div>
-                    <img 
-                      src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
-                      alt="User" 
-                      className="w-3 h-3 rounded-full object-cover"
-                    />
-                  </div>
-                  
-                  <div className="space-y-1">
-                    <div className="h-10 bg-red-50 rounded-md p-1 border border-red-100">
-                      <div className="flex items-center gap-0.5 mb-0.5">
-                        <ShieldAlert size={6} className="text-red-500" />
-                        <div className="text-[5px] text-red-700 font-medium">AMLD6 Priority Alert</div>
-                      </div>
-                      <div className="h-6 rounded flex flex-col justify-center p-0.5">
-                        <div className="text-[4px] text-gray-800 font-medium">Criminal Liability Extension</div>
-                        <div className="text-[3px] text-gray-600 mt-0.5">Review recent updates to criminal liability provisions.</div>
-                      </div>
-                    </div>
-                    
-                    <div className="h-14 bg-white rounded-md p-1 border border-gray-100">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-0.5">
-                          <GamepadIcon size={6} className="text-indigo-500" />
-                          <div className="text-[5px] text-indigo-700 font-medium">New SFDR Game</div>
-                        </div>
-                      </div>
-                      <div className="bg-gray-50 rounded-sm p-1 border border-gray-100">
-                        <div className="text-[4px] text-gray-800 font-medium">Test your SFDR knowledge</div>
-                        <div className="text-[3px] text-gray-600 mt-0.5">Complete the game to earn the 'SFDR Expert' badge</div>
-                      </div>
-                    </div>
-                    
-                    <div className="h-10 bg-white rounded-md p-1 border border-gray-100">
-                      <div className="flex items-center gap-0.5 mb-0.5">
-                        <Calendar size={6} className="text-blue-500" />
-                        <div className="text-[5px] text-blue-700 font-medium">Upcoming Deadline</div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-[4px] text-gray-800 font-medium">AMLD6 Report</div>
-                          <div className="text-[3px] text-gray-600">Due in 3 days</div>
-                        </div>
-                        <Button size="sm" className="h-2 text-[3px] bg-blue-500 hover:bg-blue-600 text-white px-1 py-0">
-                          View
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        {selectedFeature !== null && featureIcons[selectedFeature] && (
-          <>
-            <DialogHeader>
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`p-2 rounded-full ${selectedFeature === 0 ? 'bg-blue-100 text-blue-600' : 
-                                    selectedFeature === 1 ? 'bg-purple-100 text-purple-600' : 
-                                    selectedFeature === 2 ? 'bg-blue-100 text-blue-600' : 
-                                    selectedFeature === 3 ? 'bg-emerald-100 text-emerald-600' : 
-                                    'bg-rose-100 text-rose-600'}`}>
-                  {featureIcons[selectedFeature].icon}
-                </div>
-                <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
-              </div>
-              <DialogDescription>
-                {featureIcons[selectedFeature].content.description}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <p className="text-gray-700">{featureIcons[selectedFeature].content.details}</p>
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <h4 className="font-semibold text-sm mb-2">Coming in Beta Release</h4>
-                <p className="text-sm text-gray-600">This feature will be available in our upcoming beta release. Join the waitlist to be among the first to try it out.</p>
-              </div>
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setOpenDialog(false)}>Close</Button>
-                <Button onClick={openWaitlistDialog}>Join Waitlist</Button>
-              </div>
-            </div>
-          </>
-        )}
-      </Dialog>
-
-      <Dialog open={openAmlDialog} onOpenChange={setOpenAmlDialog}>
-        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-full bg-red-100 text-red-600">
-                <ShieldAlert className="h-5 w-5" />
-              </div>
-              <DialogTitle>{amldInfo.title}</DialogTitle>
-            </div>
-            <DialogDescription>
-              {amldInfo.description}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">
-                <MessageSquare className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm">Dara AI Assistant</h4>
-                <p className="text-xs text-gray-500">Regulatory Intelligence Bot</p>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 rounded-lg p-3 mb-3">
-              <p className="text-gray-700 text-sm">What is the penalty under AMLD6 and criminal liability extension?</p>
-            </div>
-
-            <div className="flex gap-3">
-              <div className="w-8 h-8 flex-shrink-0 rounded-full bg-indigo-600 flex items-center justify-center">
-                <MessageSquare className="h-4 w-4 text-white" />
-              </div>
-              <div className="bg-indigo-50 rounded-lg p-3 text-gray-800 text-sm">
-                {chatResponse || (
-                  <div className="flex gap-2 items-center h-6">
-                    <div className="h-2 w-2 rounded-full bg-indigo-300 animate-bounce [animation-delay:0ms]"></div>
-                    <div className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce [animation-delay:150ms]"></div>
-                    <div className="h-2 w-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:300ms]"></div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            <div dangerouslySetInnerHTML={{ __html: amldInfo.content }} className="prose prose-sm max-w-none" />
-            
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-              <h4 className="font-semibold text-sm mb-2 flex items-center gap-1">
-                <Zap className="h-4 w-4 text-blue-600" /> AI-Generated Analysis
-              </h4>
-              <p className="text-sm text-gray-700">Synapses has analyzed 248 sources including the official AMLD6 directive, legal commentaries, and recent enforcement actions to provide this summary. Our AI continuously monitors for updates to ensure you have the most current information.</p>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2 text-gray-500 text-xs">
-                <Calendar className="h-3 w-3" />
-                <span>Last updated: April 12, 2025</span>
-              </div>
-              
-              <div className="flex gap-2">
-                <Button variant="outline">Save to Library</Button>
-                <Button>Ask Follow-up Question</Button>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
-    </div>
-  );
-};
-
-export default HeroSection;
+                          {/* Control Status
