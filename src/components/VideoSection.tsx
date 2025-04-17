@@ -8,7 +8,7 @@ const VideoSection = () => {
   // Function to handle video play (in a real implementation, this would show the actual video)
   const handlePlayVideo = () => {
     console.log("Playing video");
-    // In a real implementation, this would trigger the video to play
+    // Future implementation could include opening a modal with the actual video
   };
 
   // Handle the scroll to this section when How It Works is clicked
