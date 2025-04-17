@@ -142,7 +142,7 @@ const Index = () => {
       <Footer />
       
       {/* Mobile optimization styles */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 640px) {
           .container {
             padding-left: 16px !important;
@@ -161,7 +161,7 @@ const Index = () => {
             height: 300px !important;
           }
         }
-      `}</style>
+      `}} />
     </div>
   );
 };
