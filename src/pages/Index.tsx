@@ -123,9 +123,7 @@ const Index = () => {
         <FeaturesSection />
       </div>
       
-      <div id="how-it-works" className={`transition-opacity duration-1000 ${visibleSections.video ? 'opacity-100' : 'opacity-0'}`}>
-        <VideoSection />
-      </div>
+      <VideoSection />
       
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
         <TestimonialsSection />
