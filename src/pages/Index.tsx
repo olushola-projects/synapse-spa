@@ -40,7 +40,7 @@ const Index = () => {
     }, observerOptions);
 
     // Observe each section element
-    const sections = ['features', 'video', 'testimonials', 'faq', 'cta'];
+    const sections = ['features', 'how-it-works', 'testimonials', 'faq', 'cta'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -98,7 +98,7 @@ const Index = () => {
       
       if (isHowItWorksLink) {
         e.preventDefault();
-        const videoSection = document.getElementById('video');
+        const videoSection = document.getElementById('how-it-works');
         if (videoSection) {
           const yOffset = -80;
           const y = videoSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -123,7 +123,7 @@ const Index = () => {
         <FeaturesSection />
       </div>
       
-      <div id="video" className={`transition-opacity duration-1000 ${visibleSections.video ? 'opacity-100' : 'opacity-0'}`}>
+      <div id="how-it-works" className={`transition-opacity duration-1000 ${visibleSections.video ? 'opacity-100' : 'opacity-0'}`}>
         <VideoSection />
       </div>
       
@@ -131,12 +131,12 @@ const Index = () => {
         <TestimonialsSection />
       </div>
       
-      {/* FAQ moved up to directly after Testimonials */}
+      {/* FAQ after Testimonials */}
       <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>
         <FAQSection />
       </div>
       
-      {/* CTA moved up to after FAQ */}
+      {/* CTA after FAQ */}
       <div id="cta" className={`transition-opacity duration-1000 ${visibleSections.cta ? 'opacity-100' : 'opacity-0'}`}>
         <CTASection />
       </div>

@@ -1,9 +1,8 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Link } from "react-router-dom";
 
 const VideoSection = () => {
   // Function to handle video play (in a real implementation, this would show the actual video)
@@ -11,6 +10,29 @@ const VideoSection = () => {
     console.log("Playing video");
     // In a real implementation, this would trigger the video to play
   };
+
+  // Handle the scroll to this section when How It Works is clicked
+  useEffect(() => {
+    const scrollToVideo = () => {
+      const hash = window.location.hash;
+      if (hash === '#how-it-works') {
+        const videoSection = document.getElementById('how-it-works');
+        if (videoSection) {
+          const yOffset = -80; // Account for header height
+          const y = videoSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }
+    };
+    
+    // Run on mount and when hash changes
+    scrollToVideo();
+    window.addEventListener('hashchange', scrollToVideo);
+    
+    return () => {
+      window.removeEventListener('hashchange', scrollToVideo);
+    };
+  }, []);
 
   return (
     <div className="py-12 bg-white relative overflow-hidden" id="how-it-works">

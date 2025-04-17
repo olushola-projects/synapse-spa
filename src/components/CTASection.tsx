@@ -3,7 +3,6 @@ import React from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WaitlistForm from "./WaitlistForm";
-import { Link } from "react-router-dom";
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
 
 const CTASection = () => {
@@ -27,7 +26,7 @@ const CTASection = () => {
       <div className="absolute top-3/4 right-1/3 w-64 h-64 rounded-full bg-indigo-200 opacity-20 blur-3xl -z-10"></div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-10">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10">
           {/* Left side: CTA text */}
           <div className="md:w-1/2">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-gray-900">

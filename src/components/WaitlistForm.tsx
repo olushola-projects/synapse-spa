@@ -1,16 +1,24 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowRight, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const WaitlistForm = () => {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
-  const [role, setRole] = useState("");
+  const [title, setTitle] = useState("");
+  const [country, setCountry] = useState("");
+  const [missingCapability, setMissingCapability] = useState("");
+  const [limitingTools, setLimitingTools] = useState("");
+  const [engagement, setEngagement] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -26,7 +34,11 @@ const WaitlistForm = () => {
           email,
           name,
           company,
-          role,
+          title,
+          country,
+          missing_capability: missingCapability,
+          limiting_tools: limitingTools,
+          engagement,
           created_at: new Date().toISOString()
         });
       
@@ -44,7 +56,11 @@ const WaitlistForm = () => {
       setEmail("");
       setName("");
       setCompany("");
-      setRole("");
+      setTitle("");
+      setCountry("");
+      setMissingCapability("");
+      setLimitingTools("");
+      setEngagement("");
     } catch (error: any) {
       console.error("Error submitting to waitlist:", error);
       
@@ -72,40 +88,78 @@ const WaitlistForm = () => {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name
+              </Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Work Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                Job Title
+              </Label>
+              <Input
+                id="title"
+                type="text"
+                placeholder="Your position"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="w-full"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+                Country
+              </Label>
+              <Select value={country} onValueChange={setCountry}>
+                <SelectTrigger id="country">
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="us">United States</SelectItem>
+                  <SelectItem value="uk">United Kingdom</SelectItem>
+                  <SelectItem value="ca">Canada</SelectItem>
+                  <SelectItem value="au">Australia</SelectItem>
+                  <SelectItem value="de">Germany</SelectItem>
+                  <SelectItem value="fr">France</SelectItem>
+                  <SelectItem value="sg">Singapore</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Work Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full"
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+            <Label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
               Company
-            </label>
+            </Label>
             <Input
               id="company"
               type="text"
@@ -117,18 +171,54 @@ const WaitlistForm = () => {
             />
           </div>
           
-          <div>
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-              Job Role
-            </label>
-            <Input
-              id="role"
-              type="text"
-              placeholder="Your position"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
+          <div className="mt-6">
+            <Label htmlFor="missing-capability" className="block text-sm font-medium text-gray-700 mb-1">
+              What's one capability, workflow, or tool you believe is missing from the current compliance landscape?
+            </Label>
+            <p className="text-xs text-gray-500 mb-2">
+              Think about your day-to-day—what would make your work significantly more efficient, insightful, or impactful?
+            </p>
+            <Textarea
+              id="missing-capability"
+              placeholder="Share your thoughts..."
+              value={missingCapability}
+              onChange={(e) => setMissingCapability(e.target.value)}
+              className="w-full min-h-24"
               required
-              className="w-full"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="limiting-tools" className="block text-sm font-medium text-gray-700 mb-1">
+              Are there any existing tools or platforms you've found limiting in your compliance work? If so, what challenges have you experienced?
+            </Label>
+            <p className="text-xs text-gray-500 mb-2">
+              Your perspective will help us understand where existing solutions may fall short—and where new value can be created.
+            </p>
+            <Textarea
+              id="limiting-tools"
+              placeholder="Share your experiences..."
+              value={limitingTools}
+              onChange={(e) => setLimitingTools(e.target.value)}
+              className="w-full min-h-24"
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="engagement" className="block text-sm font-medium text-gray-700 mb-1">
+              How do you currently engage with platforms like LinkedIn, GRC forums, or associations to stay informed, upskill, or solve regulatory challenges?
+            </Label>
+            <p className="text-xs text-gray-500 mb-2">
+              We'd love to learn how you gather insights, build networks, or contribute to the professional community.
+            </p>
+            <Textarea
+              id="engagement"
+              placeholder="Share your approaches..."
+              value={engagement}
+              onChange={(e) => setEngagement(e.target.value)}
+              className="w-full min-h-24"
+              required
             />
           </div>
           
