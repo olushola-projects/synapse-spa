@@ -1,10 +1,16 @@
 
-import React from "react";
-import { ArrowRight } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WaitlistForm from "./WaitlistForm";
 
 const CTASection = () => {
+  const [isFormExpanded, setIsFormExpanded] = useState(false);
+
+  const toggleForm = () => {
+    setIsFormExpanded(!isFormExpanded);
+  };
+
   return (
     <div id="cta" className="py-20 relative overflow-hidden">
       {/* Animated gradient background */}
@@ -62,10 +68,64 @@ const CTASection = () => {
             </div>
           </div>
           
-          {/* Right side: Waitlist form */}
+          {/* Right side: Waitlist form (collapsed by default) */}
           <div className="md:w-1/2 bg-white rounded-xl border border-gray-200 p-6 md:p-8 shadow-sm">
-            <h3 className="text-xl font-bold mb-6 text-center">Join Our Waitlist</h3>
-            <WaitlistForm />
+            <h3 className="text-xl font-bold mb-4 text-center">Join Our Waitlist</h3>
+            
+            {isFormExpanded ? (
+              <>
+                <WaitlistForm />
+                <Button 
+                  variant="ghost" 
+                  className="mt-4 w-full flex items-center justify-center text-gray-500"
+                  onClick={toggleForm}
+                >
+                  Collapse Form <ChevronUp className="ml-2 h-4 w-4" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="mb-4">
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex flex-col space-y-1.5">
+                      <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                        Work Email
+                      </label>
+                      <div className="relative">
+                        <input
+                          id="email" 
+                          type="email" 
+                          placeholder="you@company.com" 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Button 
+                  type="button" 
+                  className="w-full bg-blue-700 hover:bg-blue-800 py-6 text-white"
+                  onClick={toggleForm}
+                >
+                  <span className="flex items-center justify-center">
+                    Complete Registration <ArrowRight className="ml-2" size={18} />
+                  </span>
+                </Button>
+                <div className="mt-4 text-center">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full flex items-center justify-center text-gray-500"
+                    onClick={toggleForm}
+                  >
+                    View Full Form <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </>
+            )}
+            
+            <p className="text-xs text-center text-gray-500 mt-4">
+              By joining, you agree to our <a href="/legal/terms" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="/legal/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>.
+            </p>
           </div>
         </div>
       </div>

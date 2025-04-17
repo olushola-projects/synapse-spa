@@ -80,7 +80,7 @@ const VideoSection = () => {
 
           {/* Placeholder image for the video thumbnail */}
           <img 
-            src="/placeholder.svg" 
+            src="/lovable-uploads/45cf99e7-e503-4ed3-b858-be606a5dd904.png" 
             alt="Synapses Demo Video" 
             className="w-full h-full object-cover"
           />

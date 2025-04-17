@@ -140,6 +140,28 @@ const Index = () => {
       </div>
       
       <Footer />
+      
+      {/* Mobile optimization styles */}
+      <style jsx global>{`
+        @media (max-width: 640px) {
+          .container {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+          }
+          
+          h2 {
+            font-size: 1.75rem !important;
+          }
+          
+          .feature-grid {
+            grid-template-columns: 1fr !important;
+          }
+          
+          .chart-container {
+            height: 300px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
