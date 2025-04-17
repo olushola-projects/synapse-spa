@@ -3,15 +3,8 @@ import React from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WaitlistForm from "./WaitlistForm";
-import JoinWaitlistDialog from "./JoinWaitlistDialog";
 
 const CTASection = () => {
-  const [showWaitlistDialog, setShowWaitlistDialog] = React.useState(false);
-
-  const openWaitlistDialog = () => {
-    setShowWaitlistDialog(true);
-  };
-
   return (
     <div id="cta" className="py-20 relative overflow-hidden">
       {/* Animated gradient background */}
@@ -73,16 +66,9 @@ const CTASection = () => {
           <div className="md:w-1/2 bg-white rounded-xl border border-gray-200 p-6 md:p-8 shadow-sm">
             <h3 className="text-xl font-bold mb-6 text-center">Join Our Waitlist</h3>
             <WaitlistForm />
-            <div className="mt-4 text-center">
-              <Button onClick={openWaitlistDialog} variant="outline" className="w-full">
-                Or continue with social accounts
-              </Button>
-            </div>
           </div>
         </div>
       </div>
-
-      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
     </div>
   );
 };

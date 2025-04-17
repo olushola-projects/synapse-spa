@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, MessageSquare, Bell, Briefcase, GamepadIcon, Cpu, Users, Clock, AlertTriangle, ShieldAlert, PieChart, Zap, BadgeCheck, UserCheck, Compass, BookMarked, BarChart3, FileText } from "lucide-react";
+import { ArrowRight, MessageSquare, Bell, Briefcase, GamepadIcon, Users, ShieldAlert, PieChart, BadgeCheck, FileText, Cpu } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useState, useEffect } from "react";
@@ -40,37 +40,37 @@ const controlStatusData = [
   { name: 'Overdue', value: 19, fill: '#ef4444' },
 ];
 
-// Updated feature icons to match the image
+// Updated feature icons to match the image and the client's requirements
 const featureIcons = [
   { title: "Regulatory Analysis", icon: <MessageSquare className="text-indigo-600" size={20} />, content: {
     title: "AI-Powered Regulatory Analysis",
     description: "Get instant insights on complex regulations with our advanced AI analysis tool.",
     details: "Our regulatory analysis tool uses natural language processing to break down complex legal text into actionable insights. It can compare regulations across jurisdictions, highlight key compliance requirements, and identify potential conflicts or gaps in your existing compliance framework."
   } },
-  { title: "Regulatory Calendar", icon: <Calendar className="text-purple-500" size={20} />, content: {
-    title: "Smart Regulatory Calendar",
-    description: "Never miss important deadlines with our intelligent tracking system.",
-    details: "Our calendar integrates with global regulatory databases to provide real-time updates on compliance deadlines, consultation periods, and implementation timelines. Set custom alerts, assign tasks to team members, and track progress all in one place."
+  { title: "Networking & Forum", icon: <Users className="text-purple-500" size={20} />, content: {
+    title: "GRC Professional Networking & Forum",
+    description: "Connect with peers and mentors in the compliance community.",
+    details: "Our networking platform and forum allow you to connect with peers, mentors, and industry experts. Share knowledge, ask questions, and collaborate on solutions to common compliance challenges. Build your professional network and stay connected with the global GRC community."
   } },
-  { title: "Regulatory Updates", icon: <Bell className="text-blue-500" size={20} />, content: {
-    title: "Customized Regulatory Updates",
-    description: "Stay informed with tailored alerts on regulatory changes relevant to your organization.",
-    details: "Our regulatory update system monitors changes across multiple jurisdictions and sectors, filtering information based on your compliance profile. Receive daily or weekly digests, prioritized by impact level and organized by compliance domain."
+  { title: "Badges & Recognition", icon: <BadgeCheck className="text-blue-500" size={20} />, content: {
+    title: "Professional Badges & Recognition",
+    description: "Earn badges for your skills and achievements in the GRC field.",
+    details: "Our badge system recognizes your skills, achievements, and contributions to the GRC field. Complete courses, contribute to discussions, solve regulatory challenges, and receive badges that you can display on your profile and share with your network."
   } },
   { title: "Job Matching", icon: <Briefcase className="text-emerald-500" size={20} />, content: {
     title: "Intelligent Job Matching",
     description: "Find the perfect role with our AI-powered matching algorithm and personalized career insights.",
     details: "Our job matching system goes beyond keywords to analyze your skills, experience, and career aspirations against the detailed requirements of open positions. Receive compatibility scores, salary insights, and personalized application advice for each opportunity."
   } },
-  { title: "Games", icon: <GamepadIcon className="text-rose-500" size={20} />, content: {
+  { title: "GRC Games", icon: <GamepadIcon className="text-rose-500" size={20} />, content: {
     title: "Personalized GRC Games",
     description: "Learn compliance concepts through interactive individual and group gameplay.",
     details: "Our gamification platform offers personalized games for individual learning as well as group games for huddles, events, and ice breakers. Earn badges as you progress, turning complex compliance topics into engaging interactive experiences."
   } },
-  { title: "AI Integration", icon: <Cpu className="text-amber-500" size={20} />, content: {
-    title: "Advanced AI Integration",
-    description: "Leverage cutting-edge AI to streamline compliance workflows and enhance decision making.",
-    details: "Our AI integration capabilities allow you to automate routine compliance tasks, generate intelligent insights from regulatory data, and create predictive models to anticipate compliance risks before they materialize."
+  { title: "Interview Prep", icon: <FileText className="text-amber-500" size={20} />, content: {
+    title: "GRC Interview Preparation",
+    description: "Prepare for your next career move with our comprehensive interview preparation tools.",
+    details: "Our interview preparation system helps you get ready for your next career move with practice questions, AI-powered feedback, and industry insights. Learn how to effectively communicate your GRC expertise and stand out in competitive job interviews."
   } },
 ];
 
@@ -252,10 +252,10 @@ const HeroSection = () => {
                         <MessageSquare size={8} className="text-white" />
                       </div>
                       <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
-                        <Calendar size={8} className="text-indigo-500" />
+                        <Users size={8} className="text-indigo-500" />
                       </div>
                       <div className="w-4 h-4 bg-amber-500 rounded-md flex items-center justify-center cursor-pointer">
-                        <Bell size={8} className="text-white" />
+                        <BadgeCheck size={8} className="text-white" />
                       </div>
                       <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
                         <Briefcase size={8} className="text-indigo-500" />
@@ -264,7 +264,7 @@ const HeroSection = () => {
                         <GamepadIcon size={8} className="text-white" />
                       </div>
                       <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
-                        <ShieldAlert size={8} className="text-indigo-500" />
+                        <FileText size={8} className="text-indigo-500" />
                       </div>
                     </div>
                     
@@ -287,8 +287,8 @@ const HeroSection = () => {
                       <div className="flex gap-1 h-[15%]">
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
-                            <Bell size={6} className="text-blue-500" />
-                            <div className="text-[5px] text-gray-600">Notification</div>
+                            <BadgeCheck size={6} className="text-blue-500" />
+                            <div className="text-[5px] text-gray-600">Badges</div>
                           </div>
                           <div className="text-gray-800 text-[8px] font-medium">12 New</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full"></div>
@@ -303,10 +303,10 @@ const HeroSection = () => {
                         </div>
                         <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                           <div className="flex items-center gap-0.5">
-                            <AlertTriangle size={6} className="text-amber-500" />
-                            <div className="text-[5px] text-gray-600">High Compliance Alert</div>
+                            <Users size={6} className="text-amber-500" />
+                            <div className="text-[5px] text-gray-600">Forum Activity</div>
                           </div>
-                          <div className="text-gray-800 text-[8px] font-medium">5 High</div>
+                          <div className="text-gray-800 text-[8px] font-medium">5 New</div>
                           <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-amber-300 to-amber-500 rounded-full"></div>
                         </div>
                       </div>
@@ -341,39 +341,39 @@ const HeroSection = () => {
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
-                                <Calendar size={8} className="text-blue-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Regulatory Calendar</div>
+                                <Users size={8} className="text-blue-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Networking & Forum</div>
                               </div>
-                              <div className="text-gray-500 text-[4px] sm:text-[5px]">This Week</div>
+                              <div className="text-gray-500 text-[4px] sm:text-[5px]">Active Now</div>
                             </div>
                             
                             <div className="grid grid-cols-2 gap-1 h-[80%] overflow-y-auto">
                               <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
                                 <div className="w-1 h-1 rounded-full bg-yellow-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 14 - GDPR Update</div>
-                                  <div className="text-gray-500 text-[4px]">Review privacy policy changes</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">John D. - GDPR Forum</div>
+                                  <div className="text-gray-500 text-[4px]">Looking for case studies</div>
                                 </div>
                               </div>
                               <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
                                 <div className="w-1 h-1 rounded-full bg-red-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 15 - AMLD6 Deadline</div>
-                                  <div className="text-gray-500 text-[4px]">Submit compliance report</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Sarah M. - AMLD6 Group</div>
+                                  <div className="text-gray-500 text-[4px]">Posted new resource</div>
                                 </div>
                               </div>
                               <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
                                 <div className="w-1 h-1 rounded-full bg-green-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 16 - Training</div>
-                                  <div className="text-gray-500 text-[4px]">AML compliance workshop</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Virtual Meetup - Apr 16</div>
+                                  <div className="text-gray-500 text-[4px]">Compliance networking</div>
                                 </div>
                               </div>
                               <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
                                 <div className="w-1 h-1 rounded-full bg-purple-500 mt-0.5 mr-0.5"></div>
                                 <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Apr 18 - DORA Review</div>
-                                  <div className="text-gray-500 text-[4px]">ESAs roadmap discussion</div>
+                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Risk Officers - Discussion</div>
+                                  <div className="text-gray-500 text-[4px]">14 new comments</div>
                                 </div>
                               </div>
                             </div>
@@ -422,19 +422,19 @@ const HeroSection = () => {
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1">
                                 <FileText size={8} className="text-blue-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">SFDR Educational Game</div>
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Interview Preparation</div>
                               </div>
                               <div className="text-blue-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-blue-50 rounded-full">New</div>
                             </div>
                             
                             <div className="bg-gray-50 rounded-md p-1 border border-gray-100">
-                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">Test your knowledge on Sustainable Finance Disclosure Regulation</h3>
+                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">Prepare for your GRC interview with our AI coach</h3>
                               <p className="text-gray-600 text-[4px] sm:text-[5px] leading-tight">
-                                Our new interactive game helps you understand the complexities of SFDR through engaging scenarios and challenges. Complete the game to earn the 'SFDR Expert' badge and improve your competitive edge in sustainable finance compliance.
+                                Practice answering common GRC interview questions with our AI coach. Receive instant feedback on your responses and tips to improve your delivery. Access industry-specific questions and adapt your answers to different compliance roles.
                               </p>
                               <div className="mt-1 flex items-center gap-1">
                                 <Button variant="outline" size="sm" className="h-3 text-[4px] bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200 px-1 py-0">
-                                  Play Game
+                                  Start Practice
                                 </Button>
                                 <Button variant="outline" size="sm" className="h-3 text-[4px] bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200 px-1 py-0">
                                   Learn More
@@ -447,13 +447,13 @@ const HeroSection = () => {
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1">
-                                <BarChart3 size={8} className="text-indigo-500" />
+                                <PieChart size={8} className="text-indigo-500" />
                                 <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Compliance Risk Profile</div>
                               </div>
                               <div className="text-gray-500 text-[4px] sm:text-[5px]">Q2 2025</div>
                             </div>
                             
-                            <div className="h-[80%] w-full">
+                            <div className="h-[80%] w-full relative">
                               <ResponsiveContainer width="100%" height="100%">
                                 <ReChartPie
                                   data={donutPieData}
@@ -487,7 +487,7 @@ const HeroSection = () => {
                             </div>
                           </div>
 
-                          {/* Control Status chart */}
+                          {/* User Activity Chart */}
                           <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1">

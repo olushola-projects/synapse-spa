@@ -131,12 +131,10 @@ const Index = () => {
         <TestimonialsSection />
       </div>
       
-      {/* FAQ after Testimonials */}
       <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>
         <FAQSection />
       </div>
       
-      {/* CTA after FAQ */}
       <div id="cta" className={`transition-opacity duration-1000 ${visibleSections.cta ? 'opacity-100' : 'opacity-0'}`}>
         <CTASection />
       </div>

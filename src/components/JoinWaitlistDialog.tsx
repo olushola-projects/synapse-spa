@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Linkedin, Mail, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface JoinWaitlistDialogProps {
@@ -31,17 +31,6 @@ const JoinWaitlistDialog = ({ open, onOpenChange }: JoinWaitlistDialogProps) => 
     }, 1500);
   };
 
-  const handleSocialSignup = (provider: 'linkedin' | 'gmail') => {
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success(`Successfully joined waitlist with ${provider}!`);
-      onOpenChange(false);
-    }, 1500);
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
@@ -53,37 +42,6 @@ const JoinWaitlistDialog = ({ open, onOpenChange }: JoinWaitlistDialogProps) => 
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
-          <div className="flex flex-col gap-3">
-            <Button 
-              variant="outline" 
-              className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90 flex items-center gap-2"
-              onClick={() => handleSocialSignup('linkedin')}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Linkedin className="h-4 w-4" />}
-              Continue with LinkedIn
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              className="bg-[#DB4437] text-white hover:bg-[#DB4437]/90 flex items-center gap-2"
-              onClick={() => handleSocialSignup('gmail')}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
-              Continue with Gmail
-            </Button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-gray-500">Or continue with</span>
-            </div>
-          </div>
-
           <form onSubmit={handleEmailSignup} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
