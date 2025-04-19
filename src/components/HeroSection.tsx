@@ -1,78 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { ArrowRight, MessageSquare, Bell, Briefcase, GamepadIcon, Users, ShieldAlert, PieChart, BadgeCheck, FileText, Cpu } from "lucide-react";
-import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { DashboardHeader } from './dashboard/DashboardHeader';
+import { SideNavigation } from './dashboard/SideNavigation';
+import { StatusCards } from './dashboard/StatusCards';
+import { RegulatoryFocusChart } from './dashboard/charts/RegulatoryFocusChart';
+import { FeatureGrid, featureIcons } from './features/FeatureGrid';
+import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
-
-const areaChartData = [
-  { name: 'Jan', gdpr: 30, aml: 40, psd2: 20, dora: 27 },
-  { name: 'Feb', gdpr: 25, aml: 43, psd2: 25, dora: 30 },
-  { name: 'Mar', gdpr: 32, aml: 38, psd2: 20, dora: 35 },
-  { name: 'Apr', gdpr: 35, aml: 43, psd2: 30, dora: 38 },
-  { name: 'May', gdpr: 30, aml: 48, psd2: 25, dora: 40 },
-  { name: 'Jun', gdpr: 40, aml: 50, psd2: 35, dora: 43 },
-];
-
-const pieChartData = [
-  { name: 'GDPR', value: 35, fill: '#4F46E5' },
-  { name: 'AMLD6', value: 25, fill: '#EC4899' },
-  { name: 'DORA', value: 20, fill: '#10B981' },
-  { name: 'PSD2', value: 15, fill: '#F59E0B' },
-  { name: 'NIS2', value: 5, fill: '#8B5CF6' },
-];
-
-// New chart data for donut pie chart
-const donutPieData = [
-  { name: 'High Risk', value: 22, fill: '#ef4444' },
-  { name: 'Medium Risk', value: 38, fill: '#f97316' },
-  { name: 'Low Risk', value: 40, fill: '#22c55e' },
-];
-
-// New control status data
-const controlStatusData = [
-  { name: 'In-Progress', value: 97, fill: '#cbd5e1' },
-  { name: 'Cancelled', value: 1, fill: '#e2e8f0' },
-  { name: 'On Approval', value: 7, fill: '#fdba74' },
-  { name: 'Overdue', value: 19, fill: '#ef4444' },
-];
-
-// Updated feature icons to match the image and the client's requirements
-const featureIcons = [
-  { title: "Regulatory Analysis", icon: <MessageSquare className="text-indigo-600" size={20} />, content: {
-    title: "AI-Powered Regulatory Analysis",
-    description: "Get instant insights on complex regulations with our advanced AI analysis tool.",
-    details: "Our regulatory analysis tool uses natural language processing to break down complex legal text into actionable insights. It can compare regulations across jurisdictions, highlight key compliance requirements, and identify potential conflicts or gaps in your existing compliance framework."
-  } },
-  { title: "Networking & Forum", icon: <Users className="text-purple-500" size={20} />, content: {
-    title: "GRC Professional Networking & Forum",
-    description: "Connect with peers and mentors in the compliance community.",
-    details: "Our networking platform and forum allow you to connect with peers, mentors, and industry experts. Share knowledge, ask questions, and collaborate on solutions to common compliance challenges. Build your professional network and stay connected with the global GRC community."
-  } },
-  { title: "Badges & Recognition", icon: <BadgeCheck className="text-blue-500" size={20} />, content: {
-    title: "Professional Badges & Recognition",
-    description: "Earn badges for your skills and achievements in the GRC field.",
-    details: "Our badge system recognizes your skills, achievements, and contributions to the GRC field. Complete courses, contribute to discussions, solve regulatory challenges, and receive badges that you can display on your profile and share with your network."
-  } },
-  { title: "Job Matching", icon: <Briefcase className="text-emerald-500" size={20} />, content: {
-    title: "Intelligent Job Matching",
-    description: "Find the perfect role with our AI-powered matching algorithm and personalized career insights.",
-    details: "Our job matching system goes beyond keywords to analyze your skills, experience, and career aspirations against the detailed requirements of open positions. Receive compatibility scores, salary insights, and personalized application advice for each opportunity."
-  } },
-  { title: "GRC Games", icon: <GamepadIcon className="text-rose-500" size={20} />, content: {
-    title: "Personalized GRC Games",
-    description: "Learn compliance concepts through interactive individual and group gameplay.",
-    details: "Our gamification platform offers personalized games for individual learning as well as group games for huddles, events, and ice breakers. Earn badges as you progress, turning complex compliance topics into engaging interactive experiences."
-  } },
-  { title: "Interview Prep", icon: <FileText className="text-amber-500" size={20} />, content: {
-    title: "GRC Interview Preparation",
-    description: "Prepare for your next career move with our comprehensive interview preparation tools.",
-    details: "Our interview preparation system helps you get ready for your next career move with practice questions, AI-powered feedback, and industry insights. Learn how to effectively communicate your GRC expertise and stand out in competitive job interviews."
-  } },
-];
 
 const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
@@ -178,95 +112,20 @@ const HeroSection = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center">
-          <div className={`md:w-2/5 pb-10 md:pb-0 text-center md:text-left transition-all duration-700 ease-out ${animateContent ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-            <h1 className="heading-xl">
-              <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent animate-text">
-                <span className="animate-gradient-text">Become a Trusted Expert in the Age of AI-Driven GRC</span>
-              </span>
-            </h1>
-            
-            <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl mx-auto md:mx-0 leading-relaxed">
-              Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
-            </p>
-            
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <div onClick={openWaitlistDialog} className="cursor-pointer">
-                <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
-                  Get Early Access <ArrowRight size={18} />
-                </Button>
-              </div>
-              <a href="#features" onClick={handleLearnMoreClick}>
-                <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg hover-lift">
-                  Learn More
-                </Button>
-              </a>
-            </div>
-            
-            <div className="mt-8 flex items-center justify-center md:justify-start text-sm text-gray-500">
-              <span className="flex items-center mr-4">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></div>
-                Early Access
-              </span>
-              <span className="flex items-center">
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
-                Join 50+ early adopters in our private pilot
-              </span>
-            </div>
-
-            <div className={`mt-8 grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0 transition-all duration-700 ease-out ${animateFeatures ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-              {featureIcons.map((feature, index) => (
-                <div 
-                  key={index} 
-                  className="flex flex-col items-center p-3 rounded-lg bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md hover-lift transition-all cursor-pointer"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                  onClick={() => handleFeatureClick(index)}
-                >
-                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
-                    {feature.icon}
-                  </div>
-                  <span className="text-xs text-gray-700 text-center font-medium">{feature.title}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <HeroContent 
+            animate={animateContent}
+            onGetAccess={() => setShowWaitlistDialog(true)}
+            onLearnMore={handleLearnMoreClick}
+          />
           
           <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
             <div className="relative w-full max-w-3xl mx-auto">
               <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
                 <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
-                  <div className="h-[6%] bg-white flex items-center px-3 border-b border-gray-200">
-                    <div className="flex gap-1.5">
-                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    </div>
-                    <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">Synapses</div>
-                  </div>
+                  <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
                   
                   <div className="p-2 flex h-[94%] bg-[#F1F0FB]">
-                    <div className="w-[8%] h-full bg-white rounded-lg border border-gray-200 flex flex-col items-center py-2 gap-3">
-                      <div className="w-[60%] h-5 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <div className="w-3 h-3 bg-indigo-500 rounded-md"></div>
-                      </div>
-                      <div className="w-4 h-4 bg-indigo-500 rounded-md flex items-center justify-center cursor-pointer" onClick={() => setOpenAmlDialog(true)}>
-                        <MessageSquare size={8} className="text-white" />
-                      </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
-                        <Users size={8} className="text-indigo-500" />
-                      </div>
-                      <div className="w-4 h-4 bg-amber-500 rounded-md flex items-center justify-center cursor-pointer">
-                        <BadgeCheck size={8} className="text-white" />
-                      </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
-                        <Briefcase size={8} className="text-indigo-500" />
-                      </div>
-                      <div className="w-4 h-4 bg-green-500 rounded-md flex items-center justify-center cursor-pointer">
-                        <GamepadIcon size={8} className="text-white" />
-                      </div>
-                      <div className="w-4 h-4 bg-indigo-100 rounded-md flex items-center justify-center cursor-pointer">
-                        <FileText size={8} className="text-indigo-500" />
-                      </div>
-                    </div>
+                    <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
                     
                     <div className="flex-1 pl-1 flex flex-col gap-1">
                       <div className="h-4 flex justify-between items-center">
@@ -519,7 +378,11 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Feature Detail Dialog */}
+      <FeatureGrid 
+        onFeatureClick={handleFeatureClick}
+        animate={animateFeatures}
+      />
+
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="sm:max-w-md">
           {selectedFeature !== null && (
@@ -540,7 +403,6 @@ const HeroSection = () => {
         </DialogContent>
       </Dialog>
 
-      {/* AMLD6 Dialog */}
       <Dialog open={openAmlDialog} onOpenChange={setOpenAmlDialog}>
         <DialogContent className="sm:max-w-3xl max-h-[80vh] overflow-auto">
           <DialogHeader>
@@ -571,7 +433,6 @@ const HeroSection = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Waitlist Dialog */}
       <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
     </div>
   );

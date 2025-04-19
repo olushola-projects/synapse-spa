@@ -1,0 +1,20 @@
+
+import React from 'react';
+import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, FileText } from 'lucide-react';
+
+interface DashboardHeaderProps {
+  avatarSrc: string;
+}
+
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ avatarSrc }) => {
+  return (
+    <div className="h-[6%] bg-white flex items-center px-3 border-b border-gray-200">
+      <div className="flex gap-1.5">
+        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+      </div>
+      <div className="ml-4 text-gray-800 text-[8px] sm:text-xs font-medium">Synapses</div>
+    </div>
+  );
+};
