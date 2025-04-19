@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Sidebar from "./Sidebar";
 import MobileNav from "./MobileNav";
 import HeaderBar from "./HeaderBar";
-import DashboardContent from "./DashboardContent";
+import { DashboardContent } from "./DashboardContent";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

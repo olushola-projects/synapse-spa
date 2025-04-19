@@ -6,10 +6,11 @@ import { RegulatoryFocusChart, ComplianceRiskChart, ControlStatusChart } from '.
 import { InterviewPrepCard } from './InterviewPrepCard';
 
 interface DashboardContentProps {
-  onAmlDialogOpen: () => void;
+  onAmlDialogOpen?: () => void;
+  children?: React.ReactNode;
 }
 
-export const DashboardContent: React.FC<DashboardContentProps> = ({ onAmlDialogOpen }) => {
+export const DashboardContent: React.FC<DashboardContentProps> = ({ onAmlDialogOpen = () => {}, children }) => {
   return (
     <div className="flex gap-1 flex-1">
       <div className="flex-1 flex flex-col gap-1">
@@ -23,6 +24,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ onAmlDialogO
         <ComplianceRiskChart />
         <ControlStatusChart />
       </div>
+      {children}
     </div>
   );
 };

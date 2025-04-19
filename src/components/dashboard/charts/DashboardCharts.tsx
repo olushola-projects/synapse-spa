@@ -47,6 +47,7 @@ export const RegulatoryFocusChart: React.FC = () => {
                 cy="50%"
                 innerRadius={15}
                 outerRadius={25}
+                dataKey="value"
               >
                 {pieChartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -91,6 +92,7 @@ export const ComplianceRiskChart: React.FC = () => {
               outerRadius={30}
               startAngle={90}
               endAngle={-270}
+              dataKey="value"
             >
               {donutPieData.map((entry, index) => (
                 <Cell key={`donut-cell-${index}`} fill={entry.fill} />
