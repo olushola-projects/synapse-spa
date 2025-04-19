@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
+import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DashboardHeader } from './dashboard/DashboardHeader';
 import { SideNavigation } from './dashboard/SideNavigation';
 import { StatusCards } from './dashboard/StatusCards';
-import { RegulatoryFocusChart } from './dashboard/charts/RegulatoryFocusChart';
+import { DashboardContent } from './dashboard/DashboardContent';
 import { FeatureGrid, featureIcons } from './features/FeatureGrid';
 import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
@@ -114,7 +116,7 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row items-center">
           <HeroContent 
             animate={animateContent}
-            onGetAccess={() => setShowWaitlistDialog(true)}
+            onGetAccess={openWaitlistDialog}
             onLearnMore={handleLearnMoreClick}
           />
           
@@ -143,232 +145,9 @@ const HeroSection = () => {
                         </div>
                       </div>
                       
-                      <div className="flex gap-1 h-[15%]">
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                          <div className="flex items-center gap-0.5">
-                            <BadgeCheck size={6} className="text-blue-500" />
-                            <div className="text-[5px] text-gray-600">Badges</div>
-                          </div>
-                          <div className="text-gray-800 text-[8px] font-medium">12 New</div>
-                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full"></div>
-                        </div>
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                          <div className="flex items-center gap-0.5">
-                            <GamepadIcon size={6} className="text-purple-500" />
-                            <div className="text-[5px] text-gray-600">Gamification</div>
-                          </div>
-                          <div className="text-gray-800 text-[8px] font-medium">New Games</div>
-                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-purple-300 to-purple-500 rounded-full"></div>
-                        </div>
-                        <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                          <div className="flex items-center gap-0.5">
-                            <Users size={6} className="text-amber-500" />
-                            <div className="text-[5px] text-gray-600">Forum Activity</div>
-                          </div>
-                          <div className="text-gray-800 text-[8px] font-medium">5 New</div>
-                          <div className="h-0.5 w-full mt-1 bg-gradient-to-r from-amber-300 to-amber-500 rounded-full"></div>
-                        </div>
-                      </div>
+                      <StatusCards />
                       
-                      <div className="flex gap-1 flex-1">
-                        <div className="flex-1 flex flex-col gap-1">
-                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer" onClick={() => setOpenAmlDialog(true)}>
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center gap-1">
-                                <ShieldAlert size={8} className="text-red-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">AMLD6 Penalty Analysis</div>
-                              </div>
-                              <div className="text-red-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-red-50 rounded-full">High Priority</div>
-                            </div>
-                            
-                            <div className="bg-gray-50 rounded-md p-1 border border-gray-100">
-                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">What is the Penalty under AMLD6 and criminal liability extension?</h3>
-                              <p className="text-gray-600 text-[4px] sm:text-[5px] leading-tight">
-                                One of the key aspects of AMLD6 is the aggressive expansion of liability to legal entities and company executives who aid and abet money laundering, either through negligence or deliberate actions. Penalties under AMLD6 are severe, and fines can reach into the hundreds of millions of euros. The AMLD6 has set a precedent for stricter AML oversight and amplified penalties.
-                              </p>
-                              <div className="mt-1 flex items-center gap-1">
-                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200 px-1 py-0">
-                                  View Details
-                                </Button>
-                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200 px-1 py-0">
-                                  Ask Dara
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center gap-1">
-                                <Users size={8} className="text-blue-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Networking & Forum</div>
-                              </div>
-                              <div className="text-gray-500 text-[4px] sm:text-[5px]">Active Now</div>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 gap-1 h-[80%] overflow-y-auto">
-                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
-                                <div className="w-1 h-1 rounded-full bg-yellow-500 mt-0.5 mr-0.5"></div>
-                                <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">John D. - GDPR Forum</div>
-                                  <div className="text-gray-500 text-[4px]">Looking for case studies</div>
-                                </div>
-                              </div>
-                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
-                                <div className="w-1 h-1 rounded-full bg-red-500 mt-0.5 mr-0.5"></div>
-                                <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Sarah M. - AMLD6 Group</div>
-                                  <div className="text-gray-500 text-[4px]">Posted new resource</div>
-                                </div>
-                              </div>
-                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
-                                <div className="w-1 h-1 rounded-full bg-green-500 mt-0.5 mr-0.5"></div>
-                                <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Virtual Meetup - Apr 16</div>
-                                  <div className="text-gray-500 text-[4px]">Compliance networking</div>
-                                </div>
-                              </div>
-                              <div className="bg-gray-50 rounded-sm flex items-start p-1 border border-gray-100">
-                                <div className="w-1 h-1 rounded-full bg-purple-500 mt-0.5 mr-0.5"></div>
-                                <div>
-                                  <div className="text-gray-700 text-[5px] font-medium mb-0.5">Risk Officers - Discussion</div>
-                                  <div className="text-gray-500 text-[4px]">14 new comments</div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <div className="flex items-center gap-1">
-                                <PieChart size={8} className="text-violet-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Regulatory Focus Areas</div>
-                              </div>
-                              <div className="text-gray-500 text-[4px] sm:text-[5px]">Distribution</div>
-                            </div>
-                            
-                            <div className="h-[80%] flex">
-                              <div className="w-2/3 h-full">
-                                <ResponsiveContainer width="100%" height="100%">
-                                  <ReChartPie
-                                    data={pieChartData}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={15}
-                                    outerRadius={25}
-                                  >
-                                    {pieChartData.map((entry, index) => (
-                                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                                    ))}
-                                  </ReChartPie>
-                                </ResponsiveContainer>
-                              </div>
-                              <div className="w-1/3 flex flex-col justify-center space-y-0.5">
-                                {pieChartData.map((entry, index) => (
-                                  <div key={index} className="flex items-center text-[4px]">
-                                    <div className="w-1 h-1 rounded-full mr-0.5" style={{ backgroundColor: entry.fill }}></div>
-                                    <span className="text-gray-700">{entry.name}</span>
-                                    <span className="ml-auto text-gray-500">{entry.value}%</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="flex-1 flex flex-col gap-1">
-                          <div className="flex-1 bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center gap-1">
-                                <FileText size={8} className="text-blue-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Interview Preparation</div>
-                              </div>
-                              <div className="text-blue-500 text-[4px] sm:text-[5px] px-1 py-0.5 bg-blue-50 rounded-full">New</div>
-                            </div>
-                            
-                            <div className="bg-gray-50 rounded-md p-1 border border-gray-100">
-                              <h3 className="text-gray-800 text-[5px] sm:text-[6px] font-bold mb-0.5">Prepare for your GRC interview with our AI coach</h3>
-                              <p className="text-gray-600 text-[4px] sm:text-[5px] leading-tight">
-                                Practice answering common GRC interview questions with our AI coach. Receive instant feedback on your responses and tips to improve your delivery. Access industry-specific questions and adapt your answers to different compliance roles.
-                              </p>
-                              <div className="mt-1 flex items-center gap-1">
-                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200 px-1 py-0">
-                                  Start Practice
-                                </Button>
-                                <Button variant="outline" size="sm" className="h-3 text-[4px] bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border-indigo-200 px-1 py-0">
-                                  Learn More
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Enhanced Compliance Status Chart - Donut Chart */}
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <div className="flex items-center gap-1">
-                                <PieChart size={8} className="text-indigo-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Compliance Risk Profile</div>
-                              </div>
-                              <div className="text-gray-500 text-[4px] sm:text-[5px]">Q2 2025</div>
-                            </div>
-                            
-                            <div className="h-[80%] w-full relative">
-                              <ResponsiveContainer width="100%" height="100%">
-                                <ReChartPie
-                                  data={donutPieData}
-                                  cx="50%"
-                                  cy="50%"
-                                  innerRadius={20}
-                                  outerRadius={30}
-                                  startAngle={90}
-                                  endAngle={-270}
-                                >
-                                  {donutPieData.map((entry, index) => (
-                                    <Cell key={`donut-cell-${index}`} fill={entry.fill} />
-                                  ))}
-                                </ReChartPie>
-                              </ResponsiveContainer>
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="text-center">
-                                  <div className="text-gray-800 text-[6px] font-bold">72</div>
-                                  <div className="text-gray-500 text-[4px]">Score</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex justify-between mt-1 px-0.5">
-                              {donutPieData.map((entry, index) => (
-                                <div key={index} className="flex items-center text-[3px] sm:text-[4px]">
-                                  <div className="w-1 h-1 rounded-full mr-0.5" style={{ backgroundColor: entry.fill }}></div>
-                                  <span className="text-gray-700">{entry.name}</span>
-                                  <span className="ml-1 text-gray-500">{entry.value}%</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                          
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <div className="flex items-center gap-1">
-                                <Cpu size={8} className="text-emerald-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Control Status</div>
-                              </div>
-                              <div className="text-gray-500 text-[4px] sm:text-[5px]">124 Total</div>
-                            </div>
-                            
-                            <div className="h-[80%] flex items-center">
-                              <div className="w-full flex flex-wrap gap-1 justify-center">
-                                {controlStatusData.map((entry, index) => (
-                                  <div key={index} className="flex items-center gap-1 px-1 py-0.5 bg-white rounded border border-gray-100">
-                                    <div className="w-1 h-1 rounded-full" style={{ backgroundColor: entry.fill }}></div>
-                                    <div className="text-[3px] sm:text-[4px] text-gray-700">{entry.name}</div>
-                                    <div className="text-[3px] sm:text-[4px] font-medium">{entry.value}</div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <DashboardContent onAmlDialogOpen={() => setOpenAmlDialog(true)} />
                     </div>
                   </div>
                 </div>

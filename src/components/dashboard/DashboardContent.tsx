@@ -1,16 +1,28 @@
 
-import React from "react";
+import React from 'react';
+import { AmlAnalysisCard } from './AmlAnalysisCard';
+import { NetworkingCard } from './NetworkingCard';
+import { RegulatoryFocusChart, ComplianceRiskChart, ControlStatusChart } from './charts/DashboardCharts';
+import { InterviewPrepCard } from './InterviewPrepCard';
 
 interface DashboardContentProps {
-  children: React.ReactNode;
+  onAmlDialogOpen: () => void;
 }
 
-const DashboardContent: React.FC<DashboardContentProps> = ({ children }) => {
+export const DashboardContent: React.FC<DashboardContentProps> = ({ onAmlDialogOpen }) => {
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50 pt-16 md:pt-0">
-      {children}
-    </main>
+    <div className="flex gap-1 flex-1">
+      <div className="flex-1 flex flex-col gap-1">
+        <AmlAnalysisCard onAmlDialogOpen={onAmlDialogOpen} />
+        <NetworkingCard />
+        <RegulatoryFocusChart />
+      </div>
+      
+      <div className="flex-1 flex flex-col gap-1">
+        <InterviewPrepCard />
+        <ComplianceRiskChart />
+        <ControlStatusChart />
+      </div>
+    </div>
   );
 };
-
-export default DashboardContent;

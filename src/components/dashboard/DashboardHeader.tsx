@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, FileText } from 'lucide-react';
 
 interface DashboardHeaderProps {
   avatarSrc: string;
