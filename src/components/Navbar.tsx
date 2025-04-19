@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -47,7 +46,6 @@ const Navbar = () => {
             Synapses
           </Link>
           
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors">Home</Link>
             <a 
@@ -66,18 +64,16 @@ const Navbar = () => {
             </a>
             <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</Link>
             <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors cursor-pointer">
-              <Button size="sm">Join Waitlist</Button>
+              <Button size="sm">Get Early Access</Button>
             </div>
           </nav>
 
-          {/* Mobile Menu Button */}
           <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMobileMenu}>
             <Menu className="h-6 w-6" />
             <span className="sr-only">Toggle menu</span>
           </Button>
         </div>
         
-        {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
@@ -104,7 +100,7 @@ const Navbar = () => {
               </a>
               <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</Link>
               <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button className="mt-2">Join Waitlist</Button>
+                <Button className="mt-2">Get Early Access</Button>
               </div>
             </nav>
           </motion.div>

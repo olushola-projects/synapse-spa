@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -9,6 +8,7 @@ import { DashboardContent } from './dashboard/DashboardContent';
 import { FeatureGrid, featureIcons } from './features/FeatureGrid';
 import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
+import PoweredBySection from './PoweredBySection';
 
 const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
@@ -100,54 +100,56 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4f1ff,#e9e8ff,#f4e8ff,#e9e8ff,#e4f1ff)] animate-gradient-x"></div>
-      </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-radial from-indigo-200/30 via-transparent to-transparent"></div>
-      <div className="absolute top-1/3 right-0 w-72 h-72 bg-synapse-accent/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-synapse-primary/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
-      
-      <div className="absolute inset-x-0 top-40 h-[500px] -z-10 transform -skew-y-6 opacity-10">
-        <div className="h-full w-full bg-gradient-stripe from-purple-300 via-blue-300 to-indigo-300 animate-gradient-shift"></div>
-      </div>
+    <>
+      <div className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4f1ff,#e9e8ff,#f4e8ff,#e9e8ff,#e4f1ff)] animate-gradient-x"></div>
+        </div>
+        <div className="absolute inset-0 -z-10 bg-gradient-radial from-indigo-200/30 via-transparent to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-72 h-72 bg-synapse-accent/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-synapse-primary/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
+        
+        <div className="absolute inset-x-0 top-40 h-[500px] -z-10 transform -skew-y-6 opacity-10">
+          <div className="h-full w-full bg-gradient-stripe from-purple-300 via-blue-300 to-indigo-300 animate-gradient-shift"></div>
+        </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center">
-          <HeroContent 
-            animate={animateContent}
-            onGetAccess={openWaitlistDialog}
-            onLearnMore={handleLearnMoreClick}
-          />
-          
-          <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
-            <div className="relative w-full max-w-3xl mx-auto">
-              <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
-                <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
-                  <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
-                  
-                  <div className="p-2 flex h-[94%] bg-[#F1F0FB]">
-                    <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center">
+            <HeroContent 
+              animate={animateContent}
+              onGetAccess={openWaitlistDialog}
+              onLearnMore={handleLearnMoreClick}
+            />
+            
+            <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
+              <div className="relative w-full max-w-3xl mx-auto">
+                <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
+                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
+                    <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
                     
-                    <div className="flex-1 pl-1 flex flex-col gap-1">
-                      <div className="h-4 flex justify-between items-center">
-                        <div className="text-gray-800 text-[6px] sm:text-[8px] font-medium">Regulatory Intelligence Dashboard</div>
-                        <div className="flex gap-2 items-center">
-                          <div className="text-[5px] sm:text-[6px] text-gray-500">April 14, 2025</div>
-                          <div className="flex items-center gap-1">
-                            <div className="text-[5px] sm:text-[6px] text-gray-500">Hi, Phoebe Banks</div>
-                            <img 
-                              src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
-                              alt="Phoebe Banks" 
-                              className="w-3 h-3 rounded-full object-cover border border-gray-200"
-                            />
+                    <div className="p-2 flex h-[94%] bg-[#F1F0FB]">
+                      <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
+                      
+                      <div className="flex-1 pl-1 flex flex-col gap-1">
+                        <div className="h-4 flex justify-between items-center">
+                          <div className="text-gray-800 text-[6px] sm:text-[8px] font-medium">Regulatory Intelligence Dashboard</div>
+                          <div className="flex gap-2 items-center">
+                            <div className="text-[5px] sm:text-[6px] text-gray-500">April 14, 2025</div>
+                            <div className="flex items-center gap-1">
+                              <div className="text-[5px] sm:text-[6px] text-gray-500">Hi, Phoebe Banks</div>
+                              <img 
+                                src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
+                                alt="Phoebe Banks" 
+                                className="w-3 h-3 rounded-full object-cover border border-gray-200"
+                              />
+                            </div>
                           </div>
                         </div>
+                        
+                        <StatusCards />
+                        
+                        <DashboardContent onAmlDialogOpen={() => setOpenAmlDialog(true)} />
                       </div>
-                      
-                      <StatusCards />
-                      
-                      <DashboardContent onAmlDialogOpen={() => setOpenAmlDialog(true)} />
                     </div>
                   </div>
                 </div>
@@ -155,8 +157,18 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
-      </div>
 
+        <div className="mt-16 text-center">
+          <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 rounded-full text-sm font-medium text-gray-600">
+            <span>Join</span>
+            <span className="font-bold text-synapse-primary">50+</span>
+            <span>early adopters in our private pilot</span>
+          </div>
+        </div>
+      </div>
+      
+      <PoweredBySection />
+      
       <FeatureGrid 
         onFeatureClick={handleFeatureClick}
         animate={animateFeatures}
@@ -213,7 +225,7 @@ const HeroSection = () => {
       </Dialog>
 
       <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
-    </div>
+    </>
   );
 };
 
