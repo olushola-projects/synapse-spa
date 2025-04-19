@@ -1,10 +1,9 @@
-
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, MessageSquare, Bell, Briefcase, GamepadIcon, Users, ShieldAlert, PieChart, BadgeCheck, FileText, Cpu } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, PieChart as ReChartPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
 
@@ -192,7 +191,7 @@ const HeroSection = () => {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <div onClick={openWaitlistDialog} className="cursor-pointer">
                 <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
-                  Join Waitlist <ArrowRight size={18} />
+                  Get Early Access <ArrowRight size={18} />
                 </Button>
               </div>
               <a href="#features" onClick={handleLearnMoreClick}>
@@ -209,7 +208,7 @@ const HeroSection = () => {
               </span>
               <span className="flex items-center">
                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
-                300+ Professionals Joined
+                Join 50+ early adopters in our private pilot
               </span>
             </div>
 
@@ -481,98 +480,4 @@ const HeroSection = () => {
                                 <div key={index} className="flex items-center text-[3px] sm:text-[4px]">
                                   <div className="w-1 h-1 rounded-full mr-0.5" style={{ backgroundColor: entry.fill }}></div>
                                   <span className="text-gray-700">{entry.name}</span>
-                                  <span className="ml-1 text-gray-500">{entry.value}%</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* User Activity Chart */}
-                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <div className="flex items-center gap-1">
-                                <Users size={8} className="text-green-500" />
-                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Community Progress</div>
-                              </div>
-                              <div className="text-gray-500 text-[4px] sm:text-[5px]">Active Users</div>
-                            </div>
-                            
-                            <div className="h-[80%] flex items-center">
-                              <div className="w-full h-12">
-                                <ResponsiveContainer width="100%" height="100%">
-                                  <LineChart data={areaChartData}>
-                                    <Line type="monotone" dataKey="gdpr" stroke="#8884d8" strokeWidth={2} dot={false} />
-                                    <Line type="monotone" dataKey="aml" stroke="#82ca9d" strokeWidth={2} dot={false} />
-                                  </LineChart>
-                                </ResponsiveContainer>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Feature Dialog */}
-      {selectedFeature !== null && (
-        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
-              <DialogDescription>{featureIcons[selectedFeature].content.description}</DialogDescription>
-            </DialogHeader>
-            <div className="py-4">
-              <p className="text-gray-700">{featureIcons[selectedFeature].content.details}</p>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {/* AML Dialog */}
-      <Dialog open={openAmlDialog} onOpenChange={setOpenAmlDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>{amldInfo.title}</DialogTitle>
-            <DialogDescription>{amldInfo.description}</DialogDescription>
-          </DialogHeader>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <div className="prose prose-sm" dangerouslySetInnerHTML={{ __html: amldInfo.content }} />
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="text-sm font-semibold mb-2 flex items-center">
-                <MessageSquare className="mr-2 h-4 w-4 text-blue-500" />
-                Ask Dara
-              </h4>
-              <div className="text-sm text-gray-700 mb-3">What are the penalties under AMLD6?</div>
-              {chatResponse ? (
-                <div className="bg-white p-3 rounded-md text-sm text-gray-700 border border-gray-200">
-                  {chatResponse}
-                </div>
-              ) : (
-                <div className="flex items-center justify-center h-20">
-                  <div className="animate-pulse flex space-x-2">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Waitlist Dialog */}
-      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
-    </div>
-  );
-};
-
-export default HeroSection;
+                                  <span className="ml-1 text-gray
