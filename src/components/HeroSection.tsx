@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -480,4 +481,100 @@ const HeroSection = () => {
                                 <div key={index} className="flex items-center text-[3px] sm:text-[4px]">
                                   <div className="w-1 h-1 rounded-full mr-0.5" style={{ backgroundColor: entry.fill }}></div>
                                   <span className="text-gray-700">{entry.name}</span>
-                                  <span className="ml-1 text-gray
+                                  <span className="ml-1 text-gray-500">{entry.value}%</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <div className="flex items-center gap-1">
+                                <Cpu size={8} className="text-emerald-500" />
+                                <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Control Status</div>
+                              </div>
+                              <div className="text-gray-500 text-[4px] sm:text-[5px]">124 Total</div>
+                            </div>
+                            
+                            <div className="h-[80%] flex items-center">
+                              <div className="w-full flex flex-wrap gap-1 justify-center">
+                                {controlStatusData.map((entry, index) => (
+                                  <div key={index} className="flex items-center gap-1 px-1 py-0.5 bg-white rounded border border-gray-100">
+                                    <div className="w-1 h-1 rounded-full" style={{ backgroundColor: entry.fill }}></div>
+                                    <div className="text-[3px] sm:text-[4px] text-gray-700">{entry.name}</div>
+                                    <div className="text-[3px] sm:text-[4px] font-medium">{entry.value}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Feature Detail Dialog */}
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="sm:max-w-md">
+          {selectedFeature !== null && (
+            <>
+              <DialogHeader>
+                <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
+                <DialogDescription>
+                  {featureIcons[selectedFeature].content.description}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="p-6">
+                <p className="text-gray-700">
+                  {featureIcons[selectedFeature].content.details}
+                </p>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* AMLD6 Dialog */}
+      <Dialog open={openAmlDialog} onOpenChange={setOpenAmlDialog}>
+        <DialogContent className="sm:max-w-3xl max-h-[80vh] overflow-auto">
+          <DialogHeader>
+            <DialogTitle>{amldInfo.title}</DialogTitle>
+            <DialogDescription>
+              {amldInfo.description}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-6">
+            <div dangerouslySetInnerHTML={{ __html: amldInfo.content }} />
+            
+            {chatResponse && (
+              <div className="mt-6 border-t pt-4">
+                <div className="mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                      <MessageSquare size={16} className="text-purple-600" />
+                    </div>
+                    <div className="font-medium text-sm">Dara (AI Assistant)</div>
+                  </div>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <p className="text-gray-700 text-sm">{chatResponse}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Waitlist Dialog */}
+      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
+    </div>
+  );
+};
+
+export default HeroSection;
