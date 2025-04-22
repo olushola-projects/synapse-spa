@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, FileText } from 'lucide-react';
 
@@ -41,18 +42,18 @@ interface FeatureGridProps {
 
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ onFeatureClick, animate }) => {
   return (
-    <div className={`mt-8 grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0 transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+    <div className={`mt-8 grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       {featureIcons.map((feature, index) => (
         <div 
           key={index} 
-          className="flex flex-col items-center p-3 rounded-lg bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md hover-lift transition-all cursor-pointer"
+          className="flex flex-col items-center p-6 rounded-xl bg-white/70 backdrop-blur-sm shadow-sm border border-gray-100 hover:shadow-md hover-lift transition-all cursor-pointer"
           style={{ animationDelay: `${index * 100}ms` }}
           onClick={() => onFeatureClick(index)}
         >
-          <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
+          <div className="w-14 h-14 rounded-full bg-gray-50 flex items-center justify-center mb-4">
             {feature.icon}
           </div>
-          <span className="text-xs text-gray-700 text-center font-medium">{feature.title}</span>
+          <span className="text-sm md:text-base text-gray-700 text-center font-medium">{feature.title}</span>
         </div>
       ))}
     </div>

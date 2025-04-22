@@ -1,12 +1,13 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const logos = [
   {
     name: "OpenAI",
     src: "/lovable-uploads/bee24c50-c3a4-4ac5-a96a-4e8a6e1d5720.png",
-    alt: "OpenAI logo"
+    alt: "OpenAI logo",
+    className: "h-16 md:h-20" // Doubled size
   },
   {
     name: "Google Firebase",
@@ -16,12 +17,14 @@ const logos = [
   {
     name: "Airtable",
     src: "/lovable-uploads/6a778cb7-3cb5-4529-9cc0-fdd90cbe4ddb.png",
-    alt: "Airtable logo"
+    alt: "Airtable logo",
+    className: "h-16 md:h-20" // Doubled size
   },
   {
     name: "Microsoft",
     src: "/lovable-uploads/c4144d0f-dbcd-4fac-be19-6dd1ae7ffff3.png",
-    alt: "Microsoft logo"
+    alt: "Microsoft logo",
+    className: "h-16 md:h-20" // Doubled size
   },
   {
     name: "Google",
@@ -44,7 +47,7 @@ const PoweredBySection = () => {
       <div className="container mx-auto px-4" ref={containerRef}>
         <h3 className="text-2xl font-semibold text-center mb-12 text-gray-800">Powered By</h3>
         <div className="overflow-x-auto">
-          <div className="flex justify-center items-center min-w-max mx-auto">
+          <div className="flex justify-center items-center space-x-16 min-w-max mx-auto">
             {logos.map((logo, index) => (
               <motion.div
                 key={logo.name}
@@ -55,12 +58,11 @@ const PoweredBySection = () => {
                   delay: index * 0.1,
                   ease: "easeOut"
                 }}
-                className="mx-4"
               >
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="h-10 md:h-[40px] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                  className={`h-10 md:h-[40px] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300 ${logo.className || ''}`}
                 />
               </motion.div>
             ))}
