@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 const logos = [
   {
@@ -36,30 +36,35 @@ const logos = [
 ];
 
 const PoweredBySection = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: "-100px 0px" });
+
   return (
     <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4" ref={containerRef}>
         <h3 className="text-2xl font-semibold text-center mb-12 text-gray-800">Powered By</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
-          {logos.map((logo, index) => (
-            <motion.div
-              key={logo.name}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.1,
-                ease: "easeOut"
-              }}
-              className="flex items-center justify-center"
-            >
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                className="h-10 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </motion.div>
-          ))}
+        <div className="overflow-x-auto">
+          <div className="flex justify-center items-center min-w-max mx-auto">
+            {logos.map((logo, index) => (
+              <motion.div
+                key={logo.name}
+                initial={{ opacity: 0, x: 50 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                  ease: "easeOut"
+                }}
+                className="mx-4"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-10 md:h-[40px] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

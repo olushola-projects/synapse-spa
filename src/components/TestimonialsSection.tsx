@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ const TestimonialsSection = () => {
             What Our Users Say
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Pioneering the future of GRC with innovative AI-driven solutions
+            Reimagining compliance in the age of AI through human-centered design and collaborative intelligence
           </p>
         </div>
 
@@ -113,8 +114,7 @@ const TestimonialsSection = () => {
 
         <div className="mt-16 text-center">
           <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 rounded-full text-sm font-medium text-gray-600">
-            <span className="text-synapse-primary">Join 50+ early adopters</span>
-            <span>in our private pilot</span>
+            <span className="text-synapse-primary">Shaping the future of regulatory compliance</span>
           </div>
         </div>
       </div>

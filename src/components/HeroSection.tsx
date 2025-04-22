@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -8,7 +9,6 @@ import { DashboardContent } from './dashboard/DashboardContent';
 import { FeatureGrid, featureIcons } from './features/FeatureGrid';
 import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
-import PoweredBySection from './PoweredBySection';
 
 const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
@@ -166,8 +166,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      
-      <PoweredBySection />
       
       <FeatureGrid 
         onFeatureClick={handleFeatureClick}
