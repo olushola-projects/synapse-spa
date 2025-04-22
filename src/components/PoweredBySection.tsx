@@ -7,7 +7,7 @@ const logos = [
     name: "OpenAI",
     src: "/lovable-uploads/bee24c50-c3a4-4ac5-a96a-4e8a6e1d5720.png",
     alt: "OpenAI logo",
-    className: "h-16 md:h-20" // Doubled size
+    className: "h-16 md:h-20"
   },
   {
     name: "Google Firebase",
@@ -18,13 +18,13 @@ const logos = [
     name: "Airtable",
     src: "/lovable-uploads/6a778cb7-3cb5-4529-9cc0-fdd90cbe4ddb.png",
     alt: "Airtable logo",
-    className: "h-16 md:h-20" // Doubled size
+    className: "h-16 md:h-20"
   },
   {
     name: "Microsoft",
     src: "/lovable-uploads/c4144d0f-dbcd-4fac-be19-6dd1ae7ffff3.png",
     alt: "Microsoft logo",
-    className: "h-16 md:h-20" // Doubled size
+    className: "h-16 md:h-20"
   },
   {
     name: "Google",
