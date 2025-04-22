@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -131,7 +130,7 @@ const HeroSection = () => {
                       <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
                       
                       <div className="flex-1 pl-1 flex flex-col gap-1">
-                        <div className="h-4 flex justify-between items-center">
+                        <div className="hidden md:flex justify-between items-center">
                           <div className="text-gray-800 text-[6px] sm:text-[8px] font-medium">Regulatory Intelligence Dashboard</div>
                           <div className="flex gap-2 items-center">
                             <div className="text-[5px] sm:text-[6px] text-gray-500">April 14, 2025</div>
@@ -149,6 +148,10 @@ const HeroSection = () => {
                         <StatusCards />
                         
                         <DashboardContent onAmlDialogOpen={() => setOpenAmlDialog(true)} />
+                        
+                        <div className="md:hidden">
+                          <MobileCharts />
+                        </div>
                       </div>
                     </div>
                   </div>
