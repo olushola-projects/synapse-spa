@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,7 @@ const TestimonialsSection = () => {
             What Our Users Say
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Hear from Governance, Risk, and Compliance professionals who are already benefiting from early access to Synapses.
+            Pioneering the future of GRC with innovative AI-driven solutions
           </p>
         </div>
 
@@ -114,9 +113,8 @@ const TestimonialsSection = () => {
 
         <div className="mt-16 text-center">
           <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 rounded-full text-sm font-medium text-gray-600">
-            <span>Trusted by</span>
-            <span className="font-bold text-synapse-primary">300+</span>
-            <span>GRC Professionals</span>
+            <span className="text-synapse-primary">Join 50+ early adopters</span>
+            <span>in our private pilot</span>
           </div>
         </div>
       </div>

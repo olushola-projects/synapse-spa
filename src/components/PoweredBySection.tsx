@@ -5,48 +5,33 @@ import { motion } from 'framer-motion';
 const logos = [
   {
     name: "OpenAI",
-    src: "/lovable-uploads/openai-logo.svg",
+    src: "/lovable-uploads/bee24c50-c3a4-4ac5-a96a-4e8a6e1d5720.png",
     alt: "OpenAI logo"
   },
   {
     name: "Google Firebase",
-    src: "/lovable-uploads/firebase-logo.svg",
+    src: "/lovable-uploads/24bc5b6a-2ffe-469d-ae66-bec6fe163be5.png",
     alt: "Google Firebase logo"
   },
   {
     name: "Airtable",
-    src: "/lovable-uploads/airtable-logo.svg",
+    src: "/lovable-uploads/6a778cb7-3cb5-4529-9cc0-fdd90cbe4ddb.png",
     alt: "Airtable logo"
   },
   {
-    name: "Make.com",
-    src: "/lovable-uploads/make-logo.svg",
-    alt: "Make.com logo"
-  },
-  {
-    name: "DeepL",
-    src: "/lovable-uploads/deepl-logo.svg",
-    alt: "DeepL logo"
-  },
-  {
-    name: "Gemini",
-    src: "/lovable-uploads/gemini-logo.svg",
-    alt: "Gemini logo"
-  },
-  {
-    name: "Anthropic",
-    src: "/lovable-uploads/anthropic-logo.svg",
-    alt: "Anthropic logo"
-  },
-  {
     name: "Microsoft",
-    src: "/lovable-uploads/microsoft-logo.svg",
+    src: "/lovable-uploads/c4144d0f-dbcd-4fac-be19-6dd1ae7ffff3.png",
     alt: "Microsoft logo"
   },
   {
     name: "Google",
-    src: "/lovable-uploads/google-logo.svg",
+    src: "/lovable-uploads/0d37b216-879f-46ea-8740-e50726c3a6a3.png",
     alt: "Google logo"
+  },
+  {
+    name: "Anthropic",
+    src: "/lovable-uploads/a363f7e4-db90-4a53-a679-ddbf92f0cebc.png",
+    alt: "Anthropic logo"
   }
 ];
 
