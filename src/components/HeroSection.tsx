@@ -1,15 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DashboardHeader } from './dashboard/DashboardHeader';
 import { SideNavigation } from './dashboard/SideNavigation';
 import { StatusCards } from './dashboard/StatusCards';
 import { DashboardContent } from './dashboard/DashboardContent';
-import { FeatureGrid, featureIcons } from './features/FeatureGrid';
 import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
-import MobileCharts from './dashboard/MobileCharts';
+import { MobileCharts } from './dashboard/MobileCharts';
 
 const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
@@ -172,11 +169,6 @@ const HeroSection = () => {
         </div>
       </div>
       
-      <FeatureGrid 
-        onFeatureClick={handleFeatureClick}
-        animate={animateFeatures}
-      />
-
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="sm:max-w-md">
           {selectedFeature !== null && (
