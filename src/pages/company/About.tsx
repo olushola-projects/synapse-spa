@@ -11,28 +11,34 @@ const About = () => {
   // Leadership team data
   const leadershipTeam = [
     {
-      name: "Alexandra Chen",
-      role: "Chief Executive Officer",
-      bio: "Former regulatory compliance advisor with 15+ years of experience across financial services and technology sectors.",
-      image: "/placeholder.svg"
-    },
-    {
-      name: "Marcus Williams",
-      role: "Chief Technology Officer",
-      bio: "AI and machine learning expert who previously led engineering teams at leading regtech startups.",
-      image: "/placeholder.svg"
-    },
-    {
-      name: "Sophia Rodriguez",
-      role: "Chief Compliance Officer",
-      bio: "Certified compliance professional with extensive experience implementing GRC programs for Fortune 500 companies.",
-      image: "/placeholder.svg"
-    },
-    {
-      name: "James Kim",
-      role: "VP of Product",
-      bio: "Former GRC practitioner turned product leader focused on building intuitive solutions for complex regulatory challenges.",
-      image: "/placeholder.svg"
+  name: "Thomson Reuters",
+  role: "Future of Professionals Report, 2024",
+  bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
+  image: "/logos/thomsonreuters.svg"
+},
+{
+  name: "World Economic Forum & Citi",
+  role: "AI Impact in Compliance Report",
+  bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
+  image: "/logos/wef_citi.svg"
+},
+{
+  name: "Deloitte & McKinsey",
+  role: "State of Compliance & Automation Trends",
+  bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
+  image: "/logos/deloitte_mckinsey.svg"
+},
+{
+  name: "Synapse AI Strategy",
+  role: "Internal Strategic Brief",
+  bio: "Many compliance professionals currently lack familiarity with AI tools. Traditional training systems aren’t built for the speed of regulatory change.",
+  image: "/logos/synapse.svg"
+},
+{
+  name: "Complia",
+  role: "Strategic Briefing, 2025",
+  bio: "AI is not just a tool—it’s the next compliance culture. We’re not replacing professionals; we’re enabling faster, traceable, defensible decisions.",
+  image: "/logos/complia.svg"
     }
   ];
 
