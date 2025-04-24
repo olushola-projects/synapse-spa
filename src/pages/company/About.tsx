@@ -8,37 +8,65 @@ import { Badge } from '@/components/ui/badge';
 import { Shield, Globe, Users, Target, ArrowRight } from 'lucide-react';
 
 const About = () => {
-  // Leadership team data
-  const Perspectives Powering the Future of GRC = [
+  // Industry perspectives data
+  const industryPerspectives = [
     {
-  name: "Thomson Reuters",
-  role: "Future of Professionals Report, 2024",
-  bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
-  image: "/logos/thomsonreuters.svg"
-},
-{
-  name: "World Economic Forum & Citi",
-  role: "AI Impact in Compliance Report",
-  bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
-  image: "/logos/wef_citi.svg"
-},
-{
-  name: "Deloitte & McKinsey",
-  role: "State of Compliance & Automation Trends",
-  bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
-  image: "/logos/deloitte_mckinsey.svg"
-},
-{
-  name: "Synapses",
-  role: "Our AI Strategy",
-  bio: "Many compliance professionals currently lack familiarity with AI tools. Traditional training systems aren’t built for the speed of regulatory change.",
-  image: "/logos/synapse.svg"
-},
-{
-  name: "Complia",
-  role: "Strategic Briefing, 2025",
-  bio: "AI is not just a tool—it’s the next compliance culture. We’re not replacing professionals; we’re enabling faster, traceable, defensible decisions.",
-  image: "/logos/complia.svg"
+      name: "Thomson Reuters",
+      role: "Future of Professionals Report, 2024",
+      bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
+      image: "/logos/thomsonreuters.svg"
+    },
+    {
+      name: "World Economic Forum & Citi",
+      role: "AI Impact in Compliance Report",
+      bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
+      image: "/logos/wef_citi.svg"
+    },
+    {
+      name: "Deloitte & McKinsey",
+      role: "State of Compliance & Automation Trends",
+      bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
+      image: "/logos/deloitte_mckinsey.svg"
+    },
+    {
+      name: "Synapses",
+      role: "Our AI Strategy",
+      bio: "Many compliance professionals currently lack familiarity with AI tools. Traditional training systems aren't built for the speed of regulatory change.",
+      image: "/logos/synapse.svg"
+    },
+    {
+      name: "Complia",
+      role: "Strategic Briefing, 2025",
+      bio: "AI is not just a tool—it's the next compliance culture. We're not replacing professionals; we're enabling faster, traceable, defensible decisions.",
+      image: "/logos/complia.svg"
+    }
+  ];
+
+  // Leadership team data
+  const leadershipTeam = [
+    {
+      name: "Sarah Chen",
+      role: "CEO & Co-founder",
+      bio: "Former Compliance Officer at HSBC with 15+ years experience in global financial regulations.",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=776&q=80"
+    },
+    {
+      name: "David Okonkwo",
+      role: "CTO & Co-founder",
+      bio: "AI researcher and former RegTech lead at Accenture, specialized in machine learning for regulatory compliance.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
+    },
+    {
+      name: "Emma Rodriguez",
+      role: "Chief Product Officer",
+      bio: "Previously led product at a leading GRC platform with deep expertise in user-centered design for complex workflows.",
+      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=922&q=80"
+    },
+    {
+      name: "Michael Chang",
+      role: "Chief Compliance Strategist",
+      bio: "Former regulator with the SEC and compliance consultant to Fortune 500 companies.",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
     }
   ];
 
@@ -108,8 +136,42 @@ const About = () => {
           </div>
         </section>
 
-        {/* Leadership Team */}
+        {/* Industry Perspectives */}
         <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-16">
+                <Badge variant="outline" className="mb-4">Industry Insights</Badge>
+                <h2 className="text-3xl font-bold mb-4">Perspectives Powering the Future of GRC</h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Industry leaders and analysts agree that AI and technology are transforming the landscape of governance, risk, and compliance.
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {industryPerspectives.map((perspective, index) => (
+                  <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow p-6">
+                    <div className="h-16 mb-4 flex items-center justify-center">
+                      <img 
+                        src={perspective.image} 
+                        alt={perspective.name}
+                        className="max-h-full"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg">{perspective.name}</h3>
+                      <p className="text-blue-600 font-medium text-sm mb-3">{perspective.role}</p>
+                      <p className="text-gray-600 text-sm">{perspective.bio}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Leadership Team */}
+        <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
@@ -149,7 +211,7 @@ const About = () => {
         </section>
 
         {/* Join Us */}
-        <section className="py-20">
+        <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <Badge variant="outline" className="mb-4">Careers</Badge>
