@@ -10,7 +10,7 @@ const pieChartData = [
   { name: 'AMLD6', value: 25, fill: '#EC4899' },
   { name: 'DORA', value: 20, fill: '#10B981' },
   { name: 'PSD2', value: 15, fill: '#F59E0B' },
-  { name: 'NIS2', value: 5, fill: '#8B5CF6' },
+  { name: 'SFDR', value: 5, fill: '#8B5CF6' },
 ];
 
 const donutPieData = [
@@ -19,11 +19,13 @@ const donutPieData = [
   { name: 'Low Risk', value: 40, fill: '#22c55e' },
 ];
 
-const controlStatusData = [
-  { name: 'In-Progress', value: 97, fill: '#cbd5e1' },
-  { name: 'Cancelled', value: 1, fill: '#e2e8f0' },
-  { name: 'On Approval', value: 7, fill: '#fdba74' },
-  { name: 'Overdue', value: 19, fill: '#ef4444' },
+const BarChartData = [
+  { name: 'Engagement', value: 27, fill: '#cbd5e1' },
+  { name: 'Cancelled', value: 5, fill: '#e2e8f0' },
+  { name: 'Projects', value: 7, fill: '#fdba74' },
+  { name: 'Contributions', value: 19, fill: '#ef4444' },
+  { name: 'CV Matches', value: 32, fill: '#4F46E5' }
+  { name: 'Badges', value: 65, fill: '#10B981' }
 ];
 
 export const RegulatoryFocusChart: React.FC = () => {
@@ -120,20 +122,20 @@ export const ComplianceRiskChart: React.FC = () => {
   );
 };
 
-export const ControlStatusChart: React.FC = () => {
+export const BarChartData: React.FC = () => {
   return (
     <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
       <div className="flex items-center justify-between mb-0.5">
         <div className="flex items-center gap-1">
           <Cpu size={8} className="text-emerald-500" />
-          <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Control Status</div>
+          <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Bar Chart</div>
         </div>
         <div className="text-gray-500 text-[4px] sm:text-[5px]">124 Total</div>
       </div>
       
       <div className="h-[80%] flex items-center">
         <div className="w-full flex flex-wrap gap-1 justify-center">
-          {controlStatusData.map((entry, index) => (
+          {BarChartData.map((entry, index) => (
             <div key={index} className="flex items-center gap-1 px-1 py-0.5 bg-white rounded border border-gray-100">
               <div className="w-1 h-1 rounded-full" style={{ backgroundColor: entry.fill }}></div>
               <div className="text-[3px] sm:text-[4px] text-gray-700">{entry.name}</div>

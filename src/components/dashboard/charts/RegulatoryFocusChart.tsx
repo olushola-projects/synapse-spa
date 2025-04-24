@@ -8,7 +8,7 @@ const pieChartData = [
   { name: 'AMLD6', value: 25, fill: '#EC4899' },
   { name: 'DORA', value: 20, fill: '#10B981' },
   { name: 'PSD2', value: 15, fill: '#F59E0B' },
-  { name: 'NIS2', value: 5, fill: '#8B5CF6' },
+  { name: 'SFDR', value: 5, fill: '#8B5CF6' },
 ];
 
 export const RegulatoryFocusChart = () => {
