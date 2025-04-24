@@ -24,7 +24,7 @@ const BarChartData = [
   { name: 'Cancelled', value: 5, fill: '#e2e8f0' },
   { name: 'Projects', value: 7, fill: '#fdba74' },
   { name: 'Contributions', value: 19, fill: '#ef4444' },
-  { name: 'CV Matches', value: 32, fill: '#4F46E5' }
+  { name: 'CV Matches', value: 32, fill: '#4F46E5' },  // Added missing comma here
   { name: 'Badges', value: 65, fill: '#10B981' }
 ];
 
