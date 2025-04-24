@@ -19,9 +19,7 @@ const CTASection = () => {
           </Button>
           <div className="mt-8 text-center">
             <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 rounded-full text-sm font-medium text-gray-600">
-              <span>Join</span>
-              <span className="font-bold text-synapse-primary">50+</span>
-              <span>early adopters in our private pilot</span>
+             <span><strong>🎁 Limited time offer:</strong> Join the waitlist for a chance to get 3 months of Pro Plan access—<strong>free!</strong></span>
             </div>
           </div>
         </div>
