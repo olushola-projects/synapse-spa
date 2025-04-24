@@ -9,7 +9,7 @@ import { Shield, Globe, Users, Target, ArrowRight } from 'lucide-react';
 
 const About = () => {
   // Leadership team data
-  const leadershipTeam = [
+  const Perspectives Powering the Future of GRC = [
     {
   name: "Thomson Reuters",
   role: "Future of Professionals Report, 2024",
@@ -29,8 +29,8 @@ const About = () => {
   image: "/logos/deloitte_mckinsey.svg"
 },
 {
-  name: "Synapse AI Strategy",
-  role: "Internal Strategic Brief",
+  name: "Synapses",
+  role: "Our AI Strategy",
   bio: "Many compliance professionals currently lack familiarity with AI tools. Traditional training systems aren’t built for the speed of regulatory change.",
   image: "/logos/synapse.svg"
 },
