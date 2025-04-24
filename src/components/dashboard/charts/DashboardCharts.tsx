@@ -24,7 +24,7 @@ const BarChartData = [
   { name: 'Cancelled', value: 5, fill: '#e2e8f0' },
   { name: 'Projects', value: 7, fill: '#fdba74' },
   { name: 'Contributions', value: 19, fill: '#ef4444' },
-  { name: 'CV Matches', value: 32, fill: '#4F46E5' }
+  { name: 'CV Matches', value: 32, fill: '#4F46E5' },
   { name: 'Badges', value: 65, fill: '#10B981' }
 ];
 
@@ -122,7 +122,7 @@ export const ComplianceRiskChart: React.FC = () => {
   );
 };
 
-export const BarChartData: React.FC = () => {
+export const ControlStatusChart: React.FC = () => {
   return (
     <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
       <div className="flex items-center justify-between mb-0.5">
