@@ -6,32 +6,62 @@ export const featureIcons = [
   {
     title: "Regulatory Analysis",
     icon: <MessageSquare className="text-indigo-600" size={24} />,
-    description: "Get instant insights on complex regulations"
+    description: "Get instant insights on complex regulations",
+    content: {
+      title: "Regulatory Analysis",
+      description: "Get instant insights on complex regulations",
+      details: "Our AI-powered regulatory analysis helps you understand complex regulations in simple terms. Get immediate answers to your compliance questions."
+    }
   },
   {
     title: "Networking & Forum",
     icon: <Users className="text-purple-500" size={24} />,
-    description: "Connect with peers in the compliance community"
+    description: "Connect with peers in the compliance community",
+    content: {
+      title: "Networking & Forum",
+      description: "Connect with peers in the compliance community",
+      details: "Join a vibrant community of GRC professionals to share knowledge, discuss challenges, and find solutions together."
+    }
   },
   {
     title: "Badges & Recognition",
     icon: <BadgeCheck className="text-blue-500" size={24} />,
-    description: "Earn badges for your GRC expertise"
+    description: "Earn badges for your GRC expertise",
+    content: {
+      title: "Badges & Recognition",
+      description: "Earn badges for your GRC expertise",
+      details: "Showcase your expertise and achievements with our badge system. Earn recognition for your contributions and skills."
+    }
   },
   {
     title: "Job Matching",
     icon: <Briefcase className="text-emerald-500" size={24} />,
-    description: "Find your next GRC opportunity"
+    description: "Find your next GRC opportunity",
+    content: {
+      title: "Job Matching",
+      description: "Find your next GRC opportunity",
+      details: "Our intelligent job matching system connects you with relevant GRC opportunities based on your skills and experience."
+    }
   },
   {
     title: "GRC Games",
     icon: <GamepadIcon className="text-rose-500" size={24} />,
-    description: "Learn through interactive gameplay"
+    description: "Learn through interactive gameplay",
+    content: {
+      title: "GRC Games",
+      description: "Learn through interactive gameplay",
+      details: "Make learning fun with our interactive GRC games. Test your knowledge and skills in an engaging way."
+    }
   },
   {
     title: "Interview Prep",
     icon: <FileText className="text-amber-500" size={24} />,
-    description: "Prepare for your next career move"
+    description: "Prepare for your next career move",
+    content: {
+      title: "Interview Prep",
+      description: "Prepare for your next career move",
+      details: "Get ready for your next interview with our preparation tools. Practice common questions and get feedback on your answers."
+    }
   }
 ];
 
@@ -59,4 +89,3 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, className = "
     </div>
   );
 };
-

@@ -6,7 +6,9 @@ import { StatusCards } from './dashboard/StatusCards';
 import { DashboardContent } from './dashboard/DashboardContent';
 import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
-import { MobileCharts } from './dashboard/MobileCharts';
+import MobileCharts from './dashboard/MobileCharts';
+import { MessageSquare } from 'lucide-react';
+import { featureIcons } from './features/FeatureGrid';
 
 const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
@@ -174,14 +176,14 @@ const HeroSection = () => {
           {selectedFeature !== null && (
             <>
               <DialogHeader>
-                <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
+                <DialogTitle>{featureIcons[selectedFeature].title}</DialogTitle>
                 <DialogDescription>
-                  {featureIcons[selectedFeature].content.description}
+                  {featureIcons[selectedFeature].description}
                 </DialogDescription>
               </DialogHeader>
               <div className="p-6">
                 <p className="text-gray-700">
-                  {featureIcons[selectedFeature].content.details}
+                  {featureIcons[selectedFeature].content && featureIcons[selectedFeature].content.details}
                 </p>
               </div>
             </>
