@@ -38,11 +38,11 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       <div className="mt-8 flex items-center justify-center md:justify-start text-sm text-gray-500">
         <span className="flex items-center mr-4">
           <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></div>
-          Early Access
+          GRC Innovation Hub
         </span>
         <span className="flex items-center">
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
-          Join 50+ early adopters in our private pilot
+          Join early adopters in our private pilot
         </span>
       </div>
     </div>
