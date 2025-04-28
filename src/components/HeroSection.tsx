@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -164,9 +163,9 @@ const HeroSection = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 rounded-full text-sm font-medium text-gray-600">
+          <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-white/80">
             <span>Join</span>
-            <span className="font-bold text-synapse-primary">50+</span>
+            <span className="font-bold text-white">50+</span>
             <span>early adopters in our private pilot</span>
           </div>
         </div>

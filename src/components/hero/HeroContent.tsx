@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
+import { FeatureGrid } from '../features/FeatureGrid';
 
 interface HeroContentProps {
   animate: boolean;
@@ -11,7 +12,7 @@ interface HeroContentProps {
 
 export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore }) => {
   return (
-    <div className={`md:w-2/5 pb-10 md:pb-0 text-center md:text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+    <div className={`w-full text-center md:text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       <h1 className="heading-xl">
         <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent animate-text">
           <span className="animate-gradient-text">Become a Trusted Expert in the Age of AI-Driven GRC</span>
@@ -38,12 +39,17 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       <div className="mt-8 flex items-center justify-center md:justify-start text-sm text-gray-500">
         <span className="flex items-center mr-4">
           <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></div>
-          GRC Innovation Hub
+          Early Access
         </span>
         <span className="flex items-center">
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
-          Join early adopters in our private pilot
+          300+ Professionals Joined
         </span>
+      </div>
+
+      {/* Feature Grid moved into hero section */}
+      <div className="mt-16">
+        <FeatureGrid animate={animate} onFeatureClick={() => {}} />
       </div>
     </div>
   );
