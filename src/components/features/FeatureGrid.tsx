@@ -6,32 +6,62 @@ export const featureIcons = [
   {
     title: "Regulatory Analysis",
     icon: <MessageSquare className="text-indigo-600" size={20} />,
-    description: "Analysis"
+    description: "Analysis",
+    content: {
+      title: "AI-Powered Regulatory Analysis",
+      description: "Navigate complex regulations with ease",
+      details: "Our AI copilot Dara provides intelligent regulatory insights and automates compliance tasks, helping you stay ahead of regulatory changes and requirements."
+    }
   },
   {
     title: "Networking & Forum",
     icon: <Users className="text-purple-500" size={20} />,
-    description: "Forum"
+    description: "Forum",
+    content: {
+      title: "GRC Professional Community",
+      description: "Connect with peers and mentors",
+      details: "Join a global network of GRC professionals to share knowledge, ask questions, and collaborate on solving complex compliance challenges."
+    }
   },
   {
     title: "Badges & Recognition",
     icon: <BadgeCheck className="text-blue-500" size={20} />,
-    description: "Recognition"
+    description: "Recognition",
+    content: {
+      title: "Professional Achievement Tracking",
+      description: "Showcase your expertise",
+      details: "Earn badges and recognition for your contributions, skills, and knowledge in specific regulatory domains and compliance areas."
+    }
   },
   {
     title: "Job Matching",
     icon: <Briefcase className="text-emerald-500" size={20} />,
-    description: "Matching"
+    description: "Matching",
+    content: {
+      title: "Career Advancement Opportunities",
+      description: "Find your next GRC position",
+      details: "Get matched with relevant job opportunities based on your skills, experience, and career goals in the governance, risk, and compliance space."
+    }
   },
   {
     title: "GRC Games",
     icon: <GamepadIcon className="text-rose-500" size={20} />,
-    description: "Games"
+    description: "Games",
+    content: {
+      title: "Interactive Learning Experience",
+      description: "Learn through gameplay",
+      details: "Enhance your GRC knowledge and skills through interactive scenarios, quizzes, and challenges designed to make learning engaging and effective."
+    }
   },
   {
     title: "Interview Prep",
     icon: <FileText className="text-amber-500" size={20} />,
-    description: "Prep"
+    description: "Prep",
+    content: {
+      title: "Career Readiness Tools",
+      description: "Prepare for your next role",
+      details: "Access interview guides, resume reviews, and practice sessions tailored specifically for GRC professionals to help you succeed in your career journey."
+    }
   }
 ];
 

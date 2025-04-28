@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -179,7 +178,7 @@ const HeroSection = () => {
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="sm:max-w-md">
-          {selectedFeature !== null && (
+          {selectedFeature !== null && featureIcons[selectedFeature] && (
             <>
               <DialogHeader>
                 <DialogTitle>{featureIcons[selectedFeature].content.title}</DialogTitle>
