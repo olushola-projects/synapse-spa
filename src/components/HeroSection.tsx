@@ -121,7 +121,7 @@ const HeroSection = () => {
               onLearnMore={handleLearnMoreClick}
             />
             
-            <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
+            <div className={`md:w-3/5 mt-12 md:mt-0 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
               <div className="relative w-full max-w-3xl mx-auto">
                 <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">

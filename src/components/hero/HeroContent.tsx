@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
@@ -39,16 +38,15 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       <div className="mt-8 flex items-center justify-center md:justify-start text-sm text-gray-500">
         <span className="flex items-center mr-4">
           <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></div>
-          Early Access
+          GRC Innovation Hub
         </span>
         <span className="flex items-center">
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
-          300+ Professionals Joined
+          Join early adopters in our private pilot
         </span>
       </div>
 
-      {/* Feature Grid moved into hero section */}
-      <div className="mt-16">
+      <div className="mt-12">
         <FeatureGrid animate={animate} onFeatureClick={() => {}} />
       </div>
     </div>
