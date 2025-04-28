@@ -72,19 +72,19 @@ interface FeatureGridProps {
 
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+    <div id="features" className={`mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       {featureIcons.map((feature, index) => (
         <div 
           key={index}
-          className="flex flex-col items-center p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all cursor-pointer text-white"
+          className="flex flex-col items-center p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"
           style={{ animationDelay: `${index * 100}ms` }}
           onClick={() => onFeatureClick && onFeatureClick(index)}
         >
-          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mb-2">
+          <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-4">
             {feature.icon}
           </div>
-          <h3 className="text-base font-semibold mb-1 text-center text-white">{feature.title}</h3>
-          <p className="text-xs text-white/90 text-center">{feature.description}</p>
+          <h3 className="text-lg font-semibold mb-2 text-center">{feature.title}</h3>
+          <p className="text-gray-600 text-sm text-center">{feature.description}</p>
         </div>
       ))}
     </div>

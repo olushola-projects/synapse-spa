@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -121,7 +122,7 @@ const HeroSection = () => {
               onLearnMore={handleLearnMoreClick}
             />
             
-            <div className={`md:w-3/5 mt-12 md:mt-0 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
+            <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
               <div className="relative w-full max-w-3xl mx-auto">
                 <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
@@ -163,9 +164,9 @@ const HeroSection = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-white/80">
+          <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 rounded-full text-sm font-medium text-gray-600">
             <span>Join</span>
-            <span className="font-bold text-white">50+</span>
+            <span className="font-bold text-synapse-primary">50+</span>
             <span>early adopters in our private pilot</span>
           </div>
         </div>
