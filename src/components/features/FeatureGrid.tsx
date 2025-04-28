@@ -5,63 +5,33 @@ import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, FileText } fr
 export const featureIcons = [
   {
     title: "Regulatory Analysis",
-    icon: <MessageSquare className="text-indigo-600" size={24} />,
-    description: "Get instant insights on complex regulations",
-    content: {
-      title: "Regulatory Analysis with AI",
-      description: "Harness the power of AI for regulatory compliance",
-      details: "Our AI-powered regulatory analysis tools help compliance professionals stay ahead of complex regulations. Get instant insights, summaries, and actionable recommendations tailored to your industry and jurisdiction."
-    }
+    icon: <MessageSquare className="text-indigo-600" size={20} />,
+    description: "Analysis"
   },
   {
     title: "Networking & Forum",
-    icon: <Users className="text-purple-500" size={24} />,
-    description: "Connect with peers in the compliance community",
-    content: {
-      title: "GRC Professional Network",
-      description: "Build your professional network in the GRC space",
-      details: "Join a vibrant community of GRC professionals to share knowledge, discuss regulatory challenges, and build meaningful connections that enhance your career opportunities."
-    }
+    icon: <Users className="text-purple-500" size={20} />,
+    description: "Forum"
   },
   {
     title: "Badges & Recognition",
-    icon: <BadgeCheck className="text-blue-500" size={24} />,
-    description: "Earn badges for your GRC expertise",
-    content: {
-      title: "Professional Recognition System",
-      description: "Showcase your expertise and achievements",
-      details: "Our badge system recognizes your growing expertise in different regulatory domains. Earn credentials that demonstrate your knowledge and commitment to excellence in governance, risk, and compliance."
-    }
+    icon: <BadgeCheck className="text-blue-500" size={20} />,
+    description: "Recognition"
   },
   {
     title: "Job Matching",
-    icon: <Briefcase className="text-emerald-500" size={24} />,
-    description: "Find your next GRC opportunity",
-    content: {
-      title: "Career Advancement Tools",
-      description: "Discover opportunities aligned with your skills",
-      details: "Our intelligent job matching algorithm connects you with opportunities that align with your expertise, career goals, and professional interests in the GRC space."
-    }
+    icon: <Briefcase className="text-emerald-500" size={20} />,
+    description: "Matching"
   },
   {
     title: "GRC Games",
-    icon: <GamepadIcon className="text-rose-500" size={24} />,
-    description: "Learn through interactive gameplay",
-    content: {
-      title: "Interactive Learning Experience",
-      description: "Make compliance learning engaging and effective",
-      details: "Turn complex regulatory concepts into engaging learning experiences through gamification. Our GRC games help you and your team build knowledge while having fun."
-    }
+    icon: <GamepadIcon className="text-rose-500" size={20} />,
+    description: "Games"
   },
   {
     title: "Interview Prep",
-    icon: <FileText className="text-amber-500" size={24} />,
-    description: "Prepare for your next career move",
-    content: {
-      title: "Career Development Resources",
-      description: "Ace your next GRC interview with confidence",
-      details: "Access specialized resources to prepare for GRC interviews, including practice questions, expert insights, and personalized feedback to help you advance your career."
-    }
+    icon: <FileText className="text-amber-500" size={20} />,
+    description: "Prep"
   }
 ];
 
@@ -72,19 +42,19 @@ interface FeatureGridProps {
 
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
-    <div id="features" className={`mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+    <div className={`mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-2xl mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       {featureIcons.map((feature, index) => (
         <div 
           key={index}
-          className="flex flex-col items-center p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"
+          className="flex flex-col items-center p-4 rounded-xl bg-white/90 hover:bg-white/95 transition-all cursor-pointer shadow-sm hover:shadow"
           style={{ animationDelay: `${index * 100}ms` }}
           onClick={() => onFeatureClick && onFeatureClick(index)}
         >
-          <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-4">
+          <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
             {feature.icon}
           </div>
-          <h3 className="text-lg font-semibold mb-2 text-center">{feature.title}</h3>
-          <p className="text-gray-600 text-sm text-center">{feature.description}</p>
+          <h3 className="text-sm font-medium mb-1 text-center">{feature.title}</h3>
+          <p className="text-xs text-gray-600 text-center">{feature.description}</p>
         </div>
       ))}
     </div>
