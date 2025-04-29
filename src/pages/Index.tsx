@@ -8,6 +8,7 @@ import IndustryPerspectivesSection from "../components/IndustryPerspectivesSecti
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import PoweredBySection from "../components/PoweredBySection";
+import FAQSection from "../components/FAQSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Index = () => {
@@ -15,7 +16,8 @@ const Index = () => {
     features: false,
     video: false,
     testimonials: false,
-    cta: false
+    cta: false,
+    faq: false
   });
 
   useEffect(() => {
@@ -121,6 +123,10 @@ const Index = () => {
       
       <div id="cta" className={`transition-opacity duration-1000 ${visibleSections.cta ? 'opacity-100' : 'opacity-0'}`}>
         <CTASection />
+      </div>
+      
+      <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>
+        <FAQSection />
       </div>
       
       <PoweredBySection />

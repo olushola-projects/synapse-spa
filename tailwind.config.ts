@@ -112,6 +112,11 @@ const config: Config = {
         "gradient-stripe":
           "linear-gradient(45deg, var(--tw-gradient-stops) 25%, transparent 25%, transparent 50%, var(--tw-gradient-stops) 50%, var(--tw-gradient-stops) 75%, transparent 75%, transparent)",
       },
+      textRendering: {
+        optimizeSpeed: 'optimizeSpeed',
+        optimizeLegibility: 'optimizeLegibility',
+        geometricPrecision: 'geometricPrecision',
+      },
     },
   },
   plugins: ["tailwindcss-animate"],

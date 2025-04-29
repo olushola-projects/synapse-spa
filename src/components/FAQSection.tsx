@@ -1,62 +1,73 @@
 
-import { useState } from 'react';
+import React from 'react';
 import { 
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from "@/components/ui/accordion";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { UserRound, MessageCircle } from "lucide-react";
-import PoweredBySection from './PoweredBySection';
 
 const faqs = [
   {
-    question: "What is Synapse and how does it help GRC professionals?",
-    answer: "Synapse is a specialized platform designed for Governance, Risk, and Compliance professionals. It combines intelligent tools, specialized knowledge, and a vibrant community to help you navigate complex regulatory landscapes. From AI-powered insights to networking opportunities, Synapse supports your professional growth and day-to-day compliance needs."
+    question: "What is Synapses?",
+    answer: "Synapses is the GRC Intelligence Platform — your personalized workspace for navigating regulations, connecting with compliance professionals, and building intelligent tools like GRC agents. It's where the future of compliance is created."
   },
   {
-    question: "Who is Dara and what can the AI copilot do?",
-    answer: "Dara is Synapse's AI copilot specifically trained on GRC knowledge. Dara can provide instant regulatory insights, analyze compliance requirements, answer complex questions about regulations, and offer actionable recommendations tailored to your specific situation and jurisdiction."
+    question: "Who is Synapses for?",
+    answer: "Synapses is designed for compliance officers, risk professionals, regulators, RegTech founders, consultants, auditors, researchers, and educators. Whether you're shaping strategy or testing new tools, Synapses brings the ecosystem together."
   },
   {
-    question: "When will Synapse be available?",
-    answer: "Synapse is currently in private beta with select organizations. We're expanding access through our waitlist, prioritizing GRC professionals across various industries. Join the waitlist now to secure your early access when we launch publicly."
+    question: "What is a GRC Agent?",
+    answer: "GRC Agents are smart, task-specific assistants powered by trusted language models. They help automate or accelerate common compliance tasks — like summarizing regulations, checking audit readiness, or interpreting policy gaps."
   },
   {
-    question: "Is my data secure on the platform?",
-    answer: "Absolutely. At Synapse, security is our top priority. We implement industry-leading encryption standards, regular security audits, and strict access controls. Your compliance data is sensitive, and we treat it with the utmost care, ensuring full compliance with privacy regulations including GDPR, CCPA, and more."
+    question: "Can I create my own compliance AI agent?",
+    answer: "Yes! Synapses lets you build your own custom agent — choose the LLM (like GPT or Claude), set its focus (e.g., AML, GDPR), define how it responds, and get to work. No code or tech background needed."
   },
   {
-    question: "How does the job matching feature work?",
-    answer: "Our job matching feature uses AI to analyze your skills, experience, and preferences against open positions in the GRC field. Unlike generic job boards, we specialize in compliance roles and can identify opportunities that align with your specific expertise, whether that's financial compliance, data protection, healthcare regulations, or other specialized areas."
+    question: "What can I do with my Synapses dashboard?",
+    answer: "Your dashboard is fully customizable — display regulatory calendars, daily insights, badge achievements, community questions, and even live agent performance. It's your control center for compliance work and growth."
   },
   {
-    question: "Can I use Synapse for my entire compliance team?",
-    answer: "Yes! Synapse offers team collaboration features that allow compliance departments to work together efficiently. Team members can share insights, assign tasks, track regulatory projects, and maintain a centralized knowledge base, all while maintaining appropriate access controls."
+    question: "How does Synapses compare to LinkedIn or GitHub?",
+    answer: "LinkedIn is for connections. GitHub is for developers. Synapses is for compliance professionals who want both — and more. It's the professional platform for building your GRC identity, tools, and impact."
+  },
+  {
+    question: "I'm not technical — can I still use Synapses?",
+    answer: "Absolutely. Synapses is built for non-technical users. Whether you're asking questions, customizing dashboards, or training agents, we've made it intuitive, secure, and human-friendly."
+  },
+  {
+    question: "Is Synapses free?",
+    answer: "Yes — joining as an early user is completely free. In the future, advanced features (like private workspaces or enterprise dashboards) may be part of a premium plan."
+  },
+  {
+    question: "Can I invite my team or organization?",
+    answer: "Yes. Synapses is perfect for teams — coming soon are features like Team Huddles, compliance challenges, and shared dashboards. Invite your team now to build together."
+  },
+  {
+    question: "Can I test upcoming RegTech tools on Synapses?",
+    answer: "Yes! As a Synapses early user, you can be one of the first to test new RegTech tools built by developers and compliance innovators — and give feedback that helps shape the future of the industry."
+  },
+  {
+    question: "When is Synapses launching?",
+    answer: "Synapses is currently in early access. Our MVP is live with a curated group of GRC professionals. Join today to help shape what comes next. Full launch is expected in late 2025."
+  },
+  {
+    question: "What if I have more questions?",
+    answer: "We'd love to help. Reach out to us directly at help@synapses.ai — or ask inside the Synapses community."
   }
 ];
 
-// Support team profiles
-const supportTeam = [
-  { name: "Alex Rivera", role: "Compliance Specialist", avatar: "/placeholder.svg" },
-  { name: "Sarah Chen", role: "GRC Advisor", avatar: "/placeholder.svg" },
-  { name: "Michael Okoye", role: "Support Lead", avatar: "/placeholder.svg" },
-  { name: "Taylor Mason", role: "Regulatory Expert", avatar: "/placeholder.svg" },
-];
-
 const FAQSection = () => {
-  const [openItem, setOpenItem] = useState<string | undefined>(undefined);
-
   return (
-    <div id="faq" className="py-20 bg-gray-50">
+    <section id="faq" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Find answers to common questions about Synapse and how it can transform your GRC experience.
+            Find answers to common questions about Synapses and how it can transform your GRC experience.
           </p>
         </div>
 
@@ -74,9 +85,14 @@ const FAQSection = () => {
             ))}
           </Accordion>
         </div>
+
+        <div className="text-center mt-12">
+          <p className="text-gray-500">
+            Still have questions? <a href="#contact" className="text-synapse-primary font-medium hover:underline">Contact our team</a>
+          </p>
+        </div>
       </div>
-      <PoweredBySection />
-    </div>
+    </section>
   );
 };
 
