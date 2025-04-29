@@ -48,7 +48,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
         </span>
       </div>
       
-      <div className="mt-8">
+      <div className="mt-6">
         <FeatureGrid animate={animate} onFeatureClick={onFeatureClick} />
       </div>
     </div>
