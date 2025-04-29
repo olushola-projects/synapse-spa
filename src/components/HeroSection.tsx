@@ -1,11 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { DashboardHeader } from './dashboard/DashboardHeader';
+import { SideNavigation } from './dashboard/SideNavigation';
+import { StatusCards } from './dashboard/StatusCards';
+import { DashboardContent } from './dashboard/DashboardContent';
 import { FeatureGrid, featureIcons } from './features/FeatureGrid';
 import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
-import { StripeDashboardMockup } from './dashboard/Dashboard';
+import MobileCharts from './dashboard/MobileCharts';
 
 const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
@@ -111,19 +114,49 @@ const HeroSection = () => {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center">
-            <div className={`w-full max-w-4xl mx-auto text-center transition-all duration-700 ease-out ${animateContent ? 'opacity-100' : 'opacity-0 translate-y-6'} mb-12`}>
-              <HeroContent 
-                animate={animateContent}
-                onGetAccess={openWaitlistDialog}
-                onLearnMore={handleLearnMoreClick}
-              />
-            </div>
+          <div className="flex flex-col md:flex-row items-center">
+            <HeroContent 
+              animate={animateContent}
+              onGetAccess={openWaitlistDialog}
+              onLearnMore={handleLearnMoreClick}
+            />
             
-            <div className={`w-full transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'} mb-16`}>
-              <div className="relative w-full max-w-6xl mx-auto overflow-hidden">
-                {/* Stripe-style Dashboard */}
-                <StripeDashboardMockup />
+            <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
+              <div className="relative w-full max-w-3xl mx-auto">
+                <div className="aspect-[16/10] mb-2 rounded-t-xl overflow-hidden shadow-2xl relative">
+                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
+                    <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
+                    
+                    <div className="p-2 flex h-[94%] bg-[#F1F0FB]">
+                      <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
+                      
+                      <div className="flex-1 pl-1 flex flex-col gap-1">
+                        <div className="hidden md:flex justify-between items-center">
+                          <div className="text-gray-800 text-[6px] sm:text-[8px] font-medium">Regulatory Intelligence Dashboard</div>
+                          <div className="flex gap-2 items-center">
+                            <div className="text-[5px] sm:text-[6px] text-gray-500">April 14, 2025</div>
+                            <div className="flex items-center gap-1">
+                              <div className="text-[5px] sm:text-[6px] text-gray-500">Hi, Phoebe Banks</div>
+                              <img 
+                                src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
+                                alt="Phoebe Banks" 
+                                className="w-3 h-3 rounded-full object-cover border border-gray-200"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <StatusCards />
+                        
+                        <DashboardContent onAmlDialogOpen={() => setOpenAmlDialog(true)} />
+                        
+                        <div className="md:hidden">
+                          <MobileCharts />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -138,19 +171,10 @@ const HeroSection = () => {
         </div>
       </div>
       
-      <div className="py-12 bg-gray-50">
-        <div className="container mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">Features Designed for GRC Professionals</h2>
-            <p className="text-gray-600 mt-2">Explore powerful tools built for regulatory excellence</p>
-          </div>
-          
-          <FeatureGrid 
-            onFeatureClick={handleFeatureClick}
-            animate={animateFeatures}
-          />
-        </div>
-      </div>
+      <FeatureGrid 
+        onFeatureClick={handleFeatureClick}
+        animate={animateFeatures}
+      />
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="sm:max-w-md">

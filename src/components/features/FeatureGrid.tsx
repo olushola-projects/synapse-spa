@@ -1,17 +1,17 @@
 
 import React from 'react';
-import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, Bot, Settings } from 'lucide-react';
+import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const featureIcons = [
   {
-    title: "GRC Agent Gallery",
-    icon: <Bot className="text-indigo-600" size={20} />,
-    description: "Gallery",
+    title: "Regulatory Analysis",
+    icon: <MessageSquare className="text-indigo-600" size={20} />,
+    description: "Analysis",
     content: {
-      title: "Explore Regulatory AI Agents",
-      description: "Discover purpose-built compliance assistants",
-      details: "Browse our curated library of intelligent agents developed specifically for compliance tasks - from SFDR disclosure automation to AML transaction monitoring and ESG reporting. Each agent is trained on domain-specific regulations and best practices."
+      title: "AI-Powered Regulatory Analysis",
+      description: "Navigate complex regulations with ease",
+      details: "Our AI copilot Dara provides intelligent regulatory insights and automates compliance tasks, helping you stay ahead of regulatory changes and requirements."
     }
   },
   {
@@ -55,13 +55,13 @@ export const featureIcons = [
     }
   },
   {
-    title: "Customize Your Own Agent",
-    icon: <Settings className="text-amber-500" size={20} />,
-    description: "Customize",
+    title: "Interview Prep",
+    icon: <FileText className="text-amber-500" size={20} />,
+    description: "Prep",
     content: {
-      title: "Personalized AI Assistant Builder",
-      description: "Create compliance tools for your needs",
-      details: "Design your own compliance AI assistant with our intuitive builder. Select your preferred large language model, customize its tone and expertise areas, and define its behavior patterns - all without writing a single line of code."
+      title: "Career Readiness Tools",
+      description: "Prepare for your next role",
+      details: "Access interview guides, resume reviews, and practice sessions tailored specifically for GRC professionals to help you succeed in your career journey."
     }
   }
 ];
@@ -73,22 +73,22 @@ interface FeatureGridProps {
 
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
-    <div className="max-w-[1200px] mx-auto px-4">
-      <div className={`mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+    <div className="max-w-[1200px] mx-auto">
+      <div className={`mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}
-            className="flex flex-col items-center p-5 rounded-xl bg-white/90 hover:bg-white/95 transition-all cursor-pointer shadow-sm hover:shadow max-w-none hover:translate-y-[-5px] hover:shadow-lg"
+            className="flex flex-col items-center p-3 rounded-xl bg-white/90 hover:bg-white/95 transition-all cursor-pointer shadow-sm hover:shadow max-w-[180px] hover:translate-y-[-5px] hover:shadow-lg"
             style={{ animationDelay: `${index * 100}ms` }}
             onClick={() => onFeatureClick && onFeatureClick(index)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: animate ? 1 : 0, y: animate ? 0 : 20 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-3 animate-[float_3s_ease-in-out_infinite]">
+            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mb-2 animate-[float_3s_ease-in-out_infinite]">
               {feature.icon}
             </div>
-            <h3 className="text-sm font-medium mb-2 text-center">{feature.title}</h3>
+            <h3 className="text-xs font-medium mb-1 text-center">{feature.title}</h3>
             <p className="text-xs text-gray-600 text-center">{feature.description}</p>
           </motion.div>
         ))}

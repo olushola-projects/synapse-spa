@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
+import FeaturesSection from "../components/FeaturesSection";
 import VideoSection from "../components/VideoSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import CTASection from "../components/CTASection";
@@ -11,6 +12,7 @@ import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
+    features: false,
     video: false,
     testimonials: false,
     cta: false
@@ -34,7 +36,7 @@ const Index = () => {
       });
     }, observerOptions);
 
-    const sections = ['how-it-works', 'testimonials', 'faq', 'cta'];
+    const sections = ['features', 'how-it-works', 'testimonials', 'faq', 'cta'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -106,6 +108,10 @@ const Index = () => {
       <AnimatedBackground />
       <Navbar />
       <HeroSection />
+      
+      <div id="features" className={`transition-opacity duration-1000 ${visibleSections.features ? 'opacity-100' : 'opacity-0'}`}>
+        <FeaturesSection />
+      </div>
       
       <VideoSection />
       
