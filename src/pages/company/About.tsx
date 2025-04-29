@@ -3,9 +3,8 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Shield, Globe, Users, Target, ArrowRight } from 'lucide-react';
+import { Shield, Globe, Users, Target, ArrowRight, Quote } from 'lucide-react';
 
 const About = () => {
   // Industry perspectives data
@@ -14,31 +13,31 @@ const About = () => {
       name: "Thomson Reuters",
       role: "Future of Professionals Report, 2024",
       bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
-      image: "/lovable-uploads/7ef540cb-b6cd-435f-851f-791b450bf977.png"
+      image: "/lovable-uploads/21bbb15a-40f1-48ca-a6a0-5d2d20d9331e.png"
     },
     {
       name: "Complia",
       role: "Strategic Briefing, 2025",
-      bio: "AI is not just a tool—it's the next compliance culture. We're not replacing professionals; we're enabling faster, traceable, defensible decisions.",
-      image: "/lovable-uploads/03eec3f2-1d7f-4ea9-a37d-a5f0a40dd23a.png"
+      bio: "AI is no longer just a tool — it's becoming the foundation of modern compliance culture. We're not replacing professionals; we're enabling faster, traceable, and defensible decision-making at every level of the organization.",
+      image: "/lovable-uploads/4a8b4569-6106-4b80-9ed1-aad25b35df82.png"
     },
     {
       name: "World Economic Forum & Citi",
       role: "AI Impact in Compliance Report",
       bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
-      image: "/lovable-uploads/a445b7c1-0e73-4cf1-95a3-e072d9a2a739.png"
+      image: "/lovable-uploads/c9a37f7e-d2d9-4558-a19b-8b109f41376f.png"
     },
     {
       name: "Deloitte & McKinsey",
       role: "State of Compliance & Automation Trends",
       bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
-      image: "/lovable-uploads/fb0adfe3-6046-421c-aeb4-b4c2e7e4a834.png"
+      image: "/lovable-uploads/d9efb365-be69-41f3-b367-ffdd791930a9.png"
     },
     {
       name: "Synapses",
       role: "Our AI Strategy",
-      bio: "Many compliance professionals currently lack familiarity with AI tools. Traditional training systems aren't built for the speed of regulatory change.",
-      image: "/lovable-uploads/82f61427-efb3-492c-9be8-fee00268a56a.png"
+      bio: "GRC professionals have the expertise to shape the next generation of RegTech—but traditional systems have left them behind in AI literacy. Synapses empower compliance leaders to build, adapt, and govern tomorrow's intelligent systems - not be governed by them.",
+      image: "/lovable-uploads/c7da120f-c31d-4d3b-aa3d-8e3ba8d619d6.png"
     }
   ];
 
@@ -137,8 +136,11 @@ const About = () => {
         </section>
 
         {/* Industry Perspectives */}
-        <section className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
+        <section className="py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-blue-50/30 opacity-70 z-0"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.2),transparent_50%)] z-0"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <Badge variant="outline" className="mb-4">Industry Insights</Badge>
@@ -150,18 +152,35 @@ const About = () => {
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {industryPerspectives.map((perspective, index) => (
-                  <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow p-6">
-                    <div className="h-16 mb-4 flex items-center justify-center">
-                      <img 
-                        src={perspective.image} 
-                        alt={perspective.name}
-                        className="max-h-full object-contain"
-                      />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg">{perspective.name}</h3>
-                      <p className="text-blue-600 font-medium text-sm mb-3">{perspective.role}</p>
-                      <p className="text-gray-600 text-sm">{perspective.bio}</p>
+                  <div key={index} className="h-full group animate-float">
+                    <div className="h-full flex flex-col p-7 hover:shadow-xl transition-all duration-300 rounded-xl bg-white/70 backdrop-blur-md border border-white/60 relative overflow-hidden shadow-md">
+                      {/* Decorative elements */}
+                      <div className="absolute -bottom-16 -right-16 w-32 h-32 bg-gradient-to-tr from-blue-100/20 to-indigo-100/30 rounded-full opacity-70"></div>
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-synapse-primary/30 to-transparent"></div>
+                      
+                      {/* Logo section */}
+                      <div className="h-14 mb-5 flex items-center">
+                        <img 
+                          src={perspective.image} 
+                          alt={perspective.name}
+                          className="max-h-full max-w-[140px] object-contain"
+                        />
+                      </div>
+                      
+                      <div className="flex-1 flex flex-col">
+                        <div className="mb-3">
+                          <h3 className="font-bold text-lg text-gray-800">{perspective.name}</h3>
+                          <p className="text-synapse-primary font-medium text-sm">{perspective.role}</p>
+                        </div>
+                        
+                        {/* Quote section with emphasis */}
+                        <div className="relative">
+                          <Quote className="text-synapse-primary/20 absolute top-0 left-0 h-6 w-6 transform -translate-x-1 -translate-y-1" />
+                          <p className="text-gray-600 pl-5 italic font-medium leading-relaxed text-sm">
+                            {perspective.bio}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
