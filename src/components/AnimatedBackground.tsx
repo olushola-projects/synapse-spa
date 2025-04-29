@@ -1,7 +1,6 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { cloudyAnimation } from "@/styles/animations";
 
 export const AnimatedBackground = () => {
   return (
