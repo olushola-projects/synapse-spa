@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -119,6 +120,7 @@ const HeroSection = () => {
               animate={animateContent}
               onGetAccess={openWaitlistDialog}
               onLearnMore={handleLearnMoreClick}
+              onFeatureClick={handleFeatureClick}
             />
             
             <div className={`md:w-3/5 relative transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
@@ -171,10 +173,11 @@ const HeroSection = () => {
         </div>
       </div>
       
-      <FeatureGrid 
+      {/* Remove this from here as we've moved it into the HeroContent */}
+      {/* <FeatureGrid 
         onFeatureClick={handleFeatureClick}
         animate={animateFeatures}
-      />
+      /> */}
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="sm:max-w-md">

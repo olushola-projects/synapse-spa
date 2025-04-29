@@ -8,9 +8,10 @@ interface HeroContentProps {
   animate: boolean;
   onGetAccess: () => void;
   onLearnMore: (e: React.MouseEvent) => void;
+  onFeatureClick?: (index: number) => void;
 }
 
-export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore }) => {
+export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore, onFeatureClick }) => {
   return (
     <div className={`w-full pb-10 md:pb-0 text-center transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       <h1 className="heading-xl max-w-3xl mx-auto">
@@ -46,8 +47,10 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
           Join early adopters in our private pilot
         </span>
       </div>
-
-      <FeatureGrid animate={animate} />
+      
+      <div className="mt-8">
+        <FeatureGrid animate={animate} onFeatureClick={onFeatureClick} />
+      </div>
     </div>
   );
 };

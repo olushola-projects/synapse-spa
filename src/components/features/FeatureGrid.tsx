@@ -3,6 +3,7 @@ import React from 'react';
 import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+// We'll reduce and modify the feature icons to create a 2x3 grid
 export const featureIcons = [
   {
     title: "Regulatory Analysis",
@@ -74,7 +75,7 @@ interface FeatureGridProps {
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
     <div className="max-w-[1200px] mx-auto">
-      <div className={`mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+      <div className={`grid grid-cols-3 gap-3 mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}
