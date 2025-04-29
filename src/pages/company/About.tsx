@@ -14,31 +14,31 @@ const About = () => {
       name: "Thomson Reuters",
       role: "Future of Professionals Report, 2024",
       bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
-      image: "/logos/thomsonreuters.svg"
-    },
-    {
-      name: "World Economic Forum & Citi",
-      role: "AI Impact in Compliance Report",
-      bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
-      image: "/logos/wef_citi.svg"
-    },
-    {
-      name: "Deloitte & McKinsey",
-      role: "State of Compliance & Automation Trends",
-      bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
-      image: "/logos/deloitte_mckinsey.svg"
-    },
-    {
-      name: "Synapses",
-      role: "Our AI Strategy",
-      bio: "Many compliance professionals currently lack familiarity with AI tools. Traditional training systems aren't built for the speed of regulatory change.",
-      image: "/logos/synapse.svg"
+      image: "/lovable-uploads/7ef540cb-b6cd-435f-851f-791b450bf977.png"
     },
     {
       name: "Complia",
       role: "Strategic Briefing, 2025",
       bio: "AI is not just a tool—it's the next compliance culture. We're not replacing professionals; we're enabling faster, traceable, defensible decisions.",
-      image: "/logos/complia.svg"
+      image: "/lovable-uploads/03eec3f2-1d7f-4ea9-a37d-a5f0a40dd23a.png"
+    },
+    {
+      name: "World Economic Forum & Citi",
+      role: "AI Impact in Compliance Report",
+      bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
+      image: "/lovable-uploads/a445b7c1-0e73-4cf1-95a3-e072d9a2a739.png"
+    },
+    {
+      name: "Deloitte & McKinsey",
+      role: "State of Compliance & Automation Trends",
+      bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
+      image: "/lovable-uploads/fb0adfe3-6046-421c-aeb4-b4c2e7e4a834.png"
+    },
+    {
+      name: "Synapses",
+      role: "Our AI Strategy",
+      bio: "Many compliance professionals currently lack familiarity with AI tools. Traditional training systems aren't built for the speed of regulatory change.",
+      image: "/lovable-uploads/82f61427-efb3-492c-9be8-fee00268a56a.png"
     }
   ];
 
@@ -155,7 +155,7 @@ const About = () => {
                       <img 
                         src={perspective.image} 
                         alt={perspective.name}
-                        className="max-h-full"
+                        className="max-h-full object-contain"
                       />
                     </div>
                     <div>
