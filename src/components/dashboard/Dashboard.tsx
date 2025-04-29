@@ -1,50 +1,32 @@
 
-import styled from "styled-components";
+import React from "react";
 import { motion } from "framer-motion";
-import { cloudyAnimation } from "@/styles/animations";
 
-export const EnhancedDashboardContainer = styled.div`
-  width: 150%; /* Increased by 50% */
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 2rem;
-  overflow: hidden;
-  position: relative;
+export const EnhancedDashboardContainer = ({ children, className = "" }) => {
+  return (
+    <div className={`w-[150%] max-w-[1440px] mx-auto p-8 overflow-hidden relative md:w-full md:p-4 ${className}`}>
+      {children}
+    </div>
+  );
+};
 
-  @media (max-width: 768px) {
-    width: 100%;
-    padding: 1rem;
-  }
-`;
+export const DashboardGrid = ({ children, className = "" }) => {
+  return (
+    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 ${className}`}>
+      {children}
+    </div>
+  );
+};
 
-export const DashboardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-`;
-
-export const MobileDashboard = styled(motion.div)`
-  display: none;
-  
-  @media (max-width: 768px) {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 1rem;
-    
-    &::-webkit-scrollbar {
-      height: 4px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.1);
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 2px;
-    }
-  }
-`;
+export const MobileDashboard = ({ children, className = "" }) => {
+  return (
+    <motion.div 
+      className={`hidden md:block w-full overflow-x-auto p-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 ${className}`}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
