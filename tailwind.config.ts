@@ -93,6 +93,10 @@ const config: Config = {
           "0%, 100%": { transform: "translateX(0)" },
           "50%": { transform: "translateX(33%)" },
         },
+        "gentle-rotate": {
+          "0%, 100%": { transform: "rotate(-1.5deg)" },
+          "50%": { transform: "rotate(1.5deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -101,6 +105,7 @@ const config: Config = {
         "pulse-soft": "pulse-soft 6s ease-in-out infinite",
         "gradient-shift": "gradient-shift 8s ease-in-out infinite",
         "float": "float 3s ease-in-out infinite",
+        "gentle-rotate": "gentle-rotate 8s ease-in-out infinite",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

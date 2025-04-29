@@ -97,3 +97,18 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* New gentle rotation animation */
+@keyframes gentle-rotate {
+  0%, 100% {
+    transform: rotate(-1.5deg);
+  }
+  50% {
+    transform: rotate(1.5deg);
+  }
+}
+
+.animate-gentle-rotate {
+  animation: gentle-rotate 8s ease-in-out infinite;
+  transform-origin: center center;
+}
