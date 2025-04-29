@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare, Bot, Cpu } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -169,8 +170,8 @@ const HeroSection = () => {
               </div>
             </div>
             
-            {/* Floating Mobile Preview */}
-            <div className="hidden lg:block absolute -right-10 top-1/2 transform -translate-y-1/2 w-[180px] h-[350px] rounded-[28px] border-[8px] border-gray-800 bg-[#F1F0FB] shadow-2xl overflow-hidden">
+            {/* Floating Mobile Preview - positioned closer to dashboard */}
+            <div className="hidden sm:block absolute -right-4 lg:right-2 top-1/2 transform -translate-y-1/2 w-[180px] h-[350px] rounded-[28px] border-[8px] border-gray-800 bg-[#F1F0FB] shadow-2xl overflow-hidden">
               <div className="absolute top-[14px] left-1/2 transform -translate-x-1/2 w-[60px] h-[16px] bg-gray-800 rounded-full"></div>
               <div className="h-full overflow-hidden">
                 <img 

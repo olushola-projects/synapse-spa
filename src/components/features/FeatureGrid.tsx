@@ -79,14 +79,14 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClic
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}
-            className="flex flex-col items-center p-2 rounded-lg bg-white/90 hover:bg-white/95 transition-all cursor-pointer shadow-sm hover:shadow max-w-[150px] hover:translate-y-[-3px] hover:shadow-md"
+            className="flex flex-col items-center p-2 rounded-lg bg-white/90 hover:bg-white/95 shadow-sm hover:shadow border border-gray-100/50 cursor-pointer hover:-translate-y-1 transition-all duration-300"
             style={{ animationDelay: `${index * 100}ms` }}
             onClick={() => onFeatureClick && onFeatureClick(index)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: animate ? 1 : 0, y: animate ? 0 : 20 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <div className="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center mb-1 animate-[float_3s_ease-in-out_infinite]">
+            <div className="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center mb-1">
               {feature.icon}
             </div>
             <h3 className="text-xs font-medium mb-0.5 text-center">{feature.title}</h3>

@@ -76,9 +76,9 @@ const features = [
     textColor: "text-teal-400"
   },
   {
-    title: "Interview Preparation",
-    description: "Prepare for your next career move with tailored interview coaching combining AI-powered practice sessions with human expert feedback. Practice answering industry-specific questions and receive real-time performance analytics.",
-    icon: Mic,
+    title: "GRC Agent Gallery",
+    description: "Explore a curated library of specialized AI assistants built for compliance use cases. Access pre-built agents designed to tackle specific regulatory challenges across industries, from SFDR audits to AML compliance checks.",
+    icon: Bot,
     color: "bg-pink-900/20",
     textColor: "text-pink-400"
   },
@@ -118,8 +118,8 @@ const features = [
     textColor: "text-blue-400"
   },
   {
-    title: "Regulatory Technology",
-    description: "Exclusive access to future AI solutions in the Governance, Risk, and Compliance space. By signing up, you'll be able to lead the way in shaping the future of GRC by beta testing and providing feedback on cutting-edge regulatory technology.",
+    title: "Customize Your Own Agent",
+    description: "Build your personal compliance AI assistant. Choose your preferred LLM, set its tone, and define its behavior — no coding needed. Create specialized agents for specific regulatory domains or compliance tasks tailored to your organization.",
     icon: Cpu,
     color: "bg-indigo-900/20",
     textColor: "text-indigo-400"

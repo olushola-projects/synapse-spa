@@ -30,7 +30,7 @@ const barChartData = [
 
 export const RegulatoryFocusChart: React.FC = () => {
   return (
-    <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
+    <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-0.5">
         <div className="flex items-center gap-1">
           <PieChartIcon size={8} className="text-violet-500" />
@@ -74,7 +74,7 @@ export const RegulatoryFocusChart: React.FC = () => {
 
 export const ComplianceRiskChart: React.FC = () => {
   return (
-    <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
+    <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-0.5">
         <div className="flex items-center gap-1">
           <PieChartIcon size={8} className="text-indigo-500" />
@@ -124,22 +124,21 @@ export const ComplianceRiskChart: React.FC = () => {
 
 export const ControlStatusChart: React.FC = () => {
   return (
-    <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer">
+    <div className="h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-0.5">
         <div className="flex items-center gap-1">
           <Cpu size={8} className="text-emerald-500" />
-          <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">Bar Chart</div>
+          <div className="text-gray-800 text-[6px] sm:text-[7px] font-medium">GRC Agent Gallery</div>
         </div>
-        <div className="text-gray-500 text-[4px] sm:text-[5px]">124 Total</div>
+        <div className="text-gray-500 text-[4px] sm:text-[5px]">5 Available</div>
       </div>
       
       <div className="h-[80%] flex items-center">
         <div className="w-full flex flex-wrap gap-1 justify-center">
-          {barChartData.map((entry, index) => (
-            <div key={index} className="flex items-center gap-1 px-1 py-0.5 bg-white rounded border border-gray-100">
-              <div className="w-1 h-1 rounded-full" style={{ backgroundColor: entry.fill }}></div>
-              <div className="text-[3px] sm:text-[4px] text-gray-700">{entry.name}</div>
-              <div className="text-[3px] sm:text-[4px] font-medium">{entry.value}</div>
+          {barChartData.slice(0, 5).map((entry, index) => (
+            <div key={index} className="flex items-center gap-1 px-1 py-0.5 bg-white rounded border border-gray-100 hover:bg-gray-50 transition-colors">
+              <div className="w-1 h-1 rounded-full" style={{ backgroundColor: ['#ef4444', '#f97316', '#10B981', '#4F46E5', '#8B5CF6'][index] }}></div>
+              <div className="text-[3px] sm:text-[4px] text-gray-700">{['AML', 'ESG', 'MiFID II', 'DORA', 'Privacy'][index]}</div>
             </div>
           ))}
         </div>

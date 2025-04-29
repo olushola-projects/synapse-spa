@@ -5,11 +5,11 @@ import { Bot } from 'lucide-react';
 
 // Sample data for mobile charts
 const regulationData = [
-  { name: 'Anti-Money Laundering', value: 85 },
-  { name: 'GDPR', value: 72 },
-  { name: 'SFDR', value: 64 },
-  { name: 'DORA', value: 56 },
-  { name: 'MiFID II', value: 42 },
+  { name: 'Anti-Money Laundering', value: 35 },
+  { name: 'GDPR', value: 25 },
+  { name: 'DORA', value: 20 },
+  { name: 'PSD2', value: 15 },
+  { name: 'SFDR', value: 5 },
 ];
 
 // Sample line data
@@ -22,7 +22,7 @@ const lineData = [
   { name: 'Jun', risk: 23, compliance: 65 },
 ];
 
-// Agent types
+// Agent types - matching desktop version
 const agentTypes = ['AML', 'ESG', 'MiFID II', 'DORA', 'Privacy'];
 
 const MobileCharts: React.FC = () => {
@@ -42,10 +42,10 @@ const MobileCharts: React.FC = () => {
               <Cell 
                 key={`cell-${index}`} 
                 fill={
-                  index === 0 ? '#8884d8' : 
-                  index === 1 ? '#82ca9d' : 
-                  index === 2 ? '#ffc658' :
-                  index === 3 ? '#ff8042' : '#ca82b8'
+                  index === 0 ? '#4F46E5' : 
+                  index === 1 ? '#EC4899' : 
+                  index === 2 ? '#10B981' :
+                  index === 3 ? '#F59E0B' : '#8B5CF6'
                 } 
               />
             ))}
@@ -63,26 +63,38 @@ const MobileCharts: React.FC = () => {
       </div>
 
       <div className="mt-3">
-        <div className="text-[8px] font-medium mb-1 text-gray-600">Compliance Trends</div>
-        <ResponsiveContainer width="100%" height={80}>
-          <LineChart
-            data={lineData}
-            margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-            <YAxis hide={true} />
-            <XAxis dataKey="name" tick={{ fontSize: 6 }} />
-            <Tooltip contentStyle={{ fontSize: '8px' }} />
-            <Line type="monotone" dataKey="risk" stroke="#ff8042" dot={{ r: 1 }} strokeWidth={1} />
-            <Line type="monotone" dataKey="compliance" stroke="#8884d8" dot={{ r: 1 }} strokeWidth={1} />
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="text-[8px] font-medium mb-1 text-gray-600">Compliance Risk Profile</div>
+        <div className="flex justify-center">
+          <div className="w-16 h-16 relative">
+            <div className="w-full h-full rounded-full border-4 border-green-400"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-[10px] font-bold text-gray-800">72</div>
+                <div className="text-[6px] text-gray-500">Score</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between mt-1 text-[5px]">
+          <div className="flex items-center gap-0.5">
+            <div className="w-1 h-1 rounded-full bg-red-400"></div>
+            <span>High Risk</span>
+          </div>
+          <div className="flex items-center gap-0.5">
+            <div className="w-1 h-1 rounded-full bg-orange-400"></div>
+            <span>Medium Risk</span>
+          </div>
+          <div className="flex items-center gap-0.5">
+            <div className="w-1 h-1 rounded-full bg-green-400"></div>
+            <span>Low Risk</span>
+          </div>
+        </div>
       </div>
       
       <div className="mt-3">
         <div className="text-[8px] font-medium mb-1 flex items-center gap-1 text-gray-600">
           <Bot size={8} className="text-blue-500" />
-          <span>Available Agents</span>
+          <span>GRC Agent Gallery</span>
         </div>
         <div className="flex flex-wrap gap-1 mt-1">
           {agentTypes.map((agent, index) => (
