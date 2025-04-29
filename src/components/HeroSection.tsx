@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, MessageSquare } from 'lucide-react';
+import { ArrowRight, MessageSquare, Bot, Cpu } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DashboardHeader } from './dashboard/DashboardHeader';
 import { SideNavigation } from './dashboard/SideNavigation';
@@ -134,15 +134,11 @@ const HeroSection = () => {
             <span>early adopters in our private pilot</span>
           </div>
         </div>
-      </div>
-      
-      {/* Stripe-inspired full-width dashboard section */}
-      <div className="py-10 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Your Compliance Dashboard</h2>
-          
-          <div className="relative w-full max-w-6xl mx-auto">
-            <div className="aspect-[16/9] mb-2 rounded-xl overflow-hidden shadow-2xl relative">
+
+        {/* Dashboard Preview Section - displayed within hero section */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+          <div className="max-w-6xl mx-auto">
+            <div className="aspect-[16/9] mb-4 rounded-xl overflow-hidden shadow-2xl relative">
               {/* Main Dashboard */}
               <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
                 <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
@@ -184,10 +180,6 @@ const HeroSection = () => {
                 />
               </div>
             </div>
-          </div>
-          
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 text-sm">Experience the power of Synapse on any device</p>
           </div>
         </div>
       </div>

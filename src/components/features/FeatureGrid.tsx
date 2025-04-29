@@ -1,18 +1,18 @@
 
 import React from 'react';
-import { MessageSquare, Users, BadgeCheck, Briefcase, GamepadIcon, FileText } from 'lucide-react';
+import { Bot, Users, BadgeCheck, Briefcase, GamepadIcon, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// We'll reduce and modify the feature icons to create a 2x3 grid
+// We'll update the feature icons - replacing "Regulatory Analysis" with "GRC Agent Gallery" and "Interview Prep" with "Customize Your Own Agent"
 export const featureIcons = [
   {
-    title: "Regulatory Analysis",
-    icon: <MessageSquare className="text-indigo-600" size={20} />,
-    description: "Analysis",
+    title: "GRC Agent Gallery",
+    icon: <Bot className="text-indigo-600" size={20} />,
+    description: "Explore",
     content: {
-      title: "AI-Powered Regulatory Analysis",
-      description: "Navigate complex regulations with ease",
-      details: "Our AI copilot Dara provides intelligent regulatory insights and automates compliance tasks, helping you stay ahead of regulatory changes and requirements."
+      title: "GRC Agent Gallery",
+      description: "Explore specialized compliance AI assistants",
+      details: "Explore a curated library of intelligent agents built for real-world compliance use cases — from SFDR audits to AML checks. Access pre-built, specialized AI assistants designed to tackle specific regulatory challenges across industries."
     }
   },
   {
@@ -56,13 +56,13 @@ export const featureIcons = [
     }
   },
   {
-    title: "Interview Prep",
-    icon: <FileText className="text-amber-500" size={20} />,
-    description: "Prep",
+    title: "Customize Your Own Agent",
+    icon: <Cpu className="text-amber-500" size={20} />,
+    description: "Customize",
     content: {
-      title: "Career Readiness Tools",
-      description: "Prepare for your next role",
-      details: "Access interview guides, resume reviews, and practice sessions tailored specifically for GRC professionals to help you succeed in your career journey."
+      title: "Customizable AI Assistant",
+      description: "Build your personal compliance assistant",
+      details: "Build your personal compliance AI assistant. Choose your preferred LLM, set its tone, and define its behavior — no coding needed. Create specialized agents for specific regulatory domains or compliance tasks tailored to your organization's needs."
     }
   }
 ];
@@ -74,8 +74,8 @@ interface FeatureGridProps {
 
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className={`grid grid-cols-3 gap-2 mx-auto transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+    <div className="max-w-3xl">
+      <div className={`grid grid-cols-3 gap-2 transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -125,27 +126,6 @@ const Index = () => {
       <PoweredBySection />
       
       <Footer />
-      
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media (max-width: 640px) {
-          .container {
-            padding-left: 16px !important;
-            padding-right: 16px !important;
-          }
-          
-          h2 {
-            font-size: 1.75rem !important;
-          }
-          
-          .feature-grid {
-            grid-template-columns: 1fr !important;
-          }
-          
-          .chart-container {
-            height: 300px !important;
-          }
-        }
-      `}} />
     </div>
   );
 };

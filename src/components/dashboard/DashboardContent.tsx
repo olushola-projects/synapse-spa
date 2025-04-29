@@ -3,7 +3,7 @@ import React from 'react';
 import { AmlAnalysisCard } from './AmlAnalysisCard';
 import { NetworkingCard } from './NetworkingCard';
 import { RegulatoryFocusChart, ComplianceRiskChart, ControlStatusChart } from './charts/DashboardCharts';
-import { InterviewPrepCard } from './InterviewPrepCard';
+import { AgentGalleryCard } from './AgentGalleryCard';
 
 interface DashboardContentProps {
   onAmlDialogOpen?: () => void;
@@ -20,7 +20,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ onAmlDialogO
       </div>
       
       <div className="flex-1 flex flex-col gap-1">
-        <InterviewPrepCard />
+        <AgentGalleryCard />
         <ComplianceRiskChart />
         <ControlStatusChart />
       </div>

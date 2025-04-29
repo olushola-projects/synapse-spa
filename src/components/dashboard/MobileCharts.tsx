@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { BarChart, Bar, XAxis, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, ResponsiveContainer, Cell, LineChart, Line, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { Bot } from 'lucide-react';
 
 // Sample data for mobile charts
 const regulationData = [
@@ -10,6 +11,19 @@ const regulationData = [
   { name: 'DORA', value: 56 },
   { name: 'MiFID II', value: 42 },
 ];
+
+// Sample line data
+const lineData = [
+  { name: 'Jan', risk: 40, compliance: 24 },
+  { name: 'Feb', risk: 30, compliance: 28 },
+  { name: 'Mar', risk: 20, compliance: 39 },
+  { name: 'Apr', risk: 27, compliance: 43 },
+  { name: 'May', risk: 18, compliance: 52 },
+  { name: 'Jun', risk: 23, compliance: 65 },
+];
+
+// Agent types
+const agentTypes = ['AML', 'ESG', 'MiFID II', 'DORA', 'Privacy'];
 
 const MobileCharts: React.FC = () => {
   return (
@@ -46,6 +60,38 @@ const MobileCharts: React.FC = () => {
             <span className="text-gray-500">{item.value}%</span>
           </div>
         ))}
+      </div>
+
+      <div className="mt-3">
+        <div className="text-[8px] font-medium mb-1 text-gray-600">Compliance Trends</div>
+        <ResponsiveContainer width="100%" height={80}>
+          <LineChart
+            data={lineData}
+            margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+            <YAxis hide={true} />
+            <XAxis dataKey="name" tick={{ fontSize: 6 }} />
+            <Tooltip contentStyle={{ fontSize: '8px' }} />
+            <Line type="monotone" dataKey="risk" stroke="#ff8042" dot={{ r: 1 }} strokeWidth={1} />
+            <Line type="monotone" dataKey="compliance" stroke="#8884d8" dot={{ r: 1 }} strokeWidth={1} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      
+      <div className="mt-3">
+        <div className="text-[8px] font-medium mb-1 flex items-center gap-1 text-gray-600">
+          <Bot size={8} className="text-blue-500" />
+          <span>Available Agents</span>
+        </div>
+        <div className="flex flex-wrap gap-1 mt-1">
+          {agentTypes.map((agent, index) => (
+            <div key={index} className="bg-white px-2 py-0.5 rounded-full border border-gray-200 text-[6px] font-medium text-gray-700 flex items-center gap-1">
+              <div className={`w-1.5 h-1.5 rounded-full ${['bg-red-400', 'bg-green-400', 'bg-blue-400', 'bg-purple-400', 'bg-amber-400'][index]}`}></div>
+              {agent}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
