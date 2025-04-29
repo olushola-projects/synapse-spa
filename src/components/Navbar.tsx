@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,7 @@ const Navbar = () => {
               How It Works
             </a>
             <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</Link>
+            <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors">FAQ</Link>
             <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors cursor-pointer">
               <Button size="sm">Get Early Access</Button>
             </div>
@@ -99,6 +101,7 @@ const Navbar = () => {
                 How It Works
               </a>
               <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</Link>
+              <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">FAQ</Link>
               <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
                 <Button className="mt-2">Get Early Access</Button>
               </div>

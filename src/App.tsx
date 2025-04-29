@@ -23,6 +23,7 @@ import CookiePolicy from "./pages/legal/CookiePolicy";
 // Resources pages
 import Blog from "./pages/resources/Blog";
 import Documentation from "./pages/resources/Documentation";
+import FAQ from "./pages/resources/FAQ";
 
 // Company pages
 import About from "./pages/company/About";
@@ -66,6 +67,7 @@ const App = () => (
             {/* Resources Routes */}
             <Route path="/resources/blog" element={<Blog />} />
             <Route path="/resources/documentation" element={<Documentation />} />
+            <Route path="/resources/faq" element={<FAQ />} />
             
             {/* Company Routes */}
             <Route path="/company/about" element={<About />} />

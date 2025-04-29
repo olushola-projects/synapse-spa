@@ -8,7 +8,7 @@ import IndustryPerspectivesSection from "../components/IndustryPerspectivesSecti
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import PoweredBySection from "../components/PoweredBySection";
-import FAQSection from "../components/FAQSection";
+import RegulatoryEvolutionSection from "../components/RegulatoryEvolutionSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Index = () => {
@@ -16,8 +16,7 @@ const Index = () => {
     features: false,
     video: false,
     testimonials: false,
-    cta: false,
-    faq: false
+    cta: false
   });
 
   useEffect(() => {
@@ -38,7 +37,7 @@ const Index = () => {
       });
     }, observerOptions);
 
-    const sections = ['features', 'how-it-works', 'testimonials', 'faq', 'cta'];
+    const sections = ['features', 'how-it-works', 'testimonials', 'cta'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -125,11 +124,9 @@ const Index = () => {
         <CTASection />
       </div>
       
-      <div id="faq" className={`transition-opacity duration-1000 ${visibleSections.faq ? 'opacity-100' : 'opacity-0'}`}>
-        <FAQSection />
-      </div>
-      
       <PoweredBySection />
+      
+      <RegulatoryEvolutionSection />
       
       <Footer />
     </div>
