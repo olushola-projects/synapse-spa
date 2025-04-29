@@ -1,7 +1,9 @@
+
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { cloudyAnimation } from "@/styles/animations";
 
-const EnhancedDashboardContainer = styled.div`
+export const EnhancedDashboardContainer = styled.div`
   width: 150%; /* Increased by 50% */
   max-width: 1440px;
   margin: 0 auto;
@@ -15,14 +17,14 @@ const EnhancedDashboardContainer = styled.div`
   }
 `;
 
-const DashboardGrid = styled.div`
+export const DashboardGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 `;
 
-const MobileDashboard = styled(motion.div)`
+export const MobileDashboard = styled(motion.div)`
   display: none;
   
   @media (max-width: 768px) {
@@ -45,23 +47,4 @@ const MobileDashboard = styled(motion.div)`
       border-radius: 2px;
     }
   }
-`;
-
-const AnimatedBackground = styled.div`
-  background: linear-gradient(
-    -45deg,
-    #ee7752,
-    #e73c7e,
-    #23a6d5,
-    #23d5ab
-  );
-  background-size: 400% 400%;
-  animation: ${cloudyAnimation} 15s ease infinite;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  opacity: 0.1;
 `;

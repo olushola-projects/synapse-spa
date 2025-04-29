@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -7,6 +8,7 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import PoweredBySection from "../components/PoweredBySection";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
@@ -102,7 +104,8 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
       <Navbar />
       <HeroSection />
       
@@ -149,37 +152,3 @@ const Index = () => {
 };
 
 export default Index;
-import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { FeatureGrid } from "@/components/features/FeatureGrid";
-import { EnhancedDashboardContainer, DashboardGrid, MobileDashboard } from "@/components/dashboard/Dashboard";
-
-const HomePage = () => {
-  return (
-    <div className="min-h-screen relative">
-      <AnimatedBackground />
-      
-      {/* Features Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Platform Features</h2>
-          <FeatureGrid />
-        </div>
-      </section>
-
-      {/* Dashboard Section */}
-      <section className="py-20 bg-gray-50">
-        <EnhancedDashboardContainer>
-          <h2 className="text-3xl font-bold text-center mb-12">Interactive Dashboard</h2>
-          <DashboardGrid>
-            {/* Your dashboard widgets */}
-          </DashboardGrid>
-          <MobileDashboard>
-            {/* Mobile-specific dashboard content */}
-          </MobileDashboard>
-        </EnhancedDashboardContainer>
-      </section>
-    </div>
-  );
-};
-
-export default HomePage;
