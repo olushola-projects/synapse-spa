@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare, Bot, Cpu } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -115,7 +114,8 @@ const HeroSection = () => {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center">
+          <div className="flex flex-col md:flex-row items-start">
+            {/* Left side with hero content */}
             <div className="md:w-1/2 mb-10 md:mb-0">
               <HeroContent 
                 animate={animateContent}
@@ -137,7 +137,7 @@ const HeroSection = () => {
 
         {/* Dashboard Preview Section - displayed within hero section */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <div className="aspect-[16/9] mb-4 rounded-xl overflow-hidden shadow-2xl relative">
               {/* Main Dashboard */}
               <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
@@ -207,13 +207,13 @@ const HeroSection = () => {
       <Dialog open={openAmlDialog} onOpenChange={setOpenAmlDialog}>
         <DialogContent className="sm:max-w-3xl max-h-[80vh] overflow-auto">
           <DialogHeader>
-            <DialogTitle>{amldInfo.title}</DialogTitle>
+            <DialogTitle>{amldInfo?.title}</DialogTitle>
             <DialogDescription>
-              {amldInfo.description}
+              {amldInfo?.description}
             </DialogDescription>
           </DialogHeader>
           <div className="p-6">
-            <div dangerouslySetInnerHTML={{ __html: amldInfo.content }} />
+            <div dangerouslySetInnerHTML={{ __html: amldInfo?.content || '' }} />
             
             {chatResponse && (
               <div className="mt-6 border-t pt-4">
