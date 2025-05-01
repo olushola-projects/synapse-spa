@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -118,10 +117,6 @@ const Index = () => {
       
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
         <IndustryPerspectivesSection />
-      </div>
-      
-      <div id="cta" className={`transition-opacity duration-1000 ${visibleSections.cta ? 'opacity-100' : 'opacity-0'}`}>
-        <CTASection />
       </div>
       
       <PoweredBySection />
