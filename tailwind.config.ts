@@ -13,9 +13,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        display: ["Poppins", "sans-serif"],
-        body: ["Inter", "sans-serif"],
+        sans: ["Work Sans", "Inter", ...fontFamily.sans],
+        display: ["Work Sans", "Poppins", "sans-serif"],
+        body: ["Work Sans", "Inter", "sans-serif"],
       },
       colors: {
         'synapse-primary': "#2563eb",

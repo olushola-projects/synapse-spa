@@ -31,8 +31,8 @@ const RegulatoryEvolutionSection = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-              Join Synapses to upskill, collaborate with compliance leaders, test and leverage GRC agent gallery, train powerful AI agents, and future-proof your practice in a unified ecosystem.
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 tracking-tight text-gray-900 leading-tight">
+              Join the GRC revolution with Synapses
             </h2>
             
             <ul className="space-y-3 mb-8">
@@ -41,7 +41,7 @@ const RegulatoryEvolutionSection = () => {
                   <div className="mt-1 rounded-full bg-green-100 p-1 text-green-600">
                     <Check size={14} />
                   </div>
-                  <span>{feature}</span>
+                  <span className="text-gray-700">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -63,7 +63,7 @@ const RegulatoryEvolutionSection = () => {
           >
             <div className="relative aspect-square md:aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-lg">
               <img
-                src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png"
+                src="/lovable-uploads/318526a2-7e1a-426e-97da-6a20311cb631.png"
                 alt="Regulatory Evolution Platform"
                 className="w-full h-full object-cover"
               />

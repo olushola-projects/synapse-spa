@@ -14,13 +14,13 @@ interface HeroContentProps {
 export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore, onFeatureClick }) => {
   return (
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-      <h1 className="heading-xl max-w-3xl">
-        <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent animate-text">
-          <span className="animate-gradient-text">Become a Trusted Expert in the Age of AI-Driven GRC</span>
+      <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
+        <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">
+          <span>Become a Trusted Expert in the Age of AI-Driven GRC</span>
         </span>
       </h1>
       
-      <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-xl leading-relaxed">
+      <p className="mt-6 text-base md:text-lg text-gray-700 max-w-xl leading-relaxed font-normal">
         Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
       </p>
       

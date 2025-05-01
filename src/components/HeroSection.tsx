@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, MessageSquare, Bot, Cpu } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -115,7 +114,7 @@ const HeroSection = () => {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-start">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
             {/* Left side with hero content */}
             <div className="md:w-1/2 mb-10 md:mb-0">
               <HeroContent 
@@ -125,6 +124,42 @@ const HeroSection = () => {
                 onFeatureClick={handleFeatureClick}
               />
             </div>
+            
+            {/* Right side with dashboard preview (moved from below) */}
+            <div className="md:w-1/2">
+              <div className={`transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+                <div className="rounded-xl overflow-hidden shadow-2xl relative">
+                  {/* Main Dashboard */}
+                  <div className="bg-[#F1F0FB] rounded-md overflow-hidden">
+                    <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
+                    
+                    <div className="p-2 flex h-[300px] bg-[#F1F0FB]">
+                      <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
+                      
+                      <div className="flex-1 pl-1 flex flex-col gap-1">
+                        <div className="flex justify-between items-center">
+                          <div className="text-gray-800 text-[10px] sm:text-[12px] font-medium">Regulatory Intelligence Dashboard</div>
+                          <div className="flex gap-2 items-center">
+                            <div className="text-[8px] sm:text-[10px] text-gray-500">April 29, 2025</div>
+                            <div className="flex items-center gap-1">
+                              <div className="text-[8px] sm:text-[10px] text-gray-500">Hi, Phoebe Banks</div>
+                              <img 
+                                src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
+                                alt="Phoebe Banks" 
+                                className="w-4 h-4 rounded-full object-cover border border-gray-200"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <StatusCards />
+                        <DashboardContent onAmlDialogOpen={() => setOpenAmlDialog(true)} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -133,54 +168,6 @@ const HeroSection = () => {
             <span>Join</span>
             <span className="font-bold text-synapse-primary">50+</span>
             <span>early adopters in our private pilot</span>
-          </div>
-        </div>
-
-        {/* Dashboard Preview Section - displayed within hero section */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-          <div className="max-w-7xl mx-auto">
-            <div className="aspect-[16/9] mb-4 rounded-xl overflow-hidden shadow-2xl relative">
-              {/* Main Dashboard */}
-              <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#F1F0FB] rounded-md overflow-hidden">
-                <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
-                
-                <div className="p-2 flex h-[94%] bg-[#F1F0FB]">
-                  <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
-                  
-                  <div className="flex-1 pl-1 flex flex-col gap-1">
-                    <div className="flex justify-between items-center">
-                      <div className="text-gray-800 text-[10px] sm:text-[12px] font-medium">Regulatory Intelligence Dashboard</div>
-                      <div className="flex gap-2 items-center">
-                        <div className="text-[8px] sm:text-[10px] text-gray-500">April 29, 2025</div>
-                        <div className="flex items-center gap-1">
-                          <div className="text-[8px] sm:text-[10px] text-gray-500">Hi, Phoebe Banks</div>
-                          <img 
-                            src="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" 
-                            alt="Phoebe Banks" 
-                            className="w-4 h-4 rounded-full object-cover border border-gray-200"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <StatusCards />
-                    <DashboardContent onAmlDialogOpen={() => setOpenAmlDialog(true)} />
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating Mobile Preview - positioned closer to dashboard */}
-            <div className="hidden sm:block absolute -right-4 lg:right-2 top-1/2 transform -translate-y-1/2 w-[180px] h-[350px] rounded-[28px] border-[8px] border-gray-800 bg-[#F1F0FB] shadow-2xl overflow-hidden">
-              <div className="absolute top-[14px] left-1/2 transform -translate-x-1/2 w-[60px] h-[16px] bg-gray-800 rounded-full"></div>
-              <div className="h-full overflow-hidden">
-                <img 
-                  src="/lovable-uploads/2a0750ab-ba08-4622-8ded-ba9afe4e7980.png" 
-                  alt="Mobile Dashboard" 
-                  className="w-full object-cover"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>
