@@ -7,7 +7,7 @@ import IndustryPerspectivesSection from "../components/IndustryPerspectivesSecti
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import PoweredBySection from "../components/PoweredBySection";
-import RegulatoryEvolutionSection from "../components/RegulatoryEvolutionSection";
+import EnterpriseSection from "../components/EnterpriseSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Index = () => {
@@ -121,7 +121,7 @@ const Index = () => {
       
       <PoweredBySection />
       
-      <RegulatoryEvolutionSection />
+      <EnterpriseSection />
       
       <Footer />
     </div>
