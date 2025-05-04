@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -8,6 +9,7 @@ import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import PoweredBySection from "../components/PoweredBySection";
 import EnterpriseSection from "../components/EnterpriseSection";
+import HowItWorksSection from "../components/HowItWorksSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Index = () => {
@@ -115,6 +117,8 @@ const Index = () => {
       
       <VideoSection />
       
+      <HowItWorksSection />
+      
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
         <IndustryPerspectivesSection />
       </div>
@@ -122,6 +126,8 @@ const Index = () => {
       <PoweredBySection />
       
       <EnterpriseSection />
+      
+      <CTASection />
       
       <Footer />
     </div>

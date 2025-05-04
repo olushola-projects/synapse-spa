@@ -3,16 +3,18 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, FileText, BarChart3, Globe, ShieldCheck } from 'lucide-react';
-import JoinWaitlistDialog from './JoinWaitlistDialog';
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import ExternalFormDialog from './ExternalFormDialog';
 
 const EnterpriseSection = () => {
-  const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
+  const [showFormDialog, setShowFormDialog] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState("Join Synapse");
 
-  const openWaitlistDialog = () => {
-    setShowWaitlistDialog(true);
+  const openFormDialog = (title: string = "Join Synapse") => {
+    setDialogTitle(title);
+    setShowFormDialog(true);
   };
 
   // Animation variants
@@ -68,7 +70,7 @@ const EnterpriseSection = () => {
             
             <motion.div variants={itemVariants}>
               <p className="text-[1.125rem] text-[#4B4B4B] leading-relaxed font-normal">
-                Modernize regulatory operations with <a href="#" className="text-[#7A73FF] hover:text-[#6366F1] underline-offset-4 hover:underline">professional services</a> and <a href="#" className="text-[#7A73FF] hover:text-[#6366F1] underline-offset-4 hover:underline">certified partners</a>. Scale securely across jurisdictions with Synapses enterprise-grade regulatory compliance solutions.
+                Modernize regulatory operations with <a href="#" onClick={(e) => {e.preventDefault(); openFormDialog("Learn about Professional Services");}} className="text-[#7A73FF] hover:text-[#6366F1] underline-offset-4 hover:underline">professional services</a> and <a href="#" onClick={(e) => {e.preventDefault(); openFormDialog("Learn about Certified Partners");}} className="text-[#7A73FF] hover:text-[#6366F1] underline-offset-4 hover:underline">certified partners</a>. Scale securely across jurisdictions with Synapses enterprise-grade regulatory compliance solutions.
               </p>
               <p className="mt-4 text-[1.125rem] text-[#4B4B4B] leading-relaxed font-normal">
                 Connect to existing platforms like ServiceNow, Salesforce, and Microsoft 365.
@@ -79,7 +81,7 @@ const EnterpriseSection = () => {
               <Button 
                 size="lg" 
                 className="bg-[#7A73FF] hover:bg-[#6366F1] text-white px-8 py-6 text-base font-medium rounded-full"
-                onClick={openWaitlistDialog}
+                onClick={() => openFormDialog("Explore Synapses for enterprises")}
               >
                 Explore Synapses for enterprises <ArrowRight size={18} className="ml-2" />
               </Button>
@@ -127,7 +129,8 @@ const EnterpriseSection = () => {
             className="mt-4 md:mt-0"
           >
             <div 
-              className="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group"
+              className="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
+              onClick={() => openFormDialog("Global Finance Corp Case Study")}
             >
               <div className="aspect-[16/9] w-full relative">
                 <img
@@ -172,7 +175,11 @@ const EnterpriseSection = () => {
         </div>
       </div>
       
-      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
+      <ExternalFormDialog 
+        open={showFormDialog} 
+        onOpenChange={setShowFormDialog}
+        title={dialogTitle}
+      />
     </section>
   );
 };

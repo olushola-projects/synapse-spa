@@ -1,9 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
+import ExternalFormDialog from './ExternalFormDialog';
 
 const CTASection = () => {
+  const [showFormDialog, setShowFormDialog] = useState(false);
+  
   return (
     <section className="bg-white py-20">
       <div className="container mx-auto px-4">
@@ -14,7 +17,10 @@ const CTASection = () => {
           <p className="text-lg text-gray-600 mb-8">
             Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
           </p>
-          <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift mx-auto">
+          <Button 
+            className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift mx-auto"
+            onClick={() => setShowFormDialog(true)}
+          >
             Get Early Access <ArrowRight size={18} />
           </Button>
           <div className="mt-8 text-center">
@@ -24,6 +30,12 @@ const CTASection = () => {
           </div>
         </div>
       </div>
+      
+      <ExternalFormDialog 
+        open={showFormDialog} 
+        onOpenChange={setShowFormDialog} 
+        title="Get Early Access"
+      />
     </section>
   );
 };

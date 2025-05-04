@@ -9,6 +9,7 @@ import { FeatureGrid, featureIcons } from './features/FeatureGrid';
 import { HeroContent } from './hero/HeroContent';
 import JoinWaitlistDialog from "./JoinWaitlistDialog";
 import MobileCharts from './dashboard/MobileCharts';
+import ExternalFormDialog from "./ExternalFormDialog";
 
 const HeroSection = () => {
   const [animateContent, setAnimateContent] = useState(false);
@@ -19,6 +20,8 @@ const HeroSection = () => {
   const [openAmlDialog, setOpenAmlDialog] = useState(false);
   const [chatResponse, setChatResponse] = useState("");
   const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
+  const [showFormDialog, setShowFormDialog] = useState(false);
+  const [formDialogTitle, setFormDialogTitle] = useState("Join Synapse");
 
   const amldInfo = {
     title: "AMLD6 Penalties and Criminal Liability Extension",
@@ -85,6 +88,11 @@ const HeroSection = () => {
     setOpenDialog(true);
   };
 
+  const openFormDialog = (title: string = "Join Synapse") => {
+    setFormDialogTitle(title);
+    setShowFormDialog(true);
+  };
+
   const openWaitlistDialog = () => {
     setShowWaitlistDialog(true);
   };
@@ -119,13 +127,13 @@ const HeroSection = () => {
             <div className="md:w-1/2 mb-10 md:mb-0">
               <HeroContent 
                 animate={animateContent}
-                onGetAccess={openWaitlistDialog}
+                onGetAccess={() => openFormDialog("Get Early Access")}
                 onLearnMore={handleLearnMoreClick}
                 onFeatureClick={handleFeatureClick}
               />
             </div>
             
-            {/* Right side with dashboard preview (moved from below) */}
+            {/* Right side with dashboard preview */}
             <div className="md:w-1/2">
               <div className={`transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
                 <div className="rounded-xl overflow-hidden shadow-2xl relative">
@@ -223,6 +231,11 @@ const HeroSection = () => {
       </Dialog>
 
       <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
+      <ExternalFormDialog 
+        open={showFormDialog} 
+        onOpenChange={setShowFormDialog}
+        title={formDialogTitle}
+      />
     </>
   );
 };

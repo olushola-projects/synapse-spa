@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
-import JoinWaitlistDialog from "./JoinWaitlistDialog";
+import ExternalFormDialog from "./ExternalFormDialog";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
+  const [showFormDialog, setShowFormDialog] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,8 +24,8 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  const openWaitlistDialog = () => {
-    setShowWaitlistDialog(true);
+  const openFormDialog = () => {
+    setShowFormDialog(true);
   };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -65,7 +65,7 @@ const Navbar = () => {
             </a>
             <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</Link>
             <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors">FAQ</Link>
-            <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors cursor-pointer">
+            <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors cursor-pointer">
               <Button size="sm">Get Early Access</Button>
             </div>
           </nav>
@@ -102,7 +102,7 @@ const Navbar = () => {
               </a>
               <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</Link>
               <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">FAQ</Link>
-              <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
+              <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
                 <Button className="mt-2">Get Early Access</Button>
               </div>
             </nav>
@@ -110,7 +110,11 @@ const Navbar = () => {
         )}
       </header>
       
-      <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
+      <ExternalFormDialog 
+        open={showFormDialog} 
+        onOpenChange={setShowFormDialog} 
+        title="Get Early Access"
+      />
     </>
   );
 };

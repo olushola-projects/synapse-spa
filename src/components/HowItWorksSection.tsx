@@ -1,8 +1,16 @@
 
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import ExternalFormDialog from "./ExternalFormDialog";
 
 const HowItWorksSection = () => {
+  const [showFormDialog, setShowFormDialog] = useState(false);
+
+  const openFormDialog = () => {
+    setShowFormDialog(true);
+  };
+
   const steps = [
     {
       number: "01",
@@ -58,11 +66,20 @@ const HowItWorksSection = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <Button className="text-white bg-synapse-primary hover:bg-synapse-secondary px-8 py-6 text-lg rounded-lg flex mx-auto items-center gap-2">
+          <Button 
+            className="text-white bg-synapse-primary hover:bg-synapse-secondary px-8 py-6 text-lg rounded-lg flex mx-auto items-center gap-2"
+            onClick={openFormDialog}
+          >
             Join Waitlist <ArrowRight size={18} />
           </Button>
         </div>
       </div>
+
+      <ExternalFormDialog 
+        open={showFormDialog} 
+        onOpenChange={setShowFormDialog} 
+        title="Join Waitlist"
+      />
     </div>
   );
 };
