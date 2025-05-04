@@ -15,7 +15,7 @@ const HowItWorksSection = () => {
     {
       number: "01",
       title: "Sign Up",
-      description: "Join the Synapse waiting list to be one of the first to experience the platform when it launches."
+      description: "Join the Synapses waiting list to be one of the first to experience the platform when it launches."
     },
     {
       number: "02",
@@ -39,10 +39,10 @@ const HowItWorksSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            How Synapse Works
+            How Synapses Works
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Getting started with Synapse is simple. Follow these steps to transform your GRC experience.
+            Getting started with Synapses is simple. Follow these steps to transform your GRC experience.
           </p>
         </div>
 

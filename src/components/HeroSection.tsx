@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, MessageSquare, Bot, Cpu } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DashboardHeader } from './dashboard/DashboardHeader';
 import { SideNavigation } from './dashboard/SideNavigation';
@@ -21,7 +21,7 @@ const HeroSection = () => {
   const [chatResponse, setChatResponse] = useState("");
   const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
   const [showFormDialog, setShowFormDialog] = useState(false);
-  const [formDialogTitle, setFormDialogTitle] = useState("Join Synapse");
+  const [formDialogTitle, setFormDialogTitle] = useState("Join Synapses");
 
   const amldInfo = {
     title: "AMLD6 Penalties and Criminal Liability Extension",
@@ -88,7 +88,7 @@ const HeroSection = () => {
     setOpenDialog(true);
   };
 
-  const openFormDialog = (title: string = "Join Synapse") => {
+  const openFormDialog = (title: string = "Join Synapses") => {
     setFormDialogTitle(title);
     setShowFormDialog(true);
   };
@@ -110,13 +110,19 @@ const HeroSection = () => {
   return (
     <>
       <div className="relative pt-24 pb-8 md:pt-28 md:pb-16 overflow-hidden">
+        {/* Diagonal stripe background inspired by Stripe */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4f1ff,#e9e8ff,#f4e8ff,#e9e8ff,#e4f1ff)] animate-gradient-x"></div>
         </div>
         <div className="absolute inset-0 -z-10 bg-gradient-radial from-indigo-200/30 via-transparent to-transparent"></div>
+        
+        {/* Diagonal decorative element */}
+        <div className="absolute inset-x-0 bottom-0 h-[400px] -z-10 transform -skew-y-6 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-70"></div>
+        
         <div className="absolute top-1/3 right-0 w-72 h-72 bg-synapse-accent/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-synapse-primary/10 rounded-full filter blur-3xl -z-10 animate-pulse-soft"></div>
         
+        {/* Diagonal stripes */}
         <div className="absolute inset-x-0 top-40 h-[500px] -z-10 transform -skew-y-6 opacity-10">
           <div className="h-full w-full bg-gradient-stripe from-purple-300 via-blue-300 to-indigo-300 animate-gradient-shift"></div>
         </div>

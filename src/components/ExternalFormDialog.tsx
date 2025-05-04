@@ -8,7 +8,7 @@ interface ExternalFormDialogProps {
   title?: string;
 }
 
-const ExternalFormDialog = ({ open, onOpenChange, title = "Join Synapse" }: ExternalFormDialogProps) => {
+const ExternalFormDialog = ({ open, onOpenChange, title = "Join Synapses" }: ExternalFormDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] p-0 overflow-hidden">
