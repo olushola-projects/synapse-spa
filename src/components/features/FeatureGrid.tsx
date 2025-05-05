@@ -1,14 +1,14 @@
 
 import React from 'react';
-import { Compass, Users, Award, Briefcase, GamepadIcon, Settings } from 'lucide-react';
+import { Bot, Users, BadgeCheck, Briefcase, GamepadIcon, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// Updated feature icons with new labels, simplified descriptions, and proper icons
+// We'll update the feature icons - replacing "Regulatory Analysis" with "GRC Agent Gallery" and "Interview Prep" with "Customize Agent"
 export const featureIcons = [
   {
     title: "GRC Agent Gallery",
-    label: "Explore",
-    icon: <Compass className="text-indigo-600" size={32} />,
+    icon: <Bot className="text-indigo-600" size={20} />,
+    description: "Explore",
     content: {
       title: "GRC Agent Gallery",
       description: "Explore specialized compliance AI assistants",
@@ -17,8 +17,8 @@ export const featureIcons = [
   },
   {
     title: "Networking & Forum",
-    label: "Forum",
-    icon: <Users className="text-purple-500" size={32} />,
+    icon: <Users className="text-purple-500" size={20} />,
+    description: "Forum",
     content: {
       title: "GRC Professional Community",
       description: "Connect with peers and mentors",
@@ -27,8 +27,8 @@ export const featureIcons = [
   },
   {
     title: "Badges & Recognition",
-    label: "Recognition",
-    icon: <Award className="text-blue-500" size={32} />,
+    icon: <BadgeCheck className="text-blue-500" size={20} />,
+    description: "Recognition",
     content: {
       title: "Professional Achievement Tracking",
       description: "Showcase your expertise",
@@ -37,8 +37,8 @@ export const featureIcons = [
   },
   {
     title: "Job Matching",
-    label: "Matching",
-    icon: <Briefcase className="text-emerald-500" size={32} />,
+    icon: <Briefcase className="text-emerald-500" size={20} />,
+    description: "Matching",
     content: {
       title: "Career Advancement Opportunities",
       description: "Find your next GRC position",
@@ -47,8 +47,8 @@ export const featureIcons = [
   },
   {
     title: "GRC Games",
-    label: "Games",
-    icon: <GamepadIcon className="text-rose-500" size={32} />,
+    icon: <GamepadIcon className="text-rose-500" size={20} />,
+    description: "Games",
     content: {
       title: "Interactive Learning Experience",
       description: "Learn through gameplay",
@@ -56,9 +56,9 @@ export const featureIcons = [
     }
   },
   {
-    title: "Customize Your Own Agent",
-    label: "Customize",
-    icon: <Settings className="text-amber-500" size={32} />,
+    title: "Customize Agent",
+    icon: <Cpu className="text-amber-500" size={20} />,
+    description: "Customize",
     content: {
       title: "Customizable AI Assistant",
       description: "Build your personal compliance assistant",
@@ -75,22 +75,22 @@ interface FeatureGridProps {
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
     <div className="max-w-2xl">
-      <div className="grid grid-cols-3 gap-3 md:gap-4 transition-all duration-700 ease-out">
+      <div className="grid grid-cols-3 gap-3 transition-all duration-700 ease-out">
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}
-            className="flex flex-col items-center justify-center w-full aspect-square max-w-[200px] min-h-[140px] md:min-h-[200px] p-3 rounded-md bg-white border border-[#E4E7EC] hover:border-[#4F46E5] hover:-translate-y-0.5 cursor-pointer transition-all duration-150"
+            className="flex flex-col items-center aspect-square p-3 rounded-lg bg-white/90 hover:bg-white/95 shadow-sm hover:shadow border border-gray-100/50 cursor-pointer hover:-translate-y-1 transition-all duration-300"
             style={{ animationDelay: `${index * 100}ms` }}
             onClick={() => onFeatureClick && onFeatureClick(index)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: animate ? 1 : 0, y: animate ? 0 : 20 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            aria-label={`${feature.title} – ${feature.label}`}
           >
-            <div className="flex flex-col items-center justify-center h-full">
+            <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
               {feature.icon}
-              <span className="mt-1.5 text-sm font-medium text-center">{feature.label}</span>
             </div>
+            <h3 className="text-xs font-medium mb-1 text-center">{feature.title}</h3>
+            <p className="text-[10px] text-gray-600 text-center">{feature.description}</p>
           </motion.div>
         ))}
       </div>
