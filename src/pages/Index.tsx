@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
 import VideoSection from "../components/VideoSection";
-import IndustryPerspectivesSection from "../components/IndustryPerspectivesSection";
+import IndustryPerspectiveSection from "../components/IndustryPerspectiveSection";
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import PoweredBySection from "../components/PoweredBySection";
