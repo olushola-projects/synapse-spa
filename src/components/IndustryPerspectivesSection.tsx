@@ -9,37 +9,42 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 
-// Industry perspectives data - updated quotes
+// Industry perspectives data - updated quotes with links to sources
 const industryPerspectives = [
   {
     name: "Thomson Reuters",
     role: "Future of Professionals Report, 2024",
     bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
-    icon: <TrendingUp className="h-8 w-8 text-blue-600" />
+    icon: <TrendingUp className="h-8 w-8 text-blue-600" />,
+    link: "https://www.thomsonreuters.com/en/artificial-intelligence/future-of-professionals-report.html"
   },
   {
     name: "Complia",
     role: "Strategic Briefing, 2025",
     bio: "AI is no longer just a tool — it's becoming the foundation of modern compliance culture. We're not replacing professionals; we're enabling faster, traceable, and defensible decision-making at every level of the organization.",
-    icon: <Zap className="h-8 w-8 text-purple-600" />
+    icon: <Zap className="h-8 w-8 text-purple-600" />,
+    link: "https://www.compliancecosmos.org/ai-in-compliance-culture"
   },
   {
     name: "World Economic Forum & Citi",
     role: "AI Impact in Compliance Report",
     bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
-    icon: <Shield className="h-8 w-8 text-green-600" />
+    icon: <Shield className="h-8 w-8 text-green-600" />,
+    link: "https://www.weforum.org/reports/the-future-of-jobs-report-2023/"
   },
   {
     name: "Deloitte & McKinsey",
     role: "State of Compliance & Automation Trends",
     bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
-    icon: <Users className="h-8 w-8 text-orange-600" />
+    icon: <Users className="h-8 w-8 text-orange-600" />,
+    link: "https://www2.deloitte.com/us/en/pages/regulatory/articles/modernizing-compliance-digital-age.html"
   },
   {
     name: "Synapses",
     role: "Our AI Strategy",
     bio: "GRC professionals have the expertise to shape the next generation of RegTech—but traditional systems have left them behind in AI literacy. Synapses empower compliance leaders to build, adapt, and govern tomorrow's intelligent systems - not be governed by them.",
-    icon: <Zap className="h-8 w-8 text-synapse-primary" />
+    icon: <Zap className="h-8 w-8 text-synapse-primary" />,
+    link: "https://synapses.ai/blog/ai-strategy-for-grc"
   }
 ];
 
@@ -96,9 +101,14 @@ const IndustryPerspectivesSection = () => {
                     
                     <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
                       <span className="text-xs text-gray-400">Industry Insight</span>
-                      <button className="text-synapse-primary text-sm font-medium inline-flex items-center gap-2 hover:underline">
+                      <a 
+                        href={perspective.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-synapse-primary text-sm font-medium inline-flex items-center gap-2 hover:underline"
+                      >
                         Learn more <ArrowRight size={14} />
-                      </button>
+                      </a>
                     </div>
                   </CardContent>
                 </Card>
@@ -146,6 +156,16 @@ const PerspectiveCard = ({ perspective }: { perspective: typeof industryPerspect
       <div className="mt-auto pt-4 border-t border-gray-100">
         <h3 className="font-bold text-gray-800">{perspective.name}</h3>
         <p className="text-synapse-primary/80 text-xs">{perspective.role}</p>
+        <div className="mt-2">
+          <a 
+            href={perspective.link} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-synapse-primary text-sm font-medium inline-flex items-center gap-2 hover:underline"
+          >
+            Learn more <ArrowRight size={14} />
+          </a>
+        </div>
       </div>
     </div>
   </div>

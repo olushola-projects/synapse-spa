@@ -15,6 +15,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Badge } from '@/components/ui/badge';
+import useEmblaCarousel from "embla-carousel-react";
 
 // Agent data for the carousel
 const agentData = [
@@ -210,6 +211,8 @@ const EnterpriseSection = () => {
     }
   };
 
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
   return (
     <section className="bg-[#F9FAFB] py-16 md:py-[90px]">
       <div className="container mx-auto max-w-[1200px] px-4 md:px-6">
@@ -259,32 +262,35 @@ const EnterpriseSection = () => {
               </Button>
             </motion.div>
 
-            {/* Stats moved to left column below the text */}
+            {/* Stats updated with new text and content */}
             <motion.div
               variants={itemVariants}
               className="pt-6 mt-8 border-t border-gray-200"
             >
               <div className="grid grid-cols-3 gap-6">
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-1">25+</h4>
-                  <p className="text-gray-600">Global enterprises onboarded</p>
+                  <h4 className="text-xl font-bold text-gray-900 mb-1">Status</h4>
+                  <p className="text-gray-600">Early Access Program Open</p>
                 </div>
                 
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-1">9</h4>
-                  <p className="text-gray-600">jurisdictions supported</p>
+                  <h4 className="text-xl font-bold text-gray-900 mb-1">Regions</h4>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-gray-600">Global Regulatory Coverage</p>
+                    <p className="text-gray-600 text-sm">Continuously Expanding Jurisdictions</p>
+                  </div>
                 </div>
                 
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-1">Products</h4>
+                  <h4 className="text-xl font-bold text-gray-900 mb-1">Powered by Innovation</h4>
                   <div className="flex items-center gap-4 mt-2">
                     <div className="flex items-center gap-1 text-gray-600">
                       <div className="w-3 h-3 bg-[#7A73FF] rounded-full"></div>
-                      <span>Dara AI</span>
+                      <span>AML Agent</span>
                     </div>
                     <div className="flex items-center gap-1 text-gray-600">
                       <div className="w-3 h-3 bg-[#10b981] rounded-full"></div>
-                      <span>RegCheck</span>
+                      <span>ESGR Agent</span>
                     </div>
                   </div>
                 </div>
@@ -306,6 +312,7 @@ const EnterpriseSection = () => {
                 loop: true,
               }}
               className="w-full"
+              ref={emblaRef}
             >
               <CarouselContent>
                 {agentData.map((agent, index) => (

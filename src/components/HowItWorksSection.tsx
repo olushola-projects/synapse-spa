@@ -24,8 +24,8 @@ const HowItWorksSection = () => {
     },
     {
       number: "03",
-      title: "Engage with Dara",
-      description: "Start interacting with our AI copilot to get instant regulatory insights and actionable compliance recommendations."
+      title: "Engage Agent Gallery",
+      description: "Interact with Dara and other agents, build your own agents, add test and co-create new regtechs for your compliance needs."
     },
     {
       number: "04",
