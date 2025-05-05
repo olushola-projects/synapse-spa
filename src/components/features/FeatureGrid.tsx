@@ -3,11 +3,11 @@ import React from 'react';
 import { Bot, Users, BadgeCheck, Briefcase, GamepadIcon, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// We'll update the feature icons - replacing "Regulatory Analysis" with "GRC Agent Gallery" and "Interview Prep" with "Customize Your Own Agent"
+// We'll update the feature icons - replacing "Regulatory Analysis" with "GRC Agent Gallery" and "Interview Prep" with "Customize Agent"
 export const featureIcons = [
   {
     title: "GRC Agent Gallery",
-    icon: <Bot className="text-indigo-600" size={20} />,
+    icon: <Bot className="text-indigo-600" size={10} />,
     description: "Explore",
     content: {
       title: "GRC Agent Gallery",
@@ -17,7 +17,7 @@ export const featureIcons = [
   },
   {
     title: "Networking & Forum",
-    icon: <Users className="text-purple-500" size={20} />,
+    icon: <Users className="text-purple-500" size={10} />,
     description: "Forum",
     content: {
       title: "GRC Professional Community",
@@ -27,7 +27,7 @@ export const featureIcons = [
   },
   {
     title: "Badges & Recognition",
-    icon: <BadgeCheck className="text-blue-500" size={20} />,
+    icon: <BadgeCheck className="text-blue-500" size={10} />,
     description: "Recognition",
     content: {
       title: "Professional Achievement Tracking",
@@ -37,7 +37,7 @@ export const featureIcons = [
   },
   {
     title: "Job Matching",
-    icon: <Briefcase className="text-emerald-500" size={20} />,
+    icon: <Briefcase className="text-emerald-500" size={10} />,
     description: "Matching",
     content: {
       title: "Career Advancement Opportunities",
@@ -47,7 +47,7 @@ export const featureIcons = [
   },
   {
     title: "GRC Games",
-    icon: <GamepadIcon className="text-rose-500" size={20} />,
+    icon: <GamepadIcon className="text-rose-500" size={10} />,
     description: "Games",
     content: {
       title: "Interactive Learning Experience",
@@ -56,8 +56,8 @@ export const featureIcons = [
     }
   },
   {
-    title: "Customize Your Own Agent",
-    icon: <Cpu className="text-amber-500" size={20} />,
+    title: "Customize Agent",
+    icon: <Cpu className="text-amber-500" size={10} />,
     description: "Customize",
     content: {
       title: "Customizable AI Assistant",
