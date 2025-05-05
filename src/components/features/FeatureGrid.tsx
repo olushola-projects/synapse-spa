@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 export const featureIcons = [
   {
     title: "GRC Agent Gallery",
-    icon: <Bot className="text-indigo-600" size={10} />,
+    icon: <Bot className="text-indigo-600" size={20} />,
     description: "Explore",
     content: {
       title: "GRC Agent Gallery",
@@ -17,7 +17,7 @@ export const featureIcons = [
   },
   {
     title: "Networking & Forum",
-    icon: <Users className="text-purple-500" size={10} />,
+    icon: <Users className="text-purple-500" size={20} />,
     description: "Forum",
     content: {
       title: "GRC Professional Community",
@@ -27,7 +27,7 @@ export const featureIcons = [
   },
   {
     title: "Badges & Recognition",
-    icon: <BadgeCheck className="text-blue-500" size={10} />,
+    icon: <BadgeCheck className="text-blue-500" size={20} />,
     description: "Recognition",
     content: {
       title: "Professional Achievement Tracking",
@@ -37,7 +37,7 @@ export const featureIcons = [
   },
   {
     title: "Job Matching",
-    icon: <Briefcase className="text-emerald-500" size={10} />,
+    icon: <Briefcase className="text-emerald-500" size={20} />,
     description: "Matching",
     content: {
       title: "Career Advancement Opportunities",
@@ -47,7 +47,7 @@ export const featureIcons = [
   },
   {
     title: "GRC Games",
-    icon: <GamepadIcon className="text-rose-500" size={10} />,
+    icon: <GamepadIcon className="text-rose-500" size={20} />,
     description: "Games",
     content: {
       title: "Interactive Learning Experience",
@@ -57,7 +57,7 @@ export const featureIcons = [
   },
   {
     title: "Customize Agent",
-    icon: <Cpu className="text-amber-500" size={10} />,
+    icon: <Cpu className="text-amber-500" size={20} />,
     description: "Customize",
     content: {
       title: "Customizable AI Assistant",
