@@ -16,14 +16,14 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
         <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">
-          <span>Become</span><br />
-          <span>A Trusted Expert</span><br />
-          <span>in the Age-Driven GRC</span>
+          <span>Transform</span><br />
+          <span>Your Expertise</span><br />
+          <span>With GRC Agents</span>
         </span>
       </h1>
       
       <p className="mt-6 text-sm md:text-base text-gray-700 max-w-xl leading-relaxed font-normal">
-        Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
+        Join a global network of professionals to boost your expertise with GRC agents, exclusive testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
       </p>
       
       <div className="mt-10 flex flex-col sm:flex-row gap-4">
