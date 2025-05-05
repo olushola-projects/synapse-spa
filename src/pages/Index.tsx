@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
 import VideoSection from "../components/VideoSection";
-import IndustryPerspectiveSection from "../components/IndustryPerspectiveSection";
+import IndustryPerspectivesSection from "../components/IndustryPerspectivesSection";
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import PoweredBySection from "../components/PoweredBySection";
@@ -120,7 +120,7 @@ const Index = () => {
       <HowItWorksSection />
       
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
-        <IndustryPerspectiveSection />
+        <IndustryPerspectivesSection />
       </div>
       
       <PoweredBySection />

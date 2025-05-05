@@ -183,7 +183,6 @@ const agentData = [
 const EnterpriseSection = () => {
   const [showFormDialog, setShowFormDialog] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("Join Synapse");
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const openFormDialog = (title: string = "Join Synapse") => {
     setDialogTitle(title);
@@ -209,25 +208,6 @@ const EnterpriseSection = () => {
       y: 0,
       transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
     }
-  };
-
-  const slideVariants = {
-    hidden: { opacity: 0, scale: 0.92 },
-    visible: { 
-      opacity: 1,
-      scale: 1, 
-      transition: { duration: 0.4, ease: "easeOut" }
-    },
-    exit: { 
-      opacity: 0,
-      scale: 0.92,
-      transition: { duration: 0.3, ease: "easeIn" }
-    }
-  };
-
-  const handleCarouselSlideClick = (index: number) => {
-    setShowFormDialog(true);
-    // You can use the index parameter if needed for tracking or other purposes
   };
 
   return (
@@ -286,25 +266,25 @@ const EnterpriseSection = () => {
             >
               <div className="grid grid-cols-3 gap-6">
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-1">Early Access</h4>
-                  <p className="text-gray-600">Program Open</p>
+                  <h4 className="text-xl font-bold text-gray-900 mb-1">25+</h4>
+                  <p className="text-gray-600">Global enterprises onboarded</p>
                 </div>
                 
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-1">Global</h4>
-                  <p className="text-gray-600">Regulatory Coverage</p>
+                  <h4 className="text-xl font-bold text-gray-900 mb-1">9</h4>
+                  <p className="text-gray-600">jurisdictions supported</p>
                 </div>
                 
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-1">Powered by</h4>
+                  <h4 className="text-xl font-bold text-gray-900 mb-1">Products</h4>
                   <div className="flex items-center gap-4 mt-2">
                     <div className="flex items-center gap-1 text-gray-600">
                       <div className="w-3 h-3 bg-[#7A73FF] rounded-full"></div>
-                      <span>AML Agent</span>
+                      <span>Dara AI</span>
                     </div>
                     <div className="flex items-center gap-1 text-gray-600">
                       <div className="w-3 h-3 bg-[#10b981] rounded-full"></div>
-                      <span>ESGR Agent</span>
+                      <span>RegCheck</span>
                     </div>
                   </div>
                 </div>
@@ -326,33 +306,21 @@ const EnterpriseSection = () => {
                 loop: true,
               }}
               className="w-full"
-              onSelect={(api) => {
-                const selectedIndex = api.selectedScrollSnap();
-                setActiveIndex(selectedIndex);
-              }}
             >
               <CarouselContent>
                 {agentData.map((agent, index) => (
                   <CarouselItem key={index} className="md:basis-[100%] lg:basis-[100%]">
-                    <motion.div 
-                      variants={slideVariants}
-                      initial="hidden"
-                      animate={activeIndex === index ? "visible" : "hidden"}
-                      exit="exit"
+                    <div 
                       className="p-1 h-full"
-                      onClick={() => handleCarouselSlideClick(index)}
+                      onClick={() => openFormDialog(`Learn about ${agent.name} - ${agent.role}`)}
                     >
                       <Card className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 h-full cursor-pointer group border border-gray-200">
                         <div className="bg-gradient-to-r from-[rgba(60,90,180,0.03)] to-[rgba(60,90,180,0.1)] absolute inset-0 opacity-50"></div>
                         <CardContent className="p-6 relative z-10 h-full flex flex-col">
                           <div className="flex items-center gap-3 mb-3">
-                            <motion.div 
-                              className="bg-white p-2 rounded-full shadow-sm"
-                              whileHover={{ rotate: 15, scale: 1.1 }}
-                              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                            >
+                            <div className="bg-white p-2 rounded-full shadow-sm">
                               {agent.icon}
-                            </motion.div>
+                            </div>
                             <div>
                               <h3 className="text-xl font-bold text-gray-900">{agent.name}</h3>
                               <p className="text-sm text-gray-600">{agent.role}</p>
@@ -363,16 +331,9 @@ const EnterpriseSection = () => {
                             <p className="text-xs uppercase font-semibold text-gray-500 mb-2">Integrated Tools</p>
                             <div className="flex flex-wrap gap-2">
                               {agent.integratedTools.map((tool, i) => (
-                                <motion.div
-                                  key={i}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: 0.1 * i }}
-                                >
-                                  <Badge key={i} variant="outline" className="bg-blue-50 text-blue-700">
-                                    {tool}
-                                  </Badge>
-                                </motion.div>
+                                <Badge key={i} variant="outline" className="bg-blue-50 text-blue-700">
+                                  {tool}
+                                </Badge>
                               ))}
                             </div>
                           </div>
@@ -381,54 +342,34 @@ const EnterpriseSection = () => {
                             <p className="text-xs uppercase font-semibold text-gray-500 mb-2">Value Add</p>
                             <ul className="space-y-2">
                               {agent.valueAdd.map((value, i) => (
-                                <motion.li 
-                                  key={i} 
-                                  className="flex items-start gap-2 text-sm"
-                                  initial={{ opacity: 0, x: -20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: 0.2 + (0.1 * i) }}
-                                >
+                                <li key={i} className="flex items-start gap-2 text-sm">
                                   <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                                   <span>{value}</span>
-                                </motion.li>
+                                </li>
                               ))}
                             </ul>
                           </div>
                           
-                          <motion.div 
-                            className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.5 }}
-                          >
+                          <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
                             <p className="text-xs uppercase font-semibold text-gray-500 mb-2">Outcomes</p>
                             <ul className="space-y-1">
                               {agent.outcomes.map((outcome, i) => (
                                 <li key={i} className="text-sm text-gray-700">• {outcome}</li>
                               ))}
                             </ul>
-                          </motion.div>
+                          </div>
                           
                           <div className="mt-auto pt-3">
                             <p className="text-xs uppercase font-semibold text-gray-500 mb-2">Supporting Metrics</p>
                             {agent.metrics.map((metric, i) => (
-                              <motion.div 
-                                key={i} 
-                                className="mb-2 last:mb-0"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.6 + (0.1 * i) }}
-                              >
+                              <div key={i} className="mb-2 last:mb-0">
                                 <p className="text-sm text-gray-700 font-medium mb-1">{metric.text}</p>
                                 <p className="text-xs text-gray-500">Source: {metric.source}</p>
-                              </motion.div>
+                              </div>
                             ))}
                           </div>
                           
-                          <motion.div 
-                            className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
-                            whileHover={{ scale: 1.05 }}
-                          >
+                          <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Button 
                               variant="ghost" 
                               size="sm"
@@ -436,10 +377,10 @@ const EnterpriseSection = () => {
                             >
                               Learn more <ArrowRight size={16} className="ml-1" />
                             </Button>
-                          </motion.div>
+                          </div>
                         </CardContent>
                       </Card>
-                    </motion.div>
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -448,15 +389,7 @@ const EnterpriseSection = () => {
                 <CarouselPrevious className="relative inset-0 translate-y-0 mr-2" />
                 <div className="flex gap-2">
                   {agentData.map((_, index) => (
-                    <motion.div 
-                      key={index} 
-                      className={`w-2 h-2 rounded-full ${activeIndex === index ? 'bg-[#7A73FF]' : 'bg-gray-300'}`}
-                      whileHover={{ scale: 1.2 }}
-                      animate={{ 
-                        scale: activeIndex === index ? 1.2 : 1, 
-                        backgroundColor: activeIndex === index ? '#7A73FF' : '#E5E7EB'
-                      }}
-                    ></motion.div>
+                    <div key={index} className="w-2 h-2 rounded-full bg-gray-300"></div>
                   ))}
                 </div>
                 <CarouselNext className="relative inset-0 translate-y-0 ml-2" />
