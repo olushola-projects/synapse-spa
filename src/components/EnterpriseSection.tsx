@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -325,7 +326,10 @@ const EnterpriseSection = () => {
                 loop: true,
               }}
               className="w-full"
-              onSelect={(index) => setActiveIndex(index)}
+              onSelect={(api) => {
+                const selectedIndex = api.selectedScrollSnap();
+                setActiveIndex(selectedIndex);
+              }}
             >
               <CarouselContent>
                 {agentData.map((agent, index) => (
