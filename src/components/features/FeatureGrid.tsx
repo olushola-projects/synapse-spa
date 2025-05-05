@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { Bot, Users, BadgeCheck, Briefcase, GamepadIcon, Cpu } from 'lucide-react';
+import { Compass, Users, Award, Briefcase, GamepadIcon, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// We'll update the feature icons - replacing "Regulatory Analysis" with "GRC Agent Gallery" and "Interview Prep" with "Customize Agent"
+// Updated feature icons with new titles and icons
 export const featureIcons = [
   {
     title: "GRC Agent Gallery",
-    icon: <Bot className="text-indigo-600" size={20} />,
+    icon: <Compass className="text-indigo-600" size={32} />,
     description: "Explore",
     content: {
       title: "GRC Agent Gallery",
@@ -17,7 +17,7 @@ export const featureIcons = [
   },
   {
     title: "Networking & Forum",
-    icon: <Users className="text-purple-500" size={20} />,
+    icon: <Users className="text-purple-500" size={32} />,
     description: "Forum",
     content: {
       title: "GRC Professional Community",
@@ -27,7 +27,7 @@ export const featureIcons = [
   },
   {
     title: "Badges & Recognition",
-    icon: <BadgeCheck className="text-blue-500" size={20} />,
+    icon: <Award className="text-blue-500" size={32} />,
     description: "Recognition",
     content: {
       title: "Professional Achievement Tracking",
@@ -37,7 +37,7 @@ export const featureIcons = [
   },
   {
     title: "Job Matching",
-    icon: <Briefcase className="text-emerald-500" size={20} />,
+    icon: <Briefcase className="text-emerald-500" size={32} />,
     description: "Matching",
     content: {
       title: "Career Advancement Opportunities",
@@ -47,7 +47,7 @@ export const featureIcons = [
   },
   {
     title: "GRC Games",
-    icon: <GamepadIcon className="text-rose-500" size={20} />,
+    icon: <GamepadIcon className="text-rose-500" size={32} />,
     description: "Games",
     content: {
       title: "Interactive Learning Experience",
@@ -57,7 +57,7 @@ export const featureIcons = [
   },
   {
     title: "Customize Agent",
-    icon: <Cpu className="text-amber-500" size={20} />,
+    icon: <Settings className="text-amber-500" size={32} />,
     description: "Customize",
     content: {
       title: "Customizable AI Assistant",
@@ -75,22 +75,22 @@ interface FeatureGridProps {
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
     <div className="max-w-2xl">
-      <div className="grid grid-cols-3 gap-3 transition-all duration-700 ease-out">
+      <div className="grid grid-cols-3 gap-3 md:gap-4 transition-all duration-700 ease-out">
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}
-            className="flex flex-col items-center aspect-square p-3 rounded-lg bg-white/90 hover:bg-white/95 shadow-sm hover:shadow border border-gray-100/50 cursor-pointer hover:-translate-y-1 transition-all duration-300"
+            className="flex flex-col items-center justify-center w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] md:w-[160px] md:h-[160px] aspect-square rounded-md bg-white border border-[#E4E7EC] hover:border-[#4F46E5] shadow-sm hover:shadow cursor-pointer hover:-translate-y-[2px] transition-all duration-150"
             style={{ animationDelay: `${index * 100}ms` }}
             onClick={() => onFeatureClick && onFeatureClick(index)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: animate ? 1 : 0, y: animate ? 0 : 20 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
+            aria-label={`${feature.title} – ${feature.description}`}
           >
-            <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
+            <div className="flex flex-col items-center justify-center space-y-1.5">
               {feature.icon}
+              <h3 className="text-[14px] font-medium text-gray-800 text-center">{feature.description}</h3>
             </div>
-            <h3 className="text-xs font-medium mb-1 text-center">{feature.title}</h3>
-            <p className="text-[10px] text-gray-600 text-center">{feature.description}</p>
           </motion.div>
         ))}
       </div>
