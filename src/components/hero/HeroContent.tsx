@@ -15,10 +15,10 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
   return (
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[4rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
-        <span className="inline-block relative bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">
-          <span>Transform</span><br />
-          <span>Your Expertise</span><br />
-          <span>With GRC Agents</span>
+        <span className="inline-block relative">
+          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span><br />
+          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span><br />
+          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">With GRC Agents</span>
         </span>
       </h1>
       
@@ -50,7 +50,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
         </span>
       </div>
       
-      <div className="mt-6">
+      <div className="mt-8">
         <FeatureGrid animate={animate} onFeatureClick={onFeatureClick} />
       </div>
     </div>

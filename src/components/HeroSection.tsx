@@ -128,7 +128,7 @@ const HeroSection = () => {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
+          <div className="flex flex-col md:flex-row items-start md:items-start gap-4 lg:gap-2">
             {/* Left side with hero content */}
             <div className="md:w-1/2 mb-10 md:mb-0">
               <HeroContent 
@@ -139,15 +139,15 @@ const HeroSection = () => {
               />
             </div>
             
-            {/* Right side with dashboard preview */}
-            <div className="md:w-1/2">
+            {/* Right side with dashboard preview - Increased size and aligned with Transform text */}
+            <div className="md:w-1/2 md:pl-4">
               <div className={`transition-all duration-700 ease-out ${animateImage ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
                 <div className="rounded-xl overflow-hidden shadow-2xl relative">
-                  {/* Main Dashboard */}
+                  {/* Main Dashboard - Increased height */}
                   <div className="bg-[#F1F0FB] rounded-md overflow-hidden">
                     <DashboardHeader avatarSrc="/lovable-uploads/06c9cfd1-9bb6-43dd-a1b8-2d3ff1f97ad1.png" />
                     
-                    <div className="p-2 flex h-[300px] bg-[#F1F0FB]">
+                    <div className="p-2 flex h-[340px] md:h-[360px] lg:h-[380px] bg-[#F1F0FB]">
                       <SideNavigation onAmlDialogOpen={() => setOpenAmlDialog(true)} />
                       
                       <div className="flex-1 pl-1 flex flex-col gap-1">
