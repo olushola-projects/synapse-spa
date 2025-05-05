@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -225,6 +224,11 @@ const EnterpriseSection = () => {
     }
   };
 
+  const handleCarouselSlideClick = (index: number) => {
+    setShowFormDialog(true);
+    // You can use the index parameter if needed for tracking or other purposes
+  };
+
   return (
     <section className="bg-[#F9FAFB] py-16 md:py-[90px]">
       <div className="container mx-auto max-w-[1200px] px-4 md:px-6">
@@ -332,7 +336,7 @@ const EnterpriseSection = () => {
                       animate={activeIndex === index ? "visible" : "hidden"}
                       exit="exit"
                       className="p-1 h-full"
-                      onClick={() => openFormDialog(`Learn about ${agent.name} - ${agent.role}`)}
+                      onClick={() => handleCarouselSlideClick(index)}
                     >
                       <Card className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 h-full cursor-pointer group border border-gray-200">
                         <div className="bg-gradient-to-r from-[rgba(60,90,180,0.03)] to-[rgba(60,90,180,0.1)] absolute inset-0 opacity-50"></div>

@@ -120,7 +120,7 @@ const Index = () => {
       <HowItWorksSection />
       
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
-        <IndustryPerspectivesSection />
+        <IndustryPerspectiveSection />
       </div>
       
       <PoweredBySection />
