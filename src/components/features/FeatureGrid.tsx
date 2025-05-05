@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 export const featureIcons = [
   {
     title: "GRC Agent Gallery",
-    icon: <Compass className="text-indigo-600" size={24} />,
+    icon: <Compass className="text-indigo-600" size={26} />,
     description: "Explore",
     content: {
       title: "GRC Agent Gallery",
@@ -17,7 +17,7 @@ export const featureIcons = [
   },
   {
     title: "Networking & Forum",
-    icon: <Users className="text-purple-500" size={24} />,
+    icon: <Users className="text-purple-500" size={26} />,
     description: "Forum",
     content: {
       title: "GRC Professional Community",
@@ -27,7 +27,7 @@ export const featureIcons = [
   },
   {
     title: "Badges & Recognition",
-    icon: <Award className="text-blue-500" size={24} />,
+    icon: <Award className="text-blue-500" size={26} />,
     description: "Recognition",
     content: {
       title: "Professional Achievement Tracking",
@@ -37,7 +37,7 @@ export const featureIcons = [
   },
   {
     title: "Job Matching",
-    icon: <Briefcase className="text-emerald-500" size={24} />,
+    icon: <Briefcase className="text-emerald-500" size={26} />,
     description: "Matching",
     content: {
       title: "Career Advancement Opportunities",
@@ -47,7 +47,7 @@ export const featureIcons = [
   },
   {
     title: "GRC Games",
-    icon: <GamepadIcon className="text-rose-500" size={24} />,
+    icon: <GamepadIcon className="text-rose-500" size={26} />,
     description: "Games",
     content: {
       title: "Interactive Learning Experience",
@@ -57,7 +57,7 @@ export const featureIcons = [
   },
   {
     title: "Customize Agent",
-    icon: <Settings className="text-amber-500" size={24} />,
+    icon: <Settings className="text-amber-500" size={26} />,
     description: "Customize",
     content: {
       title: "Customizable AI Assistant",
@@ -79,7 +79,7 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClic
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}
-            className="flex flex-col items-center justify-center aspect-square p-2 sm:p-3 rounded-lg bg-white hover:bg-white/95 shadow-sm hover:shadow border border-gray-200 cursor-pointer hover:-translate-y-1 transition-all duration-300 hover:border-indigo-500"
+            className="flex flex-col items-center justify-center aspect-square p-2 sm:p-3 rounded-lg bg-white hover:bg-white/95 shadow-md hover:shadow-lg border border-gray-200 cursor-pointer hover:-translate-y-1 transition-all duration-300 hover:border-indigo-500"
             style={{ animationDelay: `${index * 100}ms` }}
             onClick={() => onFeatureClick && onFeatureClick(index)}
             initial={{ opacity: 0, y: 20 }}
@@ -87,11 +87,11 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClic
             transition={{ duration: 0.5, delay: index * 0.1 }}
             aria-label={`${feature.title} - ${feature.description}`}
           >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center mb-1 sm:mb-2">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gray-50 flex items-center justify-center mb-1 sm:mb-2">
               {feature.icon}
             </div>
-            <h3 className="text-xs font-semibold mb-0.5 text-center line-clamp-1">{feature.title}</h3>
-            <p className="text-[10px] text-gray-600 text-center">{feature.description}</p>
+            <h3 className="text-xs sm:text-sm font-semibold mb-0.5 text-center line-clamp-1">{feature.title}</h3>
+            <p className="text-[10px] sm:text-xs text-gray-600 text-center">{feature.description}</p>
           </motion.div>
         ))}
       </div>

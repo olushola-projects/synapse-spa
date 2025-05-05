@@ -14,7 +14,7 @@ interface HeroContentProps {
 export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore, onFeatureClick }) => {
   return (
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-      <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[4rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[4.25rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
         <span className="inline-block relative">
           <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span><br />
           <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span><br />
@@ -22,7 +22,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
         </span>
       </h1>
       
-      <p className="mt-6 text-sm md:text-base text-gray-700 max-w-md leading-relaxed font-normal">
+      <p className="mt-6 text-base md:text-lg text-gray-700 max-w-md leading-relaxed font-normal">
         Join a global network of professionals to boost your expertise with GRC agents, exclusive testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
       </p>
       
@@ -50,7 +50,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
         </span>
       </div>
       
-      <div className="mt-8">
+      <div className="mt-10">
         <FeatureGrid animate={animate} onFeatureClick={onFeatureClick} />
       </div>
     </div>
