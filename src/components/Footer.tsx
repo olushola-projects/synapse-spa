@@ -16,16 +16,16 @@ const Footer = () => {
                 The global ecosystem where Governance, Risk, and Compliance professionals connect, grow, and shape the future of compliance.
               </p>
               <div className="mt-6 flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-synapse-primary transition-colors">
+                <a href="https://facebook.com/synapsesgrc" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
                   <Facebook size={20} />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-synapse-primary transition-colors">
+                <a href="https://twitter.com/synapsesgrc" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
                   <Twitter size={20} />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-synapse-primary transition-colors">
+                <a href="https://linkedin.com/company/synapsesgrc" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
                   <Linkedin size={20} />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-synapse-primary transition-colors">
+                <a href="https://instagram.com/synapsesgrc" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
                   <Instagram size={20} />
                 </a>
               </div>
@@ -36,7 +36,7 @@ const Footer = () => {
               <ul className="space-y-2 text-sm">
                 <li><Link to="/platform/features" className="text-gray-600 hover:text-synapse-primary">Features</Link></li>
                 <li><Link to="/platform/solutions" className="text-gray-600 hover:text-synapse-primary">Solutions</Link></li>
-                <li><Link to="/#integrations" className="text-gray-600 hover:text-synapse-primary">Integrations</Link></li>
+                <li><Link to="/#features" className="text-gray-600 hover:text-synapse-primary">Integrations</Link></li>
                 <li><Link to="/ask-dara" className="text-gray-600 hover:text-synapse-primary">AI Copilot</Link></li>
               </ul>
             </div>

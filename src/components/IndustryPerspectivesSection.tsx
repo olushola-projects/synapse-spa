@@ -151,8 +151,8 @@ const IndustryPerspectivesSection = () => {
                     }`}
                     style={{ transitionDelay: `${index * 150}ms` }}
                   >
-                    <Card className="h-full border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden bg-white rounded-xl">
-                      <CardContent className="p-6">
+                    <Card className="h-[360px] border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden bg-white rounded-xl">
+                      <CardContent className="p-6 flex flex-col h-full">
                         <div className="mb-4">
                           {perspective.icon}
                         </div>
@@ -162,7 +162,7 @@ const IndustryPerspectivesSection = () => {
                           <p className="text-sm text-synapse-primary/80">{perspective.role}</p>
                         </div>
                         
-                        <p className="text-gray-600 text-sm line-clamp-3">{perspective.bio}</p>
+                        <p className="text-gray-600 text-sm flex-grow overflow-hidden">{perspective.bio}</p>
                         
                         <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
                           <span className="text-xs text-gray-400">Industry Insight</span>
