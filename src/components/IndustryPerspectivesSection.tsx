@@ -62,6 +62,7 @@ const IndustryPerspectivesSection = () => {
   
   const scrollTo = useCallback((index: number) => {
     if (!emblaApi) return;
+    // Use the wrap function to ensure the index stays within bounds
     emblaApi.scrollTo(wrap(0, industryPerspectives.length, index));
   }, [emblaApi]);
 
