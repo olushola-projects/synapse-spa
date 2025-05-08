@@ -1,13 +1,18 @@
 
-import { useState, useEffect, useRef } from 'react';
-import { Quote, ArrowRight, Zap, TrendingUp, Shield, Users } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Quote, ArrowRight, Zap, TrendingUp, Shield, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useInView } from 'framer-motion';
 import { 
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import useEmblaCarousel from 'embla-carousel-react';
+import { wrap } from "@/lib/utils";
 
 // Industry perspectives data - updated quotes with links to sources
 const industryPerspectives = [
@@ -51,7 +56,59 @@ const industryPerspectives = [
 const IndustryPerspectivesSection = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, margin: "-100px 0px" });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [autoplayInterval, setAutoplayInterval] = useState<NodeJS.Timeout | null>(null);
+  
+  const scrollTo = useCallback((index: number) => {
+    if (!emblaApi) return;
+    emblaApi.scrollTo(wrap(0, industryPerspectives.length, index));
+  }, [emblaApi]);
 
+  // Setup autoplay
+  const startAutoplay = useCallback(() => {
+    if (autoplayInterval) clearInterval(autoplayInterval);
+    
+    const interval = setInterval(() => {
+      if (emblaApi) {
+        emblaApi.scrollNext();
+      }
+    }, 5000); // Slide every 5 seconds
+    
+    setAutoplayInterval(interval);
+  }, [emblaApi, autoplayInterval]);
+  
+  // Handle carousel initialization and cleanup
+  useEffect(() => {
+    if (!emblaApi) return;
+    
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+    
+    emblaApi.on("select", onSelect);
+    startAutoplay();
+    
+    return () => {
+      emblaApi.off("select", onSelect);
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+      }
+    };
+  }, [emblaApi, startAutoplay, autoplayInterval]);
+
+  // Pause autoplay when hovering over carousel
+  const handleMouseEnter = () => {
+    if (autoplayInterval) {
+      clearInterval(autoplayInterval);
+      setAutoplayInterval(null);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    startAutoplay();
+  };
+  
   return (
     <div id="testimonials" className="py-24 relative overflow-hidden" ref={sectionRef}>
       {/* Stripe-inspired diagonal background */}
@@ -73,61 +130,110 @@ const IndustryPerspectivesSection = () => {
           </p>
         </div>
 
-        {/* Stripe-inspired card grid */}
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {industryPerspectives.map((perspective, index) => (
-              <div 
-                key={index}
-                className={`transition-all duration-500 ease-in-out transform ${
-                  isInView 
-                    ? 'opacity-100 translate-y-0' 
-                    : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                <Card className="h-full border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden bg-white rounded-xl">
-                  <CardContent className="p-6">
-                    <div className="mb-4">
-                      {perspective.icon}
-                    </div>
-                    
-                    <div className="mb-5">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">{perspective.name}</h3>
-                      <p className="text-sm text-synapse-primary/80">{perspective.role}</p>
-                    </div>
-                    
-                    <p className="text-gray-600 text-sm">{perspective.bio}</p>
-                    
-                    <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                      <span className="text-xs text-gray-400">Industry Insight</span>
-                      <a 
-                        href={perspective.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-synapse-primary text-sm font-medium inline-flex items-center gap-2 hover:underline"
-                      >
-                        Learn more <ArrowRight size={14} />
-                      </a>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
+        {/* Desktop Carousel - limited to 3 perspectives at a time */}
+        <div className="max-w-7xl mx-auto hidden md:block">
+          <div 
+            className="overflow-hidden" 
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            ref={emblaRef}
+          >
+            <div className="flex -ml-4">
+              {industryPerspectives.map((perspective, index) => (
+                <div 
+                  key={index} 
+                  className="flex-[0_0_33.33%] min-w-0 pl-4 transition-all duration-500"
+                >
+                  <div 
+                    className={`transition-all duration-500 ease-in-out transform ${
+                      isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                    }`}
+                    style={{ transitionDelay: `${index * 150}ms` }}
+                  >
+                    <Card className="h-full border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden bg-white rounded-xl">
+                      <CardContent className="p-6">
+                        <div className="mb-4">
+                          {perspective.icon}
+                        </div>
+                        
+                        <div className="mb-5">
+                          <h3 className="text-lg font-bold text-gray-900 mb-1">{perspective.name}</h3>
+                          <p className="text-sm text-synapse-primary/80">{perspective.role}</p>
+                        </div>
+                        
+                        <p className="text-gray-600 text-sm line-clamp-3">{perspective.bio}</p>
+                        
+                        <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                          <span className="text-xs text-gray-400">Industry Insight</span>
+                          <a 
+                            href={perspective.link} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-synapse-primary text-sm font-medium inline-flex items-center gap-2 hover:underline"
+                          >
+                            Learn more <ArrowRight size={14} />
+                          </a>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Mobile Carousel */}
-          <div className="md:hidden mt-8">
-            <Carousel className="w-full">
-              <CarouselContent>
-                {industryPerspectives.map((perspective, i) => (
-                  <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
-                    <PerspectiveCard perspective={perspective} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+          {/* Carousel Controls */}
+          <div className="flex justify-center items-center gap-4 mt-6">
+            <Button 
+              variant="outline" 
+              size="icon"
+              className="rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary"
+              onClick={() => emblaApi?.scrollPrev()}
+            >
+              <ChevronLeft size={20} />
+              <span className="sr-only">Previous</span>
+            </Button>
+            
+            <div className="flex gap-2">
+              {industryPerspectives.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                    selectedIndex === index ? 'bg-synapse-primary' : 'bg-gray-300'
+                  }`}
+                  onClick={() => scrollTo(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+            
+            <Button 
+              variant="outline" 
+              size="icon"
+              className="rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary"
+              onClick={() => emblaApi?.scrollNext()}
+            >
+              <ChevronRight size={20} />
+              <span className="sr-only">Next</span>
+            </Button>
           </div>
+        </div>
+
+        {/* Mobile Carousel */}
+        <div className="md:hidden mt-8">
+          <Carousel className="w-full" opts={{ loop: true }}>
+            <CarouselContent>
+              {industryPerspectives.map((perspective, i) => (
+                <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
+                  <PerspectiveCard perspective={perspective} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-4 mt-4">
+              <CarouselPrevious className="relative static transform-none bg-white" />
+              <CarouselNext className="relative static transform-none bg-white" />
+            </div>
+          </Carousel>
         </div>
 
         <div className="mt-16 text-center">
