@@ -31,11 +31,6 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
             Get Early Access <ArrowRight size={18} />
           </Button>
         </div>
-        <div onClick={onInvite} className="cursor-pointer">
-          <Button variant="outline" className="border-black text-black bg-transparent hover:bg-gray-100 px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
-            Invite
-          </Button>
-        </div>
       </div>
       
       <div className="mt-6 flex items-center text-sm text-gray-500 space-x-6">

@@ -55,15 +55,15 @@ const Navbar = () => {
             </Link>
             
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors">Home</Link>
-              <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Become a Partner</Link>
-              <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors">FAQ</Link>
+              <Link to="/" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">Home</Link>
+              <Link to="/partners" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">Become a Partner</Link>
+              <Link to="/resources/faq" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">FAQ</Link>
             </nav>
           </div>
           
           <div className="hidden md:flex items-center gap-4">
             <div onClick={openInviteDialog} className="cursor-pointer">
-              <Button variant="outline" className="border-black text-black bg-transparent hover:bg-gray-100">Invite</Button>
+              <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold">Invite</Button>
             </div>
             <div onClick={openFormDialog} className="cursor-pointer">
               <Button>Get Early Access</Button>
@@ -85,11 +85,11 @@ const Navbar = () => {
             className="md:hidden bg-white border-b shadow-lg"
           >
             <nav className="container mx-auto p-4 flex flex-col gap-4">
-              <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Home</Link>
-              <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Become a Partner</Link>
-              <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">FAQ</Link>
+              <Link to="/" className="text-blue-700 hover:text-blue-800 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-bold">Home</Link>
+              <Link to="/partners" className="text-blue-700 hover:text-blue-800 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-bold">Become a Partner</Link>
+              <Link to="/resources/faq" className="text-blue-700 hover:text-blue-800 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-bold">FAQ</Link>
               <div onClick={openInviteDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button variant="outline" className="border-black text-black bg-transparent hover:bg-gray-100 mt-2 w-full">Invite</Button>
+                <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold w-full">Invite</Button>
               </div>
               <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
                 <Button className="mt-2 w-full">Get Early Access</Button>

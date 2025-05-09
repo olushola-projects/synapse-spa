@@ -12,7 +12,7 @@ interface DashboardContentProps {
 
 export const DashboardContent: React.FC<DashboardContentProps> = ({ onAmlDialogOpen = () => {}, children }) => {
   return (
-    <div className="flex gap-1 flex-1">
+    <div className="flex gap-1 flex-1 text-[1.125rem]">
       <div className="flex-1 flex flex-col gap-1">
         <AmlAnalysisCard onAmlDialogOpen={onAmlDialogOpen} />
         <NetworkingCard />

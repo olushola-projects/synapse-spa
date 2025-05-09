@@ -70,7 +70,7 @@ const HowItWorksSection = () => {
             className="text-white bg-synapse-primary hover:bg-synapse-secondary px-8 py-6 text-lg rounded-lg flex mx-auto items-center gap-2"
             onClick={openFormDialog}
           >
-            Join Waitlist <ArrowRight size={18} />
+            Get Early Access <ArrowRight size={18} />
           </Button>
         </div>
       </div>
@@ -78,7 +78,7 @@ const HowItWorksSection = () => {
       <ExternalFormDialog 
         open={showFormDialog} 
         onOpenChange={setShowFormDialog} 
-        title="Join Waitlist"
+        title="Get Early Access"
       />
     </div>
   );
