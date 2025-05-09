@@ -66,7 +66,7 @@ export const USPFeatureSection = () => {
   };
 
   return (
-    <div className="flex justify-center gap-8 flex-wrap">
+    <div className="flex justify-start gap-8 flex-wrap">
       {uspItems.map((usp, index) => (
         <motion.div
           key={index}
