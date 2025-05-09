@@ -11,11 +11,11 @@ interface HeroContentProps {
 export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess }) => {
   return (
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-      <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-[4.5rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
+      <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-[5.25rem] font-display font-bold tracking-tight leading-none text-gray-900 mb-6">
         <span className="inline-block relative">
-          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span><br />
-          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span><br />
-          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">With GRC Agents</span>
+          <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span>
+          <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span>
+          <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">With GRC Agents</span>
         </span>
       </h1>
       

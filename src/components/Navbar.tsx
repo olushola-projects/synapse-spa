@@ -43,26 +43,12 @@ const Navbar = () => {
     <>
       <header className={`sticky top-0 z-50 w-full ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"} transition-all duration-200`}>
         <div className="container mx-auto flex items-center justify-between p-4">
-          <Link to="/" className="text-xl font-bold text-blue-700 flex items-center gap-2">
+          <Link to="/" className="text-2xl font-bold text-blue-700 flex items-center gap-2">
             Synapses
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors">Home</Link>
-            <a 
-              href="/#features" 
-              className="text-gray-700 hover:text-blue-700 transition-colors"
-              onClick={(e) => handleNavClick(e, "features")}
-            >
-              Features
-            </a>
-            <a 
-              href="/#how-it-works" 
-              className="text-gray-700 hover:text-blue-700 transition-colors"
-              onClick={(e) => handleNavClick(e, "how-it-works")}
-            >
-              How It Works
-            </a>
             <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</Link>
             <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors">FAQ</Link>
             <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors cursor-pointer">
@@ -86,20 +72,6 @@ const Navbar = () => {
           >
             <nav className="container mx-auto p-4 flex flex-col gap-4">
               <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Home</Link>
-              <a 
-                href="/#features" 
-                className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100"
-                onClick={(e) => handleNavClick(e, "features")}
-              >
-                Features
-              </a>
-              <a 
-                href="/#how-it-works" 
-                className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100"
-                onClick={(e) => handleNavClick(e, "how-it-works")}
-              >
-                How It Works
-              </a>
               <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</Link>
               <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">FAQ</Link>
               <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">

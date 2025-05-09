@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -107,8 +106,8 @@ const Solutions = () => {
                     </div>
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100">
                       <img 
-                        src="/placeholder.svg" 
-                        alt="Financial Services Compliance"
+                        src="/lovable-uploads/6ac8bd07-6906-427c-b832-be14819a3aed.png" 
+                        alt="Financial Services Compliance Dashboard"
                         className="w-full h-auto"
                       />
                     </div>
@@ -118,11 +117,10 @@ const Solutions = () => {
                 <TabsContent value="healthcare" className="pt-6">
                   <div className="grid md:grid-cols-2 gap-12 items-center">
                     <div className="order-2 md:order-1 bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100">
-                      <img 
-                        src="/placeholder.svg" 
-                        alt="Healthcare Compliance"
-                        className="w-full h-auto"
-                      />
+                      <div className="flex flex-col items-center justify-center p-10 bg-gray-50 h-full">
+                        <p className="text-xl font-semibold text-center mb-4">Coming Soon to Healthcare Sector</p>
+                        <p className="text-gray-500 text-center">Our specialized healthcare compliance solutions are currently in development.</p>
+                      </div>
                     </div>
                     <div className="order-1 md:order-2">
                       <h3 className="text-2xl font-bold mb-4">Healthcare & Life Sciences Compliance</h3>
@@ -141,58 +139,61 @@ const Solutions = () => {
                         </div>
                       </div>
                       
-                      <ul className="space-y-3">
-                        {[
-                          "HIPAA compliance management and risk assessment",
-                          "Patient data privacy and security controls",
-                          "Quality management system documentation",
-                          "Clinical trial compliance and documentation",
-                          "Healthcare fraud and abuse prevention"
-                        ].map((item, i) => (
-                          <li key={i} className="flex items-start">
-                            <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <p className="mt-6 font-medium text-blue-600">Coming soon to this sector</p>
                       
-                      <Button className="mt-6 flex items-center gap-1">
+                      <Button disabled className="mt-6 flex items-center gap-1 opacity-70">
                         Learn More <ArrowRight size={16} />
                       </Button>
                     </div>
                   </div>
                 </TabsContent>
                 
-                {/* Additional tabs content would follow the same pattern */}
+                {/* Additional tabs content with "Coming Soon" messaging */}
                 <TabsContent value="technology" className="pt-6">
-                  {/* Technology industry content */}
-                  <div className="text-center py-10 opacity-70">
-                    <p className="text-lg">Technology industry solutions information coming soon.</p>
-                    <p>Contact us for details about our solutions for tech companies.</p>
+                  <div className="text-center py-10">
+                    <p className="text-2xl font-semibold mb-4">Coming Soon to Technology Sector</p>
+                    <p className="text-gray-600 max-w-lg mx-auto">
+                      Our specialized technology compliance solutions are currently in development. Contact us for details about our upcoming solutions for tech companies.
+                    </p>
+                    <Button variant="outline" className="mt-8">
+                      Get Notified When Available
+                    </Button>
                   </div>
                 </TabsContent>
                 
                 <TabsContent value="energy" className="pt-6">
-                  {/* Energy industry content */}
-                  <div className="text-center py-10 opacity-70">
-                    <p className="text-lg">Energy industry solutions information coming soon.</p>
-                    <p>Contact us for details about our solutions for energy companies.</p>
+                  <div className="text-center py-10">
+                    <p className="text-2xl font-semibold mb-4">Coming Soon to Energy Sector</p>
+                    <p className="text-gray-600 max-w-lg mx-auto">
+                      Our specialized energy compliance solutions are currently in development. Contact us for details about our upcoming solutions for energy companies.
+                    </p>
+                    <Button variant="outline" className="mt-8">
+                      Get Notified When Available
+                    </Button>
                   </div>
                 </TabsContent>
                 
                 <TabsContent value="manufacturing" className="pt-6">
-                  {/* Manufacturing industry content */}
-                  <div className="text-center py-10 opacity-70">
-                    <p className="text-lg">Manufacturing industry solutions information coming soon.</p>
-                    <p>Contact us for details about our solutions for manufacturing companies.</p>
+                  <div className="text-center py-10">
+                    <p className="text-2xl font-semibold mb-4">Coming Soon to Manufacturing Sector</p>
+                    <p className="text-gray-600 max-w-lg mx-auto">
+                      Our specialized manufacturing compliance solutions are currently in development. Contact us for details about our upcoming solutions for manufacturing companies.
+                    </p>
+                    <Button variant="outline" className="mt-8">
+                      Get Notified When Available
+                    </Button>
                   </div>
                 </TabsContent>
                 
                 <TabsContent value="government" className="pt-6">
-                  {/* Government industry content */}
-                  <div className="text-center py-10 opacity-70">
-                    <p className="text-lg">Government solutions information coming soon.</p>
-                    <p>Contact us for details about our solutions for government agencies.</p>
+                  <div className="text-center py-10">
+                    <p className="text-2xl font-semibold mb-4">Coming Soon to Government Sector</p>
+                    <p className="text-gray-600 max-w-lg mx-auto">
+                      Our specialized government compliance solutions are currently in development. Contact us for details about our upcoming solutions for government agencies.
+                    </p>
+                    <Button variant="outline" className="mt-8">
+                      Get Notified When Available
+                    </Button>
                   </div>
                 </TabsContent>
               </Tabs>

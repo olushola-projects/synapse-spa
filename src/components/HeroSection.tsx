@@ -34,7 +34,7 @@ const HeroSection = () => {
   return (
     <div
       style={{ minHeight: "calc(100vh - 64px)" }}
-      className="w-full px-4 sm:px-6 lg:px-8 py-6 md:py-12 flex flex-col items-center justify-center bg-gradient-to-br from-[#eef4ff] via-white to-[#f8faff]"
+      className="w-full px-4 sm:px-6 lg:px-8 py-2 md:py-6 flex flex-col items-center justify-center bg-gradient-to-br from-[#eef4ff] via-white to-[#f8faff]"
     >
       <div className="container mx-auto grid md:grid-cols-2 gap-16 items-center">
         {/* Hero Content - Left Side */}
@@ -50,11 +50,11 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Hero Visual - Right Side: Dynamic Dashboard */}
+        {/* Hero Visual - Right Side: Dynamic Dashboard - increased by 50% */}
         <div className={`relative w-full transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-x-6'}`}>
-          <div className="w-full overflow-hidden rounded-xl shadow-2xl bg-white">
+          <div className="w-[150%] ml-[-25%] overflow-hidden rounded-xl shadow-2xl bg-white">
             {/* Dashboard simulation */}
-            <div className="w-full h-[420px] overflow-hidden relative flex flex-col">
+            <div className="w-full h-[630px] overflow-hidden relative flex flex-col">
               {/* Dashboard Header */}
               <DashboardHeader avatarSrc="/lovable-uploads/c5b1f529-364b-4a3f-9e4e-29fe1862e7b3.png" />
               
