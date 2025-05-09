@@ -2,16 +2,14 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
-import { FeatureGrid } from '../features/FeatureGrid';
 
 interface HeroContentProps {
   animate: boolean;
   onGetAccess: () => void;
   onLearnMore: (e: React.MouseEvent) => void;
-  onFeatureClick?: (index: number) => void;
 }
 
-export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore, onFeatureClick }) => {
+export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore }) => {
   return (
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
       <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[4.25rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
@@ -48,10 +46,6 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
           Join early adopters in our private pilot
         </span>
-      </div>
-      
-      <div className="mt-10">
-        <FeatureGrid animate={animate} onFeatureClick={onFeatureClick} />
       </div>
     </div>
   );

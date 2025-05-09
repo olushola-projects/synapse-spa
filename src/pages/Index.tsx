@@ -11,13 +11,15 @@ import PoweredBySection from "../components/PoweredBySection";
 import EnterpriseSection from "../components/EnterpriseSection";
 import HowItWorksSection from "../components/HowItWorksSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { USPFeatureSection } from "@/components/features/USPFeatureSection";
 
 const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
     features: false,
     video: false,
     testimonials: false,
-    cta: false
+    cta: false,
+    usp: false
   });
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const Index = () => {
       });
     }, observerOptions);
 
-    const sections = ['features', 'how-it-works', 'testimonials', 'cta'];
+    const sections = ['features', 'how-it-works', 'testimonials', 'cta', 'usp-section'];
     sections.forEach(section => {
       const element = document.getElementById(section);
       if (element) {
@@ -110,6 +112,10 @@ const Index = () => {
       <AnimatedBackground />
       <Navbar />
       <HeroSection />
+      
+      <div id="usp-section" className={`transition-opacity duration-1000 ${visibleSections.usp ? 'opacity-100' : 'opacity-0'}`}>
+        <USPFeatureSection />
+      </div>
       
       <div id="features" className={`transition-opacity duration-1000 ${visibleSections.features ? 'opacity-100' : 'opacity-0'}`}>
         <FeaturesSection />
