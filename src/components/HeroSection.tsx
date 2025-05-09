@@ -34,19 +34,31 @@ const HeroSection = () => {
   return (
     <div
       style={{ minHeight: "calc(100vh - 64px)" }}
-      className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-24 flex flex-col md:flex-row items-center justify-center gap-12"
+      className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-24 flex flex-col items-center justify-center"
     >
       <div className="container mx-auto grid md:grid-cols-2 gap-16 items-center">
         {/* Hero Content - Left Side */}
-        <HeroContent
-          animate={animate}
-          onGetAccess={handleGetAccessClick}
-          onLearnMore={handleLearnMoreClick}
-        />
+        <div className="flex flex-col items-start">
+          <HeroContent
+            animate={animate}
+            onGetAccess={handleGetAccessClick}
+            onLearnMore={handleLearnMoreClick}
+          />
+          
+          {/* USP Feature Section - Under Hero Content */}
+          <div className={`mt-12 w-full transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+            <USPFeatureSection />
+          </div>
+        </div>
 
         {/* Hero Visual - Right Side */}
         <div className={`relative w-full transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-x-6'}`}>
-          <USPFeatureSection />
+          {/* Original dashboard visualization restored */}
+          <img 
+            src="/lovable-uploads/c5b1f529-364b-4a3f-9e4e-29fe1862e7b3.png" 
+            alt="Dashboard interface" 
+            className="w-full h-auto shadow-2xl rounded-xl"
+          />
         </div>
       </div>
     </div>

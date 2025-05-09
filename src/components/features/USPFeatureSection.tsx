@@ -66,88 +66,72 @@ export const USPFeatureSection = () => {
   };
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-gray-900">
-            Synapses Core Capabilities
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Transform your expertise with our purpose-built GRC solutions
-          </p>
-        </div>
+    <div className="flex justify-center gap-8 flex-wrap">
+      {uspItems.map((usp, index) => (
+        <motion.div
+          key={index}
+          className="flex flex-col items-center cursor-pointer"
+          whileHover={{ y: -5 }}
+          onClick={() => handleUSPClick(usp)}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: index * 0.1 }}
+        >
+          <div className={`w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-2 ${usp.color}`}>
+            {usp.icon}
+          </div>
+          <h3 className="text-base font-bold text-gray-800">{usp.title}</h3>
+          <div className="pt-1">
+            <span className="text-indigo-600 font-medium text-sm flex items-center justify-center">
+              Learn More
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </div>
+        </motion.div>
+      ))}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {uspItems.map((usp, index) => (
-            <motion.div
-              key={index}
-              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 cursor-pointer h-full border border-gray-100 hover:border-indigo-300"
-              whileHover={{ y: -5 }}
-              onClick={() => handleUSPClick(usp)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-            >
-              <div className="flex flex-col items-center text-center h-full">
-                <div className={`w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 ${usp.color}`}>
-                  {usp.icon}
+      {/* Modal Dialog */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        {selectedUSP && (
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl flex items-center gap-2">
+                <div className={`inline-block ${selectedUSP.color}`}>
+                  {selectedUSP.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-gray-800">{usp.title}</h3>
-                <p className="text-gray-600 mb-4">{usp.description}</p>
-                <div className="mt-auto pt-4">
-                  <span className="text-indigo-600 font-medium text-sm flex items-center justify-center">
-                    Learn More
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </span>
-                </div>
+                <span>{selectedUSP.title}</span>
+              </DialogTitle>
+              <DialogDescription className="text-lg text-gray-700 mt-2">
+                {selectedUSP.description}
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-6 pt-4">
+              <div>
+                <h4 className="text-lg font-semibold text-indigo-700">Position</h4>
+                <p className="mt-1 text-gray-700">{selectedUSP.modalContent.position}</p>
               </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Modal Dialog */}
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          {selectedUSP && (
-            <DialogContent className="sm:max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="text-2xl flex items-center gap-2">
-                  <div className={`inline-block ${selectedUSP.color}`}>
-                    {selectedUSP.icon}
-                  </div>
-                  <span>{selectedUSP.title}</span>
-                </DialogTitle>
-                <DialogDescription className="text-lg text-gray-700 mt-2">
-                  {selectedUSP.description}
-                </DialogDescription>
-              </DialogHeader>
               
-              <div className="space-y-6 pt-4">
-                <div>
-                  <h4 className="text-lg font-semibold text-indigo-700">Position</h4>
-                  <p className="mt-1 text-gray-700">{selectedUSP.modalContent.position}</p>
-                </div>
-                
-                <div>
-                  <h4 className="text-lg font-semibold text-indigo-700">Problem</h4>
-                  <p className="mt-1 text-gray-700">{selectedUSP.modalContent.problem}</p>
-                </div>
-                
-                <div>
-                  <h4 className="text-lg font-semibold text-indigo-700">Solution</h4>
-                  <p className="mt-1 text-gray-700">{selectedUSP.modalContent.solution}</p>
-                </div>
-                
-                <div>
-                  <h4 className="text-lg font-semibold text-indigo-700">Why It Matters</h4>
-                  <p className="mt-1 text-gray-700">{selectedUSP.modalContent.whyItMatters}</p>
-                </div>
+              <div>
+                <h4 className="text-lg font-semibold text-indigo-700">Problem</h4>
+                <p className="mt-1 text-gray-700">{selectedUSP.modalContent.problem}</p>
               </div>
-            </DialogContent>
-          )}
-        </Dialog>
-      </div>
-    </section>
+              
+              <div>
+                <h4 className="text-lg font-semibold text-indigo-700">Solution</h4>
+                <p className="mt-1 text-gray-700">{selectedUSP.modalContent.solution}</p>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-semibold text-indigo-700">Why It Matters</h4>
+                <p className="mt-1 text-gray-700">{selectedUSP.modalContent.whyItMatters}</p>
+              </div>
+            </div>
+          </DialogContent>
+        )}
+      </Dialog>
+    </div>
   );
 };
