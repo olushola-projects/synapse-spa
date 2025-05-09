@@ -27,16 +27,6 @@ const HeroSection = () => {
     }
   };
 
-  const handleLearnMoreClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const featuresSection = document.getElementById("features");
-    if (featuresSection) {
-      const yOffset = -80;
-      const y = featuresSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
-
   const handleAmlDialogOpen = () => {
     setShowAmlDialog(true);
   };
@@ -44,7 +34,7 @@ const HeroSection = () => {
   return (
     <div
       style={{ minHeight: "calc(100vh - 64px)" }}
-      className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-24 flex flex-col items-center justify-center bg-gradient-to-br from-[#eef4ff] via-white to-[#f8faff]"
+      className="w-full px-4 sm:px-6 lg:px-8 py-6 md:py-12 flex flex-col items-center justify-center bg-gradient-to-br from-[#eef4ff] via-white to-[#f8faff]"
     >
       <div className="container mx-auto grid md:grid-cols-2 gap-16 items-center">
         {/* Hero Content - Left Side */}
@@ -52,7 +42,6 @@ const HeroSection = () => {
           <HeroContent
             animate={animate}
             onGetAccess={handleGetAccessClick}
-            onLearnMore={handleLearnMoreClick}
           />
           
           {/* USP Feature Section - Under Hero Content */}

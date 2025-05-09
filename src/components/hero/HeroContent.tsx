@@ -6,13 +6,12 @@ import { ArrowRight } from 'lucide-react';
 interface HeroContentProps {
   animate: boolean;
   onGetAccess: () => void;
-  onLearnMore: (e: React.MouseEvent) => void;
 }
 
-export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onLearnMore }) => {
+export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess }) => {
   return (
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-      <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[4.25rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
+      <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-[4.5rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
         <span className="inline-block relative">
           <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span><br />
           <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span><br />
@@ -27,14 +26,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       <div className="mt-10 flex flex-col sm:flex-row gap-4">
         <div onClick={onGetAccess} className="cursor-pointer">
           <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
-            Join Waitlist <ArrowRight size={18} />
+            Get Early Access <ArrowRight size={18} />
           </Button>
         </div>
-        <a href="#features" onClick={onLearnMore}>
-          <Button variant="outline" className="border-synapse-primary text-synapse-primary hover:bg-synapse-primary/5 px-8 py-6 text-lg rounded-lg hover-lift">
-            Learn More
-          </Button>
-        </a>
       </div>
       
       <div className="mt-6 flex items-center text-sm text-gray-500 space-x-6">
