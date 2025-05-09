@@ -53,9 +53,9 @@ const HeroSection = () => {
 
         {/* Hero Visual - Right Side */}
         <div className={`relative w-full transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-x-6'}`}>
-          {/* Original dashboard visualization restored */}
+          {/* Dashboard visualization restored to original image */}
           <img 
-            src="/lovable-uploads/c5b1f529-364b-4a3f-9e4e-29fe1862e7b3.png" 
+            src="/lovable-uploads/1d282686-82bd-4818-948a-3a844c5ea12e.png" 
             alt="Dashboard interface" 
             className="w-full h-auto shadow-2xl rounded-xl"
           />
