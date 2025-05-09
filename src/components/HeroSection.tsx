@@ -7,10 +7,14 @@ import { DashboardContent } from "./dashboard/DashboardContent";
 import { StatusCards } from "./dashboard/StatusCards";
 import { EnhancedDashboardContainer, DashboardGrid } from "./dashboard/Dashboard";
 import MobileCharts from "./dashboard/MobileCharts";
+import ExternalFormDialog from "./ExternalFormDialog";
+import InviteDialog from "./InviteDialog";
 
 const HeroSection = () => {
   const [animate, setAnimate] = useState(false);
   const [showAmlDialog, setShowAmlDialog] = useState(false);
+  const [showFormDialog, setShowFormDialog] = useState(false);
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
 
   // Trigger animations after component mounts
   useEffect(() => {
@@ -20,11 +24,11 @@ const HeroSection = () => {
   }, []);
 
   const handleGetAccessClick = () => {
-    // Open dialog or scroll to contact form
-    const element = document.getElementById("cta");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    setShowFormDialog(true);
+  };
+
+  const handleInviteClick = () => {
+    setShowInviteDialog(true);
   };
 
   const handleAmlDialogOpen = () => {
@@ -42,6 +46,7 @@ const HeroSection = () => {
           <HeroContent
             animate={animate}
             onGetAccess={handleGetAccessClick}
+            onInvite={handleInviteClick}
           />
           
           {/* USP Feature Section - Under Hero Content */}
@@ -75,6 +80,18 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+      
+      {/* Dialogs */}
+      <ExternalFormDialog 
+        open={showFormDialog} 
+        onOpenChange={setShowFormDialog} 
+        title="Get Early Access"
+      />
+      
+      <InviteDialog
+        open={showInviteDialog}
+        onOpenChange={setShowInviteDialog}
+      />
     </div>
   );
 };

@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import ExternalFormDialog from "./ExternalFormDialog";
+import InviteDialog from "./InviteDialog";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showFormDialog, setShowFormDialog] = useState(false);
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +29,10 @@ const Navbar = () => {
   const openFormDialog = () => {
     setShowFormDialog(true);
   };
+  
+  const openInviteDialog = () => {
+    setShowInviteDialog(true);
+  };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -43,18 +49,26 @@ const Navbar = () => {
     <>
       <header className={`sticky top-0 z-50 w-full ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"} transition-all duration-200`}>
         <div className="container mx-auto flex items-center justify-between p-4">
-          <Link to="/" className="text-2xl font-bold text-blue-700 flex items-center gap-2">
-            Synapses
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link to="/" className="text-3xl font-bold text-blue-700 flex items-center gap-2">
+              Synapses
+            </Link>
+            
+            <nav className="hidden md:flex items-center gap-6">
+              <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors">Home</Link>
+              <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Become a Partner</Link>
+              <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors">FAQ</Link>
+            </nav>
+          </div>
           
-          <nav className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors">Home</Link>
-            <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors">Partners</Link>
-            <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors">FAQ</Link>
-            <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors cursor-pointer">
-              <Button size="sm">Get Early Access</Button>
+          <div className="hidden md:flex items-center gap-4">
+            <div onClick={openInviteDialog} className="cursor-pointer">
+              <Button variant="outline" className="border-black text-black bg-transparent hover:bg-gray-100">Invite</Button>
             </div>
-          </nav>
+            <div onClick={openFormDialog} className="cursor-pointer">
+              <Button>Get Early Access</Button>
+            </div>
+          </div>
 
           <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMobileMenu}>
             <Menu className="h-6 w-6" />
@@ -72,10 +86,13 @@ const Navbar = () => {
           >
             <nav className="container mx-auto p-4 flex flex-col gap-4">
               <Link to="/" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Home</Link>
-              <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Partners</Link>
+              <Link to="/partners" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">Become a Partner</Link>
               <Link to="/resources/faq" className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100">FAQ</Link>
+              <div onClick={openInviteDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
+                <Button variant="outline" className="border-black text-black bg-transparent hover:bg-gray-100 mt-2 w-full">Invite</Button>
+              </div>
               <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button className="mt-2">Get Early Access</Button>
+                <Button className="mt-2 w-full">Get Early Access</Button>
               </div>
             </nav>
           </motion.div>
@@ -86,6 +103,11 @@ const Navbar = () => {
         open={showFormDialog} 
         onOpenChange={setShowFormDialog} 
         title="Get Early Access"
+      />
+      
+      <InviteDialog
+        open={showInviteDialog}
+        onOpenChange={setShowInviteDialog}
       />
     </>
   );
