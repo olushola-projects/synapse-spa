@@ -1,17 +1,23 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { USPFeatureSection } from "./features/USPFeatureSection";
 import { HeroContent } from "./hero/HeroContent";
+import { DashboardHeader } from "./dashboard/DashboardHeader";
+import { DashboardContent } from "./dashboard/DashboardContent";
+import { StatusCards } from "./dashboard/StatusCards";
+import { EnhancedDashboardContainer, DashboardGrid } from "./dashboard/Dashboard";
+import MobileCharts from "./dashboard/MobileCharts";
 
 const HeroSection = () => {
   const [animate, setAnimate] = useState(false);
+  const [showAmlDialog, setShowAmlDialog] = useState(false);
 
   // Trigger animations after component mounts
-  useState(() => {
+  useEffect(() => {
     setTimeout(() => {
       setAnimate(true);
     }, 100);
-  });
+  }, []);
 
   const handleGetAccessClick = () => {
     // Open dialog or scroll to contact form
@@ -29,6 +35,10 @@ const HeroSection = () => {
       const y = featuresSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
+  };
+
+  const handleAmlDialogOpen = () => {
+    setShowAmlDialog(true);
   };
 
   return (
@@ -51,14 +61,29 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Hero Visual - Right Side */}
+        {/* Hero Visual - Right Side: Dynamic Dashboard */}
         <div className={`relative w-full transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-x-6'}`}>
-          {/* Dashboard visualization restored to match the reference image */}
-          <img 
-            src="/lovable-uploads/b580e547-9e9f-4145-9649-3b9f79e59b32.png" 
-            alt="Dashboard interface" 
-            className="w-full h-auto shadow-2xl rounded-xl"
-          />
+          <div className="w-full overflow-hidden rounded-xl shadow-2xl bg-white">
+            {/* Dashboard simulation */}
+            <div className="w-full h-[420px] overflow-hidden relative flex flex-col">
+              {/* Dashboard Header */}
+              <DashboardHeader avatarSrc="/lovable-uploads/c5b1f529-364b-4a3f-9e4e-29fe1862e7b3.png" />
+              
+              {/* Dashboard Container */}
+              <div className="flex-1 p-1 flex flex-col bg-gray-50">
+                {/* Status Cards */}
+                <StatusCards />
+                
+                {/* Dashboard Main Content */}
+                <DashboardContent onAmlDialogOpen={handleAmlDialogOpen} />
+                
+                {/* Mobile-specific charts for responsive design */}
+                <div className="hidden md:hidden">
+                  <MobileCharts />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
