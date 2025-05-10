@@ -1,194 +1,20 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CalendarIcon, Clock, Tag, Search, Filter } from 'lucide-react';
+import { CalendarIcon, Clock, Tag, Search } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Badge } from '@/components/ui/badge';
-
-interface BlogAuthor {
-  name: string;
-  role: string;
-  avatar: string;
-}
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  author: BlogAuthor;
-  date: string;
-  readTime: string;
-  tags: string[];
-  image: string;
-  category: string;
-  featured?: boolean;
-}
-
-// Blog authors
-const authors = {
-  phoebe: {
-    name: "Phoebe Banks",
-    role: "Compliance Transformation Officer at Complia",
-    avatar: "/placeholder.svg"
-  },
-  alfred: {
-    name: "Alfred Frodes",
-    role: "Compliance Automation Lead",
-    avatar: "/placeholder.svg"
-  }
-};
-
-// Blog posts data
-const blogPosts: BlogPost[] = [
-  // Theme 1: AI-Powered Investigation & Compliance
-  {
-    id: 1,
-    title: "The Future of AML Investigation: AI Agents and Human Expertise",
-    excerpt: "How investigation-centered approaches powered by AI are revolutionizing financial crime detection while keeping human expertise at the core of decision-making.",
-    author: authors.phoebe,
-    date: "May 8, 2025",
-    readTime: "8 min read",
-    tags: ["AML", "Financial Crime", "AI Investigations"],
-    image: "/placeholder.svg",
-    category: "AI-Powered Investigation",
-    featured: true
-  },
-  {
-    id: 2,
-    title: "Beyond Rule-Based Systems: AI's Impact on Modern Compliance",
-    excerpt: "Discover how AI is transforming traditional compliance from reactive rule-following to proactive risk management with enhanced detection capabilities.",
-    author: authors.alfred,
-    date: "May 5, 2025",
-    readTime: "6 min read",
-    tags: ["AI", "Compliance Evolution", "Risk Management"],
-    image: "/placeholder.svg",
-    category: "AI-Powered Investigation"
-  },
-  {
-    id: 3,
-    title: "Strategic Implementation of AI in GRC Programs: 2025 Framework",
-    excerpt: "A comprehensive framework for implementing AI across governance, risk, and compliance functions with practical steps for integration.",
-    author: authors.phoebe,
-    date: "April 28, 2025",
-    readTime: "10 min read",
-    tags: ["GRC", "Implementation Framework", "Strategy"],
-    image: "/placeholder.svg",
-    category: "AI-Powered Investigation"
-  },
-  {
-    id: 4,
-    title: "How Banks Are Using Generative AI to Transform Risk Management in 2025",
-    excerpt: "Case studies of leading financial institutions leveraging generative AI to enhance risk identification, assessment, and mitigation strategies.",
-    author: authors.alfred,
-    date: "April 20, 2025",
-    readTime: "9 min read",
-    tags: ["Banking", "Generative AI", "Risk Management"],
-    image: "/placeholder.svg",
-    category: "AI-Powered Investigation"
-  },
-  
-  // Theme 2: Future of Compliance Professionals
-  {
-    id: 5,
-    title: "From Regulator to Orchestrator: The Evolved Role of Compliance Officers",
-    excerpt: "How AI is transforming compliance professionals from rule enforcers into strategic business partners who orchestrate regulatory technology ecosystems.",
-    author: authors.phoebe,
-    date: "May 2, 2025",
-    readTime: "7 min read",
-    tags: ["Career Development", "Future Skills", "Compliance Leadership"],
-    image: "/placeholder.svg",
-    category: "Future of Compliance Professionals"
-  },
-  {
-    id: 6,
-    title: "The AI-Enhanced Compliance Professional: Critical Skills for 2025 and Beyond",
-    excerpt: "Identifying and developing the essential skills that will define successful compliance professionals in an AI-augmented regulatory landscape.",
-    author: authors.alfred,
-    date: "April 25, 2025",
-    readTime: "8 min read",
-    tags: ["Skills Development", "Career Planning", "AI Literacy"],
-    image: "/placeholder.svg",
-    category: "Future of Compliance Professionals"
-  },
-  {
-    id: 7,
-    title: "Human-AI Collaboration: The New Compliance Operating Model",
-    excerpt: "Building effective partnership models between compliance teams and AI systems to maximize regulatory coverage and business value.",
-    author: authors.phoebe,
-    date: "April 15, 2025",
-    readTime: "6 min read",
-    tags: ["Collaboration", "Operating Models", "Team Structure"],
-    image: "/placeholder.svg",
-    category: "Future of Compliance Professionals"
-  },
-  
-  // Theme 3: Embedding AI in Regulatory Processes
-  {
-    id: 8,
-    title: "Regulatory Technology Ecosystems: Integrating AI Throughout the Compliance Lifecycle",
-    excerpt: "A holistic approach to embedding AI capabilities across all stages of the compliance process from regulatory change management to reporting.",
-    author: authors.alfred,
-    date: "April 12, 2025",
-    readTime: "11 min read",
-    tags: ["RegTech", "Process Automation", "Integration"],
-    image: "/placeholder.svg",
-    category: "Embedding AI in Regulatory Processes"
-  },
-  {
-    id: 9,
-    title: "Compliance by Design: AI-Driven Approaches to Regulatory Architecture",
-    excerpt: "How organizations are reimagining compliance architectures with AI at the core to ensure regulations are embedded into business processes from the ground up.",
-    author: authors.phoebe,
-    date: "April 8, 2025",
-    readTime: "9 min read",
-    tags: ["Compliance by Design", "Architecture", "Process Integration"],
-    image: "/placeholder.svg",
-    category: "Embedding AI in Regulatory Processes"
-  },
-  
-  // Theme 4: Specialized Compliance Areas
-  {
-    id: 10,
-    title: "AI vs. Greenwashing: The New Frontier in ESG Compliance",
-    excerpt: "How advanced AI systems are being deployed to identify greenwashing and ensure accurate ESG reporting in financial services.",
-    author: authors.alfred,
-    date: "April 3, 2025",
-    readTime: "7 min read",
-    tags: ["ESG", "Sustainability", "Reporting"],
-    image: "/placeholder.svg",
-    category: "Specialized Compliance Areas"
-  },
-  {
-    id: 11,
-    title: "Balancing Innovation and Governance: Navigating AI Compliance in 2025",
-    excerpt: "Strategies for maintaining regulatory compliance while leveraging AI's transformative potential across business functions.",
-    author: authors.phoebe,
-    date: "March 30, 2025",
-    readTime: "8 min read",
-    tags: ["AI Governance", "Innovation", "Regulatory Balance"],
-    image: "/placeholder.svg",
-    category: "Specialized Compliance Areas"
-  },
-  {
-    id: 12,
-    title: "Industry-Specific AI Compliance Challenges and Solutions",
-    excerpt: "A comprehensive analysis of how different sectors are addressing unique regulatory challenges with tailored AI compliance approaches.",
-    author: authors.alfred,
-    date: "March 25, 2025",
-    readTime: "10 min read",
-    tags: ["Industry Analysis", "Sectoral Regulation", "Case Studies"],
-    image: "/placeholder.svg",
-    category: "Specialized Compliance Areas"
-  },
-];
+import { blogPosts } from '@/data/blogData';
 
 const Blog = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -216,6 +42,11 @@ const Blog = () => {
   const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
   
+  // Function to navigate to article details
+  const handleReadArticle = (articleId: number) => {
+    navigate(`/resources/blog/${articleId}`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -257,7 +88,7 @@ const Blog = () => {
                       />
                     </div>
                     <div className="p-6 md:w-1/2 md:p-8 flex flex-col">
-                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 flex-wrap">
                         <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">
                           Featured
                         </Badge>
@@ -279,7 +110,12 @@ const Blog = () => {
                           <p className="text-sm text-gray-500">{featuredPost.author.role}</p>
                         </div>
                         
-                        <Button variant="outline" size="sm" className="ml-auto">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="ml-auto"
+                          onClick={() => handleReadArticle(featuredPost.id)}
+                        >
                           Read More
                         </Button>
                       </div>
@@ -317,7 +153,7 @@ const Blog = () => {
                               className="w-full h-48 object-cover"
                             />
                             <div className="p-6">
-                              <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                              <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 flex-wrap">
                                 <Badge variant="outline" className="capitalize">{post.category}</Badge>
                                 <span className="flex items-center gap-1"><CalendarIcon className="w-3 h-3" /> {post.date}</span>
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {post.readTime}</span>
@@ -344,8 +180,13 @@ const Blog = () => {
                                   <p className="text-xs text-gray-500">{post.author.role}</p>
                                 </div>
                                 
-                                <Button variant="ghost" size="sm" className="ml-auto">
-                                  Read
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="ml-auto"
+                                  onClick={() => handleReadArticle(post.id)}
+                                >
+                                  Read More
                                 </Button>
                               </div>
                             </div>

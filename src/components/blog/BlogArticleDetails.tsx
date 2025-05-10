@@ -8,31 +8,16 @@ import { Badge } from '@/components/ui/badge';
 import { CalendarIcon, Clock, ChevronLeft, Tag, Share2 } from 'lucide-react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import { blogPosts, BlogPost } from '@/data/blogData';
+import { toast } from "sonner";
 
-interface BlogAuthor {
-  name: string;
-  role: string;
-  avatar: string;
-}
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  author: BlogAuthor;
-  date: string;
-  readTime: string;
-  tags: string[];
-  image: string;
-  category: string;
-  content?: string;
-}
-
-// This would typically come from a database or API
-// For now, we'll just use a placeholder
-const getArticle = (id: string): BlogPost => {
-  return {
-    id: parseInt(id),
+const BlogArticleDetails: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  
+  // Get article from our data source
+  const article: BlogPost = blogPosts.find(post => post.id === parseInt(id || "0")) || {
+    id: 0,
     title: "Article not found",
     excerpt: "The article you're looking for couldn't be found.",
     author: {
@@ -45,16 +30,13 @@ const getArticle = (id: string): BlogPost => {
     tags: ["GRC", "Compliance"],
     image: "/placeholder.svg",
     category: "General",
-    content: "This is a placeholder for article content. In a real application, this would contain the full article text with proper formatting, images, and other rich content elements."
+    content: "This article could not be found. Please check the URL and try again."
   };
-};
-
-const BlogArticleDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   
-  // In a real app, you would fetch the article data based on the ID
-  const article = getArticle(id || "0");
+  // Get related articles (same category, excluding current article)
+  const relatedArticles = blogPosts
+    .filter(post => post.category === article.category && post.id !== article.id)
+    .slice(0, 2);
   
   const handleGoBack = () => {
     navigate('/resources/blog');
@@ -72,8 +54,14 @@ const BlogArticleDetails: React.FC = () => {
       console.log('Web Share API not supported');
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
-      alert('Article URL copied to clipboard!');
+      toast("Article URL copied to clipboard!", {
+        description: "You can now paste the link to share this article."
+      });
     }
+  };
+  
+  const handleRelatedArticleClick = (articleId: number) => {
+    navigate(`/resources/blog/${articleId}`);
   };
   
   return (
@@ -126,21 +114,44 @@ const BlogArticleDetails: React.FC = () => {
                   </Button>
                 </div>
                 
-                {/* Article Content - In a real app, this would be rich formatted content */}
+                {/* Article Content */}
                 <div className="prose max-w-none mb-8">
                   <p className="text-lg text-gray-700 mb-4">{article.excerpt}</p>
                   
-                  {/* This is placeholder content */}
-                  <p className="text-gray-700 mb-4">
-                    This is a placeholder for the full article content. In a real application, 
-                    this section would contain the complete article with proper formatting, 
-                    headings, paragraphs, lists, images, and other rich content elements.
-                  </p>
-                  <p className="text-gray-700 mb-4">
-                    The content would be stored in a database or content management system
-                    and retrieved based on the article ID. It could be formatted as Markdown,
-                    HTML, or using a rich text editor format.
-                  </p>
+                  {/* Render article content */}
+                  {article.content ? (
+                    <div className="article-content" 
+                      dangerouslySetInnerHTML={{ 
+                        __html: article.content
+                          .split('\n')
+                          .map(line => {
+                            // Handle Markdown-style headings
+                            if (line.startsWith('# ')) {
+                              return `<h1 class="text-3xl font-bold mt-8 mb-4">${line.slice(2)}</h1>`;
+                            } else if (line.startsWith('## ')) {
+                              return `<h2 class="text-2xl font-bold mt-8 mb-3">${line.slice(3)}</h2>`;
+                            } else if (line.startsWith('### ')) {
+                              return `<h3 class="text-xl font-bold mt-6 mb-2">${line.slice(4)}</h3>`;
+                            } else if (line.startsWith('**') && line.endsWith('**')) {
+                              // Bold text
+                              return `<p class="font-bold my-2">${line.slice(2, -2)}</p>`;
+                            } else if (line.trim() === '') {
+                              // Empty lines become breaks
+                              return '<br>';
+                            } else if (line.startsWith('- ')) {
+                              // List items
+                              return `<li class="ml-6 mb-1">${line.slice(2)}</li>`;
+                            } else {
+                              // Regular paragraphs
+                              return `<p class="mb-4">${line}</p>`;
+                            }
+                          })
+                          .join('')
+                      }} 
+                    />
+                  ) : (
+                    <p className="text-gray-700">No content available for this article.</p>
+                  )}
                 </div>
                 
                 <div className="flex flex-wrap gap-2 mt-6">
@@ -153,44 +164,37 @@ const BlogArticleDetails: React.FC = () => {
               </div>
             </div>
             
-            {/* Related Articles Placeholder */}
-            <div className="mt-12">
-              <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="overflow-hidden">
-                  <img 
-                    src="/placeholder.svg" 
-                    alt="Related article"
-                    className="w-full h-40 object-cover"
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="font-bold mb-2">Related Article Title</h3>
-                    <p className="text-sm text-gray-600 line-clamp-2">
-                      Brief excerpt from the related article would appear here.
-                    </p>
-                    <Button variant="ghost" size="sm" className="mt-2 p-0">
-                      Read More
-                    </Button>
-                  </CardContent>
-                </Card>
-                <Card className="overflow-hidden">
-                  <img 
-                    src="/placeholder.svg" 
-                    alt="Related article"
-                    className="w-full h-40 object-cover"
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="font-bold mb-2">Related Article Title</h3>
-                    <p className="text-sm text-gray-600 line-clamp-2">
-                      Brief excerpt from the related article would appear here.
-                    </p>
-                    <Button variant="ghost" size="sm" className="mt-2 p-0">
-                      Read More
-                    </Button>
-                  </CardContent>
-                </Card>
+            {/* Related Articles */}
+            {relatedArticles.length > 0 && (
+              <div className="mt-12">
+                <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {relatedArticles.map((relatedArticle) => (
+                    <Card key={relatedArticle.id} className="overflow-hidden">
+                      <img 
+                        src={relatedArticle.image} 
+                        alt={relatedArticle.title}
+                        className="w-full h-40 object-cover"
+                      />
+                      <CardContent className="p-4">
+                        <h3 className="font-bold mb-2">{relatedArticle.title}</h3>
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {relatedArticle.excerpt}
+                        </p>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="mt-2 p-0"
+                          onClick={() => handleRelatedArticleClick(relatedArticle.id)}
+                        >
+                          Read More
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
