@@ -22,6 +22,7 @@ import CookiePolicy from "./pages/legal/CookiePolicy";
 
 // Resources pages
 import Blog from "./pages/resources/Blog";
+import BlogArticleDetails from "./components/blog/BlogArticleDetails";
 import Documentation from "./pages/resources/Documentation";
 import FAQ from "./pages/resources/FAQ";
 
@@ -66,6 +67,7 @@ const App = () => (
             
             {/* Resources Routes */}
             <Route path="/resources/blog" element={<Blog />} />
+            <Route path="/resources/blog/:id" element={<BlogArticleDetails />} />
             <Route path="/resources/documentation" element={<Documentation />} />
             <Route path="/resources/faq" element={<FAQ />} />
             
