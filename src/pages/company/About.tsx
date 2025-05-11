@@ -89,10 +89,12 @@ const About = () => {
                   <Badge variant="outline" className="mb-4">Our Story</Badge>
                   <h2 className="text-3xl font-bold mb-6">Building the Future of GRC</h2>
                   <p className="text-gray-600 mb-4">
-                    Synapses was founded in 2025 with a clear vision: to democratize access to regulatory agents for GRC professionals—empowering them not just to navigate, but to lead the future of compliance. As regulatory complexity accelerates, Synapses is designed to fundamentally upskill and reskill compliance teams, enabling them to operate as strategic conductors in the era of agentic compliance. Our intuitive AI copilots and intelligent agents augment—not replace—human judgment, transforming how compliance work is done by enhancing expertise, insight, and strategic decision-making. 
+                    Synapses was founded in 2025 with a clear vision: to democratize access to regulatory agents for GRC professionals—empowering them not just to navigate, but to lead the future of compliance. 
+                  <p className="text-gray-600 mb-4">
+                    As regulatory complexity accelerates, Synapses is designed to fundamentally upskill and reskill compliance teams, enabling them to operate as strategic conductors in the era of agentic compliance. Our intuitive AI copilots and intelligent agents augment—not replace—human judgment, transforming how compliance work is done by enhancing expertise, insight, and strategic decision-making.
                   </p>
                   <p className="text-gray-600 mb-4">
-                    We recognized that compliance professionals deserved better—a platform that combines cutting-edge technology with deep domain expertise to simplify compliance tasks and foster professional growth.
+                    We recognized that compliance professionals deserved better—a platform that combines emerging technologie with deep domain expertise to simplify compliance tasks and foster professional growth.
                   </p>
                   <p className="text-gray-600 mb-4">
                     Today, we're building the most comprehensive GRC intelligence platform that serves as the central nervous system for compliance operations, connecting professionals, knowledge, and tools in one integrated ecosystem.
