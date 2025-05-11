@@ -20,17 +20,17 @@ const About = () => {
       bio: "AI is no longer just a tool — it's becoming the foundation of modern compliance culture. We're not replacing professionals; we're enabling faster, traceable, and defensible decision-making at every level of the organization.",
     },
     {
-      name: "World Economic Forum & Citi",
+      name: "Citi Report",
       role: "AI Impact in Compliance Report",
       bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
     },
     {
-      name: "Deloitte & McKinsey",
+      name: "McKinsey's Report",
       role: "State of Compliance & Automation Trends",
       bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
     },
     {
-      name: "Synapses",
+      name: "Synapses' Founder",
       role: "Our AI Strategy",
       bio: "GRC professionals have the expertise to shape the next generation of RegTech—but traditional systems have left them behind in AI literacy. Synapses empower compliance leaders to build, adapt, and govern tomorrow's intelligent systems - not be governed by them.",
     }
