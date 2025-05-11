@@ -1,42 +1,22 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Shield, Globe, Users, Target, ArrowRight, Quote } from 'lucide-react';
+import { Shield, Globe, Users, Target, ArrowRight, Quote, ExternalLink } from 'lucide-react';
+import { getSortedPerspectives } from '@/data/industryPerspectivesData';
+import ArticleDialog from '@/components/ArticleDialog';
 
 const About = () => {
-  // Industry perspectives data
-  const industryPerspectives = [
-    {
-      name: "Thomson Reuters",
-      role: "Future of Professionals Report, 2024",
-      bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
-    },
-    {
-      name: "Complia",
-      role: "Strategic Briefing, 2025",
-      bio: "AI is no longer just a tool — it's becoming the foundation of modern compliance culture. We're not replacing professionals; we're enabling faster, traceable, and defensible decision-making at every level of the organization.",
-    },
-    {
-      name: "Citi Report",
-      role: "AI Impact in Compliance Report",
-      bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
-    },
-    {
-      name: "McKinsey's Report",
-      role: "State of Compliance & Automation Trends",
-      bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
-    },
-    {
-      name: "Synapses' Founder",
-      role: "Our AI Strategy",
-      bio: "GRC professionals have the expertise to shape the next generation of RegTech—but traditional systems have left them behind in AI literacy. Synapses empower compliance leaders to build, adapt, and govern tomorrow's intelligent systems - not be governed by them.",
-    }
-  ];
+  // State for article dialog
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedPerspective, setSelectedPerspective] = useState(null);
+  
+  // Get sorted perspectives
+  const sortedPerspectives = getSortedPerspectives();
 
-  // Leadership team data
+  // Industry perspectives data
   const leadershipTeam = [
     {
       name: "Sarah Chen",
@@ -63,6 +43,11 @@ const About = () => {
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
     }
   ];
+
+  const handleOpenArticle = (perspective) => {
+    setSelectedPerspective(perspective);
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -149,7 +134,7 @@ const About = () => {
               </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {industryPerspectives.map((perspective, index) => (
+                {sortedPerspectives.map((perspective, index) => (
                   <div key={index} className="h-full group animate-gentle-rotate">
                     <div className="h-full flex flex-col p-7 rounded-xl bg-white shadow-sm border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300">
                       {/* Quote content with emphasis */}
@@ -164,8 +149,24 @@ const About = () => {
                       
                       {/* Attribution section */}
                       <div className="mt-auto border-t border-gray-100 pt-4">
-                        <h3 className="font-bold text-lg text-gray-800">{perspective.name}</h3>
-                        <p className="text-synapse-primary/80 font-medium text-sm">{perspective.role}</p>
+                        <div className="flex items-start gap-3">
+                          <div className={`mt-1 ${perspective.color}`}>
+                            {perspective.icon}
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-lg text-gray-800">{perspective.name}</h3>
+                            <p className="text-synapse-primary/80 font-medium text-sm">{perspective.role}</p>
+                          </div>
+                        </div>
+                        <div className="mt-4 text-right">
+                          <Button 
+                            variant="link" 
+                            className={`text-sm ${perspective.color} font-medium flex items-center justify-end ml-auto gap-1`} 
+                            onClick={() => handleOpenArticle(perspective)}
+                          >
+                            Learn More <ExternalLink size={14} />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -233,6 +234,13 @@ const About = () => {
         </section>
       </div>
       <Footer />
+
+      {/* Article Dialog */}
+      <ArticleDialog 
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        perspective={selectedPerspective}
+      />
     </div>
   );
 };

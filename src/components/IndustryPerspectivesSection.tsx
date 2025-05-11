@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Quote, ArrowRight, Zap, TrendingUp, Shield, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Quote, ArrowRight, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useInView } from 'framer-motion';
 import { 
   Carousel,
@@ -13,45 +13,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import useEmblaCarousel from 'embla-carousel-react';
 import { wrap } from "@/lib/utils";
-
-// Industry perspectives data - updated quotes with links to sources
-const industryPerspectives = [
-  {
-    name: "Thomson Reuters",
-    role: "Future of Professionals Report, 2024",
-    bio: "77% of professionals said the rise of AI would transform their work in the next five years.",
-    icon: <TrendingUp className="h-8 w-8 text-blue-600" />,
-    link: "https://www.thomsonreuters.com/en/artificial-intelligence/future-of-professionals-report.html"
-  },
-  {
-    name: "Complia",
-    role: "Strategic Briefing, 2025",
-    bio: "AI is no longer just a tool — it's becoming the foundation of modern compliance culture. We're not replacing professionals; we're enabling faster, traceable, and defensible decision-making at every level of the organization.",
-    icon: <Zap className="h-8 w-8 text-purple-600" />,
-    link: "https://www.compliancecosmos.org/ai-in-compliance-culture"
-  },
-  {
-    name: "World Economic Forum & Citi",
-    role: "AI Impact in Compliance Report",
-    bio: "Compliance officers will evolve into Compliance Analysts and Risk Advisors—focusing on predictive analytics, strategic advisory, and AI-aided decision-making.",
-    icon: <Shield className="h-8 w-8 text-green-600" />,
-    link: "https://www.weforum.org/reports/the-future-of-jobs-report-2023/"
-  },
-  {
-    name: "Deloitte & McKinsey",
-    role: "State of Compliance & Automation Trends",
-    bio: "Up to 50% of compliance tasks currently performed manually will be automated by 2027.",
-    icon: <Users className="h-8 w-8 text-orange-600" />,
-    link: "https://www2.deloitte.com/us/en/pages/regulatory/articles/modernizing-compliance-digital-age.html"
-  },
-  {
-    name: "Synapses",
-    role: "Our AI Strategy",
-    bio: "GRC professionals have the expertise to shape the next generation of RegTech—but traditional systems have left them behind in AI literacy. Synapses empower compliance leaders to build, adapt, and govern tomorrow's intelligent systems - not be governed by them.",
-    icon: <Zap className="h-8 w-8 text-synapse-primary" />,
-    link: "https://synapses.ai/blog/ai-strategy-for-grc"
-  }
-];
+import { getSortedPerspectives, IndustryPerspective } from '@/data/industryPerspectivesData';
+import ArticleDialog from '@/components/ArticleDialog';
 
 const IndustryPerspectivesSection = () => {
   const sectionRef = useRef(null);
@@ -59,14 +22,19 @@ const IndustryPerspectivesSection = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [autoplayInterval, setAutoplayInterval] = useState<NodeJS.Timeout | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedPerspective, setSelectedPerspective] = useState<IndustryPerspective | null>(null);
+  
+  // Get sorted perspectives
+  const sortedPerspectives = getSortedPerspectives();
   
   const scrollTo = useCallback((index: number) => {
     if (!emblaApi) return;
     // Use the wrap function to ensure the index stays within bounds
-    emblaApi.scrollTo(wrap(0, industryPerspectives.length, index));
-  }, [emblaApi]);
+    emblaApi.scrollTo(wrap(0, sortedPerspectives.length, index));
+  }, [emblaApi, sortedPerspectives.length]);
 
-  // Setup autoplay
+  // Setup autoplay with slower speed for better readability
   const startAutoplay = useCallback(() => {
     if (autoplayInterval) clearInterval(autoplayInterval);
     
@@ -74,7 +42,7 @@ const IndustryPerspectivesSection = () => {
       if (emblaApi) {
         emblaApi.scrollNext();
       }
-    }, 5000); // Slide every 5 seconds
+    }, 8000); // Slide every 8 seconds (increased from 5s for better readability)
     
     setAutoplayInterval(interval);
   }, [emblaApi, autoplayInterval]);
@@ -109,6 +77,11 @@ const IndustryPerspectivesSection = () => {
   const handleMouseLeave = () => {
     startAutoplay();
   };
+
+  const handleOpenArticle = (perspective: IndustryPerspective) => {
+    setSelectedPerspective(perspective);
+    setIsDialogOpen(true);
+  };
   
   return (
     <div id="testimonials" className="py-24 relative overflow-hidden" ref={sectionRef}>
@@ -140,7 +113,7 @@ const IndustryPerspectivesSection = () => {
             ref={emblaRef}
           >
             <div className="flex -ml-4">
-              {industryPerspectives.map((perspective, index) => (
+              {sortedPerspectives.map((perspective, index) => (
                 <div 
                   key={index} 
                   className="flex-[0_0_33.33%] min-w-0 pl-4 transition-all duration-500"
@@ -166,14 +139,13 @@ const IndustryPerspectivesSection = () => {
                         
                         <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
                           <span className="text-xs text-gray-400">Industry Insight</span>
-                          <a 
-                            href={perspective.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-synapse-primary text-sm font-medium inline-flex items-center gap-2 hover:underline"
+                          <Button 
+                            variant="link" 
+                            className={`text-sm ${perspective.color} font-medium flex items-center gap-1 p-0`} 
+                            onClick={() => handleOpenArticle(perspective)}
                           >
-                            Learn more <ArrowRight size={14} />
-                          </a>
+                            Learn More <ExternalLink size={14} />
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -196,7 +168,7 @@ const IndustryPerspectivesSection = () => {
             </Button>
             
             <div className="flex gap-2">
-              {industryPerspectives.map((_, index) => (
+              {sortedPerspectives.map((_, index) => (
                 <button
                   key={index}
                   className={`w-2.5 h-2.5 rounded-full transition-colors ${
@@ -224,9 +196,12 @@ const IndustryPerspectivesSection = () => {
         <div className="md:hidden mt-8">
           <Carousel className="w-full" opts={{ loop: true }}>
             <CarouselContent>
-              {industryPerspectives.map((perspective, i) => (
+              {sortedPerspectives.map((perspective, i) => (
                 <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
-                  <PerspectiveCard perspective={perspective} />
+                  <PerspectiveCard 
+                    perspective={perspective} 
+                    onLearnMore={() => handleOpenArticle(perspective)}
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -243,11 +218,24 @@ const IndustryPerspectivesSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Article Dialog */}
+      <ArticleDialog 
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        perspective={selectedPerspective}
+      />
     </div>
   );
 };
 
-const PerspectiveCard = ({ perspective }: { perspective: typeof industryPerspectives[0] }) => (
+const PerspectiveCard = ({ 
+  perspective, 
+  onLearnMore 
+}: { 
+  perspective: IndustryPerspective,
+  onLearnMore: () => void
+}) => (
   <div className="h-full">
     <div className="h-full flex flex-col p-6 rounded-xl bg-white shadow-sm border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300">
       <div className="mb-4">
@@ -264,14 +252,13 @@ const PerspectiveCard = ({ perspective }: { perspective: typeof industryPerspect
         <h3 className="font-bold text-gray-800">{perspective.name}</h3>
         <p className="text-synapse-primary/80 text-xs">{perspective.role}</p>
         <div className="mt-2">
-          <a 
-            href={perspective.link} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-synapse-primary text-sm font-medium inline-flex items-center gap-2 hover:underline"
+          <Button 
+            variant="link" 
+            className={`text-sm ${perspective.color} font-medium flex items-center gap-1 p-0`} 
+            onClick={onLearnMore}
           >
-            Learn more <ArrowRight size={14} />
-          </a>
+            Learn More <ExternalLink size={14} />
+          </Button>
         </div>
       </div>
     </div>
