@@ -90,6 +90,7 @@ const About = () => {
                   <h2 className="text-3xl font-bold mb-6">Building the Future of GRC</h2>
                   <p className="text-gray-600 mb-4">
                     Synapses was founded in 2025 with a clear vision: to democratize access to regulatory agents for GRC professionals—empowering them not just to navigate, but to lead the future of compliance. 
+                  </p>
                   <p className="text-gray-600 mb-4">
                     As regulatory complexity accelerates, Synapses is designed to fundamentally upskill and reskill compliance teams, enabling them to operate as strategic conductors in the era of agentic compliance. Our intuitive AI copilots and intelligent agents augment—not replace—human judgment, transforming how compliance work is done by enhancing expertise, insight, and strategic decision-making.
                   </p>
