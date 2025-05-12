@@ -39,14 +39,16 @@ const ArticleDialog = ({ isOpen, onOpenChange, perspective }: ArticleDialogProps
             {perspective.bio}
           </p>
           
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mt-4">
-            <h4 className="font-semibold text-gray-800 mb-2">Key Insights:</h4>
-            <ul className="space-y-2 list-disc pl-5">
-              {perspective.insights.map((insight, index) => (
-                <li key={index}>{insight}</li>
-              ))}
-            </ul>
-          </div>
+          {perspective.insights && perspective.insights.length > 0 && (
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mt-4">
+              <h4 className="font-semibold text-gray-800 mb-2">Key Insights:</h4>
+              <ul className="space-y-2 list-disc pl-5">
+                {perspective.insights.map((insight, index) => (
+                  <li key={index}>{insight}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           
           {perspective.quotation && (
             <blockquote className="border-l-4 border-synapse-primary/30 pl-4 italic text-gray-700">
