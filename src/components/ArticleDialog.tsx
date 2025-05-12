@@ -42,11 +42,22 @@ const ArticleDialog = ({ isOpen, onOpenChange, perspective }: ArticleDialogProps
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mt-4">
             <h4 className="font-semibold text-gray-800 mb-2">Key Insights:</h4>
             <ul className="space-y-2 list-disc pl-5">
-              <li>GRC professionals are adapting to AI-driven transformation across regulatory landscapes</li>
-              <li>New governance frameworks are necessary for managing agentic AI systems</li>
-              <li>Organizations must balance innovation with compliance requirements</li>
+              {perspective.insights.map((insight, index) => (
+                <li key={index}>{insight}</li>
+              ))}
             </ul>
           </div>
+          
+          {perspective.quotation && (
+            <blockquote className="border-l-4 border-synapse-primary/30 pl-4 italic text-gray-700">
+              "{perspective.quotation}"
+              {perspective.attribution && (
+                <footer className="mt-1 text-sm text-gray-500 not-italic">
+                  — {perspective.attribution}
+                </footer>
+              )}
+            </blockquote>
+          )}
         </div>
         
         <DialogFooter className="flex items-center justify-between border-t pt-4">
