@@ -80,4 +80,3 @@ const ArticleDialog = ({ isOpen, onOpenChange, perspective }: ArticleDialogProps
 };
 
 export default ArticleDialog;
-

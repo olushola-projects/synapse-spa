@@ -4,7 +4,7 @@ import { Facebook, Twitter, Linkedin, Instagram, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-gray-200">
+    <footer className="relative bg-white border-t border-gray-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-12">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
@@ -40,14 +40,14 @@ const Footer = () => {
                 <li><Link to="/platform/features" className="text-gray-600 hover:text-synapse-primary">Features</Link></li>
                 <li><Link to="/platform/solutions" className="text-gray-600 hover:text-synapse-primary">Solutions</Link></li>
                 <li><Link to="/#features" className="text-gray-600 hover:text-synapse-primary">Integrations</Link></li>
-                <li><Link to="/ask-dara" className="text-gray-600 hover:text-synapse-primary">AI Copilot</Link></li>
+                <li><Link to="/ask-dara" className="text-gray-600 hover:text-synapse-primary">Agent</Link></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Resources</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/resources/blog" className="text-gray-600 hover:text-synapse-primary">GRC Blog</Link></li>
+                <li><Link to="/resources/blog" className="text-gray-600 hover:text-synapse-primary">Blog</Link></li>
                 <li><Link to="/resources/documentation" className="text-gray-600 hover:text-synapse-primary">Documentation</Link></li>
                 <li><Link to="/resources/faq" className="text-gray-600 hover:text-synapse-primary">FAQ</Link></li>
                 <li><Link to="/resources/webinars" className="text-gray-600 hover:text-synapse-primary">Webinars</Link></li>
@@ -67,10 +67,10 @@ const Footer = () => {
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Legal</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/legal/privacy" className="text-gray-600 hover:text-synapse-primary">Privacy</Link></li>
-                <li><Link to="/legal/terms" className="text-gray-600 hover:text-synapse-primary">Terms</Link></li>
+                <li><Link to="/legal/privacy" className="text-gray-600 hover:text-synapse-primary">Privacy Policy</Link></li>
+                <li><Link to="/legal/terms" className="text-gray-600 hover:text-synapse-primary">Terms of Service</Link></li>
                 <li><Link to="/legal/security" className="text-gray-600 hover:text-synapse-primary">Security</Link></li>
-                <li><Link to="/legal/cookies" className="text-gray-600 hover:text-synapse-primary">Cookies</Link></li>
+                <li><Link to="/legal/cookies" className="text-gray-600 hover:text-synapse-primary">Cookie Policy</Link></li>
               </ul>
             </div>
           </div>
