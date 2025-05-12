@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Instagram, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -27,6 +27,9 @@ const Footer = () => {
                 </a>
                 <a href="https://instagram.com/synapsesgrc" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
                   <Instagram size={20} />
+                </a>
+                <a href="mailto:admin@joinsynapses.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
+                  <Mail size={20} />
                 </a>
               </div>
             </div>

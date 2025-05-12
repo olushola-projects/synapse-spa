@@ -42,7 +42,7 @@ const IndustryPerspectivesSection = () => {
       if (emblaApi) {
         emblaApi.scrollNext();
       }
-    }, 8000); // Slide every 8 seconds (increased from 5s for better readability)
+    }, 20000); // Slide every 20 seconds (increased from 8s for better readability)
     
     setAutoplayInterval(interval);
   }, [emblaApi, autoplayInterval]);
