@@ -11,6 +11,7 @@ import PoweredBySection from "../components/PoweredBySection";
 import EnterpriseSection from "../components/EnterpriseSection";
 import HowItWorksSection from "../components/HowItWorksSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { Helmet } from "react-helmet";
 
 const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
@@ -107,6 +108,45 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative">
+      <Helmet>
+        {/* Structured Data for Organization */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Synapses",
+              "url": "https://www.joinsynapses.com",
+              "logo": "https://www.joinsynapses.com/lovable-uploads/93f022b9-560f-49fe-95a3-72816c483659.png",
+              "description": "AI-driven GRC intelligence platform that equips compliance professionals with regulatory agents, insights, and career resilience tools.",
+              "sameAs": [
+                "https://twitter.com/synapsesgrc",
+                "https://www.linkedin.com/company/joinsynapses"
+              ]
+            }
+          `}
+        </script>
+
+        {/* Structured Data for Software Application */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "Synapses GRC Platform",
+              "applicationCategory": "BusinessApplication",
+              "operatingSystem": "Web",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/ComingSoon"
+              },
+              "description": "AI-driven platform for GRC professionals with regulatory agents, insights and career tools."
+            }
+          `}
+        </script>
+      </Helmet>
       <AnimatedBackground />
       <Navbar />
       <HeroSection />
