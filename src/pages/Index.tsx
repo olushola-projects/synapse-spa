@@ -108,17 +108,17 @@ const Index = () => {
   return (
     <div className="min-h-screen relative">
       <SeoHead 
-        title="Synapses - The Agentic Hub For GRC Professionals"
-        description="Empowering the future of Governance, Risk & Compliance. Built by compliance officers, for compliance officers."
-        ogImage="/lovable-uploads/88a5c7a6-e347-41ee-ad94-701d034e7258.png"
+        title="Synapse - GRC Intelligence Platform"
+        description="Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future."
+        ogImage="/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png"
         structuredData={{
           organization: {
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "Synapses",
+            "name": "Synapse",
             "url": "https://www.joinsynapses.com",
-            "logo": "https://www.joinsynapses.com/lovable-uploads/88a5c7a6-e347-41ee-ad94-701d034e7258.png",
-            "description": "Empowering the future of Governance, Risk & Compliance. Built by compliance officers, for compliance officers.",
+            "logo": "https://www.joinsynapses.com/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png",
+            "description": "Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future.",
             "sameAs": [
               "https://twitter.com/synapsesgrc",
               "https://www.linkedin.com/company/joinsynapses"
@@ -127,7 +127,7 @@ const Index = () => {
           application: {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "Synapses GRC Platform",
+            "name": "Synapse GRC Platform",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "offers": {
@@ -136,7 +136,7 @@ const Index = () => {
               "priceCurrency": "USD",
               "availability": "https://schema.org/ComingSoon"
             },
-            "description": "The Agentic Hub For GRC Professionals - Empowering the future of Governance, Risk & Compliance"
+            "description": "The intelligence platform where compliance professionals connect, grow, and shape the future."
           }
         }}
       />

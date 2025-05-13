@@ -17,12 +17,13 @@ interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({
-  title = "Synapses - The Agentic Hub For GRC Professionals",
-  description = "Empowering the future of Governance, Risk & Compliance. Built by compliance officers, for compliance officers.",
+  title = "Synapse - GRC Intelligence Platform",
+  description = "Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future.",
   canonicalUrl = "https://www.joinsynapses.com",
-  ogImage = "/lovable-uploads/88a5c7a6-e347-41ee-ad94-701d034e7258.png",
+  ogImage = "/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png",
   ogType = "website",
   keywords = [
+    "Synapse", 
     "GRC", 
     "Governance Risk Compliance", 
     "Regulatory Technology", 
@@ -35,12 +36,17 @@ export const SeoHead: React.FC<SeoHeadProps> = ({
     "ESG Reporting",
     "Regulatory Intelligence",
     "Agentic Hub",
-    "GRC Professionals"
+    "GRC Professionals",
+    "Compliance Software",
+    "Regulatory Compliance",
+    "Compliance Platform",
+    "GRC Solution",
+    "Risk Management Software"
   ],
   structuredData
 }) => {
   const joinedKeywords = keywords.join(", ");
-  const fullTitle = title.includes("Synapses") ? title : `${title} | Synapses`;
+  const fullTitle = title.includes("Synapse") ? title : `${title} | Synapse`;
   
   return (
     <Helmet>
@@ -56,7 +62,9 @@ export const SeoHead: React.FC<SeoHeadProps> = ({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
-      <meta property="og:site_name" content="Synapses" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:site_name" content="Synapse" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -64,6 +72,12 @@ export const SeoHead: React.FC<SeoHeadProps> = ({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content="Synapse - GRC Intelligence Platform" />
+
+      {/* Additional SEO tags */}
+      <meta name="author" content="Synapse" />
+      <meta name="robots" content="index, follow" />
+      <meta name="googlebot" content="index, follow" />
 
       {/* Structured Data */}
       {structuredData && Object.entries(structuredData).map(([key, data]) => {
