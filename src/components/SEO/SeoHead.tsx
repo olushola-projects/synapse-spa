@@ -9,7 +9,11 @@ interface SeoHeadProps {
   ogImage?: string;
   ogType?: string;
   keywords?: string[];
-  structuredData?: Record<string, any>;
+  structuredData?: {
+    organization?: Record<string, any>;
+    application?: Record<string, any>;
+    [key: string]: Record<string, any> | undefined;
+  };
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({
@@ -60,11 +64,16 @@ export const SeoHead: React.FC<SeoHeadProps> = ({
       <meta name="twitter:image" content={ogImage} />
 
       {/* Structured Data */}
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
+      {structuredData && Object.entries(structuredData).map(([key, data]) => {
+        if (data) {
+          return (
+            <script key={key} type="application/ld+json">
+              {JSON.stringify(data)}
+            </script>
+          );
+        }
+        return null;
+      })}
     </Helmet>
   );
 };
