@@ -17,10 +17,10 @@ interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({
-  title = "Synapses - GRC Intelligence Platform",
-  description = "Join a global network of GRC professionals to boost your expertise with regulatory agents, comprehensive insights and career resilience tools.",
+  title = "Synapses - The Agentic Hub For GRC Professionals",
+  description = "Empowering the future of Governance, Risk & Compliance. Built by compliance officers, for compliance officers.",
   canonicalUrl = "https://www.joinsynapses.com",
-  ogImage = "/lovable-uploads/93f022b9-560f-49fe-95a3-72816c483659.png",
+  ogImage = "/lovable-uploads/88a5c7a6-e347-41ee-ad94-701d034e7258.png",
   ogType = "website",
   keywords = [
     "GRC", 
@@ -33,7 +33,9 @@ export const SeoHead: React.FC<SeoHeadProps> = ({
     "Risk Management",
     "Financial Compliance",
     "ESG Reporting",
-    "Regulatory Intelligence"
+    "Regulatory Intelligence",
+    "Agentic Hub",
+    "GRC Professionals"
   ],
   structuredData
 }) => {
