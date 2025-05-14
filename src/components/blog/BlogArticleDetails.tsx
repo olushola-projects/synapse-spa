@@ -11,6 +11,7 @@ import Footer from '../Footer';
 import { blogPosts, BlogPost } from '@/data/blogData';
 import { toast } from "sonner";
 import { Slider } from '@/components/ui/slider';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const BlogArticleDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,6 +40,16 @@ const BlogArticleDetails: React.FC = () => {
     image: "/placeholder.svg",
     category: "General",
     content: "This article could not be found. Please check the URL and try again."
+  };
+  
+  // Infographics that will be inserted into the article content
+  const infographics = {
+    "RegTech": "/lovable-uploads/6ac8bd07-6906-427c-b832-be14819a3aed.png", // Tech and code visual
+    "AI": "/lovable-uploads/93f022b9-560f-49fe-95a3-72816c483659.png", // Abstract AI visualization
+    "Compliance": "/lovable-uploads/1d282686-82bd-4818-948a-3a844c5ea12e.png", // Business/compliance visual
+    "Risk": "/lovable-uploads/6a778cb7-3cb5-4529-9cc0-fdd90cbe4ddb.png", // Analytics visual
+    "Governance": "/lovable-uploads/b580e547-9e9f-4145-9649-3b9f79e59b32.png", // Structure/governance visual
+    "Career": "/lovable-uploads/24bc5b6a-2ffe-469d-ae66-bec6fe163be5.png" // People/career visual
   };
   
   // Text-to-speech functionality using browser's built-in speech synthesis
@@ -91,13 +102,25 @@ const BlogArticleDetails: React.FC = () => {
         .replace(/\*\*/g, ''); // Remove bold markers
       
       let utterance = new SpeechSynthesisUtterance(cleanText);
+      
+      // Set voice to English UK - female professional
+      const voices = window.speechSynthesis.getVoices();
+      const ukFemaleVoice = voices.find(voice => 
+        voice.lang.includes('en-GB') && voice.name.includes('Female')
+      );
+      
+      // If we can't find a specific UK female voice, try to find any UK voice
+      const ukVoice = voices.find(voice => voice.lang.includes('en-GB'));
+      
+      utterance.voice = ukFemaleVoice || ukVoice || null;
+      utterance.lang = 'en-GB';
       utterance.rate = 1;
       utterance.pitch = 1;
       utterance.volume = volume;
       
       // Show toast message
       toast("Reading article...", {
-        description: "AI voice narration has started. Use the player controls to adjust or stop.",
+        description: "UK English female voice narration has started. Use the player controls to adjust or stop.",
       });
       
       window.speechSynthesis.speak(utterance);
@@ -128,6 +151,110 @@ const BlogArticleDetails: React.FC = () => {
     const value = newVolume[0];
     setVolume(value);
     if (audio) audio.volume = value;
+  };
+  
+  // Ensure voices are loaded
+  useEffect(() => {
+    // Chrome needs this event handling to load voices properly
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
+  
+  // Function to insert infographics into the content
+  const renderEnhancedContent = () => {
+    if (!article.content) return <p>No content available for this article.</p>;
+    
+    // Split the content into paragraphs
+    const paragraphs = article.content.split('\n');
+    
+    // Function to determine which infographic to use based on paragraph content
+    const getInfographicForParagraph = (paragraph: string) => {
+      const lowercaseContent = paragraph.toLowerCase();
+      
+      if (lowercaseContent.includes('regtech') || lowercaseContent.includes('technology')) 
+        return infographics.RegTech;
+      if (lowercaseContent.includes('ai') || lowercaseContent.includes('artificial intelligence'))
+        return infographics.AI;
+      if (lowercaseContent.includes('compliance') || lowercaseContent.includes('regulation'))
+        return infographics.Compliance;
+      if (lowercaseContent.includes('risk') || lowercaseContent.includes('assessment'))
+        return infographics.Risk;
+      if (lowercaseContent.includes('governance') || lowercaseContent.includes('structure'))
+        return infographics.Governance;
+      if (lowercaseContent.includes('career') || lowercaseContent.includes('professional'))
+        return infographics.Career;
+      
+      return null;
+    };
+    
+    // Process paragraphs and insert infographics every ~3 paragraphs
+    let processedContent = [];
+    let infographicCounter = 0;
+    
+    paragraphs.forEach((para, index) => {
+      // Process paragraph
+      let element;
+      
+      if (para.startsWith('# ')) {
+        element = <h1 key={`para-${index}`} className="text-3xl font-bold mt-8 mb-4">{para.slice(2)}</h1>;
+      } else if (para.startsWith('## ')) {
+        element = <h2 key={`para-${index}`} className="text-2xl font-bold mt-8 mb-3">{para.slice(3)}</h2>;
+      } else if (para.startsWith('### ')) {
+        element = <h3 key={`para-${index}`} className="text-xl font-bold mt-6 mb-2">{para.slice(4)}</h3>;
+      } else if (para.startsWith('**') && para.endsWith('**')) {
+        element = <p key={`para-${index}`} className="font-bold my-2">{para.slice(2, -2)}</p>;
+      } else if (para.trim() === '') {
+        element = <br key={`para-${index}`} />;
+      } else if (para.startsWith('- ')) {
+        element = <li key={`para-${index}`} className="ml-6 mb-1">{para.slice(2)}</li>;
+      } else {
+        element = <p key={`para-${index}`} className="mb-4">{para}</p>;
+      }
+      
+      processedContent.push(element);
+      
+      // Insert infographic after heading or every ~3 paragraphs
+      if (
+        (para.startsWith('#') && para.length > 10) || // After substantial headings
+        (infographicCounter === 0 && index > 2) || // First infographic after some intro
+        (index > 0 && (index % 3 === 0) && !para.trim().startsWith('#')) // Every 3 paragraphs
+      ) {
+        const infographicSrc = getInfographicForParagraph(para);
+        
+        if (infographicSrc) {
+          infographicCounter++;
+          
+          // Create a professional infographic display
+          processedContent.push(
+            <div key={`infographic-${index}`} className="my-8 bg-gray-50 rounded-xl overflow-hidden shadow-sm">
+              <AspectRatio ratio={16 / 9} className="bg-muted">
+                <img 
+                  src={infographicSrc}
+                  alt={`GRC Infographic illustration for ${article.title}`} 
+                  className="object-cover w-full h-full"
+                />
+              </AspectRatio>
+              <div className="p-4 text-sm text-center text-gray-500">
+                Figure {infographicCounter}: {
+                  infographicSrc.includes('RegTech') ? 'Regulatory Technology Framework' :
+                  infographicSrc.includes('AI') ? 'AI-Driven Compliance Process' :
+                  infographicSrc.includes('Compliance') ? 'Compliance Workflow Visualization' : 
+                  infographicSrc.includes('Risk') ? 'Risk Assessment Matrix' :
+                  infographicSrc.includes('Governance') ? 'Governance Structure' :
+                  'Professional Development Path'
+                }
+              </div>
+            </div>
+          );
+        }
+      }
+    });
+    
+    return processedContent;
   };
   
   // Get related articles (same category, excluding current article)
@@ -216,7 +343,7 @@ const BlogArticleDetails: React.FC = () => {
                       onClick={toggleAudio}
                     >
                       {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                      {isPlaying ? "Pause" : "Listen"}
+                      {isPlaying ? "Pause" : "Listen (UK Voice)"}
                     </Button>
                     
                     <Button 
@@ -268,44 +395,14 @@ const BlogArticleDetails: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Article Content */}
+                {/* Article Content with Infographics */}
                 <div className="prose max-w-none mb-8">
                   <p className="text-lg text-gray-700 mb-4">{article.excerpt}</p>
                   
-                  {/* Render article content */}
-                  {article.content ? (
-                    <div className="article-content" 
-                      dangerouslySetInnerHTML={{ 
-                        __html: article.content
-                          .split('\n')
-                          .map(line => {
-                            // Handle Markdown-style headings
-                            if (line.startsWith('# ')) {
-                              return `<h1 class="text-3xl font-bold mt-8 mb-4">${line.slice(2)}</h1>`;
-                            } else if (line.startsWith('## ')) {
-                              return `<h2 class="text-2xl font-bold mt-8 mb-3">${line.slice(3)}</h2>`;
-                            } else if (line.startsWith('### ')) {
-                              return `<h3 class="text-xl font-bold mt-6 mb-2">${line.slice(4)}</h3>`;
-                            } else if (line.startsWith('**') && line.endsWith('**')) {
-                              // Bold text
-                              return `<p class="font-bold my-2">${line.slice(2, -2)}</p>`;
-                            } else if (line.trim() === '') {
-                              // Empty lines become breaks
-                              return '<br>';
-                            } else if (line.startsWith('- ')) {
-                              // List items
-                              return `<li class="ml-6 mb-1">${line.slice(2)}</li>`;
-                            } else {
-                              // Regular paragraphs
-                              return `<p class="mb-4">${line}</p>`;
-                            }
-                          })
-                          .join('')
-                      }} 
-                    />
-                  ) : (
-                    <p className="text-gray-700">No content available for this article.</p>
-                  )}
+                  {/* Render article content with infographics */}
+                  <div className="article-content">
+                    {renderEnhancedContent()}
+                  </div>
                 </div>
                 
                 <div className="flex flex-wrap gap-2 mt-6">
