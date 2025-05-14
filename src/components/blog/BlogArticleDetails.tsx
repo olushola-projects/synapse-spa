@@ -11,7 +11,6 @@ import Footer from '../Footer';
 import { blogPosts, BlogPost } from '@/data/blogData';
 import { toast } from "sonner";
 import { Slider } from '@/components/ui/slider';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const BlogArticleDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -91,53 +90,16 @@ const BlogArticleDetails: React.FC = () => {
         .replace(/#{1,6} /g, '') // Remove Markdown headings
         .replace(/\*\*/g, ''); // Remove bold markers
       
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      
-      // Get available voices
-      const voices = window.speechSynthesis.getVoices();
-      console.log("Available voices:", voices.map(v => `${v.name} (${v.lang})`));
-      
-      // Set voice to English UK - female professional
-      // Find a UK female voice first
-      let selectedVoice = voices.find(voice => 
-        voice.lang.includes('en-GB') && voice.name.toLowerCase().includes('female')
-      );
-      
-      // If no UK female voice is found, try any UK voice
-      if (!selectedVoice) {
-        selectedVoice = voices.find(voice => voice.lang.includes('en-GB'));
-      }
-      
-      // If still no voice found, use default
-      utterance.voice = selectedVoice || null;
-      utterance.lang = 'en-GB';
+      let utterance = new SpeechSynthesisUtterance(cleanText);
       utterance.rate = 1;
       utterance.pitch = 1;
       utterance.volume = volume;
       
-      // Show toast message with selected voice information
+      // Show toast message
       toast("Reading article...", {
-        description: selectedVoice 
-          ? `Using ${selectedVoice.name} voice. Use the player controls to adjust or stop.`
-          : "Using default voice. Use the player controls to adjust or stop.",
+        description: "AI voice narration has started. Use the player controls to adjust or stop.",
       });
       
-      // Add an event listener to initialize the speech
-      const voicesChangedHandler = () => {
-        const updatedVoices = window.speechSynthesis.getVoices();
-        const ukFemaleVoice = updatedVoices.find(voice => 
-          voice.lang.includes('en-GB') && voice.name.toLowerCase().includes('female')
-        ) || updatedVoices.find(voice => voice.lang.includes('en-GB'));
-        
-        if (ukFemaleVoice) {
-          utterance.voice = ukFemaleVoice;
-          console.log("Selected voice:", ukFemaleVoice.name);
-        }
-      };
-      
-      window.speechSynthesis.onvoiceschanged = voicesChangedHandler;
-      
-      // Speak the text
       window.speechSynthesis.speak(utterance);
       setIsPlaying(true);
       
@@ -150,7 +112,6 @@ const BlogArticleDetails: React.FC = () => {
       utterance.onend = () => {
         setIsPlaying(false);
         if (audio) audio.pause();
-        window.speechSynthesis.onvoiceschanged = null;
       };
     }
   };
@@ -167,58 +128,6 @@ const BlogArticleDetails: React.FC = () => {
     const value = newVolume[0];
     setVolume(value);
     if (audio) audio.volume = value;
-  };
-  
-  // Ensure voices are loaded
-  useEffect(() => {
-    // Pre-load voices 
-    const loadVoices = () => {
-      // Force Chrome to load voices
-      window.speechSynthesis.getVoices();
-    };
-    
-    loadVoices();
-    
-    // Chrome needs this event handling to load voices properly
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-    
-    return () => {
-      window.speechSynthesis.onvoiceschanged = null;
-    };
-  }, []);
-  
-  // Function to render the content without infographics
-  const renderEnhancedContent = () => {
-    if (!article.content) return <p>No content available for this article.</p>;
-    
-    // Split the content into paragraphs
-    const paragraphs = article.content.split('\n');
-    
-    // Process paragraphs
-    const processedContent = paragraphs.map((para, index) => {
-      // Process paragraph
-      let element;
-      
-      if (para.startsWith('# ')) {
-        element = <h1 key={`para-${index}`} className="text-3xl font-bold mt-8 mb-4">{para.slice(2)}</h1>;
-      } else if (para.startsWith('## ')) {
-        element = <h2 key={`para-${index}`} className="text-2xl font-bold mt-8 mb-3">{para.slice(3)}</h2>;
-      } else if (para.startsWith('### ')) {
-        element = <h3 key={`para-${index}`} className="text-xl font-bold mt-6 mb-2">{para.slice(4)}</h3>;
-      } else if (para.startsWith('**') && para.endsWith('**')) {
-        element = <p key={`para-${index}`} className="font-bold my-2">{para.slice(2, -2)}</p>;
-      } else if (para.trim() === '') {
-        element = <br key={`para-${index}`} />;
-      } else if (para.startsWith('- ')) {
-        element = <li key={`para-${index}`} className="ml-6 mb-1">{para.slice(2)}</li>;
-      } else {
-        element = <p key={`para-${index}`} className="mb-4">{para}</p>;
-      }
-      
-      return element;
-    });
-    
-    return processedContent;
   };
   
   // Get related articles (same category, excluding current article)
@@ -307,7 +216,7 @@ const BlogArticleDetails: React.FC = () => {
                       onClick={toggleAudio}
                     >
                       {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                      {isPlaying ? "Pause" : "Listen (UK Voice)"}
+                      {isPlaying ? "Pause" : "Listen"}
                     </Button>
                     
                     <Button 
@@ -359,14 +268,44 @@ const BlogArticleDetails: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Article Content without Infographics */}
+                {/* Article Content */}
                 <div className="prose max-w-none mb-8">
                   <p className="text-lg text-gray-700 mb-4">{article.excerpt}</p>
                   
-                  {/* Render article content without infographics */}
-                  <div className="article-content">
-                    {renderEnhancedContent()}
-                  </div>
+                  {/* Render article content */}
+                  {article.content ? (
+                    <div className="article-content" 
+                      dangerouslySetInnerHTML={{ 
+                        __html: article.content
+                          .split('\n')
+                          .map(line => {
+                            // Handle Markdown-style headings
+                            if (line.startsWith('# ')) {
+                              return `<h1 class="text-3xl font-bold mt-8 mb-4">${line.slice(2)}</h1>`;
+                            } else if (line.startsWith('## ')) {
+                              return `<h2 class="text-2xl font-bold mt-8 mb-3">${line.slice(3)}</h2>`;
+                            } else if (line.startsWith('### ')) {
+                              return `<h3 class="text-xl font-bold mt-6 mb-2">${line.slice(4)}</h3>`;
+                            } else if (line.startsWith('**') && line.endsWith('**')) {
+                              // Bold text
+                              return `<p class="font-bold my-2">${line.slice(2, -2)}</p>`;
+                            } else if (line.trim() === '') {
+                              // Empty lines become breaks
+                              return '<br>';
+                            } else if (line.startsWith('- ')) {
+                              // List items
+                              return `<li class="ml-6 mb-1">${line.slice(2)}</li>`;
+                            } else {
+                              // Regular paragraphs
+                              return `<p class="mb-4">${line}</p>`;
+                            }
+                          })
+                          .join('')
+                      }} 
+                    />
+                  ) : (
+                    <p className="text-gray-700">No content available for this article.</p>
+                  )}
                 </div>
                 
                 <div className="flex flex-wrap gap-2 mt-6">
