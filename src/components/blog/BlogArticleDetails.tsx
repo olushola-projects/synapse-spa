@@ -42,16 +42,6 @@ const BlogArticleDetails: React.FC = () => {
     content: "This article could not be found. Please check the URL and try again."
   };
   
-  // Infographics that will be inserted into the article content
-  const infographics = {
-    "RegTech": "/lovable-uploads/6ac8bd07-6906-427c-b832-be14819a3aed.png", // Tech and code visual
-    "AI": "/lovable-uploads/93f022b9-560f-49fe-95a3-72816c483659.png", // Abstract AI visualization
-    "Compliance": "/lovable-uploads/1d282686-82bd-4818-948a-3a844c5ea12e.png", // Business/compliance visual
-    "Risk": "/lovable-uploads/6a778cb7-3cb5-4529-9cc0-fdd90cbe4ddb.png", // Analytics visual
-    "Governance": "/lovable-uploads/b580e547-9e9f-4145-9649-3b9f79e59b32.png", // Structure/governance visual
-    "Career": "/lovable-uploads/24bc5b6a-2ffe-469d-ae66-bec6fe163be5.png" // People/career visual
-  };
-  
   // Text-to-speech functionality using browser's built-in speech synthesis
   useEffect(() => {
     if (article.content) {
@@ -101,28 +91,53 @@ const BlogArticleDetails: React.FC = () => {
         .replace(/#{1,6} /g, '') // Remove Markdown headings
         .replace(/\*\*/g, ''); // Remove bold markers
       
-      let utterance = new SpeechSynthesisUtterance(cleanText);
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      
+      // Get available voices
+      const voices = window.speechSynthesis.getVoices();
+      console.log("Available voices:", voices.map(v => `${v.name} (${v.lang})`));
       
       // Set voice to English UK - female professional
-      const voices = window.speechSynthesis.getVoices();
-      const ukFemaleVoice = voices.find(voice => 
-        voice.lang.includes('en-GB') && voice.name.includes('Female')
+      // Find a UK female voice first
+      let selectedVoice = voices.find(voice => 
+        voice.lang.includes('en-GB') && voice.name.toLowerCase().includes('female')
       );
       
-      // If we can't find a specific UK female voice, try to find any UK voice
-      const ukVoice = voices.find(voice => voice.lang.includes('en-GB'));
+      // If no UK female voice is found, try any UK voice
+      if (!selectedVoice) {
+        selectedVoice = voices.find(voice => voice.lang.includes('en-GB'));
+      }
       
-      utterance.voice = ukFemaleVoice || ukVoice || null;
+      // If still no voice found, use default
+      utterance.voice = selectedVoice || null;
       utterance.lang = 'en-GB';
       utterance.rate = 1;
       utterance.pitch = 1;
       utterance.volume = volume;
       
-      // Show toast message
+      // Show toast message with selected voice information
       toast("Reading article...", {
-        description: "UK English female voice narration has started. Use the player controls to adjust or stop.",
+        description: selectedVoice 
+          ? `Using ${selectedVoice.name} voice. Use the player controls to adjust or stop.`
+          : "Using default voice. Use the player controls to adjust or stop.",
       });
       
+      // Add an event listener to initialize the speech
+      const voicesChangedHandler = () => {
+        const updatedVoices = window.speechSynthesis.getVoices();
+        const ukFemaleVoice = updatedVoices.find(voice => 
+          voice.lang.includes('en-GB') && voice.name.toLowerCase().includes('female')
+        ) || updatedVoices.find(voice => voice.lang.includes('en-GB'));
+        
+        if (ukFemaleVoice) {
+          utterance.voice = ukFemaleVoice;
+          console.log("Selected voice:", ukFemaleVoice.name);
+        }
+      };
+      
+      window.speechSynthesis.onvoiceschanged = voicesChangedHandler;
+      
+      // Speak the text
       window.speechSynthesis.speak(utterance);
       setIsPlaying(true);
       
@@ -135,6 +150,7 @@ const BlogArticleDetails: React.FC = () => {
       utterance.onend = () => {
         setIsPlaying(false);
         if (audio) audio.pause();
+        window.speechSynthesis.onvoiceschanged = null;
       };
     }
   };
@@ -155,47 +171,31 @@ const BlogArticleDetails: React.FC = () => {
   
   // Ensure voices are loaded
   useEffect(() => {
-    // Chrome needs this event handling to load voices properly
-    window.speechSynthesis.onvoiceschanged = () => {
+    // Pre-load voices 
+    const loadVoices = () => {
+      // Force Chrome to load voices
       window.speechSynthesis.getVoices();
     };
+    
+    loadVoices();
+    
+    // Chrome needs this event handling to load voices properly
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    
     return () => {
       window.speechSynthesis.onvoiceschanged = null;
     };
   }, []);
   
-  // Function to insert infographics into the content
+  // Function to render the content without infographics
   const renderEnhancedContent = () => {
     if (!article.content) return <p>No content available for this article.</p>;
     
     // Split the content into paragraphs
     const paragraphs = article.content.split('\n');
     
-    // Function to determine which infographic to use based on paragraph content
-    const getInfographicForParagraph = (paragraph: string) => {
-      const lowercaseContent = paragraph.toLowerCase();
-      
-      if (lowercaseContent.includes('regtech') || lowercaseContent.includes('technology')) 
-        return infographics.RegTech;
-      if (lowercaseContent.includes('ai') || lowercaseContent.includes('artificial intelligence'))
-        return infographics.AI;
-      if (lowercaseContent.includes('compliance') || lowercaseContent.includes('regulation'))
-        return infographics.Compliance;
-      if (lowercaseContent.includes('risk') || lowercaseContent.includes('assessment'))
-        return infographics.Risk;
-      if (lowercaseContent.includes('governance') || lowercaseContent.includes('structure'))
-        return infographics.Governance;
-      if (lowercaseContent.includes('career') || lowercaseContent.includes('professional'))
-        return infographics.Career;
-      
-      return null;
-    };
-    
-    // Process paragraphs and insert infographics every ~3 paragraphs
-    let processedContent = [];
-    let infographicCounter = 0;
-    
-    paragraphs.forEach((para, index) => {
+    // Process paragraphs
+    const processedContent = paragraphs.map((para, index) => {
       // Process paragraph
       let element;
       
@@ -215,43 +215,7 @@ const BlogArticleDetails: React.FC = () => {
         element = <p key={`para-${index}`} className="mb-4">{para}</p>;
       }
       
-      processedContent.push(element);
-      
-      // Insert infographic after heading or every ~3 paragraphs
-      if (
-        (para.startsWith('#') && para.length > 10) || // After substantial headings
-        (infographicCounter === 0 && index > 2) || // First infographic after some intro
-        (index > 0 && (index % 3 === 0) && !para.trim().startsWith('#')) // Every 3 paragraphs
-      ) {
-        const infographicSrc = getInfographicForParagraph(para);
-        
-        if (infographicSrc) {
-          infographicCounter++;
-          
-          // Create a professional infographic display
-          processedContent.push(
-            <div key={`infographic-${index}`} className="my-8 bg-gray-50 rounded-xl overflow-hidden shadow-sm">
-              <AspectRatio ratio={16 / 9} className="bg-muted">
-                <img 
-                  src={infographicSrc}
-                  alt={`GRC Infographic illustration for ${article.title}`} 
-                  className="object-cover w-full h-full"
-                />
-              </AspectRatio>
-              <div className="p-4 text-sm text-center text-gray-500">
-                Figure {infographicCounter}: {
-                  infographicSrc.includes('RegTech') ? 'Regulatory Technology Framework' :
-                  infographicSrc.includes('AI') ? 'AI-Driven Compliance Process' :
-                  infographicSrc.includes('Compliance') ? 'Compliance Workflow Visualization' : 
-                  infographicSrc.includes('Risk') ? 'Risk Assessment Matrix' :
-                  infographicSrc.includes('Governance') ? 'Governance Structure' :
-                  'Professional Development Path'
-                }
-              </div>
-            </div>
-          );
-        }
-      }
+      return element;
     });
     
     return processedContent;
@@ -395,11 +359,11 @@ const BlogArticleDetails: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Article Content with Infographics */}
+                {/* Article Content without Infographics */}
                 <div className="prose max-w-none mb-8">
                   <p className="text-lg text-gray-700 mb-4">{article.excerpt}</p>
                   
-                  {/* Render article content with infographics */}
+                  {/* Render article content without infographics */}
                   <div className="article-content">
                     {renderEnhancedContent()}
                   </div>
