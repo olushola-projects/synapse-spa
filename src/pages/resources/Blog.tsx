@@ -50,8 +50,15 @@ const Blog = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow bg-gray-50">
-        <div className="container mx-auto px-4 py-12">
+      <div className="flex-grow bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+        {/* Diagonal lines background inspired by the uploaded image */}
+        <div className="absolute inset-0 overflow-hidden z-0">
+          <div className="absolute top-0 left-0 w-full h-[35%] bg-gradient-to-r from-orange-500/30 to-blue-400/30 transform rotate-6 translate-y-[-10%] translate-x-[-5%]"></div>
+          <div className="absolute top-[20%] left-0 w-full h-[35%] bg-gradient-to-r from-blue-400/20 to-yellow-400/20 transform rotate-6 translate-y-[-5%]"></div>
+          <div className="absolute bottom-[10%] right-0 w-full h-[40%] bg-gradient-to-r from-purple-300/20 to-blue-300/20 transform rotate-6"></div>
+        </div>
+
+        <div className="container mx-auto px-4 py-12 relative z-10">
           <header className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">Synapse GRC Intelligence Blog</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -78,7 +85,7 @@ const Blog = () => {
             <div className="flex flex-col gap-8">
               {/* Featured Post */}
               {!searchTerm && activeTab === "all" && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-gray-100 overflow-hidden transform hover:shadow-md transition-all duration-300">
                   <div className="md:flex">
                     <div className="md:w-1/2">
                       <img 
@@ -146,7 +153,7 @@ const Blog = () => {
                     <>
                       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {currentPosts.map((post) => (
-                          <Card key={post.id} className="overflow-hidden hover:shadow-md transition-shadow duration-200">
+                          <Card key={post.id} className="overflow-hidden hover:shadow-md transition-shadow duration-200 bg-white/80 backdrop-blur-sm">
                             <img 
                               src={post.image} 
                               alt={post.title}
