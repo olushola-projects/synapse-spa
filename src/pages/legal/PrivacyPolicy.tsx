@@ -71,8 +71,8 @@ const PrivacyPolicy = () => {
             
             <h2 className="text-2xl font-semibold mt-8 mb-4">7. Contact Us</h2>
             <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-            <p className="mt-2">Email: privacy@synapse-platform.com</p>
-            <p className="mt-1">Address: 123 Compliance Way, Regulatory District, RC 12345</p>
+            <p className="mt-2">Email: info@joinsynapses.com</p>
+            <p className="mt-1">Address: Regina House, 69 Cheapside, London, EC2V 6AZ, United Kingdom</p>
           </div>
         </div>
       </div>

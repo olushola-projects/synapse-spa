@@ -105,8 +105,8 @@ const Contact = () => {
                     <Mail className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <a href="mailto:contact@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        contact@synapse-platform.com
+                      <a href="mailto:info@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        info@joinsynapses.com
                       </a>
                     </div>
                   </div>
@@ -126,9 +126,9 @@ const Contact = () => {
                     <div>
                       <p className="font-medium">Location</p>
                       <p className="text-sm text-gray-600">
-                        123 Compliance Way<br />
-                        Regulatory District, RC 12345<br />
-                        United States
+                        Regina House, 69 Cheapside<br />
+                        London, EC2V 6AZ<br />
+                        United Kingdom
                       </p>
                     </div>
                   </div>
@@ -142,8 +142,8 @@ const Contact = () => {
                     <Users className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Sales</p>
-                      <a href="mailto:sales@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        sales@synapse-platform.com
+                      <a href="mailto:sales@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        sales@joinsynapses.com
                       </a>
                     </div>
                   </div>
@@ -152,8 +152,8 @@ const Contact = () => {
                     <HelpCircle className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Support</p>
-                      <a href="mailto:support@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        support@synapse-platform.com
+                      <a href="mailto:support@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        support@joinsynapses.com
                       </a>
                     </div>
                   </div>
@@ -162,8 +162,8 @@ const Contact = () => {
                     <Briefcase className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Partnerships</p>
-                      <a href="mailto:partners@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        partners@synapse-platform.com
+                      <a href="mailto:partners@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        partners@joinsynapses.com
                       </a>
                     </div>
                   </div>
@@ -172,8 +172,8 @@ const Contact = () => {
                     <BookOpen className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Press</p>
-                      <a href="mailto:press@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        press@synapse-platform.com
+                      <a href="mailto:press@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        press@joinsynapses.com
                       </a>
                     </div>
                   </div>
@@ -189,7 +189,7 @@ const Contact = () => {
               {[
                 {
                   question: "How can I request a demo of Synapse?",
-                  answer: "You can request a personalized demo by filling out the contact form above or emailing sales@synapse-platform.com directly. One of our account executives will get in touch to schedule a time that works for you."
+                  answer: "You can request a personalized demo by filling out the contact form above or emailing sales@joinsynapses.com directly. One of our account executives will get in touch to schedule a time that works for you."
                 },
                 {
                   question: "Is Synapse available internationally?",
@@ -197,7 +197,7 @@ const Contact = () => {
                 },
                 {
                   question: "How do I get technical support?",
-                  answer: "If you're a current customer, you can access support through your account dashboard or by emailing support@synapse-platform.com. For urgent issues, we also offer phone support during business hours."
+                  answer: "If you're a current customer, you can access support through your account dashboard or by emailing support@joinsynapses.com. For urgent issues, we also offer phone support during business hours."
                 }
               ].map((faq, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">

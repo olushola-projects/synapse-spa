@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -119,6 +120,14 @@ const Index = () => {
             "url": "https://www.joinsynapses.com",
             "logo": "https://www.joinsynapses.com/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png",
             "description": "Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future.",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Regina House, 69 Cheapside",
+              "addressLocality": "London",
+              "postalCode": "EC2V 6AZ",
+              "addressCountry": "UK"
+            },
+            "email": "info@joinsynapses.com",
             "sameAs": [
               "https://twitter.com/synapsesgrc",
               "https://www.linkedin.com/company/joinsynapses"
