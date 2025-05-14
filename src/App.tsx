@@ -29,6 +29,7 @@ import FAQ from "./pages/resources/FAQ";
 // Company pages
 import About from "./pages/company/About";
 import Contact from "./pages/company/Contact";
+import Careers from "./pages/company/Careers";
 
 // Platform pages
 import Features from "./pages/platform/Features";
@@ -74,6 +75,7 @@ const App = () => (
             {/* Company Routes */}
             <Route path="/company/about" element={<About />} />
             <Route path="/company/contact" element={<Contact />} />
+            <Route path="/company/careers" element={<Careers />} />
             
             {/* Platform Routes */}
             <Route path="/platform/features" element={<Features />} />
