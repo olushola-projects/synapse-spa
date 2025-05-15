@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Shield, Globe, Users, Target } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const About = () => {
   return (
@@ -86,8 +87,12 @@ const About = () => {
                 We're looking for passionate individuals who want to transform the GRC industry through innovative technology and deep domain expertise.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button as={Link} to="/company/careers">View Careers</Button>
-                <Button variant="outline" as={Link} to="/company/careers">Our Culture</Button>
+                <Link to="/company/careers">
+                  <Button>View Careers</Button>
+                </Link>
+                <Link to="/company/careers">
+                  <Button variant="outline">Our Culture</Button>
+                </Link>
               </div>
             </div>
           </div>
