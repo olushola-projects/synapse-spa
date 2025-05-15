@@ -52,7 +52,7 @@ const Blog = () => {
         <header className="text-center mb-12 relative z-10">
           <StripeMotionContainer>
             <StripeMotionItem>
-              <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-synapse-primary to-synapse-secondary bg-clip-text text-transparent">
+              <h1 className="text-5xl font-normal mb-4 bg-gradient-to-r from-synapse-primary to-synapse-secondary bg-clip-text text-transparent">
                 Synapse GRC Intelligence Blog
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
