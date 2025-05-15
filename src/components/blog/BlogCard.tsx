@@ -48,7 +48,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({
   if (featured) {
     return (
       <motion.div
-        className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-gray-100 overflow-hidden transform hover:shadow-md transition-all duration-300"
+        className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-gray-100 overflow-hidden transform hover:shadow-md transition-all duration-300 hover:-translate-y-1"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -72,7 +72,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({
               <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {readTime}</span>
             </div>
             
-            <h2 className="text-2xl font-bold mb-3">{title}</h2>
+            <h2 className="text-2xl font-bold mb-3 hover:text-synapse-primary transition-colors">{title}</h2>
             <p className="text-gray-600 mb-6">{excerpt}</p>
             
             <div className="flex items-center mt-auto">

@@ -10,7 +10,7 @@ import { Search } from 'lucide-react';
 import { blogPosts } from '@/data/blogData';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { motion } from 'framer-motion';
-import { StripeSection } from '@/components/ui/stripe-elements';
+import { StripeSection, StripeMotionContainer, StripeMotionItem } from '@/components/ui/stripe-elements';
 
 const Blog = () => {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -50,30 +50,30 @@ const Blog = () => {
       <Navbar />
       <StripeSection withGrid withStripes className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
         <header className="text-center mb-12 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-synapse-primary to-synapse-secondary bg-clip-text text-transparent">
-              Synapse GRC Intelligence Blog
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Expert insights, industry trends, and best practices for governance, risk, and compliance professionals.
-            </p>
+          <StripeMotionContainer>
+            <StripeMotionItem>
+              <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-synapse-primary to-synapse-secondary bg-clip-text text-transparent">
+                Synapse GRC Intelligence Blog
+              </h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Expert insights, industry trends, and best practices for governance, risk, and compliance professionals.
+              </p>
+            </StripeMotionItem>
             
-            <div className="max-w-md mx-auto mt-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input
-                  placeholder="Search articles..."
-                  className="pl-10 border-gray-200 focus:border-synapse-primary"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+            <StripeMotionItem>
+              <div className="max-w-md mx-auto mt-8">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Input
+                    placeholder="Search articles..."
+                    className="pl-10 border-gray-200 focus:border-synapse-primary"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </StripeMotionItem>
+          </StripeMotionContainer>
         </header>
         
         <div className="max-w-6xl mx-auto">
