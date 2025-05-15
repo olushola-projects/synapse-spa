@@ -54,8 +54,8 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <Badge variant="outline" className="mb-4 bg-white/80 backdrop-blur-sm">About Synapse</Badge>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-br from-synapse-primary to-synapse-secondary bg-clip-text text-transparent">Our Mission</h1>
+              <Badge variant="outline" className="mb-4 bg-white/80 backdrop-blur-sm">About Synapses</Badge>
+              <h1 className="text-5xl md:text-6xl font-normal mb-6 bg-gradient-to-br from-synapse-primary to-synapse-secondary bg-clip-text text-transparent">Our Mission</h1>
               <p className="text-xl md:text-2xl leading-relaxed">
                 We're empowering GRC professionals to navigate complexity with confidence through intelligent tools, specialized knowledge, and community.
               </p>
@@ -78,10 +78,10 @@ const About = () => {
                   <Badge variant="outline" className="mb-4">Our Story</Badge>
                   <h2 className="text-3xl font-bold mb-6 bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text text-transparent">Building the Future of GRC</h2>
                   <p className="text-gray-600 mb-4">
-                    Synapse was founded in 2025 with a clear vision: to democratize access to regulatory agents for GRC professionals—empowering them not just to navigate, but to lead the future of compliance. 
+                    Synapses was founded in 2025 with a clear vision: to democratize access to regulatory agents for GRC professionals—empowering them not just to navigate, but to lead the future of compliance. 
                   </p>
                   <p className="text-gray-600 mb-4">
-                    As regulatory complexity accelerates, Synapse is designed to fundamentally upskill and reskill compliance teams, enabling them to operate as strategic conductors in the era of agentic compliance. Our intuitive AI copilots and intelligent agents augment—not replace—human judgment, transforming how compliance work is done by enhancing expertise, insight, and strategic decision-making.
+                    As regulatory complexity accelerates, Synapses is designed to fundamentally upskill and reskill compliance teams, enabling them to operate as strategic conductors in the era of agentic compliance. Our intuitive AI copilots and intelligent agents augment—not replace—human judgment, transforming how compliance work is done by enhancing expertise, insight, and strategic decision-making.
                   </p>
                   <p className="text-gray-600 mb-4">
                     We recognized that compliance professionals deserved better—a platform that combines emerging technologies with deep domain expertise to simplify compliance tasks and foster professional growth.
