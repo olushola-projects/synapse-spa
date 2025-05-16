@@ -220,24 +220,12 @@
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
   }
   
-  /* Stripe-style CTA Button */
+  /* CTA Button - Restored to original styling */
   .cta-button {
-    @apply rounded-full bg-[#635BFF] text-white font-semibold 
-           h-11 md:h-[52px] px-6 md:px-8 
-           text-base md:text-lg 
-           shadow-sm hover:shadow-md 
-           transition-all duration-300 
+    @apply rounded-md bg-primary text-white font-medium 
+           px-6 py-2
+           shadow-sm hover:bg-primary/90
+           transition-colors duration-200
            flex items-center justify-center gap-2;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  }
-  
-  .cta-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-  }
-  
-  .cta-button:focus-visible {
-    outline: 2px solid white;
-    outline-offset: 2px;
   }
 }

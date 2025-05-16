@@ -27,9 +27,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       
       <div className="mt-10 flex flex-col sm:flex-row gap-4">
         <div onClick={onGetAccess} className="cursor-pointer">
-          <button className="cta-button">
+          <Button className="flex items-center gap-2">
             Join Waitlist <ArrowRight size={16} />
-          </button>
+          </Button>
         </div>
       </div>
       

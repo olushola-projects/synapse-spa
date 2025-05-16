@@ -23,12 +23,12 @@ const CTASection = () => {
           <p className="text-lg text-gray-600 mb-8">
             Join a global network of professionals for exclusive beta testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
           </p>
-          <button 
-            className="cta-button mx-auto"
+          <Button 
             onClick={openWaitlistDialog}
+            className="flex items-center gap-2"
           >
             Join Waitlist <ArrowRight size={16} />
-          </button>
+          </Button>
           <div className="mt-8 text-center">
             <div className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 rounded-full text-sm font-medium text-gray-600">
              <span><strong>🎁 Limited time offer:</strong> Join the waitlist for a chance to get 3 months of Pro Plan access—<strong>free!</strong></span>

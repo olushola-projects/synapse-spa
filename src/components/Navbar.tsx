@@ -72,11 +72,11 @@ const Navbar = () => {
               <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold">Invite</Button>
             </div>
             
-            {/* Sticky CTA that appears on scroll */}
+            {/* Waitlist button that appears on scroll */}
             <div onClick={openWaitlistDialog} className={`cursor-pointer transition-opacity duration-300 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
-              <button className="cta-button">
+              <Button className="flex items-center gap-2">
                 Join Waitlist <ArrowRight size={16} />
-              </button>
+              </Button>
             </div>
             
             <div onClick={openFormDialog} className="cursor-pointer">
@@ -106,7 +106,9 @@ const Navbar = () => {
                 <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold w-full">Invite</Button>
               </div>
               <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <button className="cta-button w-full">Join Waitlist <ArrowRight size={16} /></button>
+                <Button className="mt-2 w-full flex items-center justify-center gap-2">
+                  Join Waitlist <ArrowRight size={16} />
+                </Button>
               </div>
               <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
                 <Button className="mt-2 w-full">Get Early Access</Button>
