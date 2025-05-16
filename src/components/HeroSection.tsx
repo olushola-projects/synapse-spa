@@ -9,12 +9,14 @@ import { EnhancedDashboardContainer, DashboardGrid } from "./dashboard/Dashboard
 import MobileCharts from "./dashboard/MobileCharts";
 import ExternalFormDialog from "./ExternalFormDialog";
 import InviteDialog from "./InviteDialog";
+import JoinWaitlistDialog from "./JoinWaitlistDialog";
 
 const HeroSection = () => {
   const [animate, setAnimate] = useState(false);
   const [showAmlDialog, setShowAmlDialog] = useState(false);
   const [showFormDialog, setShowFormDialog] = useState(false);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
 
   // Trigger animations after component mounts
   useEffect(() => {
@@ -24,7 +26,7 @@ const HeroSection = () => {
   }, []);
 
   const handleGetAccessClick = () => {
-    setShowFormDialog(true);
+    setShowWaitlistDialog(true);
   };
 
   const handleInviteClick = () => {
@@ -39,8 +41,9 @@ const HeroSection = () => {
     <div
       style={{ minHeight: "calc(100vh - 64px)" }}
       className="w-full px-4 sm:px-6 lg:px-8 py-2 md:py-6 flex flex-col items-center justify-center bg-gradient-to-br from-[#eef4ff] via-white to-[#f8faff]"
+      id="hero-section"
     >
-      <div className="container mx-auto grid md:grid-cols-2 gap-16 items-center">
+      <div className="container mx-auto grid md:grid-cols-2 gap-8 md:gap-16 items-center">
         {/* Hero Content - Left Side */}
         <div className="flex flex-col items-start">
           <HeroContent
@@ -55,9 +58,9 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Hero Visual - Right Side: Dynamic Dashboard - increased by 50% */}
+        {/* Hero Visual - Right Side: Dynamic Dashboard */}
         <div className={`relative w-full transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-x-6'}`}>
-          <div className="w-[150%] ml-[-25%] overflow-hidden rounded-xl shadow-2xl bg-white">
+          <div className="dashboard-mock w-full md:w-[120%] md:ml-[-10%] overflow-hidden rounded-xl shadow-2xl bg-white">
             {/* Dashboard simulation */}
             <div className="w-full h-[630px] overflow-hidden relative flex flex-col">
               {/* Dashboard Header */}
@@ -91,6 +94,11 @@ const HeroSection = () => {
       <InviteDialog
         open={showInviteDialog}
         onOpenChange={setShowInviteDialog}
+      />
+      
+      <JoinWaitlistDialog
+        open={showWaitlistDialog}
+        onOpenChange={setShowWaitlistDialog}
       />
     </div>
   );

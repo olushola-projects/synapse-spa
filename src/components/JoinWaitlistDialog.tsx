@@ -42,7 +42,12 @@ const JoinWaitlistDialog = ({ open, onOpenChange }: JoinWaitlistDialogProps) => 
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
-          <form onSubmit={handleEmailSignup} className="space-y-4">
+          <form onSubmit={handleEmailSignup} className="space-y-4" id="waitlist-form">
+            {/* Honeypot field for spam prevention */}
+            <input type="text" name="_hp" aria-hidden="true" 
+              style={{ display: 'none', position: 'absolute', left: '-9999px' }} 
+              tabIndex={-1} autoComplete="off" />
+              
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="name">Full Name</Label>
@@ -167,7 +172,7 @@ const JoinWaitlistDialog = ({ open, onOpenChange }: JoinWaitlistDialogProps) => 
         </div>
 
         <div className="mt-4 text-sm text-gray-500 text-center">
-          By joining, you agree to our <a href="/legal/terms" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="/legal/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>
+          By joining, you agree to our <a href="/legal/terms" className="text-blue-600 hover:underline" rel="noopener">Terms of Service</a> and <a href="/legal/privacy" className="text-blue-600 hover:underline" rel="noopener">Privacy Policy</a>
         </div>
       </DialogContent>
     </Dialog>

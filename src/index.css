@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
@@ -16,7 +15,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221 83% 53%;
+    --primary: 250 100% 60%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 226 70% 55%;
@@ -33,7 +32,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --ring: 250 100% 60%;
 
     --radius: 0.5rem;
 
@@ -80,6 +79,40 @@
     @apply bg-white/20 backdrop-blur-sm rounded-xl shadow-lg border border-white/30;
   }
 
+  /* Responsive feature grid - mobile first */
+  .feature-grid {
+    @apply max-w-full w-full overflow-x-hidden grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6;
+  }
+  
+  /* Responsive dashboard mock */
+  .dashboard-mock {
+    @apply max-w-full w-full overflow-x-hidden display-block margin-inline-auto;
+  }
+  
+  /* Responsive typography for hero */
+  .hero-heading {
+    @apply text-[clamp(24px,7vw,38px)] leading-tight;
+  }
+  
+  /* Logo button container for partner logos */
+  .logo-btn {
+    @apply w-12 h-12 flex items-center justify-center;
+  }
+
+  /* Mobile optimized feature card */
+  @media (max-width: 600px) {
+    .feature-card {
+      @apply min-w-[140px] min-h-[140px];
+    }
+  }
+  
+  /* Mobile logo sizing */
+  @media (max-width: 400px) {
+    .partner-logo {
+      @apply h-16 w-auto;
+    }
+  }
+
   /* Stripe-inspired components */
   .stripe-card {
     @apply bg-gradient-to-b from-white to-gray-50 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-300;
@@ -100,6 +133,11 @@
   
   .body-text {
     @apply text-base font-normal text-gray-700 leading-relaxed;
+  }
+
+  /* Form improvements */
+  #waitlist-form {
+    @apply scroll-mt-[50vh];
   }
   
   /* Enhanced animations */

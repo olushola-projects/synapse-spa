@@ -75,10 +75,17 @@ const Index = () => {
     
     carouselInit();
     window.addEventListener('load', carouselInit);
+
+    // Close mobile menu on orientation change
+    window.addEventListener('orientationchange', () => { 
+      const navToggle = document.querySelector('#nav-toggle') as HTMLInputElement;
+      if (navToggle) navToggle.checked = false;
+    });
     
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('load', carouselInit);
+      window.removeEventListener('orientationchange', () => {});
     };
   }, []);
 
@@ -109,17 +116,17 @@ const Index = () => {
   return (
     <div className="min-h-screen relative">
       <SeoHead 
-        title="Synapse - GRC Intelligence Platform"
-        description="Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future."
+        title="Synapses - GRC Intelligence Platform"
+        description="Empower your GRC career with Synapses - the intelligence platform where compliance professionals connect, grow, and shape the future."
         ogImage="/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png"
         structuredData={{
           organization: {
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "Synapse",
+            "name": "Synapses",
             "url": "https://www.joinsynapses.com",
             "logo": "https://www.joinsynapses.com/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png",
-            "description": "Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future.",
+            "description": "Empower your GRC career with Synapses - the intelligence platform where compliance professionals connect, grow, and shape the future.",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "Regina House, 69 Cheapside",
@@ -136,7 +143,7 @@ const Index = () => {
           application: {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "Synapse GRC Platform",
+            "name": "Synapses GRC Platform",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "offers": {

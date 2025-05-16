@@ -74,12 +74,12 @@ interface FeatureGridProps {
 
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ animate, onFeatureClick }) => {
   return (
-    <div className="max-w-xl">
+    <div className="feature-grid w-full max-w-xl">
       <div className="grid grid-cols-3 gap-2 sm:gap-3 transition-all duration-700 ease-out">
         {featureIcons.map((feature, index) => (
           <motion.div 
             key={index}
-            className="flex flex-col items-center justify-center aspect-square p-2 sm:p-3 rounded-lg bg-white hover:bg-white/95 shadow-md hover:shadow-lg border border-gray-200 cursor-pointer hover:-translate-y-1 transition-all duration-300 hover:border-indigo-500"
+            className="feature-card flex flex-col items-center justify-center aspect-square p-2 sm:p-3 rounded-lg bg-white hover:bg-white/95 shadow-md hover:shadow-lg border border-gray-200 cursor-pointer hover:-translate-y-1 transition-all duration-300 hover:border-indigo-500"
             style={{ animationDelay: `${index * 100}ms` }}
             onClick={() => onFeatureClick && onFeatureClick(index)}
             initial={{ opacity: 0, y: 20 }}
