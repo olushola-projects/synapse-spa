@@ -2,20 +2,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import ExternalFormDialog from "./ExternalFormDialog";
 import InviteDialog from "./InviteDialog";
+import JoinWaitlistDialog from "./JoinWaitlistDialog";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showFormDialog, setShowFormDialog] = useState(false);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 64);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -32,6 +34,10 @@ const Navbar = () => {
   
   const openInviteDialog = () => {
     setShowInviteDialog(true);
+  };
+  
+  const openWaitlistDialog = () => {
+    setShowWaitlistDialog(true);
   };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -65,6 +71,14 @@ const Navbar = () => {
             <div onClick={openInviteDialog} className="cursor-pointer">
               <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold">Invite</Button>
             </div>
+            
+            {/* Sticky CTA that appears on scroll */}
+            <div onClick={openWaitlistDialog} className={`cursor-pointer transition-opacity duration-300 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
+              <button className="cta-button">
+                Join Waitlist <ArrowRight size={16} />
+              </button>
+            </div>
+            
             <div onClick={openFormDialog} className="cursor-pointer">
               <Button>Get Early Access</Button>
             </div>
@@ -91,6 +105,9 @@ const Navbar = () => {
               <div onClick={openInviteDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
                 <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold w-full">Invite</Button>
               </div>
+              <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
+                <button className="cta-button w-full">Join Waitlist <ArrowRight size={16} /></button>
+              </div>
               <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
                 <Button className="mt-2 w-full">Get Early Access</Button>
               </div>
@@ -108,6 +125,11 @@ const Navbar = () => {
       <InviteDialog
         open={showInviteDialog}
         onOpenChange={setShowInviteDialog}
+      />
+      
+      <JoinWaitlistDialog
+        open={showWaitlistDialog}
+        onOpenChange={setShowWaitlistDialog}
       />
     </>
   );

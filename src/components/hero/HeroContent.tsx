@@ -12,7 +12,7 @@ interface HeroContentProps {
 export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, onInvite }) => {
   return (
     <div className={`w-full pb-10 md:pb-0 text-left transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-      <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-[5.5rem] font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
+      <h1 className="hero-heading font-display font-bold tracking-tight leading-tight text-gray-900 mb-6">
         <div className="flex flex-col">
           <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span>
           <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span>
@@ -27,9 +27,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       
       <div className="mt-10 flex flex-col sm:flex-row gap-4">
         <div onClick={onGetAccess} className="cursor-pointer">
-          <Button className="bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift">
-            Get Early Access <ArrowRight size={18} />
-          </Button>
+          <button className="cta-button">
+            Join Waitlist <ArrowRight size={16} />
+          </button>
         </div>
       </div>
       
