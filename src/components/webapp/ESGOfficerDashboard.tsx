@@ -1,225 +1,212 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { AgentCard } from '../agents/AgentCard';
 import { TaskButton } from '../tasks/TaskButton';
 import { BadgeTracker } from '../gamification/BadgeTracker';
 import { RegulatoryCalendar } from '../widgets/RegulatoryCalendar';
-import { Leaf, Building2, FileText, Users, Plus, ExternalLink } from 'lucide-react';
-
-const esgAgents = [
-  {
-    id: 'sfdr-agent',
-    name: 'SFDR Compliance Assistant',
-    description: 'Navigate Sustainable Finance Disclosure Regulation requirements',
-    category: 'ESG Disclosure',
-    color: 'bg-green-600',
-    isRecommended: true,
-    isActivated: true,
-    useCases: [
-      {
-        title: 'Article Classification',
-        description: 'Determine if your fund qualifies as Article 6, 8, or 9'
-      },
-      {
-        title: 'PAI Reporting',
-        description: 'Generate Principal Adverse Impact statements'
-      }
-    ]
-  },
-  {
-    id: 'taxonomy-agent',
-    name: 'EU Taxonomy Navigator',
-    description: 'Assess taxonomy alignment and environmental objectives',
-    category: 'Taxonomy',
-    color: 'bg-emerald-600',
-    isRecommended: false,
-    isActivated: false,
-    useCases: [
-      {
-        title: 'Alignment Assessment',
-        description: 'Check activities against technical screening criteria'
-      },
-      {
-        title: 'DNSH Analysis',
-        description: 'Verify Do No Significant Harm compliance'
-      }
-    ]
-  }
-];
-
-const sfdrTasks = [
-  {
-    title: 'Explain SFDR Article 8 requirements',
-    description: 'Get detailed breakdown of light green fund obligations',
-    complexity: 'Simple' as const,
-    estimatedTime: '2 min'
-  },
-  {
-    title: 'Draft investor disclosure for ESG integration',
-    description: 'Create compliant language for fund documentation',
-    complexity: 'Moderate' as const,
-    estimatedTime: '5 min'
-  },
-  {
-    title: 'Map Article 6-8 transition strategy',
-    description: 'Plan upgrade path from Article 6 to Article 8 classification',
-    complexity: 'Complex' as const,
-    estimatedTime: '10 min'
-  }
-];
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { AlertTriangle, TrendingUp, FileText, Users } from 'lucide-react';
 
 export const ESGOfficerDashboard: React.FC = () => {
-  const [activeAgents, setActiveAgents] = useState(['sfdr-agent']);
-  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [activatedAgents, setActivatedAgents] = useState<string[]>(['esg-disclosure']);
 
-  const handleActivateAgent = (agentId: string) => {
-    setActiveAgents([...activeAgents, agentId]);
+  const handleAgentActivate = (agentId: string) => {
+    setActivatedAgents(prev => [...prev, agentId]);
   };
 
-  const handleTaskClick = (taskTitle: string) => {
-    console.log('Opening Dara for task:', taskTitle);
-    // Here you would integrate with your Dara chat system
+  const handleAgentViewDetails = (agentId: string) => {
+    console.log('Viewing details for agent:', agentId);
   };
+
+  const handleTaskClick = () => {
+    console.log('Opening Dara AI assistant...');
+  };
+
+  const agents = [
+    {
+      id: 'esg-disclosure',
+      name: 'ESG Disclosure Expert',
+      description: 'Navigate SFDR, CSRD, and taxonomy regulations with confidence',
+      category: 'ESG Compliance',
+      useCases: [
+        { title: 'SFDR Article Classification', description: 'Determine if your fund qualifies as Article 6, 8, or 9' },
+        { title: 'CSRD Reporting', description: 'Generate compliant sustainability reports' }
+      ],
+      isActivated: activatedAgents.includes('esg-disclosure'),
+      isRecommended: true,
+      color: 'bg-green-500',
+      onActivate: handleAgentActivate,
+      onViewDetails: handleAgentViewDetails
+    },
+    {
+      id: 'taxonomy-analyzer',
+      name: 'EU Taxonomy Analyzer',
+      description: 'Assess economic activities against taxonomy criteria',
+      category: 'Sustainable Finance',
+      useCases: [
+        { title: 'Activity Screening', description: 'Check if activities are taxonomy-eligible' },
+        { title: 'DNSH Assessment', description: 'Evaluate Do No Significant Harm criteria' }
+      ],
+      isActivated: activatedAgents.includes('taxonomy-analyzer'),
+      isRecommended: false,
+      color: 'bg-blue-500',
+      onActivate: handleAgentActivate,
+      onViewDetails: handleAgentViewDetails
+    }
+  ];
+
+  const tasks = [
+    {
+      title: 'SFDR Article 8 Fund Classification',
+      description: 'Review fund documentation and determine appropriate article classification under SFDR',
+      complexity: 'Moderate' as const,
+      estimatedTime: '15 min'
+    },
+    {
+      title: 'Generate CSRD Double Materiality Assessment',
+      description: 'Create materiality matrix for upcoming CSRD compliance deadline',
+      complexity: 'Complex' as const,
+      estimatedTime: '30 min'
+    },
+    {
+      title: 'Taxonomy Alignment Calculation',
+      description: 'Calculate taxonomy-aligned revenue percentage for Q3 reporting',
+      complexity: 'Simple' as const,
+      estimatedTime: '10 min'
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Leaf size={16} className="text-white" />
+    <div className="space-y-6">
+      {/* Alert Banner */}
+      <Card className="border-l-4 border-l-orange-500 bg-orange-50">
+        <CardContent className="pt-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-orange-600 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-orange-900">Action Required</h3>
+              <p className="text-sm text-orange-700 mt-1">
+                CSRD compliance deadline approaches. 2 materiality assessments need completion by Dec 31.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Active Agents</p>
+                <p className="text-2xl font-bold text-blue-600">{activatedAgents.length}</p>
               </div>
-              <h1 className="text-xl font-bold text-gray-900">Synapses</h1>
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                ESG Officer
-              </Badge>
+              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <Users size={16} className="text-blue-600" />
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm">
-                <Users size={14} className="mr-2" />
-                Invite Team
-              </Button>
-              <Button variant="outline" size="sm">
-                <Building2 size={14} className="mr-2" />
-                Enterprise Demo
-              </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Compliance Score</p>
+                <p className="text-2xl font-bold text-green-600">94%</p>
+              </div>
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <TrendingUp size={16} className="text-green-600" />
+              </div>
             </div>
-          </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Tasks Completed</p>
+                <p className="text-2xl font-bold text-purple-600">23</p>
+              </div>
+              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                <FileText size={16} className="text-purple-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Weekly Impact</p>
+                <p className="text-2xl font-bold text-orange-600">156</p>
+              </div>
+              <Progress value={78} className="mt-2 h-2" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Tasks and Agents */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Priority Tasks */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText size={20} className="text-primary" />
+                Priority Tasks
+                <Badge variant="destructive" className="ml-auto">3 Urgent</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {tasks.map((task, index) => (
+                  <TaskButton
+                    key={index}
+                    title={task.title}
+                    description={task.description}
+                    complexity={task.complexity}
+                    estimatedTime={task.estimatedTime}
+                    onClick={handleTaskClick}
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Agent Gallery */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users size={20} className="text-primary" />
+                ESG Agent Gallery
+                <Badge variant="outline" className="ml-auto">2 Available</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {agents.map((agent) => (
+                  <AgentCard key={agent.id} {...agent} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-6">
-          {/* Left Column - Main Content */}
-          <div className="lg:col-span-3 space-y-6">
-            {/* Welcome Banner */}
-            <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                      Welcome back, Sarah! 🌱
-                    </h2>
-                    <p className="text-gray-600">
-                      You have 3 active agents and 2 pending regulatory updates.
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <Badge className="bg-green-100 text-green-700 border-green-200">
-                      Impact Score: 156
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Active Agent Tasks */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText size={20} className="text-primary" />
-                  SFDR Agent Tasks
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {sfdrTasks.map((task, index) => (
-                    <TaskButton
-                      key={index}
-                      title={task.title}
-                      description={task.description}
-                      complexity={task.complexity}
-                      estimatedTime={task.estimatedTime}
-                      onClick={() => handleTaskClick(task.title)}
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Agent Gallery */}
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle className="flex items-center gap-2">
-                    Agent Gallery
-                  </CardTitle>
-                  <Button variant="outline" size="sm">
-                    <Plus size={14} className="mr-2" />
-                    Browse All Agents
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {esgAgents.map((agent) => (
-                    <AgentCard
-                      key={agent.id}
-                      {...agent}
-                      isActivated={activeAgents.includes(agent.id)}
-                      onActivate={handleActivateAgent}
-                      onViewDetails={(id) => console.log('View details for:', id)}
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Column - Sidebar */}
-          <div className="space-y-6">
-            <BadgeTracker userRole="esg-officer" />
-            <RegulatoryCalendar />
-            
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button variant="outline" className="w-full justify-start">
-                  <ExternalLink size={14} className="mr-2" />
-                  View ESG Reporting Templates
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Users size={14} className="mr-2" />
-                  Join ESG Community Forum
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <FileText size={14} className="mr-2" />
-                  Download Compliance Checklist
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+        {/* Right Column - Calendar and Progress */}
+        <div className="space-y-6">
+          <RegulatoryCalendar />
+          <BadgeTracker userRole="esg-officer" />
         </div>
-      </main>
+      </div>
     </div>
   );
 };

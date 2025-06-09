@@ -4,10 +4,15 @@ import { RoleSelector } from '../onboarding/RoleSelector';
 import { ESGOfficerDashboard } from './ESGOfficerDashboard';
 import { KYCAnalystDashboard } from './KYCAnalystDashboard';
 import { ComplianceLeadDashboard } from './ComplianceLeadDashboard';
+import { WebAppSidebar } from './WebAppSidebar';
+import { WebAppPromoBar } from './WebAppPromoBar';
+import { WebAppTopNav } from './WebAppTopNav';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 export const WebAppLayout: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [showRoleSelector, setShowRoleSelector] = useState(true);
+  const [userName, setUserName] = useState('Alex');
 
   const handleRoleSelect = (roleId: string) => {
     setSelectedRole(roleId);
@@ -38,10 +43,29 @@ export const WebAppLayout: React.FC = () => {
     }
   };
 
+  if (showRoleSelector) {
+    return <RoleSelector open={showRoleSelector} onRoleSelect={handleRoleSelect} />;
+  }
+
   return (
-    <>
-      <RoleSelector open={showRoleSelector} onRoleSelect={handleRoleSelect} />
-      {selectedRole && renderDashboard()}
-    </>
+    <SidebarProvider>
+      <div className="min-h-screen flex flex-col w-full bg-gray-50">
+        {/* Promo Bar */}
+        <WebAppPromoBar />
+        
+        {/* Top Navigation */}
+        <WebAppTopNav userName={userName} />
+        
+        {/* Main Content Area with Sidebar */}
+        <div className="flex flex-1">
+          <WebAppSidebar />
+          
+          {/* Dashboard Content */}
+          <main className="flex-1 p-6">
+            {renderDashboard()}
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 };
