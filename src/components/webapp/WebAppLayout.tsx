@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { RoleSelector } from '../onboarding/RoleSelector';
-import { ESGCommandCenter } from './ESGCommandCenter';
+import { EnhancedESGCommandCenter } from './EnhancedESGCommandCenter';
 import { KYCAnalystDashboard } from './KYCAnalystDashboard';
 import { ComplianceLeadDashboard } from './ComplianceLeadDashboard';
 import { AdvancedWebAppSidebar } from './AdvancedWebAppSidebar';
@@ -31,13 +31,13 @@ export const WebAppLayout: React.FC = () => {
   const renderDashboard = () => {
     switch (selectedRole) {
       case 'esg-officer':
-        return <ESGCommandCenter />;
+        return <EnhancedESGCommandCenter />;
       case 'kyc-analyst':
         return <KYCAnalystDashboard />;
       case 'compliance-lead':
         return <ComplianceLeadDashboard />;
       default:
-        return <ESGCommandCenter />;
+        return <EnhancedESGCommandCenter />;
     }
   };
 
@@ -61,7 +61,7 @@ export const WebAppLayout: React.FC = () => {
             <WebAppTopNav userName={userName} />
             
             {/* Dashboard Content */}
-            <main className="flex-1 p-6 overflow-auto bg-gray-50">
+            <main className="flex-1 overflow-auto">
               {renderDashboard()}
             </main>
           </div>
