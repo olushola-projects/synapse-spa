@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { RoleSelector } from '../onboarding/RoleSelector';
-import { ESGOfficerDashboard } from './ESGOfficerDashboard';
+import { ESGCommandCenter } from './ESGCommandCenter';
 import { KYCAnalystDashboard } from './KYCAnalystDashboard';
 import { ComplianceLeadDashboard } from './ComplianceLeadDashboard';
-import { WebAppSidebar } from './WebAppSidebar';
+import { AdvancedWebAppSidebar } from './AdvancedWebAppSidebar';
 import { WebAppPromoBar } from './WebAppPromoBar';
 import { WebAppTopNav } from './WebAppTopNav';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -31,13 +31,13 @@ export const WebAppLayout: React.FC = () => {
   const renderDashboard = () => {
     switch (selectedRole) {
       case 'esg-officer':
-        return <ESGOfficerDashboard />;
+        return <ESGCommandCenter />;
       case 'kyc-analyst':
         return <KYCAnalystDashboard />;
       case 'compliance-lead':
         return <ComplianceLeadDashboard />;
       default:
-        return <ESGOfficerDashboard />;
+        return <ESGCommandCenter />;
     }
   };
 
@@ -53,7 +53,7 @@ export const WebAppLayout: React.FC = () => {
         
         {/* Main Layout with Sidebar */}
         <div className="flex flex-1">
-          <WebAppSidebar />
+          <AdvancedWebAppSidebar />
           
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col">
@@ -61,7 +61,7 @@ export const WebAppLayout: React.FC = () => {
             <WebAppTopNav userName={userName} />
             
             {/* Dashboard Content */}
-            <main className="flex-1 p-6 overflow-auto">
+            <main className="flex-1 p-6 overflow-auto bg-gray-50">
               {renderDashboard()}
             </main>
           </div>
