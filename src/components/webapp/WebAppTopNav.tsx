@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Bell, Users, ExternalLink, SidebarTrigger } from 'lucide-react';
+import { SidebarTrigger } from '@/components/ui/sidebar';
+import { Bell, Users, ExternalLink } from 'lucide-react';
 import { InviteTeamDialog } from './InviteTeamDialog';
 
 interface WebAppTopNavProps {
