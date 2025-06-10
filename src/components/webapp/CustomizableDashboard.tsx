@@ -10,7 +10,7 @@ import {
   Maximize2, 
   Minimize2, 
   MoreHorizontal,
-  Drag,
+  GripVertical,
   Eye,
   EyeOff
 } from 'lucide-react';
@@ -96,7 +96,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
                   <Settings className="h-3 w-3" />
                 </Button>
                 <div className="cursor-move p-1">
-                  <Drag className="h-3 w-3 text-gray-400" />
+                  <GripVertical className="h-3 w-3 text-gray-400" />
                 </div>
               </div>
             )}
