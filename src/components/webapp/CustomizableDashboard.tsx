@@ -12,8 +12,21 @@ import {
   MoreHorizontal,
   GripVertical,
   Eye,
-  EyeOff
+  EyeOff,
+  X
 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 
 interface DashboardWidget {
   id: string;
@@ -24,6 +37,13 @@ interface DashboardWidget {
   visible: boolean;
   customizable: boolean;
   data?: any;
+  settings?: {
+    refreshInterval?: number;
+    showLabels?: boolean;
+    chartType?: string;
+    dataSource?: string;
+    notifications?: boolean;
+  };
 }
 
 interface CustomizableDashboardProps {
@@ -42,6 +62,8 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
   onAddWidget
 }) => {
   const [draggedWidget, setDraggedWidget] = useState<string | null>(null);
+  const [settingsWidget, setSettingsWidget] = useState<DashboardWidget | null>(null);
+  const [tempSettings, setTempSettings] = useState<any>({});
 
   const handleDragStart = useCallback((widgetId: string) => {
     setDraggedWidget(widgetId);
@@ -50,6 +72,40 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
   const handleDragEnd = useCallback(() => {
     setDraggedWidget(null);
   }, []);
+
+  const handleSettingsClick = (widget: DashboardWidget) => {
+    setSettingsWidget(widget);
+    setTempSettings({
+      title: widget.title,
+      refreshInterval: widget.settings?.refreshInterval || 30,
+      showLabels: widget.settings?.showLabels || true,
+      chartType: widget.settings?.chartType || 'line',
+      dataSource: widget.settings?.dataSource || 'default',
+      notifications: widget.settings?.notifications || false,
+    });
+  };
+
+  const handleSettingsSave = () => {
+    if (settingsWidget) {
+      onWidgetUpdate(settingsWidget.id, {
+        title: tempSettings.title,
+        settings: {
+          ...settingsWidget.settings,
+          refreshInterval: tempSettings.refreshInterval,
+          showLabels: tempSettings.showLabels,
+          chartType: tempSettings.chartType,
+          dataSource: tempSettings.dataSource,
+          notifications: tempSettings.notifications,
+        }
+      });
+    }
+    setSettingsWidget(null);
+  };
+
+  const handleSettingsCancel = () => {
+    setSettingsWidget(null);
+    setTempSettings({});
+  };
 
   const renderWidget = (widget: DashboardWidget) => {
     const sizeClasses = {
@@ -92,7 +148,12 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
                 >
                   {widget.size === 'large' ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
                 </Button>
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-6 w-6 p-0"
+                  onClick={() => handleSettingsClick(widget)}
+                >
                   <Settings className="h-3 w-3" />
                 </Button>
                 <div className="cursor-move p-1">
@@ -106,6 +167,11 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
           {widget.visible ? (
             <div className="text-center text-gray-500 text-sm">
               {widget.type} widget content
+              {widget.settings?.refreshInterval && (
+                <div className="text-xs text-gray-400 mt-1">
+                  Refreshes every {widget.settings.refreshInterval}s
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center text-gray-400 text-xs">
@@ -169,6 +235,114 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
           </Card>
         )}
       </div>
+
+      {/* Widget Settings Dialog */}
+      <Dialog open={!!settingsWidget} onOpenChange={() => setSettingsWidget(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Widget Settings</DialogTitle>
+            <DialogDescription>
+              Customize the behavior and appearance of your {settingsWidget?.title} widget.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-right">
+                Title
+              </Label>
+              <Input
+                id="title"
+                value={tempSettings.title || ''}
+                onChange={(e) => setTempSettings(prev => ({ ...prev, title: e.target.value }))}
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="refresh" className="text-right">
+                Refresh (sec)
+              </Label>
+              <Input
+                id="refresh"
+                type="number"
+                value={tempSettings.refreshInterval || 30}
+                onChange={(e) => setTempSettings(prev => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
+                className="col-span-3"
+              />
+            </div>
+
+            {settingsWidget?.type === 'chart' && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="chartType" className="text-right">
+                  Chart Type
+                </Label>
+                <Select 
+                  value={tempSettings.chartType || 'line'} 
+                  onValueChange={(value) => setTempSettings(prev => ({ ...prev, chartType: value }))}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="line">Line Chart</SelectItem>
+                    <SelectItem value="bar">Bar Chart</SelectItem>
+                    <SelectItem value="pie">Pie Chart</SelectItem>
+                    <SelectItem value="area">Area Chart</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="dataSource" className="text-right">
+                Data Source
+              </Label>
+              <Select 
+                value={tempSettings.dataSource || 'default'} 
+                onValueChange={(value) => setTempSettings(prev => ({ ...prev, dataSource: value }))}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="default">Default</SelectItem>
+                  <SelectItem value="live">Live Data</SelectItem>
+                  <SelectItem value="cached">Cached Data</SelectItem>
+                  <SelectItem value="mock">Mock Data</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="notifications"
+                checked={tempSettings.notifications || false}
+                onCheckedChange={(checked) => setTempSettings(prev => ({ ...prev, notifications: checked }))}
+              />
+              <Label htmlFor="notifications">Enable notifications for this widget</Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="showLabels"
+                checked={tempSettings.showLabels !== false}
+                onCheckedChange={(checked) => setTempSettings(prev => ({ ...prev, showLabels: checked }))}
+              />
+              <Label htmlFor="showLabels">Show data labels</Label>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={handleSettingsCancel}>
+              Cancel
+            </Button>
+            <Button onClick={handleSettingsSave}>
+              Save Settings
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
