@@ -17,12 +17,10 @@ export const WebAppLayout: React.FC = () => {
   const handleRoleSelect = (roleId: string) => {
     setSelectedRole(roleId);
     setShowRoleSelector(false);
-    // Store in localStorage for persistence
     localStorage.setItem('userRole', roleId);
   };
 
   useEffect(() => {
-    // Check if user has already selected a role
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
       setSelectedRole(storedRole);
@@ -39,7 +37,7 @@ export const WebAppLayout: React.FC = () => {
       case 'compliance-lead':
         return <ComplianceLeadDashboard />;
       default:
-        return <ESGOfficerDashboard />; // Default fallback
+        return <ESGOfficerDashboard />;
     }
   };
 
@@ -48,22 +46,25 @@ export const WebAppLayout: React.FC = () => {
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex flex-col w-full bg-gray-50">
         {/* Promo Bar */}
         <WebAppPromoBar />
         
-        {/* Top Navigation */}
-        <WebAppTopNav userName={userName} />
-        
-        {/* Main Content Area with Sidebar */}
+        {/* Main Layout with Sidebar */}
         <div className="flex flex-1">
           <WebAppSidebar />
           
-          {/* Dashboard Content */}
-          <main className="flex-1 p-6">
-            {renderDashboard()}
-          </main>
+          {/* Main Content Area */}
+          <div className="flex-1 flex flex-col">
+            {/* Top Navigation */}
+            <WebAppTopNav userName={userName} />
+            
+            {/* Dashboard Content */}
+            <main className="flex-1 p-6 overflow-auto">
+              {renderDashboard()}
+            </main>
+          </div>
         </div>
       </div>
     </SidebarProvider>
