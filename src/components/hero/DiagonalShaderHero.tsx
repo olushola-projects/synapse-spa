@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { cn } from '@/lib/utils';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // Lazy load the 3D canvas to improve FCP
 const ShaderCanvas = React.lazy(() => import('./ShaderCanvas'));
@@ -11,7 +12,6 @@ interface DiagonalShaderHeroProps {
   colorEnd?: string;
   angle?: number;
   speed?: number;
-  reducedMotionFallback?: boolean;
   className?: string;
 }
 
@@ -21,48 +21,32 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
   colorEnd = "#9a89e4",
   angle = 45,
   speed = 0.2,
-  reducedMotionFallback = true,
   className
 }) => {
   const [shouldUseShader, setShouldUseShader] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
   const [showReducedMotionToggle, setShowReducedMotionToggle] = useState(false);
 
   // CSS gradient fallback style
   const fallbackGradient = {
-    background: `linear-gradient(${135}deg, ${colorStart} 0%, ${colorEnd} 100%)`
+    background: `linear-gradient(135deg, ${colorStart} 0%, ${colorEnd} 100%)`
   };
 
   useEffect(() => {
-    // Check for reduced motion preference
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-    };
-    
-    mediaQuery.addEventListener('change', handleChange);
-
     // Show toggle for users who can control motion preference
     setShowReducedMotionToggle(true);
 
-    // Delay shader loading for better FCP
-    const timer = setTimeout(() => {
-      if (!mediaQuery.matches && reducedMotionFallback) {
+    // Delay shader loading for better FCP, but only if motion is allowed
+    if (!prefersReducedMotion) {
+      const timer = setTimeout(() => {
         setShouldUseShader(true);
-      }
-    }, 100);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleChange);
-      clearTimeout(timer);
-    };
-  }, [reducedMotionFallback]);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [prefersReducedMotion]);
 
   const toggleReducedMotion = () => {
-    setPrefersReducedMotion(!prefersReducedMotion);
-    setShouldUseShader(!prefersReducedMotion);
+    setShouldUseShader(!shouldUseShader);
   };
 
   return (
@@ -74,7 +58,7 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
         aria-hidden="true"
       />
 
-      {/* 3D Shader Canvas - lazy loaded */}
+      {/* 3D Shader Canvas - lazy loaded and respects motion preferences */}
       {shouldUseShader && !prefersReducedMotion && (
         <Suspense fallback={null}>
           <div className="absolute inset-0 z-0" aria-hidden="true">
@@ -93,9 +77,9 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
         <button
           onClick={toggleReducedMotion}
           className="absolute top-4 left-4 z-50 px-3 py-1.5 text-xs bg-white/20 backdrop-blur-sm rounded-md text-white hover:bg-white/30 transition-colors"
-          aria-label={`${prefersReducedMotion ? 'Enable' : 'Disable'} motion effects`}
+          aria-label={`${prefersReducedMotion || !shouldUseShader ? 'Enable' : 'Disable'} motion effects`}
         >
-          {prefersReducedMotion ? '🎬 Enable Motion' : '⏸️ Reduce Motion'}
+          {prefersReducedMotion || !shouldUseShader ? '🎬 Enable Motion' : '⏸️ Reduce Motion'}
         </button>
       )}
 

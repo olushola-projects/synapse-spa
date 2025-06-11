@@ -20,18 +20,17 @@ const HeroSection = () => {
       className="w-full"
       id="hero-section"
     >
-      {/* Production-quality hero with shader gradient */}
+      {/* 1. Shader Background - First in render order */}
       <DiagonalShaderHero
         colorStart="#ff511c"
         colorEnd="#9a89e4"
-        angle={45}
         speed={0.2}
-        reducedMotionFallback
       >
+        {/* 2. Dashboard Embed & Hero Content - Second in render order */}
         <SynapsesHeroContent />
       </DiagonalShaderHero>
 
-      {/* USP Feature Section - Below Hero */}
+      {/* 3. USP Feature Section - Below Hero */}
       <div className="bg-white py-16">
         <div className="container mx-auto px-4">
           <div className={`transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
