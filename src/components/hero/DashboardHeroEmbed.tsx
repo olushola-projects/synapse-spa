@@ -3,8 +3,12 @@ import React, { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-// Lazy load the dashboard component
-const Dashboard = React.lazy(() => import('../webapp/CustomizableDashboard'));
+// Lazy load the dashboard component - handle named export
+const Dashboard = React.lazy(() => 
+  import('../webapp/CustomizableDashboard').then(module => ({
+    default: module.CustomizableDashboard
+  }))
+);
 
 interface DashboardHeroEmbedProps {
   className?: string;
@@ -24,6 +28,43 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
     } else {
       navigate('/dashboard');
     }
+  };
+
+  // Mock dashboard props for the embed
+  const mockDashboardProps = {
+    widgets: [
+      {
+        id: '1',
+        title: 'Compliance Status',
+        type: 'metric' as const,
+        size: 'small' as const,
+        position: { x: 0, y: 0 },
+        visible: true,
+        customizable: true,
+      },
+      {
+        id: '2',
+        title: 'Regulatory Calendar',
+        type: 'calendar' as const,
+        size: 'medium' as const,
+        position: { x: 1, y: 0 },
+        visible: true,
+        customizable: true,
+      },
+      {
+        id: '3',
+        title: 'Risk Insights',
+        type: 'chart' as const,
+        size: 'large' as const,
+        position: { x: 0, y: 1 },
+        visible: true,
+        customizable: true,
+      },
+    ],
+    isCustomizing: false,
+    onToggleCustomize: () => {},
+    onWidgetUpdate: () => {},
+    onAddWidget: () => {},
   };
 
   return (
@@ -50,7 +91,7 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
       >
         {!imageError ? (
           <div className="transform scale-75 origin-top-left" style={{ width: '133.33%', height: 'auto' }}>
-            <Dashboard />
+            <Dashboard {...mockDashboardProps} />
           </div>
         ) : (
           <img 
