@@ -1,7 +1,6 @@
 
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Plane } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface ShaderCanvasProps {
@@ -91,6 +90,11 @@ const WaterPlane: React.FC<{ colorStart: string; colorEnd: string; speed: number
     return material;
   }, [colorStart, colorEnd, speed]);
 
+  // Create plane geometry
+  const geometry = useMemo(() => {
+    return new THREE.PlaneGeometry(20, 20, 64, 64);
+  }, []);
+
   useFrame((state) => {
     if (meshRef.current) {
       shaderMaterial.uniforms.uTime.value = state.clock.getElapsedTime() * speed;
@@ -98,9 +102,9 @@ const WaterPlane: React.FC<{ colorStart: string; colorEnd: string; speed: number
   });
 
   return (
-    <Plane 
+    <mesh 
       ref={meshRef} 
-      args={[20, 20, 64, 64]} 
+      geometry={geometry}
       material={shaderMaterial}
       rotation={[Math.PI / 4, 0, 0]} // 45-degree rotation
     />
