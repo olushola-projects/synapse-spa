@@ -81,6 +81,15 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
         overflow: 'hidden',
         background: 'white'
       }}
+      role="button"
+      tabIndex={0}
+      aria-label="Explore Synapses Dashboard"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
     >
       <Suspense 
         fallback={
