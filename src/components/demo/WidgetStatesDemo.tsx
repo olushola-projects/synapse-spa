@@ -17,25 +17,9 @@ export const WidgetStatesDemo: React.FC = () => {
       name: 'AML Compliance Agent',
       description: 'Specialized in Anti-Money Laundering regulations and suspicious activity monitoring.',
       category: 'Financial Crime',
-      useCases: [
-        {
-          title: 'Transaction Monitoring',
-          description: 'Analyze transaction patterns for suspicious activities'
-        },
-        {
-          title: 'Customer Risk Assessment',
-          description: 'Evaluate customer risk profiles based on AML criteria'
-        }
-      ],
-      isActivated: false,
-      isRecommended: true,
-      color: 'bg-red-500',
-      onActivate: (agentId: string) => {
-        console.log('Activating agent:', agentId);
+      onClick: () => {
+        console.log('Clicking AML agent');
         setShowAgentFlow(true);
-      },
-      onViewDetails: (agentId: string) => {
-        console.log('Viewing details for agent:', agentId);
       }
     },
     {
@@ -43,24 +27,9 @@ export const WidgetStatesDemo: React.FC = () => {
       name: 'ESG Reporting Agent',
       description: 'Environmental, Social, and Governance compliance and reporting assistance.',
       category: 'Sustainability',
-      useCases: [
-        {
-          title: 'SFDR Reporting',
-          description: 'Generate reports compliant with Sustainable Finance Disclosure Regulation'
-        },
-        {
-          title: 'Carbon Footprint Analysis',
-          description: 'Calculate and track organizational carbon emissions'
-        }
-      ],
-      isActivated: true,
-      isRecommended: false,
-      color: 'bg-green-500',
-      onActivate: (agentId: string) => {
-        console.log('Activating agent:', agentId);
-      },
-      onViewDetails: (agentId: string) => {
-        console.log('Viewing details for agent:', agentId);
+      onClick: () => {
+        console.log('Clicking ESG agent');
+        setShowAgentFlow(true);
       }
     }
   ];
@@ -122,7 +91,7 @@ export const WidgetStatesDemo: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Enhanced Compliance Widget */}
           <EnhancedComplianceStatusWidget 
-            currentState={currentState}
+            forceState={currentState}
             onRefresh={mockRefresh}
           />
 
