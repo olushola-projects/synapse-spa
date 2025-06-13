@@ -12,6 +12,7 @@ import AskDara from "./pages/AskDara";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import RegulatoryDashboard from "./pages/RegulatoryDashboard";
 import { AuthProvider } from "./contexts/AuthContext";
 import { WebAppLayout } from "./components/webapp/WebAppLayout";
 
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/webapp" element={<WebAppLayout />} />
             <Route path="/partners" element={<Partners />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/regulatory-dashboard" element={<RegulatoryDashboard />} />
             <Route path="/ask-dara" element={<AskDara />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
