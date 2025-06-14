@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import {
   RegulatoryEvent,
@@ -254,7 +255,8 @@ const MOCK_SOURCE_CONFIGS: RegulatorySourceConfig[] = [
     authConfig: {
       type: 'apiKey',
       credentials: {
-        apiKey: process.env.FCA_API_KEY || 'mock-api-key'
+        // Replace direct process.env access with mock value for browser environment
+        apiKey: 'mock-api-key'
       }
     },
     parsingConfig: {
