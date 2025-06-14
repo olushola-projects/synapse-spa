@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 
 import React, { useState } from 'react';
+=======
+import React, { useState, useEffect } from 'react';
+>>>>>>> Stashed changes
 import { EnhancedDashboardLayout } from './EnhancedDashboardLayout';
 import { AdvancedDataWidget } from '../widgets/AdvancedDataWidget';
 import { EnhancedWidget } from '../widgets/EnhancedWidget';
@@ -34,9 +38,24 @@ interface DataPoint {
   [key: string]: any;
 }
 
-export const IntegratedDashboardExample: React.FC = () => {
+interface IntegratedDashboardExampleProps {
+  onLoad?: () => void;
+}
+
+export const IntegratedDashboardExample: React.FC<IntegratedDashboardExampleProps> = ({ onLoad }) => {
   const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('detailed');
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Call onLoad when component is mounted and ready
+  React.useEffect(() => {
+    if (onLoad) {
+      // Use a small delay to ensure the component is fully rendered
+      const timer = setTimeout(() => {
+        onLoad();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [onLoad]);
   
   // Sample chart data for widgets - properly typed for AdvancedDataWidget
   const barChartData: DataPoint[] = [
