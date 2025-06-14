@@ -14,16 +14,16 @@ export const SynapsesHeroContent: React.FC = () => {
 
   return (
     <>
-      {/* Global Navigation */}
-      <nav className="w-full px-6 lg:px-10 py-4 flex items-center justify-between relative z-20">
-        <div className="text-2xl font-bold text-white tracking-tight">
+      {/* Global Navigation - Stripe-inspired */}
+      <nav className="w-full px-6 lg:px-12 py-5 flex items-center justify-between relative z-20">
+        <div className="text-2xl font-semibold text-white tracking-tight">
           Synapses
         </div>
         
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
           <Button
-            variant="outline"
-            className="border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm h-12"
+            variant="ghost"
+            className="text-white/80 hover:text-white hover:bg-white/10 font-medium px-4 py-2 h-10"
             onClick={() => setShowInviteDialog(true)}
           >
             <Users className="w-4 h-4 mr-2" />
@@ -31,13 +31,13 @@ export const SynapsesHeroContent: React.FC = () => {
           </Button>
           
           <Button
-            className="bg-white text-gray-900 hover:bg-gray-100 font-medium h-12"
+            className="bg-white text-gray-900 hover:bg-gray-50 font-medium px-6 py-2 h-10 shadow-sm"
             onClick={() => setShowFormDialog(true)}
           >
-            Enterprise Demo
+            Start free trial
           </Button>
           
-          <button className="text-white/80 hover:text-white transition-colors text-sm font-medium">
+          <button className="text-white/80 hover:text-white transition-colors text-sm font-medium px-4 py-2">
             Sign in
           </button>
         </div>
@@ -46,70 +46,68 @@ export const SynapsesHeroContent: React.FC = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="md:hidden text-white"
+          className="md:hidden text-white hover:bg-white/10"
         >
           Menu
         </Button>
       </nav>
 
-      {/* Hero Content */}
-      <header className="flex-1 flex items-center justify-center px-6 lg:px-10 py-8">
+      {/* Hero Content - Stripe-inspired layout */}
+      <header className="flex-1 flex items-center justify-center px-6 lg:px-12 py-12 lg:py-16">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-4">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
             {/* Left side - Headlines and CTAs */}
-            <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-3xl lg:text-5xl xl:text-6xl font-extrabold text-white leading-[1.15] tracking-tight mb-4">
-                Synapses
-                <br />
-                <span className="font-extrabold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-                  The Agentic Hub for GRC Professionals
-                </span>
+            <div className="flex-1 text-center lg:text-left max-w-2xl lg:max-w-none">
+              {/* Main headline - Stripe typography style */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold text-white leading-[1.1] tracking-tight mb-6">
+                The GRC platform for ambitious teams
               </h1>
               
-              <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Activate AI agents, track regulations, and earn badges—built by compliance experts, for compliance experts.
+              {/* Subheadline */}
+              <p className="text-xl lg:text-2xl text-white/85 mb-8 leading-[1.4] font-normal max-w-2xl mx-auto lg:mx-0">
+                From compliance automation to regulatory intelligence, Synapses helps you build the future of GRC—no matter your size or stage.
               </p>
               
-              {/* Primary CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-6">
+              {/* Primary CTA Buttons - Stripe button style */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8">
                 <Button
                   size="lg"
-                  className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-6 h-12 text-base shadow-lg transition-all duration-200 hover:scale-105"
+                  className="bg-white text-gray-900 hover:bg-gray-50 font-medium px-8 py-4 h-12 text-base shadow-lg transition-all duration-200 rounded-md"
                   onClick={() => setShowFormDialog(true)}
                 >
-                  Get Early Access
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  Start your integration
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
                 
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="border-2 border-white/40 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-6 h-12 text-base transition-all duration-200"
+                  variant="ghost"
+                  className="border border-white/30 bg-transparent text-white hover:bg-white/10 font-medium px-8 py-4 h-12 text-base rounded-md"
                 >
-                  Learn More
+                  Contact sales
                 </Button>
               </div>
 
-              {/* Social Proof */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-white/70 text-sm">
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                  300+ Early Adopters
-                </span>
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-                  AI-Powered Insights
-                </span>
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
-                  Expert-Built Platform
-                </span>
+              {/* Trust indicators - Stripe style */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8 text-white/60 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span>Join 300+ teams</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <span>Expert-built platform</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                  <span>Enterprise ready</span>
+                </div>
               </div>
             </div>
 
             {/* Right side - Dashboard Embed */}
-            <div className="flex-1 flex justify-center lg:justify-end w-full lg:w-auto mt-4 lg:mt-0">
-              <DashboardHeroEmbed className="w-[90vw] sm:w-[85vw] md:w-[80vw] lg:w-[65vw] lg:max-w-[960px]" />
+            <div className="flex-1 flex justify-center lg:justify-end w-full lg:w-auto mt-8 lg:mt-0 lg:max-w-2xl">
+              <DashboardHeroEmbed className="w-full max-w-[600px] lg:max-w-none" />
             </div>
           </div>
         </div>
@@ -119,7 +117,7 @@ export const SynapsesHeroContent: React.FC = () => {
       <ExternalFormDialog 
         open={showFormDialog} 
         onOpenChange={setShowFormDialog} 
-        title="Get Early Access"
+        title="Start your free trial"
       />
       
       <InviteDialog
