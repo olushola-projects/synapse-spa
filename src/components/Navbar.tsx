@@ -61,27 +61,19 @@ const Navbar = () => {
             </Link>
             
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">Home</Link>
-              <Link to="/webapp" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">Try WebApp</Link>
-              <Link to="/partners" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">Become a Partner</Link>
-              <Link to="/resources/faq" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">FAQ</Link>
+              <Link to="/" className="text-gray-900 hover:text-blue-700 transition-colors font-medium">Home</Link>
+              <Link to="/partners" className="text-gray-900 hover:text-blue-700 transition-colors font-medium">Become a Partner</Link>
+              <Link to="/resources/faq" className="text-gray-900 hover:text-blue-700 transition-colors font-medium">FAQ</Link>
             </nav>
           </div>
           
           <div className="hidden md:flex items-center gap-4">
             <div onClick={openInviteDialog} className="cursor-pointer">
-              <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold">Invite</Button>
-            </div>
-            
-            {/* Waitlist button that appears on scroll */}
-            <div onClick={openWaitlistDialog} className={`cursor-pointer transition-opacity duration-300 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
-              <Button className="flex items-center gap-2">
-                Join Waitlist <ArrowRight size={16} />
-              </Button>
+              <Button variant="outline" className="border-2 border-gray-900 text-gray-900 bg-transparent hover:bg-gray-900 hover:text-white transition-colors font-medium">Invite</Button>
             </div>
             
             <div onClick={openFormDialog} className="cursor-pointer">
-              <Button>Get Early Access</Button>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-medium">Get Early Access</Button>
             </div>
           </div>
 
@@ -100,20 +92,14 @@ const Navbar = () => {
             className="md:hidden bg-white border-b shadow-lg"
           >
             <nav className="container mx-auto p-4 flex flex-col gap-4">
-              <Link to="/" className="text-blue-700 hover:text-blue-800 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-bold">Home</Link>
-              <Link to="/webapp" className="text-blue-700 hover:text-blue-800 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-bold">Try WebApp</Link>
-              <Link to="/partners" className="text-blue-700 hover:text-blue-800 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-bold">Become a Partner</Link>
-              <Link to="/resources/faq" className="text-blue-700 hover:text-blue-800 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-bold">FAQ</Link>
+              <Link to="/" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium">Home</Link>
+              <Link to="/partners" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium">Become a Partner</Link>
+              <Link to="/resources/faq" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium">FAQ</Link>
               <div onClick={openInviteDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button variant="outline" className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold w-full">Invite</Button>
-              </div>
-              <div onClick={openWaitlistDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button className="mt-2 w-full flex items-center justify-center gap-2">
-                  Join Waitlist <ArrowRight size={16} />
-                </Button>
+                <Button variant="outline" className="border-2 border-gray-900 text-gray-900 bg-transparent hover:bg-gray-900 hover:text-white transition-colors font-medium w-full">Invite</Button>
               </div>
               <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button className="mt-2 w-full">Get Early Access</Button>
+                <Button className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium">Get Early Access</Button>
               </div>
             </nav>
           </motion.div>
