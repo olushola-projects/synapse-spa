@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Users } from 'lucide-react';
@@ -14,110 +13,102 @@ export const SynapsesHeroContent: React.FC = () => {
 
   return (
     <>
-      {/* Global Navigation - Stripe-inspired */}
+      {/* Header Navigation - Exact match to image */}
       <nav className="w-full px-6 lg:px-12 py-5 flex items-center justify-between relative z-20">
-        <div className="text-2xl font-semibold text-white tracking-tight">
+        <div className="text-3xl font-bold text-blue-700 tracking-tight">
           Synapses
         </div>
         
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-6">
+          <a href="/" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">Home</a>
+          <a href="/partners" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">Become a Partner</a>
+          <a href="/resources/faq" className="text-blue-700 hover:text-blue-800 transition-colors font-bold">FAQ</a>
+        </div>
+
+        <div className="hidden md:flex items-center gap-4">
           <Button
-            variant="ghost"
-            className="text-white/80 hover:text-white hover:bg-white/10 font-medium px-4 py-2 h-10"
+            variant="outline"
+            className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-colors font-bold"
             onClick={() => setShowInviteDialog(true)}
           >
-            <Users className="w-4 h-4 mr-2" />
-            Invite Team
+            Invite
           </Button>
           
           <Button
-            className="bg-white text-gray-900 hover:bg-gray-50 font-medium px-6 py-2 h-10 shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold"
             onClick={() => setShowFormDialog(true)}
           >
-            Start free trial
+            Get Early Access
           </Button>
-          
-          <button className="text-white/80 hover:text-white transition-colors text-sm font-medium px-4 py-2">
-            Sign in
-          </button>
         </div>
 
         {/* Mobile menu button */}
         <Button
           variant="ghost"
           size="sm"
-          className="md:hidden text-white hover:bg-white/10"
+          className="md:hidden text-blue-700 hover:bg-blue-50"
         >
           Menu
         </Button>
       </nav>
 
-      {/* Hero Content - Stripe-inspired layout */}
-      <header className="flex-1 flex items-center justify-center px-6 lg:px-12 py-12 lg:py-16">
+      {/* Hero Content - Exact match to image layout */}
+      <div className="flex-1 flex items-center justify-center px-6 lg:px-12 py-12 lg:py-16">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
-            {/* Left side - Headlines and CTAs */}
+            {/* Left side - Headlines and CTAs matching image exactly */}
             <div className="flex-1 text-center lg:text-left max-w-2xl lg:max-w-none">
-              {/* Main headline - Stripe typography style */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold text-white leading-[1.1] tracking-tight mb-6">
-                The GRC platform for ambitious teams
+              {/* Main headline - Exact match to image */}
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-gray-900 mb-4">
+                <div className="flex flex-col">
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span>
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span>
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">With GRC</span>
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Agents</span>
+                </div>
               </h1>
               
-              {/* Subheadline */}
-              <p className="text-xl lg:text-2xl text-white/85 mb-8 leading-[1.4] font-normal max-w-2xl mx-auto lg:mx-0">
-                From compliance automation to regulatory intelligence, Synapses helps you build the future of GRC—no matter your size or stage.
+              {/* Subheadline - Exact match to image */}
+              <p className="mt-4 text-base md:text-lg text-gray-700 max-w-md leading-relaxed font-normal">
+                Join a global network of professionals to boost your expertise with GRC agents, exclusive testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
               </p>
               
-              {/* Primary CTA Buttons - Stripe button style */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8">
+              {/* Primary CTA Button - Exact match to image */}
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button
-                  size="lg"
-                  className="bg-white text-gray-900 hover:bg-gray-50 font-medium px-8 py-4 h-12 text-base shadow-lg transition-all duration-200 rounded-md"
+                  className="flex items-center gap-2"
                   onClick={() => setShowFormDialog(true)}
                 >
-                  Start your integration
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-                
-                <Button
-                  size="lg"
-                  variant="ghost"
-                  className="border border-white/30 bg-transparent text-white hover:bg-white/10 font-medium px-8 py-4 h-12 text-base rounded-md"
-                >
-                  Contact sales
+                  Get Early Access <ArrowRight size={16} />
                 </Button>
               </div>
 
-              {/* Trust indicators - Stripe style */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8 text-white/60 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span>Join 300+ teams</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span>Expert-built platform</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span>Enterprise ready</span>
-                </div>
+              {/* Trust indicators - Exact match to image */}
+              <div className="mt-4 flex items-center text-sm text-gray-500 space-x-6">
+                <span className="flex items-center">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></div>
+                  GRC Innovation Hub
+                </span>
+                <span className="flex items-center">
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
+                  Join early adopters in our private pilot
+                </span>
               </div>
             </div>
 
-            {/* Right side - Dashboard Embed */}
+            {/* Right side - Dashboard Embed (keep current production) */}
             <div className="flex-1 flex justify-center lg:justify-end w-full lg:w-auto mt-8 lg:mt-0 lg:max-w-2xl">
               <DashboardHeroEmbed className="w-full max-w-[600px] lg:max-w-none" />
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Dialogs */}
       <ExternalFormDialog 
         open={showFormDialog} 
         onOpenChange={setShowFormDialog} 
-        title="Start your free trial"
+        title="Get Early Access"
       />
       
       <InviteDialog

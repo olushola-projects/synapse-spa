@@ -17,8 +17,8 @@ interface DiagonalShaderHeroProps {
 
 export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
   children,
-  colorStart = "#635BFF",
-  colorEnd = "#4F46E5",
+  colorStart = "#ffffff",
+  colorEnd = "#f8fafc",
   angle = 45,
   speed = 0.15,
   className
@@ -27,7 +27,7 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const [showReducedMotionToggle, setShowReducedMotionToggle] = useState(false);
 
-  // Stripe-inspired gradient fallback
+  // Clean white/light gradient fallback matching the image
   const fallbackGradient = {
     background: `linear-gradient(135deg, ${colorStart} 0%, ${colorEnd} 100%)`
   };
@@ -48,15 +48,15 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
   };
 
   return (
-    <div className={cn("relative min-h-screen overflow-hidden", className)}>
-      {/* Static gradient fallback - Stripe colors */}
+    <div className={cn("relative min-h-screen overflow-hidden bg-white", className)}>
+      {/* Static gradient fallback - Clean white background */}
       <div 
         className="absolute inset-0 z-0"
         style={fallbackGradient}
         aria-hidden="true"
       />
 
-      {/* 3D Shader Canvas */}
+      {/* 3D Shader Canvas - Subtle if any motion */}
       {shouldUseShader && !prefersReducedMotion && (
         <Suspense fallback={null}>
           <div className="absolute inset-0 z-0" aria-hidden="true">
@@ -74,7 +74,7 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
       {showReducedMotionToggle && (
         <button
           onClick={toggleReducedMotion}
-          className="absolute top-6 left-6 z-50 px-3 py-2 text-xs bg-white/10 backdrop-blur-sm rounded-lg text-white/80 hover:bg-white/20 transition-colors font-medium"
+          className="absolute top-6 right-6 z-50 px-3 py-2 text-xs bg-gray-100 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors font-medium"
           aria-label={`${prefersReducedMotion || !shouldUseShader ? 'Enable' : 'Disable'} motion effects`}
         >
           {prefersReducedMotion || !shouldUseShader ? '🎬 Enable Motion' : '⏸️ Reduce Motion'}
