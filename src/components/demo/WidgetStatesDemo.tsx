@@ -38,12 +38,6 @@ export const WidgetStatesDemo: React.FC = () => {
     setCurrentState(state);
   };
 
-  const mockRefresh = async () => {
-    return new Promise<void>((resolve) => {
-      setTimeout(resolve, 2000);
-    });
-  };
-
   return (
     <div className="p-6 space-y-8 bg-gray-50 min-h-screen">
       <div className="max-w-6xl mx-auto">
@@ -92,7 +86,6 @@ export const WidgetStatesDemo: React.FC = () => {
           {/* Enhanced Compliance Widget */}
           <EnhancedComplianceStatusWidget 
             forceState={currentState}
-            onRefresh={mockRefresh}
           />
 
           {/* Enhanced Generic Widget */}
@@ -105,7 +98,6 @@ export const WidgetStatesDemo: React.FC = () => {
                 📅
               </div>
             }
-            onDataRefresh={mockRefresh}
             className="h-80"
           >
             <div className="space-y-3">
@@ -133,11 +125,11 @@ export const WidgetStatesDemo: React.FC = () => {
             >
               Launch Agent Interaction Demo
             </Button>
-            <AgentInteractionFlow
-              agents={mockAgents}
-              isOpen={showAgentFlow}
-              onClose={() => setShowAgentFlow(false)}
-            />
+            {showAgentFlow && (
+              <AgentInteractionFlow
+                agents={mockAgents}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
