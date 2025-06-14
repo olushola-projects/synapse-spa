@@ -1,13 +1,4 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-import React, { useState } from 'react';
-=======
 import React, { useState, useEffect } from 'react';
->>>>>>> Stashed changes
-=======
-import React, { useState, useEffect } from 'react';
->>>>>>> Stashed changes
 import { EnhancedDashboardLayout } from './EnhancedDashboardLayout';
 import { AdvancedDataWidget } from '../widgets/AdvancedDataWidget';
 import { EnhancedWidget } from '../widgets/EnhancedWidget';
@@ -42,12 +33,6 @@ interface DataPoint {
   [key: string]: any;
 }
 
-interface IntegratedDashboardExampleProps {
-  onLoad?: () => void;
-}
-
-<<<<<<< Updated upstream
-=======
 interface DemoAction {
   id: string;
   title: string;
@@ -61,7 +46,6 @@ interface IntegratedDashboardExampleProps {
   onLoad?: () => void;
 }
 
->>>>>>> Stashed changes
 export const IntegratedDashboardExample: React.FC<IntegratedDashboardExampleProps> = ({ onLoad }) => {
   const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('detailed');
   const [activeTab, setActiveTab] = useState('overview');

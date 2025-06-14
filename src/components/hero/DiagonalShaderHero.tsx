@@ -63,10 +63,6 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = memo(({
   const prefersReducedMotion = useReducedMotion();
   const [showReducedMotionToggle, setShowReducedMotionToggle] = useState(false);
 
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
   // Memoized CSS gradient fallback style for performance
   const fallbackGradient = React.useMemo(() => ({
     background: `linear-gradient(135deg, ${colorStart} 0%, ${colorEnd} 100%)`,
@@ -88,7 +84,6 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = memo(({
       return false;
     }
   }, []);
-<<<<<<< Updated upstream
 
   useEffect(() => {
     // Check WebGL support
@@ -107,43 +102,6 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = memo(({
         }, 150); // Slightly longer delay for better FCP
         return timer;
       };
-=======
-  // Clean white/light gradient fallback matching the image
-  const fallbackGradient = {
-    background: `linear-gradient(135deg, ${colorStart} 0%, ${colorEnd} 100%)`
-  };
-
-  useEffect(() => {
-    setShowReducedMotionToggle(true);
-
-    if (!prefersReducedMotion) {
-      const timer = setTimeout(() => {
-        setShouldUseShader(true);
-      }, 200);
-      return () => clearTimeout(timer);
-    }
-  }, [prefersReducedMotion]);
->>>>>>> 6dab5789c94cd038ee4b9dc498a1617b5318fd1d
-=======
-
-  useEffect(() => {
-    // Check WebGL support
-    const hasWebGL = checkWebGLSupport();
-    setWebGLSupported(hasWebGL);
-    
-    // Show toggle for users who can control motion preference
-    setShowReducedMotionToggle(true);
-
-    // Progressive enhancement: Load shader only if conditions are met
-    if (!prefersReducedMotion && hasWebGL) {
-      // Use requestIdleCallback for better performance
-      const loadShader = () => {
-        const timer = setTimeout(() => {
-          setShouldUseShader(true);
-        }, 150); // Slightly longer delay for better FCP
-        return timer;
-      };
->>>>>>> Stashed changes
 
       if ('requestIdleCallback' in window) {
         const idleCallback = requestIdleCallback(loadShader, { timeout: 1000 });
@@ -172,20 +130,12 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = memo(({
   }, []);
 
   return (
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
     <div 
       className={cn("relative min-h-screen overflow-hidden", className)}
       role="banner"
       aria-label="Hero section with interactive background"
     >
       {/* Static CSS gradient fallback - always rendered for SSR/FCP */}
-=======
-    <div className={cn("relative min-h-screen overflow-hidden bg-white", className)}>
-      {/* Static gradient fallback - Clean white background */}
->>>>>>> 6dab5789c94cd038ee4b9dc498a1617b5318fd1d
       <div 
         className={cn(
           "absolute inset-0 z-0 transition-opacity duration-500",
@@ -195,10 +145,6 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = memo(({
         aria-hidden="true"
       />
 
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
       {/* 3D Shader Canvas - lazy loaded with comprehensive error handling */}
       {shouldUseShader && !prefersReducedMotion && webGLSupported && (
         <ShaderErrorBoundary 
@@ -207,35 +153,8 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = memo(({
               className="absolute inset-0 z-0" 
               style={fallbackGradient}
               aria-hidden="true"
-<<<<<<< Updated upstream
             />
           }
-=======
-      {/* 3D Shader Canvas - Subtle if any motion */}
-      {shouldUseShader && !prefersReducedMotion && (
-        <Suspense fallback={null}>
-          <div className="absolute inset-0 z-0" aria-hidden="true">
-            <ShaderCanvas
-              colorStart={colorStart}
-              colorEnd={colorEnd}
-              speed={speed}
-              angle={angle}
-            />
-          </div>
-        </Suspense>
-      )}
-
-      {/* Reduced motion toggle */}
-      {showReducedMotionToggle && (
-        <button
-          onClick={toggleReducedMotion}
-          className="absolute top-6 right-6 z-50 px-3 py-2 text-xs bg-gray-100 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors font-medium"
-          aria-label={`${prefersReducedMotion || !shouldUseShader ? 'Enable' : 'Disable'} motion effects`}
->>>>>>> 6dab5789c94cd038ee4b9dc498a1617b5318fd1d
-=======
-            />
-          }
->>>>>>> Stashed changes
         >
           <Suspense 
             fallback={
