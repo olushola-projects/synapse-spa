@@ -31,8 +31,8 @@ const HeroSection = () => {
       </DiagonalShaderHero>
 
       {/* 3. USP Feature Section - Below Hero */}
-      <div className="bg-white py-16">
-        <div className="container mx-auto px-4">
+      <div className="bg-white py-16 md:py-20 lg:py-24">
+        <div className="container mx-auto px-4 md:px-6">
           <div className={`transition-all duration-700 ease-out ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
             <USPFeatureSection />
           </div>

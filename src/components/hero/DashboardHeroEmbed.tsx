@@ -2,6 +2,7 @@
 import React, { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Lazy load the dashboard component - handle named export
 const Dashboard = React.lazy(() => 
@@ -21,6 +22,7 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
 }) => {
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleClick = () => {
     if (onClick) {
@@ -69,16 +71,15 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
 
   return (
     <motion.div
-      className={`relative cursor-pointer ${className}`}
-      whileHover={{ scale: 1.03 }}
+      className={`relative cursor-pointer rounded-xl overflow-hidden ${className}`}
+      whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
       onClick={handleClick}
       style={{
-        width: '60%',
-        height: 'auto',
-        borderRadius: '12px',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-        overflow: 'hidden',
+        width: '100%',
+        maxWidth: '960px',
+        aspectRatio: '16/9',
+        boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05)',
         background: 'white'
       }}
       role="button"
@@ -93,7 +94,7 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
     >
       <Suspense 
         fallback={
-          <div className="w-full h-96 bg-gray-100 flex items-center justify-center">
+          <div className="w-full h-full bg-gray-50 flex items-center justify-center">
             <div className="animate-pulse text-gray-500">Loading Dashboard...</div>
           </div>
         }
@@ -106,15 +107,15 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
           <img 
             src="/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png"
             alt="Synapses Dashboard Preview"
-            className="w-full h-auto object-cover"
+            className="w-full h-full object-cover"
             onError={() => setImageError(true)}
           />
         )}
       </Suspense>
       
-      {/* Click overlay indicator */}
+      {/* Click overlay indicator - more subtle Stripe-inspired style */}
       <div className="absolute inset-0 bg-blue-600/0 hover:bg-blue-600/5 transition-colors duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
-        <div className="bg-white/90 px-4 py-2 rounded-lg shadow-lg">
+        <div className="bg-white/90 px-4 py-2 rounded-lg shadow-md">
           <span className="text-sm font-medium text-gray-900">Click to explore →</span>
         </div>
       </div>
