@@ -128,7 +128,7 @@ export const IntegratedDashboardExample: React.FC = () => {
                 description="6-month trend of key compliance metrics"
                 data={barChartData}
                 defaultChartType="bar"
-                supportedChartTypes={['bar', 'line']}
+                chartTypes={['bar', 'line']}
                 showControls={true}
                 showLegend={true}
                 actions={[
@@ -143,7 +143,7 @@ export const IntegratedDashboardExample: React.FC = () => {
                 description="Current alignment status by category"
                 data={pieChartData}
                 defaultChartType="pie"
-                supportedChartTypes={['pie', 'bar']}
+                chartTypes={['pie', 'bar']}
                 showControls={true}
                 showLegend={true}
               />

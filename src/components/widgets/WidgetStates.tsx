@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -27,12 +26,12 @@ export const WidgetStateWrapper: React.FC<WidgetStateProps> = ({
   const prefersReducedMotion = useReducedMotion();
 
   if (state === 'loading') {
-    return <LoadingState widgetName={widgetName} prefersReducedMotion={prefersReducedMotion} />;
+    return <WidgetLoading widgetName={widgetName} prefersReducedMotion={prefersReducedMotion} />;
   }
 
   if (state === 'empty') {
     return (
-      <EmptyState 
+      <WidgetEmpty 
         widgetName={widgetName} 
         message={emptyMessage}
         illustration={emptyIllustration}
@@ -42,13 +41,14 @@ export const WidgetStateWrapper: React.FC<WidgetStateProps> = ({
   }
 
   if (state === 'error') {
-    return <ErrorState widgetName={widgetName} onRetry={onRetry} />;
+    return <WidgetError widgetName={widgetName} onRetry={onRetry} />;
   }
 
   return <>{children}</>;
 };
 
-const LoadingState: React.FC<{ widgetName: string; prefersReducedMotion: boolean }> = ({ 
+// Export with both old and new names for compatibility
+export const WidgetLoading: React.FC<{ widgetName: string; prefersReducedMotion: boolean }> = ({ 
   widgetName, 
   prefersReducedMotion 
 }) => (
@@ -71,7 +71,7 @@ const LoadingState: React.FC<{ widgetName: string; prefersReducedMotion: boolean
   </div>
 );
 
-const EmptyState: React.FC<{
+export const WidgetEmpty: React.FC<{
   widgetName: string;
   message?: string;
   illustration?: React.ReactNode;
@@ -100,7 +100,7 @@ const EmptyState: React.FC<{
   </div>
 );
 
-const ErrorState: React.FC<{
+export const WidgetError: React.FC<{
   widgetName: string;
   onRetry?: () => void;
 }> = ({ widgetName, onRetry }) => (
@@ -133,4 +133,7 @@ const ErrorState: React.FC<{
   </div>
 );
 
-export { LoadingState, EmptyState, ErrorState };
+// Keep old exports for backward compatibility
+export const LoadingState = WidgetLoading;
+export const EmptyState = WidgetEmpty;
+export const ErrorState = WidgetError;

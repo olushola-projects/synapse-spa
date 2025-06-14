@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -213,8 +214,35 @@ interface FilterFormProps {
 const FilterForm: React.FC<FilterFormProps> = ({ initialFilter, onSubmit, onCancel }) => {
   const [formFilter, setFormFilter] = useState<RegulatoryEventFilter>(initialFilter);
   
-  // Get options for filter dropdowns
-  const { typeOptions, priorityOptions, jurisdictionOptions, statusOptions } = useRegulatoryEvents();
+  // Mock options for filter dropdowns
+  const typeOptions = [
+    { value: 'DEADLINE', label: 'Deadline' },
+    { value: 'PUBLICATION', label: 'Publication' },
+    { value: 'IMPLEMENTATION', label: 'Implementation' },
+    { value: 'CONSULTATION', label: 'Consultation' }
+  ];
+  
+  const priorityOptions = [
+    { value: 'critical', label: 'Critical' },
+    { value: 'high', label: 'High' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'low', label: 'Low' }
+  ];
+  
+  const jurisdictionOptions = [
+    { value: 'EU', label: 'European Union' },
+    { value: 'US', label: 'United States' },
+    { value: 'UK', label: 'United Kingdom' },
+    { value: 'GLOBAL', label: 'Global' }
+  ];
+  
+  const statusOptions = [
+    { value: 'upcoming', label: 'Upcoming' },
+    { value: 'active', label: 'Active' },
+    { value: 'past', label: 'Past' },
+    { value: 'delayed', label: 'Delayed' },
+    { value: 'cancelled', label: 'Cancelled' }
+  ];
   
   const handleChange = (field: keyof RegulatoryEventFilter, value: any) => {
     setFormFilter(prev => ({ ...prev, [field]: value }));
