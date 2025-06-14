@@ -1,8 +1,4 @@
 
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
 import React, { useState, Suspense, memo, useCallback, useRef, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -71,43 +67,21 @@ class DashboardErrorBoundary extends React.Component<
     return this.props.children;
   }
 }
-<<<<<<< Updated upstream
-=======
-import React from 'react';
-import { IntegratedDashboardExample } from '../dashboard/IntegratedDashboardExample';
-import { cn } from '@/lib/utils';
->>>>>>> 6dab5789c94cd038ee4b9dc498a1617b5318fd1d
-=======
->>>>>>> Stashed changes
 
 interface DashboardHeroEmbedProps {
   className?: string;
+  onClick?: () => void;
 }
 
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
 export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = memo(({ 
   className = "",
   onClick 
 }) => {
   const navigate = useNavigate();
-  const [imageError, setImageError] = useState(false);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  const isMobile = useIsMobile();
-=======
-=======
->>>>>>> Stashed changes
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -215,26 +189,6 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = memo(({
 
   return (
     <motion.div
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-      className={`relative cursor-pointer rounded-xl overflow-hidden ${className}`}
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2, ease: "easeInOut" }}
-=======
-      ref={containerRef}
-      className={`relative cursor-pointer group ${className}`}
-      variants={animationVariants}
-      initial="hidden"
-      animate={isVisible ? "visible" : "hidden"}
-      whileHover="hover"
->>>>>>> Stashed changes
-      onClick={handleClick}
-      style={{
-        width: '100%',
-        maxWidth: '960px',
-        aspectRatio: '16/9',
-        boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05)',
-=======
       ref={containerRef}
       className={`relative cursor-pointer group ${className}`}
       variants={animationVariants}
@@ -248,7 +202,6 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = memo(({
         borderRadius: '12px',
         boxShadow: '0 8px 24px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)',
         overflow: 'hidden',
->>>>>>> Stashed changes
         background: 'white'
       }}
       role="button"
@@ -262,146 +215,6 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = memo(({
         }
       }}
     >
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-      <Suspense 
-        fallback={
-          <div className="w-full h-full bg-gray-50 flex items-center justify-center">
-            <div className="animate-pulse text-gray-500">Loading Dashboard...</div>
-          </div>
-        }
-      >
-        {!imageError ? (
-          <div className="transform scale-75 origin-top-left" style={{ width: '133.33%', height: 'auto' }}>
-            <Dashboard {...mockDashboardProps} />
-          </div>
-        ) : (
-          <img 
-            src="/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png"
-            alt="Synapses Dashboard Preview"
-            className="w-full h-full object-cover"
-            onError={() => setImageError(true)}
-          />
-        )}
-      </Suspense>
-=======
-export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({ 
-  className 
-}) => {
-  return (
-    <div 
-      className={cn(
-        "relative bg-white rounded-2xl overflow-hidden",
-        "aspect-[4/3] transform transition-all duration-700 hover:scale-[1.02]",
-        "shadow-2xl border border-gray-200/50",
-        className
-      )}
-      style={{
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-        transform: 'perspective(1200px) rotateX(4deg) rotateY(-8deg)',
-        transformStyle: 'preserve-3d'
-      }}
-    >
-      {/* Subtle gradient overlay for premium feel */}
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-900/5 pointer-events-none z-10" />
->>>>>>> 6dab5789c94cd038ee4b9dc498a1617b5318fd1d
-      
-      {/* Dashboard content container */}
-      <div className="relative w-full h-full overflow-hidden bg-gray-50/50">
-        <div className="transform scale-[0.85] origin-top-left w-[118%] h-[118%] -translate-y-2">
-          <IntegratedDashboardExample />
-        </div>
-=======
-      {/* Screen reader description */}
-      <div id="dashboard-description" className="sr-only">
-        Interactive dashboard preview showing compliance metrics, regulatory calendar, and risk insights. Click to explore the full dashboard.
->>>>>>> Stashed changes
-      </div>
-<<<<<<< HEAD
-
-      {/* Loading state indicator */}
-      {isVisible && !isLoaded && (
-        <div className="absolute top-2 right-2 z-10">
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" aria-label="Loading" />
-        </div>
-      )}
-
-      <DashboardErrorBoundary>
-        <Suspense 
-          fallback={
-            <div className="w-full h-96 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-12 h-12 border-3 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4" />
-                <div className="text-gray-600 text-sm font-medium">Loading Dashboard Preview...</div>
-                <div className="text-gray-400 text-xs mt-1">Preparing your GRC insights</div>
-              </div>
-            </div>
-          }
-        >
-          {isVisible && (
-            <div 
-              className={`transform scale-75 origin-top-left transition-opacity duration-500 ${
-                isLoaded ? 'opacity-100' : 'opacity-0'
-              }`} 
-              style={{ width: '133.33%', height: 'auto' }}
-            >
-              <Dashboard {...mockDashboardProps} onLoad={handleDashboardLoad} />
-            </div>
-          )}
-        </Suspense>
-      </DashboardErrorBoundary>
-      
-      {/* Enhanced click overlay indicator */}
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-600/0 via-transparent to-transparent group-hover:from-blue-600/5 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 group-focus:opacity-100">
-        <motion.div 
-          className="bg-white/95 backdrop-blur-sm px-6 py-3 rounded-lg shadow-xl border border-white/20"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <span className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-            Explore Dashboard
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </span>
-        </motion.div>
-      </div>
-
-      {/* Performance indicator */}
-      {isLoaded && (
-        <div className="absolute bottom-2 left-2 z-10">
-          <div className="bg-green-500/20 text-green-700 text-xs px-2 py-1 rounded-full border border-green-200 backdrop-blur-sm">
-            ✓ Live Preview
-          </div>
-        </div>
-      )}
-    </motion.div>
-=======
-      
-      {/* Interactive overlay */}
-      <div className="absolute inset-0 bg-transparent hover:bg-white/5 transition-colors duration-300 cursor-pointer" />
-      
-      {/* Browser chrome simulation */}
-      <div className="absolute top-0 left-0 right-0 h-10 bg-gray-100 border-b border-gray-200 flex items-center px-4 z-20">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-red-400"></div>
-          <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-          <div className="w-3 h-3 rounded-full bg-green-400"></div>
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="bg-white border border-gray-300 rounded px-3 py-1 text-xs text-gray-500 min-w-0 max-w-xs">
-            app.synapses.com
-          </div>
-        </div>
-      </div>
-    </div>
->>>>>>> 6dab5789c94cd038ee4b9dc498a1617b5318fd1d
-=======
       {/* Screen reader description */}
       <div id="dashboard-description" className="sr-only">
         Interactive dashboard preview showing compliance metrics, regulatory calendar, and risk insights. Click to explore the full dashboard.
@@ -469,7 +282,6 @@ export const DashboardHeroEmbed: React.FC<DashboardHeroEmbedProps> = ({
         </div>
       )}
     </motion.div>
->>>>>>> Stashed changes
   );
 });
 
