@@ -66,28 +66,29 @@ export const USPFeatureSection = () => {
   };
 
   return (
-    <div className="flex justify-start gap-8 flex-wrap">
+    <div className="flex justify-center gap-12 flex-wrap">
       {uspItems.map((usp, index) => (
         <motion.div
           key={index}
-          className="flex flex-col items-center cursor-pointer"
+          className="flex flex-col items-center cursor-pointer group"
           whileHover={{ y: -5 }}
           onClick={() => handleUSPClick(usp)}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: index * 0.1 }}
         >
-          <div className={`w-16 h-16 rounded-full bg-transparent flex items-center justify-center mb-2 ${usp.color}`}>
+          <div className={`w-16 h-16 rounded-full bg-transparent flex items-center justify-center mb-3 ${usp.color} group-hover:scale-110 transition-transform`}>
             {usp.icon}
           </div>
-          <h3 className="text-base font-bold text-gray-800">{usp.title}</h3>
-          <div className="pt-1">
-            <span className="text-indigo-600 font-medium text-sm flex items-center justify-center">
-              Learn More
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </span>
+          <h3 className="text-lg font-bold text-gray-800 mb-2">{usp.title}</h3>
+          <p className="text-sm text-gray-600 text-center mb-3 max-w-xs leading-relaxed">
+            {usp.description}
+          </p>
+          <div className="flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors">
+            Learn More
+            <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+            </svg>
           </div>
         </motion.div>
       ))}
