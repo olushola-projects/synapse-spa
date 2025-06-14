@@ -32,7 +32,7 @@ const RegulatoryDashboard: React.FC = () => {
     filter
   } = useRegulatoryEvents({
     filter: {
-      jurisdictions: user?.jurisdiction ? [user.jurisdiction as RegulatoryJurisdiction] : undefined
+      jurisdictions: user?.jurisdiction ? [user.jurisdiction[0] as RegulatoryJurisdiction] : undefined
     },
     autoFetch: true
   });
@@ -151,7 +151,7 @@ const RegulatoryDashboard: React.FC = () => {
                       showFilters={false}
                       initialFilter={{ 
                         ...filter,
-                        types: ['PUBLICATION' as RegulatoryEventType]
+                        types: [RegulatoryEventType.PUBLICATION]
                       }}
                       onEventClick={handleEventClick}
                       maxEvents={5}

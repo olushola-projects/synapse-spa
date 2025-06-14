@@ -130,11 +130,6 @@ export const IntegratedDashboardExample: React.FC = () => {
                 defaultChartType="bar"
                 showControls={true}
                 showLegend={true}
-                actions={[
-                  { icon: RefreshCw, label: 'Refresh', onClick: () => console.log('Refreshing data...') },
-                  { icon: Download, label: 'Download', onClick: () => console.log('Downloading data...') },
-                  { icon: Share2, label: 'Share', onClick: () => console.log('Sharing data...') }
-                ]}
               />
               
               <AdvancedDataWidget
