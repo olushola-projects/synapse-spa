@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,7 +11,7 @@ import EnhancedRegulatoryCalendar from '@/components/widgets/EnhancedRegulatoryC
 import RegulatoryAnalyticsWidget from '@/components/widgets/RegulatoryAnalyticsWidget';
 import RegulatorySourcesWidget from '@/components/widgets/RegulatorySourcesWidget';
 import RegulatoryEventDetails from '@/components/widgets/RegulatoryEventDetails';
-import { RegulatoryEvent, RegulatoryEventFilter, RegulatoryJurisdiction } from '@/types/regulatory';
+import { RegulatoryEvent, RegulatoryEventFilter, RegulatoryJurisdiction, RegulatoryEventType } from '@/types/regulatory';
 import { useRegulatoryEvents } from '@/hooks/useRegulatoryEvents';
 
 const RegulatoryDashboard: React.FC = () => {
@@ -152,7 +151,7 @@ const RegulatoryDashboard: React.FC = () => {
                       showFilters={false}
                       initialFilter={{ 
                         ...filter,
-                        types: ['PUBLICATION']
+                        types: ['PUBLICATION' as RegulatoryEventType]
                       }}
                       onEventClick={handleEventClick}
                       maxEvents={5}

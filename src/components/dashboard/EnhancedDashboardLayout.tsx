@@ -1,3 +1,4 @@
+
 import React, { useState, ReactNode } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { EnhancedSidebar, SidebarNavItem, QuickAction, UserProfile } from './EnhancedSidebar';
@@ -87,78 +88,83 @@ export const EnhancedDashboardLayout: React.FC<EnhancedDashboardLayoutProps> = (
     {
       id: 'dashboard',
       title: 'Dashboard',
-      icon: LayoutDashboard,
-      isActive: true
+      url: '/dashboard',
+      icon: LayoutDashboard
     },
     {
       id: 'agents',
       title: 'Agent Gallery',
+      url: '/agents',
       icon: Bot,
       badge: '5 New',
       subItems: [
-        { id: 'sfdr-agents', title: 'SFDR Agents', count: 4 },
-        { id: 'csrd-agents', title: 'CSRD Agents', count: 2 },
-        { id: 'taxonomy', title: 'Taxonomy', count: 3 }
+        { id: 'sfdr-agents', title: 'SFDR Agents', url: '/agents/sfdr' },
+        { id: 'csrd-agents', title: 'CSRD Agents', url: '/agents/csrd' },
+        { id: 'taxonomy', title: 'Taxonomy', url: '/agents/taxonomy' }
       ]
     },
     {
       id: 'tasks',
       title: 'Smart Tasks',
+      url: '/tasks',
       icon: CheckSquare,
-      notification: true,
-      badge: 7,
+      badge: '7',
       subItems: [
-        { id: 'high-priority', title: 'High Priority', count: 2 },
-        { id: 'in-review', title: 'In Review', count: 3 },
-        { id: 'ai-drafted', title: 'AI-Drafted', count: 2 }
+        { id: 'high-priority', title: 'High Priority', url: '/tasks/high-priority' },
+        { id: 'in-review', title: 'In Review', url: '/tasks/in-review' },
+        { id: 'ai-drafted', title: 'AI-Drafted', url: '/tasks/ai-drafted' }
       ]
     },
     {
       id: 'calendar',
       title: 'Regulatory Calendar',
+      url: '/calendar',
       icon: Calendar,
       badge: 'Today',
       subItems: [
-        { id: 'sfdr-deadlines', title: 'SFDR Deadlines', count: 1 },
-        { id: 'csrd-updates', title: 'CSRD Updates', count: 2 }
+        { id: 'sfdr-deadlines', title: 'SFDR Deadlines', url: '/calendar/sfdr' },
+        { id: 'csrd-updates', title: 'CSRD Updates', url: '/calendar/csrd' }
       ]
     },
     {
       id: 'badges',
       title: 'Achievement Hub',
+      url: '/badges',
       icon: Trophy,
       subItems: [
-        { id: 'progress', title: 'Progress', count: 85 },
-        { id: 'streaks', title: 'Streaks' }
+        { id: 'progress', title: 'Progress', url: '/badges/progress' },
+        { id: 'streaks', title: 'Streaks', url: '/badges/streaks' }
       ]
     },
     {
       id: 'team',
       title: 'Collaboration',
+      url: '/team',
       icon: Users,
-      notification: true,
       subItems: [
-        { id: 'live-activity', title: 'Live Activity' },
-        { id: 'shared-vault', title: 'Shared Vault', count: 12 },
-        { id: 'approvals', title: 'Approvals', count: 3 }
+        { id: 'live-activity', title: 'Live Activity', url: '/team/activity' },
+        { id: 'shared-vault', title: 'Shared Vault', url: '/team/vault' },
+        { id: 'approvals', title: 'Approvals', url: '/team/approvals' }
       ]
     },
     {
       id: 'compliance',
       title: 'Compliance Center',
+      url: '/compliance',
       icon: Shield,
       subItems: [
-        { id: 'reports', title: 'Reports', count: 8 },
-        { id: 'audits', title: 'Audits', count: 2 }
+        { id: 'reports', title: 'Reports', url: '/compliance/reports' },
+        { id: 'audits', title: 'Audits', url: '/compliance/audits' }
       ]
     },
     {
       id: 'documents',
       title: 'Document Library',
+      url: '/documents',
       icon: FileText,
       subItems: [
-        { id: 'templates', title: 'Templates', count: 15 },
-        { id: 'policies', title: 'Policies', count: 7 }
+        { id: 'templates', title: 'Templates', url: '/documents/templates' },
+        { id: 'policies', title: 'Policies', url: '/documents/policies' }
       ]
     }
   ];
@@ -217,16 +223,12 @@ export const EnhancedDashboardLayout: React.FC<EnhancedDashboardLayoutProps> = (
           {/* Sidebar - Hidden on mobile, shown on desktop */}
           <div className="hidden md:block">
             <EnhancedSidebar
-              logo={logo}
-              appName={appName}
-              badge={appBadge}
-              navigationItems={navigationItems}
-              quickActions={quickActions}
-              userProfile={userProfile}
-              onSearch={onSearch}
+              items={navigationItems}
+              userName={userName}
+              userRole={userRole}
+              userAvatar={userAvatar}
               onSettingsClick={onSettingsClick}
-              onLogout={onLogout}
-              onHelpClick={onHelpClick}
+              onLogoutClick={onLogout}
               className="h-screen overflow-y-auto"
             />
           </div>
@@ -248,16 +250,12 @@ export const EnhancedDashboardLayout: React.FC<EnhancedDashboardLayoutProps> = (
             <div className="fixed inset-0 z-40 bg-black/50" onClick={() => setIsMobileMenuOpen(false)}>
               <div className="absolute top-0 left-0 h-full w-3/4 max-w-xs" onClick={(e) => e.stopPropagation()}>
                 <EnhancedSidebar
-                  logo={logo}
-                  appName={appName}
-                  badge={appBadge}
-                  navigationItems={navigationItems}
-                  quickActions={quickActions}
-                  userProfile={userProfile}
-                  onSearch={onSearch}
+                  items={navigationItems}
+                  userName={userName}
+                  userRole={userRole}
+                  userAvatar={userAvatar}
                   onSettingsClick={onSettingsClick}
-                  onLogout={onLogout}
-                  onHelpClick={onHelpClick}
+                  onLogoutClick={onLogout}
                   className="h-screen overflow-y-auto"
                 />
               </div>

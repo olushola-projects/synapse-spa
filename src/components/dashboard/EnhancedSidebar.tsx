@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
@@ -36,7 +37,7 @@ import {
 } from 'lucide-react';
 
 // Define interfaces for sidebar navigation items
-interface SidebarNavItem {
+export interface SidebarNavItem {
   id: string;
   title: string;
   url: string;
@@ -46,7 +47,7 @@ interface SidebarNavItem {
   subItems?: SidebarNavSubItem[];
 }
 
-interface SidebarNavSubItem {
+export interface SidebarNavSubItem {
   id: string;
   title: string;
   url: string;
@@ -54,7 +55,23 @@ interface SidebarNavSubItem {
   isNew?: boolean;
 }
 
-interface EnhancedSidebarProps {
+export interface QuickAction {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  shortcut?: string;
+  onClick?: () => void;
+}
+
+export interface UserProfile {
+  name: string;
+  role: string;
+  focus?: string;
+  avatarUrl?: string;
+  initials?: string;
+  status?: 'online' | 'offline' | 'away';
+}
+
+export interface EnhancedSidebarProps {
   userName?: string;
   userRole?: string;
   userAvatar?: string;
@@ -70,6 +87,14 @@ interface EnhancedSidebarProps {
   onProfileClick?: () => void;
   onSettingsClick?: () => void;
   onLogoutClick?: () => void;
+  logo?: React.ReactNode;
+  appName?: string;
+  badge?: string;
+  navigationItems?: SidebarNavItem[];
+  quickActions?: QuickAction[];
+  userProfile?: UserProfile;
+  onSearch?: (query: string) => void;
+  onHelpClick?: () => void;
 }
 
 const defaultNavItems: SidebarNavItem[] = [
@@ -399,5 +424,5 @@ const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
   );
 };
 
+export { EnhancedSidebar };
 export default EnhancedSidebar;
-export type { SidebarNavItem, SidebarNavSubItem, EnhancedSidebarProps };

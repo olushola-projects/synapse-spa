@@ -1,28 +1,67 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Database, 
-  Globe, 
-  RefreshCw, 
-  Plus, 
-  Settings, 
-  CheckCircle, 
-  AlertCircle,
-  Clock,
-  ExternalLink
-} from 'lucide-react';
 import { useRegulatoryEvents } from '@/hooks/useRegulatoryEvents';
-import { RegulatorySourceConfig, RegulatoryJurisdiction, RegulatoryFramework } from '@/types/regulatory';
-import { WidgetLoading, WidgetError, WidgetEmpty } from './WidgetStates';
+import { 
+  ExternalLink, 
+  Globe, 
+  Settings, 
+  RefreshCw,
+  CheckCircle,
+  AlertTriangle,
+  Clock
+} from 'lucide-react';
+
+interface RegulatorySource {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  jurisdiction: string;
+  status: 'active' | 'inactive' | 'maintenance';
+  lastUpdate: Date;
+  eventsCount: number;
+  isEnabled: boolean;
+}
+
+const mockSources: RegulatorySource[] = [
+  {
+    id: '1',
+    name: 'European Securities and Markets Authority (ESMA)',
+    description: 'Official regulatory updates and guidelines from ESMA',
+    url: 'https://www.esma.europa.eu',
+    jurisdiction: 'EU',
+    status: 'active',
+    lastUpdate: new Date('2024-01-15'),
+    eventsCount: 45,
+    isEnabled: true
+  },
+  {
+    id: '2',
+    name: 'Securities and Exchange Commission (SEC)',
+    description: 'US securities regulations and enforcement actions',
+    url: 'https://www.sec.gov',
+    jurisdiction: 'US',
+    status: 'active',
+    lastUpdate: new Date('2024-01-14'),
+    eventsCount: 32,
+    isEnabled: true
+  },
+  {
+    id: '3',
+    name: 'Financial Conduct Authority (FCA)',
+    description: 'UK financial services regulation and policy updates',
+    url: 'https://www.fca.org.uk',
+    jurisdiction: 'UK',
+    status: 'maintenance',
+    lastUpdate: new Date('2024-01-10'),
+    eventsCount: 28,
+    isEnabled: false
+  }
+];
 
 interface RegulatorySourcesWidgetProps {
   title?: string;
@@ -35,353 +74,187 @@ const RegulatorySourcesWidget: React.FC<RegulatorySourcesWidgetProps> = ({
   description = "Manage regulatory data sources and configurations",
   className = ""
 }) => {
-  const [activeTab, setActiveTab] = useState('sources');
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [newSource, setNewSource] = useState<Partial<RegulatorySourceConfig>>({
-    name: '',
-    url: '',
-    type: 'api',
-    jurisdiction: RegulatoryJurisdiction.EU,
-    frameworks: [],
-    fetchInterval: 1440,
-    enabled: true,
-    requiresAuthentication: false
-  });
-
+  const [sources, setSources] = useState<RegulatorySource[]>(mockSources);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
   const {
-    sourceConfigs,
     isLoading,
     error,
     fetchEvents
   } = useRegulatoryEvents({
-    autoFetch: true
+    autoFetch: false
   });
 
-  const handleRefresh = async () => {
-    await fetchEvents();
+  const handleToggleSource = (sourceId: string) => {
+    setSources(prev => prev.map(source => 
+      source.id === sourceId 
+        ? { ...source, isEnabled: !source.isEnabled }
+        : source
+    ));
   };
 
-  const handleToggleSource = async (sourceId: string, enabled: boolean) => {
-    // Implementation for toggling source status
-    console.log(`Toggle source ${sourceId} to ${enabled}`);
-  };
-
-  const handleAddSource = async () => {
-    // Implementation for adding new source
-    console.log('Add new source:', newSource);
-    setIsAddDialogOpen(false);
-    setNewSource({
-      name: '',
-      url: '',
-      type: 'api',
-      jurisdiction: RegulatoryJurisdiction.EU,
-      frameworks: [],
-      fetchInterval: 1440,
-      enabled: true,
-      requiresAuthentication: false
-    });
-  };
-
-  const getSourceStatusColor = (enabled: boolean, lastFetch?: Date) => {
-    if (!enabled) return 'bg-gray-100 text-gray-800 border-gray-200';
-    // For demo purposes, assume sources are working
-    return 'bg-green-100 text-green-800 border-green-200';
-  };
-
-  const getSourceTypeIcon = (type: string) => {
-    switch (type) {
-      case 'api': return <Database className="h-4 w-4" />;
-      case 'rss': return <Globe className="h-4 w-4" />;
-      case 'webscrape': return <Globe className="h-4 w-4" />;
-      default: return <Database className="h-4 w-4" />;
+  const handleRefreshSources = async () => {
+    setIsRefreshing(true);
+    try {
+      // Simulate refresh delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Update last refresh times
+      setSources(prev => prev.map(source => ({
+        ...source,
+        lastUpdate: new Date()
+      })));
+      
+      // Refetch events with updated sources
+      await fetchEvents();
+    } catch (err) {
+      console.error('Failed to refresh sources:', err);
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
-  if (isLoading) {
+  const getStatusIcon = (status: RegulatorySource['status']) => {
+    switch (status) {
+      case 'active':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'maintenance':
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case 'inactive':
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      default:
+        return null;
+    }
+  };
+
+  const getStatusBadge = (status: RegulatorySource['status']) => {
+    const variants = {
+      active: 'default',
+      maintenance: 'secondary',
+      inactive: 'destructive'
+    };
+    
     return (
-      <WidgetLoading
-        widgetName="Regulatory Sources"
-        prefersReducedMotion={false}
-      />
+      <Badge variant={variants[status] as any} className="text-xs">
+        {status.charAt(0).toUpperCase() + status.slice(1)}
+      </Badge>
     );
-  }
+  };
 
   if (error) {
     return (
-      <WidgetError
-        widgetName="Regulatory Sources"
-        onRetry={handleRefresh}
-      />
-    );
-  }
-
-  if (!sourceConfigs || sourceConfigs.length === 0) {
-    return (
-      <WidgetEmpty
-        widgetName="Regulatory Sources"
-        message="No data sources configured"
-      />
+      <Card className={className}>
+        <CardContent className="p-6">
+          <div className="text-center text-red-600">
+            Error loading regulatory sources: {error}
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
     <Card className={className}>
-      <CardHeader className="pb-4">
+      <CardHeader>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Database className="h-5 w-5 text-blue-600" />
-            <div>
-              <CardTitle className="text-lg font-semibold">{title}</CardTitle>
-              <CardDescription className="text-sm text-gray-600">
-                {description}
-              </CardDescription>
-            </div>
+          <div>
+            <CardTitle className="text-lg font-semibold flex items-center gap-2">
+              <Globe className="h-5 w-5 text-blue-600" />
+              {title}
+            </CardTitle>
+            <CardDescription>{description}</CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Source
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Add Data Source</DialogTitle>
-                  <DialogDescription>
-                    Configure a new regulatory data source
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="source-name">Source Name</Label>
-                    <Input
-                      id="source-name"
-                      value={newSource.name}
-                      onChange={(e) => setNewSource({ ...newSource, name: e.target.value })}
-                      placeholder="European Securities and Markets Authority"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="source-url">URL</Label>
-                    <Input
-                      id="source-url"
-                      value={newSource.url}
-                      onChange={(e) => setNewSource({ ...newSource, url: e.target.value })}
-                      placeholder="https://api.example.com"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="source-type">Source Type</Label>
-                    <Select 
-                      value={newSource.type} 
-                      onValueChange={(value: 'api' | 'rss' | 'webscrape') => 
-                        setNewSource({ ...newSource, type: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="api">API</SelectItem>
-                        <SelectItem value="rss">RSS Feed</SelectItem>
-                        <SelectItem value="webscrape">Web Scraping</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="source-jurisdiction">Jurisdiction</Label>
-                    <Select 
-                      value={newSource.jurisdiction} 
-                      onValueChange={(value: RegulatoryJurisdiction) => 
-                        setNewSource({ ...newSource, jurisdiction: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.values(RegulatoryJurisdiction).map(jurisdiction => (
-                          <SelectItem key={jurisdiction} value={jurisdiction}>
-                            {jurisdiction.toUpperCase()}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="source-enabled"
-                      checked={newSource.enabled}
-                      onCheckedChange={(checked) => setNewSource({ ...newSource, enabled: checked })}
-                    />
-                    <Label htmlFor="source-enabled">Enable source</Label>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleAddSource}>
-                    Add Source
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
             <Button
               variant="outline"
               size="sm"
-              onClick={handleRefresh}
-              className="gap-2"
+              onClick={handleRefreshSources}
+              disabled={isRefreshing}
+              className="gap-1"
             >
-              <RefreshCw className="h-4 w-4" />
+              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               Refresh
+            </Button>
+            <Button variant="outline" size="sm" className="gap-1">
+              <Settings className="h-4 w-4" />
+              Configure
             </Button>
           </div>
         </div>
-
-        {/* Summary Stats */}
-        <div className="grid grid-cols-3 gap-4 mt-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <div className="text-lg font-bold text-blue-900">
-              {sourceConfigs.filter(s => s.enabled).length}
-            </div>
-            <div className="text-xs text-blue-700">Active Sources</div>
-          </div>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-            <div className="text-lg font-bold text-green-900">
-              {sourceConfigs.filter(s => s.type === 'api').length}
-            </div>
-            <div className="text-xs text-green-700">API Sources</div>
-          </div>
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-            <div className="text-lg font-bold text-amber-900">
-              {new Set(sourceConfigs.map(s => s.jurisdiction)).size}
-            </div>
-            <div className="text-xs text-amber-700">Jurisdictions</div>
-          </div>
-        </div>
       </CardHeader>
-
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="sources">Sources</TabsTrigger>
-            <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="sources" className="mt-6">
-            <div className="space-y-4">
-              {sourceConfigs.map((source) => (
-                <div key={source.id} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        {getSourceTypeIcon(source.type)}
-                        <h3 className="font-semibold text-gray-900">{source.name}</h3>
-                        <Badge variant="outline" className={getSourceStatusColor(source.enabled)}>
-                          {source.enabled ? 'Active' : 'Disabled'}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-2">{source.url}</p>
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <span>Type: {source.type.toUpperCase()}</span>
-                        <span>•</span>
-                        <span>Jurisdiction: {source.jurisdiction.toUpperCase()}</span>
-                        <span>•</span>
-                        <span>Interval: {Math.floor(source.fetchInterval / 60)}h</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Switch
-                        checked={source.enabled}
-                        onCheckedChange={(checked) => handleToggleSource(source.id, checked)}
-                      />
-                      <Button variant="ghost" size="sm">
-                        <Settings className="h-4 w-4" />
-                      </Button>
-                    </div>
+      
+      <CardContent className="p-6">
+        {isLoading ? (
+          <div className="space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="animate-pulse">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {sources.map((source) => (
+              <div
+                key={source.id}
+                className="flex items-start justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center gap-3">
+                    {getStatusIcon(source.status)}
+                    <h3 className="font-medium text-gray-900">{source.name}</h3>
+                    {getStatusBadge(source.status)}
                   </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">Frameworks:</span>
-                      {source.frameworks.slice(0, 3).map((framework) => (
-                        <Badge key={framework} variant="outline" className="text-xs">
-                          {framework.toUpperCase()}
-                        </Badge>
-                      ))}
-                      {source.frameworks.length > 3 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{source.frameworks.length - 3}
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <CheckCircle className="h-3 w-3 text-green-500" />
-                      <span>Last fetch: 2h ago</span>
-                    </div>
+                  
+                  <p className="text-sm text-gray-600">{source.description}</p>
+                  
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <span>Jurisdiction: {source.jurisdiction}</span>
+                    <span>Events: {source.eventsCount}</span>
+                    <span>Updated: {source.lastUpdate.toLocaleDateString()}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" asChild>
+                      <a href={source.url} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-3 w-3 mr-1" />
+                        Visit Source
+                      </a>
+                    </Button>
                   </div>
                 </div>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="monitoring" className="mt-6">
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Fetch Status */}
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base">Recent Fetch Activity</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {sourceConfigs.slice(0, 3).map((source) => (
-                        <div key={source.id} className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span className="text-sm font-medium">{source.name}</span>
-                          </div>
-                          <span className="text-xs text-gray-500">2h ago</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* System Health */}
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base">System Health</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">API Rate Limits</span>
-                        <Badge variant="outline" className="bg-green-50 text-green-700">
-                          Normal
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Error Rate</span>
-                        <Badge variant="outline" className="bg-green-50 text-green-700">
-                          0.2%
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Avg Response Time</span>
-                        <Badge variant="outline" className="bg-green-50 text-green-700">
-                          1.2s
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                
+                <div className="flex items-center gap-2 ml-4">
+                  <Switch
+                    checked={source.isEnabled}
+                    onCheckedChange={() => handleToggleSource(source.id)}
+                    disabled={source.status === 'maintenance'}
+                  />
+                  <span className="text-xs text-gray-500">
+                    {source.isEnabled ? 'Enabled' : 'Disabled'}
+                  </span>
+                </div>
               </div>
+            ))}
+          </div>
+        )}
+        
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+          <div className="flex items-start gap-3">
+            <div className="text-blue-600">
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
             </div>
-          </TabsContent>
-        </Tabs>
+            <div>
+              <h4 className="text-sm font-medium text-blue-900">Data Source Information</h4>
+              <p className="text-xs text-blue-700 mt-1">
+                Sources are automatically refreshed every 6 hours. You can manually refresh to get the latest updates immediately.
+              </p>
+            </div>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

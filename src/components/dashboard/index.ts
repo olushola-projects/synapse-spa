@@ -8,6 +8,8 @@ export { IntegratedDashboardExample } from './IntegratedDashboardExample';
 // Export types from EnhancedSidebar
 export type {
   SidebarNavItem,
+  SidebarNavSubItem,
   QuickAction,
-  UserProfile
+  UserProfile,
+  EnhancedSidebarProps
 } from './EnhancedSidebar';
