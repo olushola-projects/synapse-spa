@@ -18,41 +18,41 @@ export const SynapsesHeroContent: React.FC = () => {
       <div className="flex-1 flex items-center justify-center px-6 lg:px-12 py-12 lg:py-16">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
-            {/* Left side - Headlines and CTAs matching image exactly */}
+            {/* Left side - Headlines and CTAs with Stripe typography */}
             <div className="flex-1 text-center lg:text-left max-w-2xl lg:max-w-none">
-              {/* Main headline - Exact match to image */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] mb-4">
+              {/* Main headline - Stripe style typography */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 font-sans">
                 <div className="flex flex-col">
-                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Transform</span>
-                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Your Expertise</span>
-                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">With GRC</span>
-                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent drop-shadow-sm">Agents</span>
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">Transform</span>
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">Your Expertise</span>
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">With GRC</span>
+                  <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 bg-clip-text text-transparent">Agents</span>
                 </div>
               </h1>
               
-              {/* Subheadline - Exact match to image */}
-              <p className="mt-4 text-base md:text-lg text-gray-900 max-w-md leading-relaxed font-normal">
+              {/* Subheadline - Stripe style body text */}
+              <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-lg leading-relaxed font-normal font-sans">
                 Join a global network of professionals to boost your expertise with GRC agents, exclusive testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
               </p>
               
-              {/* Primary CTA Button - Exact match to image */}
+              {/* Primary CTA Button - Stripe style */}
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 text-base font-sans"
                   onClick={() => setShowFormDialog(true)}
                 >
-                  Get Early Access <ArrowRight size={16} />
+                  Get Early Access <ArrowRight size={18} />
                 </Button>
               </div>
 
-              {/* Trust indicators - Exact match to image */}
-              <div className="mt-4 flex items-center text-sm text-gray-600 space-x-6">
+              {/* Trust indicators - Stripe style */}
+              <div className="mt-6 flex items-center text-sm text-gray-600 space-x-6 font-medium font-sans">
                 <span className="flex items-center">
-                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                   GRC Innovation Hub
                 </span>
                 <span className="flex items-center">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
                   Join early adopters in our private pilot
                 </span>
               </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -55,25 +54,25 @@ const Navbar = () => {
     <>
       <header className={`sticky top-0 z-50 w-full ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"} transition-all duration-200`}>
         <div className="container mx-auto flex items-center justify-between p-4">
-          <div className="flex items-center gap-6">
-            <Link to="/" className="text-3xl font-bold text-blue-700 flex items-center gap-2">
+          <div className="flex items-center gap-8">
+            <Link to="/" className="text-2xl font-bold text-blue-700 flex items-center gap-2 font-sans tracking-tight">
               Synapses
             </Link>
             
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-gray-900 hover:text-blue-700 transition-colors font-medium">Home</Link>
-              <Link to="/partners" className="text-gray-900 hover:text-blue-700 transition-colors font-medium">Become a Partner</Link>
-              <Link to="/resources/faq" className="text-gray-900 hover:text-blue-700 transition-colors font-medium">FAQ</Link>
+            <nav className="hidden md:flex items-center gap-8">
+              <Link to="/" className="text-gray-900 hover:text-blue-700 transition-colors font-medium text-base font-sans">Home</Link>
+              <Link to="/partners" className="text-gray-900 hover:text-blue-700 transition-colors font-medium text-base font-sans">Become a Partner</Link>
+              <Link to="/resources/faq" className="text-gray-900 hover:text-blue-700 transition-colors font-medium text-base font-sans">FAQ</Link>
             </nav>
           </div>
           
           <div className="hidden md:flex items-center gap-4">
             <div onClick={openInviteDialog} className="cursor-pointer">
-              <Button variant="outline" className="border-2 border-gray-900 text-gray-900 bg-transparent hover:bg-gray-900 hover:text-white transition-colors font-medium">Invite</Button>
+              <Button variant="outline" className="border-2 border-gray-900 text-gray-900 bg-transparent hover:bg-gray-900 hover:text-white transition-colors font-medium text-base font-sans px-4 py-2">Invite</Button>
             </div>
             
             <div onClick={openFormDialog} className="cursor-pointer">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-medium">Get Early Access</Button>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-base font-sans px-4 py-2">Get Early Access</Button>
             </div>
           </div>
 
@@ -92,14 +91,14 @@ const Navbar = () => {
             className="md:hidden bg-white border-b shadow-lg"
           >
             <nav className="container mx-auto p-4 flex flex-col gap-4">
-              <Link to="/" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium">Home</Link>
-              <Link to="/partners" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium">Become a Partner</Link>
-              <Link to="/resources/faq" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium">FAQ</Link>
+              <Link to="/" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium text-base font-sans">Home</Link>
+              <Link to="/partners" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium text-base font-sans">Become a Partner</Link>
+              <Link to="/resources/faq" className="text-gray-900 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 font-medium text-base font-sans">FAQ</Link>
               <div onClick={openInviteDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button variant="outline" className="border-2 border-gray-900 text-gray-900 bg-transparent hover:bg-gray-900 hover:text-white transition-colors font-medium w-full">Invite</Button>
+                <Button variant="outline" className="border-2 border-gray-900 text-gray-900 bg-transparent hover:bg-gray-900 hover:text-white transition-colors font-medium w-full text-base font-sans">Invite</Button>
               </div>
               <div onClick={openFormDialog} className="text-gray-700 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-gray-100 cursor-pointer">
-                <Button className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium">Get Early Access</Button>
+                <Button className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-base font-sans">Get Early Access</Button>
               </div>
             </nav>
           </motion.div>
