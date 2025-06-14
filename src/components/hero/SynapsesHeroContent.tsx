@@ -53,12 +53,12 @@ export const SynapsesHeroContent: React.FC = () => {
       </nav>
 
       {/* Hero Content */}
-      <header className="flex-1 flex items-center justify-center px-6 lg:px-10 pt-8 pb-16">
+      <header className="flex-1 flex items-center justify-center px-6 lg:px-10 py-8">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 lg:gap-16">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-4">
             {/* Left side - Headlines and CTAs */}
             <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-extrabold text-white mb-6 leading-[1.1] tracking-tight">
+              <h1 className="text-3xl lg:text-5xl xl:text-6xl font-extrabold text-white leading-[1.15] tracking-tight mb-4">
                 Synapses
                 <br />
                 <span className="font-extrabold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
@@ -66,12 +66,12 @@ export const SynapsesHeroContent: React.FC = () => {
                 </span>
               </h1>
               
-              <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 Activate AI agents, track regulations, and earn badges—built by compliance experts, for compliance experts.
               </p>
               
               {/* Primary CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-6">
                 <Button
                   size="lg"
                   className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-6 h-12 text-base shadow-lg transition-all duration-200 hover:scale-105"
@@ -109,7 +109,7 @@ export const SynapsesHeroContent: React.FC = () => {
 
             {/* Right side - Dashboard Embed */}
             <div className="flex-1 flex justify-center lg:justify-end w-full lg:w-auto mt-4 lg:mt-0">
-              <DashboardHeroEmbed className="w-[90%] sm:w-[85%] md:w-[80%] lg:w-[100%]" />
+              <DashboardHeroEmbed className="w-[90vw] sm:w-[85vw] md:w-[80vw] lg:w-[65vw] lg:max-w-[960px]" />
             </div>
           </div>
         </div>
