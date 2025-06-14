@@ -1,6 +1,10 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 import React, { useState } from 'react';
+=======
+import React, { useState, useEffect } from 'react';
+>>>>>>> Stashed changes
 =======
 import React, { useState, useEffect } from 'react';
 >>>>>>> Stashed changes
@@ -42,6 +46,22 @@ interface IntegratedDashboardExampleProps {
   onLoad?: () => void;
 }
 
+<<<<<<< Updated upstream
+=======
+interface DemoAction {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  deadline?: string;
+  progress?: number;
+}
+
+interface IntegratedDashboardExampleProps {
+  onLoad?: () => void;
+}
+
+>>>>>>> Stashed changes
 export const IntegratedDashboardExample: React.FC<IntegratedDashboardExampleProps> = ({ onLoad }) => {
   const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('detailed');
   const [activeTab, setActiveTab] = useState('overview');
