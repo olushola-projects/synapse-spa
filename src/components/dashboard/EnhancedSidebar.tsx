@@ -1,69 +1,55 @@
+
 import React, { useState } from 'react';
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarGroup, 
-  SidebarGroupContent, 
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
-  SidebarMenuBadge,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton
+  useSidebar,
 } from '@/components/ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { 
-  LayoutDashboard, 
-  Bot, 
-  CheckSquare, 
-  Calendar, 
-  Trophy, 
-  Users, 
-  Settings,
-  ChevronRight,
-  Zap,
-  Clock,
-  Target,
+import {
   Search,
-  Bell,
+  ChevronDown,
+  Settings,
   HelpCircle,
-  BookOpen,
-  FileText,
-  BarChart3,
-  Shield,
-  Briefcase,
-  Globe,
-  Star,
-  PlusCircle,
-  LogOut
+  LogOut,
+  Circle,
+  LucideIcon
 } from 'lucide-react';
+
+export interface SidebarNavSubItem {
+  id: string;
+  title: string;
+  count?: number;
+  isActive?: boolean;
+}
 
 export interface SidebarNavItem {
   id: string;
   title: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   isActive?: boolean;
-  badge?: string | number;
   notification?: boolean;
-  subItems?: Array<{ 
-    id: string;
-    title: string; 
-    count?: number;
-    isActive?: boolean;
-  }>;
-  onClick?: () => void;
+  badge?: string | number;
+  subItems?: SidebarNavSubItem[];
 }
 
 export interface QuickAction {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   label: string;
   shortcut?: string;
   onClick?: () => void;
@@ -75,20 +61,20 @@ export interface UserProfile {
   focus?: string;
   avatarUrl?: string;
   initials?: string;
-  status?: 'online' | 'away' | 'offline';
+  status?: 'online' | 'offline' | 'away';
 }
 
 interface EnhancedSidebarProps {
   logo?: React.ReactNode;
   appName?: string;
   badge?: string;
-  navigationItems: SidebarNavItem[];
+  navigationItems?: SidebarNavItem[];
   quickActions?: QuickAction[];
   userProfile?: UserProfile;
   onSearch?: (query: string) => void;
   onSettingsClick?: () => void;
-  onLogout?: () => void;
   onHelpClick?: () => void;
+  onLogout?: () => void;
   className?: string;
 }
 
@@ -101,194 +87,257 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
   userProfile,
   onSearch,
   onSettingsClick,
-  onLogout,
   onHelpClick,
-  className = ''
+  onLogout,
+  className
 }) => {
-  const [expandedItem, setExpandedItem] = useState<string | null>(navigationItems.find(item => item.isActive)?.id || null);
+  const { collapsed } = useSidebar();
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
-  const handleItemClick = (itemId: string, onClick?: () => void) => {
-    setExpandedItem(expandedItem === itemId ? null : itemId);
-    if (onClick) onClick();
+  const toggleExpanded = (itemId: string) => {
+    setExpandedItems(prev =>
+      prev.includes(itemId)
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
+    );
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (onSearch) onSearch(searchQuery);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    onSearch?.(query);
   };
 
   return (
-    <Sidebar className={`border-r border-gray-200 bg-white shadow-sm ${className}`}>
-      <SidebarHeader className="p-4 border-b border-gray-100">
-        <div className="flex items-center gap-3">
+    <Sidebar className={cn("border-r bg-white", className)} collapsible>
+      {/* Header */}
+      <SidebarHeader className="p-4 border-b">
+        <div className="flex items-center gap-2">
           {logo || (
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-sm">
-              <span className="text-white font-bold text-sm">{appName.charAt(0)}</span>
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">S</span>
             </div>
           )}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">{appName}</h2>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-xs px-2 py-0 bg-green-50 text-green-700 border-green-200">
-                {badge}
-              </Badge>
+          {!collapsed && (
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-gray-900">{appName}</h2>
+                {badge && (
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
+                    {badge}
+                  </Badge>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Search */}
+        {!collapsed && (
+          <div className="mt-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="pl-10 h-9 bg-gray-50 border-gray-200 focus:bg-white"
+              />
             </div>
           </div>
-        </div>
-      </SidebarHeader>
-      
-      <SidebarContent className="px-2 py-4">
-        {/* Search */}
-        {onSearch && (
-          <div className="px-3 mb-4">
-            <form onSubmit={handleSearch}>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Search..."
-                  className="pl-9 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </form>
-          </div>
         )}
+      </SidebarHeader>
 
+      {/* Content */}
+      <SidebarContent className="px-2 py-4">
         {/* Quick Actions */}
-        {quickActions.length > 0 && (
+        {quickActions.length > 0 && !collapsed && (
           <SidebarGroup>
-            <SidebarGroupLabel className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+            <SidebarGroupLabel className="text-xs text-gray-500 uppercase tracking-wide px-2 mb-2">
               Quick Actions
             </SidebarGroupLabel>
-            <div className="px-3 mb-4">
-              <div className="grid grid-cols-3 gap-1">
+            <SidebarGroupContent>
+              <div className="grid grid-cols-3 gap-2 px-2 mb-4">
                 {quickActions.map((action, index) => (
                   <TooltipProvider key={index}>
-                    <Tooltip delayDuration={300}>
+                    <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 w-full p-1 flex flex-col items-center justify-center text-xs hover:bg-blue-50 hover:text-blue-700"
+                          className="h-12 flex flex-col items-center justify-center gap-1 p-2 text-xs"
                           onClick={action.onClick}
                         >
-                          <action.icon className="h-3 w-3 mb-1" />
-                          <span className="truncate">{action.label.split(' ')[0]}</span>
+                          <action.icon className="h-4 w-4 text-gray-600" />
+                          <span className="text-xs text-gray-600 leading-none">
+                            {action.label.split(' ')[0]}
+                          </span>
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent side="right">
-                        <p className="text-xs">
-                          {action.label}
-                          {action.shortcut && <span className="ml-2 text-gray-400">{action.shortcut}</span>}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <span>{action.label}</span>
+                          {action.shortcut && (
+                            <kbd className="px-2 py-1 bg-gray-100 text-xs rounded">
+                              {action.shortcut}
+                            </kbd>
+                          )}
+                        </div>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 ))}
               </div>
-            </div>
+            </SidebarGroupContent>
           </SidebarGroup>
         )}
 
-        {/* Main Navigation */}
+        {/* Navigation */}
         <SidebarGroup>
-          <SidebarGroupLabel className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Navigation
-          </SidebarGroupLabel>
-          <SidebarGroupContent className="mt-2">
-            <SidebarMenu className="space-y-1">
+          <SidebarGroupContent>
+            <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton 
-                    isActive={item.isActive}
-                    onClick={() => handleItemClick(item.id, item.onClick)}
-                    className={`w-full justify-start px-3 py-2.5 rounded-lg transition-all duration-200 group ${item.isActive ? 'bg-blue-50 text-blue-700 font-medium shadow-sm' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center">
-                        <item.icon className={`w-5 h-5 mr-3 ${item.isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`} />
-                        <span className="text-sm font-medium">{item.title}</span>
-                        {item.notification && (
-                          <div className="w-2 h-2 bg-red-500 rounded-full ml-2"></div>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {item.badge && (
-                          <SidebarMenuBadge variant={item.isActive ? "default" : "secondary"} className={item.isActive ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-600'}>
-                            {item.badge}
-                          </SidebarMenuBadge>
-                        )}
-                        {item.subItems && (
-                          <ChevronRight className={`w-4 h-4 transition-transform ${expandedItem === item.id ? 'rotate-90' : ''} ${item.isActive ? 'text-blue-600' : 'text-gray-400'}`} />
-                        )}
-                      </div>
-                    </div>
-                  </SidebarMenuButton>
-
-                  {/* Sub-items */}
-                  {item.subItems && expandedItem === item.id && (
-                    <SidebarMenuSub>
-                      {item.subItems.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.id}>
-                          <SidebarMenuSubButton
-                            isActive={subItem.isActive}
-                            className={`w-full justify-start h-8 px-2 py-1 text-xs ${subItem.isActive ? 'text-blue-700 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'} rounded-md`}
+                  <div>
+                    <SidebarMenuButton
+                      asChild
+                      className={cn(
+                        "w-full justify-start px-2 py-2 h-auto",
+                        item.isActive && "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
+                      )}
+                    >
+                      <Collapsible
+                        open={expandedItems.includes(item.id)}
+                        onOpenChange={() => toggleExpanded(item.id)}
+                      >
+                        <CollapsibleTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start px-2 py-2 h-auto font-medium"
                           >
-                            <span className="truncate">{subItem.title}</span>
-                            {subItem.count !== undefined && (
-                              <Badge variant="outline" className="ml-auto text-xs px-1.5 py-0 bg-gray-50">
-                                {subItem.count}
-                              </Badge>
-                            )}
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  )}
+                            <div className="flex items-center gap-3 w-full">
+                              <item.icon className="h-5 w-5 text-gray-600" />
+                              {!collapsed && (
+                                <>
+                                  <span className="flex-1 text-left text-gray-900">
+                                    {item.title}
+                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    {item.notification && (
+                                      <Circle className="h-2 w-2 fill-blue-600 text-blue-600" />
+                                    )}
+                                    {item.badge && (
+                                      <div className="bg-gray-100 text-gray-700 text-xs px-1.5 py-0.5 rounded">
+                                        {item.badge}
+                                      </div>
+                                    )}
+                                    {item.subItems && item.subItems.length > 0 && (
+                                      <ChevronDown
+                                        className={cn(
+                                          "h-4 w-4 text-gray-400 transition-transform",
+                                          expandedItems.includes(item.id) && "rotate-180"
+                                        )}
+                                      />
+                                    )}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          </Button>
+                        </CollapsibleTrigger>
+
+                        {/* Sub Items */}
+                        {item.subItems && item.subItems.length > 0 && !collapsed && (
+                          <CollapsibleContent className="mt-1">
+                            <div className="ml-8 space-y-1">
+                              {item.subItems.map((subItem) => (
+                                <Button
+                                  key={subItem.id}
+                                  variant="ghost"
+                                  size="sm"
+                                  className={cn(
+                                    "w-full justify-start text-sm text-gray-600 hover:text-gray-900 font-normal h-8",
+                                    subItem.isActive && "bg-blue-50 text-blue-700"
+                                  )}
+                                >
+                                  <span className="flex-1 text-left">{subItem.title}</span>
+                                  {subItem.count && (
+                                    <span className="text-xs text-gray-400">
+                                      {subItem.count}
+                                    </span>
+                                  )}
+                                </Button>
+                              ))}
+                            </div>
+                          </CollapsibleContent>
+                        )}
+                      </Collapsible>
+                    </SidebarMenuButton>
+                  </div>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {/* Help & Support */}
-        <SidebarGroup className="mt-8">
-          <SidebarGroupLabel className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Support
-          </SidebarGroupLabel>
-          <SidebarGroupContent className="mt-2">
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  className="w-full justify-start px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                  onClick={onHelpClick}
-                >
-                  <HelpCircle className="w-5 h-5 mr-3 text-gray-400" />
-                  <span className="text-sm">Help & Resources</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  className="w-full justify-start px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                  onClick={onSettingsClick}
-                >
-                  <Settings className="w-5 h-5 mr-3 text-gray-400" />
-                  <span className="text-sm">Settings & Preferences</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
 
-      {/* User Profile */}
-      {userProfile && (
-        <SidebarFooter className="p-4 border-t border-gray-100">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
+      {/* Footer */}
+      <SidebarFooter className="p-4 border-t">
+        {!collapsed && (
+          <>
+            <Separator className="mb-4" />
+            
+            {/* Bottom Actions */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onHelpClick}>
+                        <HelpCircle className="h-4 w-4 text-gray-600" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Help & Resources</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onSettingsClick}>
+                        <Settings className="h-4 w-4 text-gray-600" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Settings</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onLogout}>
+                      <LogOut className="h-4 w-4 text-gray-600" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sign out</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </>
+        )}
+
+        {/* User Profile */}
+        {userProfile && (
+          <div className="flex items-center gap-3 p-2 rounded-lg bg-gray-50">
+            <Avatar className="h-8 w-8">
               {userProfile.avatarUrl ? (
                 <AvatarImage src={userProfile.avatarUrl} alt={userProfile.name} />
               ) : null}
@@ -296,24 +345,29 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
                 {userProfile.initials || userProfile.name.split(' ').map(n => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
-            <div className="flex flex-col min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-900 truncate">{userProfile.name}</p>
-              <p className="text-xs text-gray-500 truncate">{userProfile.role}{userProfile.focus ? ` • ${userProfile.focus}` : ''}</p>
-              {userProfile.status && (
-                <div className="flex items-center gap-1 mt-1">
-                  <div className={`w-2 h-2 rounded-full ${userProfile.status === 'online' ? 'bg-green-500' : userProfile.status === 'away' ? 'bg-amber-500' : 'bg-gray-300'}`}></div>
-                  <span className="text-xs text-gray-500 capitalize">{userProfile.status}</span>
+            {!collapsed && (
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                  {userProfile.name}
+                </p>
+                <div className="flex items-center gap-1">
+                  <p className="text-xs text-gray-500 truncate">
+                    {userProfile.role}
+                  </p>
+                  {userProfile.focus && (
+                    <>
+                      <span className="text-xs text-gray-400">•</span>
+                      <p className="text-xs text-gray-500">
+                        {userProfile.focus}
+                      </p>
+                    </>
+                  )}
                 </div>
-              )}
-            </div>
-            {onLogout && (
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onLogout}>
-                <LogOut className="h-4 w-4 text-gray-400" />
-              </Button>
+              </div>
             )}
           </div>
-        </SidebarFooter>
-      )}
+        )}
+      </SidebarFooter>
     </Sidebar>
   );
 };

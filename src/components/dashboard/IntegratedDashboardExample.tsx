@@ -28,34 +28,40 @@ import {
   ChevronRight
 } from 'lucide-react';
 
+interface DataPoint {
+  label: string;
+  value: number;
+  [key: string]: any;
+}
+
 export const IntegratedDashboardExample: React.FC = () => {
   const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('detailed');
   const [activeTab, setActiveTab] = useState('overview');
   
   // Sample chart data for widgets - properly typed for AdvancedDataWidget
-  const barChartData = [
-    { name: 'Jan', value: 65, compliance: 72 },
-    { name: 'Feb', value: 72, compliance: 68 },
-    { name: 'Mar', value: 68, compliance: 75 },
-    { name: 'Apr', value: 75, compliance: 82 },
-    { name: 'May', value: 82, compliance: 88 },
-    { name: 'Jun', value: 88, compliance: 85 }
+  const barChartData: DataPoint[] = [
+    { label: 'Jan', value: 65, compliance: 72 },
+    { label: 'Feb', value: 72, compliance: 68 },
+    { label: 'Mar', value: 68, compliance: 75 },
+    { label: 'Apr', value: 75, compliance: 82 },
+    { label: 'May', value: 82, compliance: 88 },
+    { label: 'Jun', value: 88, compliance: 85 }
   ];
 
-  const lineChartData = [
-    { name: 'Q1 2022', alignment: 32, industry: 30 },
-    { name: 'Q2 2022', alignment: 38, industry: 35 },
-    { name: 'Q3 2022', alignment: 45, industry: 40 },
-    { name: 'Q4 2022', alignment: 51, industry: 42 },
-    { name: 'Q1 2023', alignment: 58, industry: 45 },
-    { name: 'Q2 2023', alignment: 62, industry: 48 }
+  const lineChartData: DataPoint[] = [
+    { label: 'Q1 2022', value: 32, alignment: 32, industry: 30 },
+    { label: 'Q2 2022', value: 38, alignment: 38, industry: 35 },
+    { label: 'Q3 2022', value: 45, alignment: 45, industry: 40 },
+    { label: 'Q4 2022', value: 51, alignment: 51, industry: 42 },
+    { label: 'Q1 2023', value: 58, alignment: 58, industry: 45 },
+    { label: 'Q2 2023', value: 62, alignment: 62, industry: 48 }
   ];
 
-  const pieChartData = [
-    { name: 'Aligned', value: 62 },
-    { name: 'Partially Aligned', value: 18 },
-    { name: 'Not Aligned', value: 12 },
-    { name: 'Not Assessed', value: 8 }
+  const pieChartData: DataPoint[] = [
+    { label: 'Aligned', value: 62 },
+    { label: 'Partially Aligned', value: 18 },
+    { label: 'Not Aligned', value: 12 },
+    { label: 'Not Assessed', value: 8 }
   ];
 
   return (

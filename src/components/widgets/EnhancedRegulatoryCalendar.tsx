@@ -1,354 +1,274 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Calendar, Clock, AlertTriangle, Filter, ChevronDown, ChevronUp, RefreshCw, Calendar as CalendarIcon, X } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { format, parseISO, isAfter, isBefore, isToday } from 'date-fns';
-import { useRegulatoryEvents, useRegulatoryOptions } from '@/hooks/useRegulatoryEvents';
-import {
-  RegulatoryEvent,
-  RegulatoryEventType,
-  RegulatoryEventPriority,
-  RegulatoryEventStatus,
-  RegulatoryJurisdiction,
-  RegulatoryEventFilter
-} from '@/types/regulatory';
-import { LoadingState, EmptyState, ErrorState } from '@/components/widgets/WidgetStates';
+
+import React, { useState, useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar, Filter, RefreshCw, Calendar as CalendarIcon, AlertTriangle, Clock, FileText } from 'lucide-react';
+import { format, isAfter, isBefore, parseISO } from 'date-fns';
+import { useRegulatoryEvents } from '@/hooks/useRegulatoryEvents';
+import { RegulatoryEvent, RegulatoryEventFilter } from '@/types/regulatory';
+import { WidgetLoading, WidgetError, WidgetEmpty } from './WidgetStates';
 
 interface EnhancedRegulatoryCalendarProps {
   title?: string;
   description?: string;
-  initialFilter?: RegulatoryEventFilter;
+  className?: string;
   showFilters?: boolean;
   maxEvents?: number;
+  initialFilter?: RegulatoryEventFilter;
   onEventClick?: (event: RegulatoryEvent) => void;
-  className?: string;
 }
 
-export const EnhancedRegulatoryCalendar: React.FC<EnhancedRegulatoryCalendarProps> = ({
+const EnhancedRegulatoryCalendar: React.FC<EnhancedRegulatoryCalendarProps> = ({
   title = "Regulatory Calendar",
-  description = "Upcoming regulatory events and deadlines",
-  initialFilter = {},
-  showFilters = true,
-  maxEvents = 5,
-  onEventClick,
+  description = "Stay on top of important regulatory deadlines and events",
   className = "",
+  showFilters = true,
+  maxEvents = 20,
+  initialFilter = {},
+  onEventClick
 }) => {
-  // State for active tab (upcoming, today, past)
-  const [activeTab, setActiveTab] = useState<string>('upcoming');
-  
-  // State for filters
-  const [showFilterPanel, setShowFilterPanel] = useState<boolean>(false);
-  
-  // Get regulatory events using the hook
+  const [searchTerm, setSearchTerm] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+
   const {
     events,
     isLoading,
     error,
-    fetchEvents,
-    updateFilter
+    fetchEvents
   } = useRegulatoryEvents({
     filter: initialFilter,
     autoFetch: true
   });
-  
-  // Get options for filter dropdowns
-  const {
-    typeOptions,
-    priorityOptions,
-    jurisdictionOptions
-  } = useRegulatoryOptions();
-  
-  // Filter events based on active tab
-  const filteredEvents = events.filter((event) => {
-    const eventDate = event.deadlineDate ? parseISO(event.deadlineDate as string) : 
-                      event.effectiveDate ? parseISO(event.effectiveDate as string) : 
-                      parseISO(event.publishedDate as string);
-    
-    switch (activeTab) {
-      case 'upcoming':
-        return isAfter(eventDate, new Date()) && !isToday(eventDate);
-      case 'today':
-        return isToday(eventDate);
-      case 'past':
-        return isBefore(eventDate, new Date()) && !isToday(eventDate);
-      default:
-        return true;
+
+  // Filter and sort events
+  const filteredEvents = useMemo(() => {
+    let filtered = events as RegulatoryEvent[];
+
+    // Apply search filter
+    if (searchTerm) {
+      const search = searchTerm.toLowerCase();
+      filtered = filtered.filter(event =>
+        event.title.toLowerCase().includes(search) ||
+        event.description.toLowerCase().includes(search)
+      );
     }
-  }).slice(0, maxEvents);
-  
-  // Helper functions for UI
+
+    // Apply priority filter
+    if (priorityFilter !== 'all') {
+      filtered = filtered.filter(event => event.priority === priorityFilter);
+    }
+
+    // Apply status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(event => event.status === statusFilter);
+    }
+
+    // Sort by deadline date, then effective date, then published date
+    filtered.sort((a, b) => {
+      const aDate = a.deadlineDate || a.effectiveDate || a.publishedDate;
+      const bDate = b.deadlineDate || b.effectiveDate || b.publishedDate;
+      
+      if (!aDate && !bDate) return 0;
+      if (!aDate) return 1;
+      if (!bDate) return -1;
+      
+      const aDateObj = typeof aDate === 'string' ? parseISO(aDate) : aDate;
+      const bDateObj = typeof bDate === 'string' ? parseISO(bDate) : bDate;
+      
+      return aDateObj.getTime() - bDateObj.getTime();
+    });
+
+    return filtered.slice(0, maxEvents);
+  }, [events, searchTerm, priorityFilter, statusFilter, maxEvents]);
+
+  const handleRefresh = async () => {
+    await fetchEvents();
+  };
+
+  const handleEventClick = (event: RegulatoryEvent) => {
+    onEventClick?.(event);
+  };
+
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case RegulatoryEventPriority.CRITICAL:
-        return 'bg-red-100 text-red-700 border-red-200';
-      case RegulatoryEventPriority.HIGH:
-        return 'bg-orange-100 text-orange-700 border-orange-200';
-      case RegulatoryEventPriority.MEDIUM:
-        return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      default:
-        return 'bg-green-100 text-green-700 border-green-200';
+      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low': return 'bg-green-100 text-green-800 border-green-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-  
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case RegulatoryEventType.DEADLINE:
-        return <AlertTriangle size={14} className="text-red-600" />;
-      case RegulatoryEventType.IMPLEMENTATION:
-        return <Calendar size={14} className="text-blue-600" />;
-      default:
-        return <Clock size={14} className="text-purple-600" />;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'upcoming': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'active': return 'bg-green-100 text-green-800 border-green-200';
+      case 'past': return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'delayed': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-  
-  const getEventDate = (event: RegulatoryEvent) => {
-    if (event.deadlineDate) {
-      return { date: event.deadlineDate, label: 'Deadline' };
-    } else if (event.effectiveDate) {
-      return { date: event.effectiveDate, label: 'Effective' };
-    } else {
-      return { date: event.publishedDate, label: 'Published' };
-    }
+
+  const formatDate = (date: string | Date | undefined) => {
+    if (!date) return null;
+    const dateObj = typeof date === 'string' ? parseISO(date) : date;
+    return format(dateObj, 'MMM dd, yyyy');
   };
-  
-  // Handle filter changes
-  const handleFilterChange = (filterKey: keyof RegulatoryEventFilter, value: any) => {
-    updateFilter({ [filterKey]: value });
-  };
-  
-  // Handle filter reset
-  const handleResetFilters = () => {
-    updateFilter(initialFilter);
-    setShowFilterPanel(false);
-  };
-  
-  // Render loading state
+
   if (isLoading) {
     return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <Calendar size={20} className="text-primary" />
-            {title}
-          </CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
-        </CardHeader>
-        <CardContent>
-          <LoadingState />
-        </CardContent>
-      </Card>
+      <WidgetLoading
+        widgetName="Regulatory Calendar"
+        prefersReducedMotion={false}
+      />
     );
   }
-  
-  // Render error state
+
   if (error) {
     return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <Calendar size={20} className="text-primary" />
-            {title}
-          </CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
-        </CardHeader>
-        <CardContent>
-          <ErrorState 
-            message="Failed to load regulatory events" 
-            onRetry={fetchEvents} 
-          />
-        </CardContent>
-      </Card>
+      <WidgetError
+        widgetName="Regulatory Calendar"
+        onRetry={handleRefresh}
+      />
     );
   }
-  
+
   return (
     <Card className={className}>
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="text-lg font-semibold flex items-center gap-2">
-              <Calendar size={20} className="text-primary" />
-              {title}
-            </CardTitle>
-            {description && <CardDescription>{description}</CardDescription>}
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CalendarIcon className="h-5 w-5 text-blue-600" />
+            <div>
+              <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+              <CardDescription className="text-sm text-gray-600">
+                {description}
+              </CardDescription>
+            </div>
           </div>
-          <div className="flex gap-1">
-            {showFilters && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setShowFilterPanel(!showFilterPanel)}
-                className="h-8 w-8 p-0"
-              >
-                <Filter size={16} />
-              </Button>
-            )}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={fetchEvents}
-              className="h-8 w-8 p-0"
-            >
-              <RefreshCw size={16} />
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            className="gap-2"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Refresh
+          </Button>
         </div>
-      </CardHeader>
-      
-      {showFilterPanel && (
-        <div className="px-4 py-2 border-b border-gray-100">
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="text-sm font-medium">Filters</h4>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleResetFilters}
-              className="h-6 text-xs"
-            >
-              Reset
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-2 mb-2">
-            <div>
-              <Label htmlFor="type-filter" className="text-xs">Type</Label>
-              <Select 
-                onValueChange={(value) => handleFilterChange('types', value ? [value as RegulatoryEventType] : undefined)}
-                defaultValue={initialFilter.types?.[0]}
-              >
-                <SelectTrigger id="type-filter" className="h-8 text-xs">
-                  <SelectValue placeholder="All types" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">All types</SelectItem>
-                  {typeOptions.map(option => (
-                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <Label htmlFor="priority-filter" className="text-xs">Priority</Label>
-              <Select 
-                onValueChange={(value) => handleFilterChange('priorities', value ? [value as RegulatoryEventPriority] : undefined)}
-                defaultValue={initialFilter.priorities?.[0]}
-              >
-                <SelectTrigger id="priority-filter" className="h-8 text-xs">
-                  <SelectValue placeholder="All priorities" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">All priorities</SelectItem>
-                  {priorityOptions.map(option => (
-                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          <div className="mb-2">
-            <Label htmlFor="jurisdiction-filter" className="text-xs">Jurisdiction</Label>
-            <Select 
-              onValueChange={(value) => handleFilterChange('jurisdictions', value ? [value as RegulatoryJurisdiction] : undefined)}
-              defaultValue={initialFilter.jurisdictions?.[0]}
-            >
-              <SelectTrigger id="jurisdiction-filter" className="h-8 text-xs">
-                <SelectValue placeholder="All jurisdictions" />
+
+        {showFilters && (
+          <div className="flex flex-col sm:flex-row gap-3 mt-4">
+            <Input
+              placeholder="Search events..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1"
+            />
+            <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+              <SelectTrigger className="w-full sm:w-32">
+                <SelectValue placeholder="Priority" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All jurisdictions</SelectItem>
-                {jurisdictionOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                ))}
+                <SelectItem value="all">All Priority</SelectItem>
+                <SelectItem value="critical">Critical</SelectItem>
+                <SelectItem value="high">High</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="low">Low</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full sm:w-32">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="upcoming">Upcoming</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="past">Past</SelectItem>
+                <SelectItem value="delayed">Delayed</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          
-          <div>
-            <Label htmlFor="search-filter" className="text-xs">Search</Label>
-            <div className="flex gap-2">
-              <Input 
-                id="search-filter" 
-                placeholder="Search events..." 
-                className="h-8 text-xs"
-                onChange={(e) => handleFilterChange('searchTerm', e.target.value || undefined)}
-                defaultValue={initialFilter.searchTerm || ''}
-              />
-            </div>
+        )}
+      </CardHeader>
+
+      <CardContent>
+        {filteredEvents.length === 0 ? (
+          <WidgetEmpty
+            widgetName="Regulatory Calendar"
+            message="No regulatory events found matching your criteria"
+          />
+        ) : (
+          <div className="space-y-4">
+            {filteredEvents.map((event) => (
+              <div
+                key={event.id}
+                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => handleEventClick(event)}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {event.description}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 ml-4">
+                    <Badge variant="outline" className={getPriorityColor(event.priority)}>
+                      {event.priority}
+                    </Badge>
+                    <Badge variant="outline" className={getStatusColor(event.status)}>
+                      {event.status}
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium">{event.jurisdiction.toUpperCase()}</span>
+                      <span>•</span>
+                      <span>{event.framework.toUpperCase()}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    {event.deadlineDate && (
+                      <div className="flex items-center gap-1">
+                        <AlertTriangle className="h-4 w-4 text-red-500" />
+                        <span>Due: {formatDate(event.deadlineDate)}</span>
+                      </div>
+                    )}
+                    {event.effectiveDate && !event.deadlineDate && (
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-4 w-4 text-blue-500" />
+                        <span>Effective: {formatDate(event.effectiveDate)}</span>
+                      </div>
+                    )}
+                    {!event.deadlineDate && !event.effectiveDate && (
+                      <div className="flex items-center gap-1">
+                        <FileText className="h-4 w-4 text-gray-500" />
+                        <span>Published: {formatDate(event.publishedDate)}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      )}
-      
-      <CardContent className="pt-3">
-        <Tabs defaultValue="upcoming" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 mb-4">
-            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-            <TabsTrigger value="today">Today</TabsTrigger>
-            <TabsTrigger value="past">Past</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="upcoming" className="m-0">
-            {renderEventList(filteredEvents, 'No upcoming events')}
-          </TabsContent>
-          
-          <TabsContent value="today" className="m-0">
-            {renderEventList(filteredEvents, 'No events today')}
-          </TabsContent>
-          
-          <TabsContent value="past" className="m-0">
-            {renderEventList(filteredEvents, 'No past events')}
-          </TabsContent>
-        </Tabs>
+        )}
       </CardContent>
     </Card>
   );
-  
-  // Helper function to render event list
-  function renderEventList(events: RegulatoryEvent[], emptyMessage: string) {
-    if (events.length === 0) {
-      return <EmptyState message={emptyMessage} />
-    }
-    
-    return (
-      <div className="space-y-3">
-        {events.map((event) => {
-          const { date, label } = getEventDate(event);
-          
-          return (
-            <div 
-              key={event.id} 
-              className="border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow cursor-pointer"
-              onClick={() => onEventClick?.(event)}
-            >
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  {getTypeIcon(event.type)}
-                  <h4 className="text-sm font-medium text-gray-900">{event.title}</h4>
-                </div>
-                <Badge variant="outline" className={getPriorityColor(event.priority)}>
-                  {event.priority}
-                </Badge>
-              </div>
-              <div className="flex items-center gap-4 text-xs text-gray-500">
-                <span>{label}: {format(parseISO(date as string), 'MMM d, yyyy')}</span>
-                <Badge variant="outline" className="text-xs uppercase">
-                  {event.jurisdiction}
-                </Badge>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
 };
 
 export default EnhancedRegulatoryCalendar;
