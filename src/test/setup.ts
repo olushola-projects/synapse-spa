@@ -1,3 +1,4 @@
+
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
@@ -211,31 +212,31 @@ vi.mock('@react-three/fiber', () => ({
   extend: vi.fn(),
 }));
 
-// Mock Tremor components
+// Mock Tremor components - Fixed syntax
 vi.mock('@tremor/react', () => ({
-  Card: ({ children, ...props }: any) => <div data-testid="tremor-card" {...props}>{children}</div>,
-  Title: ({ children, ...props }: any) => <h2 data-testid="tremor-title" {...props}>{children}</h2>,
-  Text: ({ children, ...props }: any) => <p data-testid="tremor-text" {...props}>{children}</p>,
-  Metric: ({ children, ...props }: any) => <div data-testid="tremor-metric" {...props}>{children}</div>,
-  Flex: ({ children, ...props }: any) => <div data-testid="tremor-flex" {...props}>{children}</div>,
-  Badge: ({ children, ...props }: any) => <span data-testid="tremor-badge" {...props}>{children}</span>,
-  ProgressBar: (props: any) => <div data-testid="tremor-progress-bar" {...props} />,
-  AreaChart: (props: any) => <div data-testid="tremor-area-chart" {...props} />,
-  BarChart: (props: any) => <div data-testid="tremor-bar-chart" {...props} />,
-  DonutChart: (props: any) => <div data-testid="tremor-donut-chart" {...props} />,
-  LineChart: (props: any) => <div data-testid="tremor-line-chart" {...props} />,
-  Grid: ({ children, ...props }: any) => <div data-testid="tremor-grid" {...props}>{children}</div>,
-  Col: ({ children, ...props }: any) => <div data-testid="tremor-col" {...props}>{children}</div>,
-  TabGroup: ({ children, ...props }: any) => <div data-testid="tremor-tab-group" {...props}>{children}</div>,
-  TabList: ({ children, ...props }: any) => <div data-testid="tremor-tab-list" {...props}>{children}</div>,
-  Tab: ({ children, ...props }: any) => <button data-testid="tremor-tab" {...props}>{children}</button>,
-  TabPanels: ({ children, ...props }: any) => <div data-testid="tremor-tab-panels" {...props}>{children}</div>,
-  TabPanel: ({ children, ...props }: any) => <div data-testid="tremor-tab-panel" {...props}>{children}</div>,
-  Callout: ({ children, ...props }: any) => <div data-testid="tremor-callout" {...props}>{children}</div>,
-  Button: ({ children, ...props }: any) => <button data-testid="tremor-button" {...props}>{children}</button>,
-  Select: ({ children, ...props }: any) => <select data-testid="tremor-select" {...props}>{children}</select>,
-  SelectItem: ({ children, ...props }: any) => <option data-testid="tremor-select-item" {...props}>{children}</option>,
-  DateRangePicker: (props: any) => <div data-testid="tremor-date-range-picker" {...props} />,
+  Card: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-card', ...props }, children),
+  Title: ({ children, ...props }: any) => React.createElement('h2', { 'data-testid': 'tremor-title', ...props }, children),
+  Text: ({ children, ...props }: any) => React.createElement('p', { 'data-testid': 'tremor-text', ...props }, children),
+  Metric: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-metric', ...props }, children),
+  Flex: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-flex', ...props }, children),
+  Badge: ({ children, ...props }: any) => React.createElement('span', { 'data-testid': 'tremor-badge', ...props }, children),
+  ProgressBar: (props: any) => React.createElement('div', { 'data-testid': 'tremor-progress-bar', ...props }),
+  AreaChart: (props: any) => React.createElement('div', { 'data-testid': 'tremor-area-chart', ...props }),
+  BarChart: (props: any) => React.createElement('div', { 'data-testid': 'tremor-bar-chart', ...props }),
+  DonutChart: (props: any) => React.createElement('div', { 'data-testid': 'tremor-donut-chart', ...props }),
+  LineChart: (props: any) => React.createElement('div', { 'data-testid': 'tremor-line-chart', ...props }),
+  Grid: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-grid', ...props }, children),
+  Col: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-col', ...props }, children),
+  TabGroup: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-tab-group', ...props }, children),
+  TabList: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-tab-list', ...props }, children),
+  Tab: ({ children, ...props }: any) => React.createElement('button', { 'data-testid': 'tremor-tab', ...props }, children),
+  TabPanels: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-tab-panels', ...props }, children),
+  TabPanel: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-tab-panel', ...props }, children),
+  Callout: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tremor-callout', ...props }, children),
+  Button: ({ children, ...props }: any) => React.createElement('button', { 'data-testid': 'tremor-button', ...props }, children),
+  Select: ({ children, ...props }: any) => React.createElement('select', { 'data-testid': 'tremor-select', ...props }, children),
+  SelectItem: ({ children, ...props }: any) => React.createElement('option', { 'data-testid': 'tremor-select-item', ...props }, children),
+  DateRangePicker: (props: any) => React.createElement('div', { 'data-testid': 'tremor-date-range-picker', ...props }),
 }));
 
 // Mock TanStack Table
