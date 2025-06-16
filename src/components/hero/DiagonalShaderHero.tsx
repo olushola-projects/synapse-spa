@@ -1,10 +1,14 @@
-
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { ErrorBoundary } from './ErrorBoundary';
 
 // Lazy load the 3D canvas to improve FCP
-const ShaderCanvas = React.lazy(() => import('./ShaderCanvas'));
+const ShaderCanvas = lazy(() => 
+  import('./ShaderCanvas').then(module => ({
+    default: module.default || module
+  }))
+);
 
 interface DiagonalShaderHeroProps {
   children: React.ReactNode;
@@ -52,41 +56,43 @@ export const DiagonalShaderHero: React.FC<DiagonalShaderHeroProps> = ({
   return (
     <div className={cn("relative min-h-screen overflow-hidden", className)}>
       {/* Static CSS gradient fallback - always rendered for SSR/FCP */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={fallbackGradient}
-        aria-hidden="true"
-      />
-
+      <div className="absolute inset-0 z-0" style={fallbackGradient} aria-hidden="true" />
+      
       {/* 3D Shader Canvas - lazy loaded and respects motion preferences */}
       {shouldUseShader && !prefersReducedMotion && (
-        <Suspense fallback={null}>
-          <div className="absolute inset-0 z-0" aria-hidden="true">
-            <ShaderCanvas
-              colorStart={colorStart}
-              colorEnd={colorEnd}
-              speed={speed}
-              angle={angle}
-            />
-          </div>
-        </Suspense>
+        <ErrorBoundary fallback={
+          <div className="absolute inset-0 z-0" style={fallbackGradient} aria-hidden="true" />
+        }>
+          <Suspense fallback={
+            <div className="absolute inset-0 z-0" style={fallbackGradient} aria-hidden="true" />
+          }>
+            <div className="absolute inset-0 z-0" aria-hidden="true">
+              <ShaderCanvas
+                colorStart={colorStart}
+                colorEnd={colorEnd}
+                angle={angle}
+                speed={speed}
+              />
+            </div>
+          </Suspense>
+        </ErrorBoundary>
       )}
 
-      {/* Reduced motion toggle */}
+      {/* Content overlay */}
+      <div className="relative z-10">
+        {children}
+      </div>
+
+      {/* Optional reduced motion toggle */}
       {showReducedMotionToggle && (
         <button
           onClick={toggleReducedMotion}
-          className="absolute top-4 left-4 z-50 px-3 py-1.5 text-xs bg-white/20 backdrop-blur-sm rounded-md text-white hover:bg-white/30 transition-colors"
-          aria-label={`${prefersReducedMotion || !shouldUseShader ? 'Enable' : 'Disable'} motion effects`}
+          className="fixed bottom-4 right-4 z-50 rounded-full bg-background/80 p-2 text-foreground/80 shadow-lg backdrop-blur-sm hover:bg-background/90 hover:text-foreground"
+          aria-label={shouldUseShader ? "Disable animations" : "Enable animations"}
         >
-          {prefersReducedMotion || !shouldUseShader ? '🎬 Enable Motion' : '⏸️ Reduce Motion'}
+          {shouldUseShader ? "🚫" : "✨"}
         </button>
       )}
-
-      {/* Hero content overlay */}
-      <div className="relative z-10 min-h-screen flex flex-col">
-        {children}
-      </div>
     </div>
   );
 };

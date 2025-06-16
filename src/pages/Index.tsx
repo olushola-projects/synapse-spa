@@ -74,18 +74,30 @@ const Index = () => {
     };
     
     carouselInit();
-    window.addEventListener('load', carouselInit);
+    
+    // Use DOMContentLoaded instead of load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', carouselInit);
+    } else {
+      carouselInit();
+    }
 
-    // Close mobile menu on orientation change
-    window.addEventListener('orientationchange', () => { 
+    // Use screen.orientation.onchange instead of orientationchange
+    const handleOrientationChange = () => {
       const navToggle = document.querySelector('#nav-toggle') as HTMLInputElement;
       if (navToggle) navToggle.checked = false;
-    });
+    };
+
+    if ('orientation' in screen) {
+      screen.orientation.addEventListener('change', handleOrientationChange);
+    }
     
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('load', carouselInit);
-      window.removeEventListener('orientationchange', () => {});
+      document.removeEventListener('DOMContentLoaded', carouselInit);
+      if ('orientation' in screen) {
+        screen.orientation.removeEventListener('change', handleOrientationChange);
+      }
     };
   }, []);
 

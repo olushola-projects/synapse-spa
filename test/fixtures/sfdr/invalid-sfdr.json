@@ -1,0 +1,6 @@
+{
+  "entityId": "entity-002",
+  "indicators": [],
+  "productType": "fund"
+  // missing required disclosureDate, indicators array is empty (minItems: 1)
+}
