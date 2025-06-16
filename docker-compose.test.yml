@@ -1,0 +1,181 @@
+version: '3.8'
+
+services:
+  # Test Application
+  app-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    container_name: synapses-app-test
+    environment:
+      - NODE_ENV=test
+      - VITE_SUPABASE_URL=http://supabase-test:8000
+      - VITE_SUPABASE_ANON_KEY=test-anon-key
+      - REDIS_URL=redis://redis-test:6379
+      - QDRANT_URL=http://qdrant-test:6333
+    depends_on:
+      - redis-test
+      - postgres-test
+      - qdrant-test
+    volumes:
+      - ./src:/app/src:ro
+      - ./coverage:/app/coverage
+      - ./test-results:/app/test-results
+    command: npm run test:ci
+    networks:
+      - test-network
+
+  # Test Database
+  postgres-test:
+    image: postgres:15-alpine
+    container_name: synapses-postgres-test
+    environment:
+      POSTGRES_DB: synapses_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ./supabase/migrations:/docker-entrypoint-initdb.d:ro
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d synapses_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Test Redis
+  redis-test:
+    image: redis:7-alpine
+    container_name: synapses-redis-test
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_test_data:/data
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Test Vector Database
+  qdrant-test:
+    image: qdrant/qdrant:v1.7.0
+    container_name: synapses-qdrant-test
+    ports:
+      - "6334:6333"
+      - "6335:6334"
+    volumes:
+      - qdrant_test_data:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__HTTP_PORT: 6333
+      QDRANT__SERVICE__GRPC_PORT: 6334
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Test Supabase (Local)
+  supabase-test:
+    image: supabase/postgres:15.1.0.117
+    container_name: synapses-supabase-test
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: supabase_admin
+      POSTGRES_PASSWORD: test_password
+      JWT_SECRET: test-jwt-secret-key-for-testing-only
+      ANON_KEY: test-anon-key
+      SERVICE_ROLE_KEY: test-service-role-key
+    ports:
+      - "5434:5432"
+      - "8001:8000"
+    volumes:
+      - supabase_test_data:/var/lib/postgresql/data
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U supabase_admin -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Test Mail Server (MailHog)
+  mailhog-test:
+    image: mailhog/mailhog:v1.0.1
+    container_name: synapses-mailhog-test
+    ports:
+      - "1026:1025"  # SMTP
+      - "8026:8025"  # Web UI
+    networks:
+      - test-network
+
+  # Test Monitoring (Jaeger)
+  jaeger-test:
+    image: jaegertracing/all-in-one:1.50
+    container_name: synapses-jaeger-test
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    ports:
+      - "16687:16686"  # Web UI
+      - "14269:14268"  # HTTP collector
+      - "4319:4318"   # OTLP HTTP
+    networks:
+      - test-network
+
+  # E2E Test Runner
+  playwright-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    container_name: synapses-playwright-test
+    environment:
+      - NODE_ENV=test
+      - BASE_URL=http://app-test:3000
+    depends_on:
+      - app-test
+    volumes:
+      - ./src/test/e2e:/app/src/test/e2e:ro
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+    command: npx playwright test
+    networks:
+      - test-network
+
+  # Test Results Server
+  test-results:
+    image: nginx:alpine
+    container_name: synapses-test-results
+    ports:
+      - "8080:80"
+    volumes:
+      - ./test-results:/usr/share/nginx/html/test-results:ro
+      - ./coverage:/usr/share/nginx/html/coverage:ro
+      - ./playwright-report:/usr/share/nginx/html/playwright:ro
+    networks:
+      - test-network
+
+volumes:
+  postgres_test_data:
+    driver: local
+  redis_test_data:
+    driver: local
+  qdrant_test_data:
+    driver: local
+  supabase_test_data:
+    driver: local
+
+networks:
+  test-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

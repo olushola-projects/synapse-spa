@@ -7,13 +7,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Trash2, Copy, MessageSquare, LineChart, Award, BarChart3, Activity, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Copy, MessageSquare, LineChart, Award, BarChart3, Activity, AlertCircle, FileText } from "lucide-react";
 import { WidgetType, WidgetGrid, DashboardContextProvider } from "@/components/dashboard/WidgetGrid";
 import RegulationTrendWidget from "@/components/widgets/RegulationTrendWidget";
 import ForumPreviewWidget from "@/components/widgets/ForumPreviewWidget";
 import GamificationWidget from "@/components/widgets/GamificationWidget";
 import RecentQueriesWidget from "@/components/widgets/RecentQueriesWidget";
 import ComplianceStatusWidget from "@/components/widgets/ComplianceStatusWidget";
+import EnhancedRegulatoryCalendar from "@/components/widgets/EnhancedRegulatoryCalendar";
 import { toast } from "@/components/ui/use-toast";
 
 // Define available widget types
@@ -23,6 +24,7 @@ const availableWidgets: WidgetType[] = [
   { id: "gamification", name: "Gamification", description: "View your badges and challenges", icon: Award },
   { id: "recent-queries", name: "Recent Queries", description: "Your recent queries to Dara", icon: MessageSquare },
   { id: "compliance-status", name: "Compliance Status", description: "Your compliance status overview", icon: AlertCircle },
+  { id: "regulatory-calendar", name: "Regulatory Calendar", description: "View upcoming regulatory events and deadlines", icon: FileText },
 ];
 
 const Dashboard = () => {
@@ -37,7 +39,7 @@ const Dashboard = () => {
     // In a real app, we would load this from backend
     // For now, we'll start with default widgets or get from localStorage
     const savedWidgets = localStorage.getItem('dashboardWidgets');
-    const defaultWidgets = ["regulation-trend", "forum-preview", "gamification", "recent-queries"];
+    const defaultWidgets = ["regulation-trend", "forum-preview", "gamification", "recent-queries", "regulatory-calendar"];
     
     if (savedWidgets) {
       setWidgets(JSON.parse(savedWidgets));
@@ -93,6 +95,43 @@ const Dashboard = () => {
         return <RecentQueriesWidget onRemove={() => removeWidget(widgetId)} />;
       case "compliance-status":
         return <ComplianceStatusWidget onRemove={() => removeWidget(widgetId)} />;
+      case "regulatory-calendar":
+        return (
+          <Card className="h-full">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-start">
+                <CardTitle className="text-lg font-semibold">Regulatory Calendar</CardTitle>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 w-8 p-0"
+                  onClick={() => removeWidget(widgetId)}
+                >
+                  <Trash2 size={14} />
+                </Button>
+              </div>
+              <CardDescription>Upcoming regulatory events and deadlines</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <EnhancedRegulatoryCalendar 
+                showFilters={false} 
+                maxEvents={5} 
+                className="border-0 shadow-none" 
+                onEventClick={() => navigate('/regulatory-dashboard')}
+              />
+            </CardContent>
+            <CardFooter>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full" 
+                onClick={() => navigate('/regulatory-dashboard')}
+              >
+                View Full Regulatory Dashboard
+              </Button>
+            </CardFooter>
+          </Card>
+        );
       default:
         return null;
     }
@@ -203,7 +242,10 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col items-center justify-center p-8">
-                  <p className="text-gray-500 mb-4">Coming soon in later release</p>
+                  <p className="text-gray-500 mb-4">Access our comprehensive regulatory monitoring and compliance tools</p>
+                  <Button onClick={() => navigate('/regulatory-dashboard')}>
+                    Go to Regulatory Dashboard
+                  </Button>
                 </div>
               </CardContent>
             </Card>

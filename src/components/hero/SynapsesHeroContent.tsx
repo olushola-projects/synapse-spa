@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Users } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import ExternalFormDialog from '../ExternalFormDialog';
 import InviteDialog from '../InviteDialog';
 import { DashboardHeroEmbed } from './DashboardHeroEmbed';
+import { USPFeatureSection } from '../features/USPFeatureSection';
 
 export const SynapsesHeroContent: React.FC = () => {
   const [showFormDialog, setShowFormDialog] = useState(false);
@@ -12,106 +13,63 @@ export const SynapsesHeroContent: React.FC = () => {
 
   return (
     <>
-      {/* Global Navigation */}
-      <nav className="w-full px-6 py-4 flex items-center justify-between relative z-20">
-        <div className="text-2xl font-bold text-white tracking-tight">
-          Synapses
-        </div>
-        
-        <div className="hidden md:flex items-center gap-4">
-          <Button
-            variant="outline"
-            className="border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm"
-            onClick={() => setShowInviteDialog(true)}
-          >
-            <Users className="w-4 h-4 mr-2" />
-            Invite Team
-          </Button>
-          
-          <Button
-            className="bg-white text-gray-900 hover:bg-gray-100 font-medium"
-            onClick={() => setShowFormDialog(true)}
-          >
-            Enterprise Demo
-          </Button>
-          
-          <button className="text-white/80 hover:text-white transition-colors text-sm font-medium">
-            Sign in
-          </button>
-        </div>
-
-        {/* Mobile menu button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="md:hidden text-white"
-        >
-          Menu
-        </Button>
-      </nav>
-
-      {/* Hero Content */}
-      <header className="flex-1 flex items-center justify-center px-6">
+      {/* Hero Content - Main content section */}
+      <div className="flex-1 flex items-center justify-center px-6 lg:px-12 py-12 lg:py-16">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            {/* Left side - Headlines and CTAs */}
-            <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight">
-                Synapses
-                <br />
-                <strong className="font-extrabold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-                  The Agentic Hub for GRC Professionals
-                </strong>
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
+            {/* Left side - Headlines and CTAs with Stripe typography */}
+            <div className="flex-1 text-center lg:text-left max-w-2xl lg:max-w-none">
+              {/* Main headline - Stripe style typography */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 text-gray-900" style={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+                <div className="flex flex-col">
+                  <span className="block">Transform</span>
+                  <span className="block">Your Expertise</span>
+                  <span className="block">With GRC</span>
+                  <span className="block">Agents</span>
+                </div>
               </h1>
               
-              <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl lg:max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-                Activate AI agents, track regulations, and earn badges—built by compliance experts, for compliance experts.
+              {/* Subheadline - Stripe style body text */}
+              <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed" style={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+                Join a global network of professionals to boost your expertise with GRC agents, exclusive testing of future solutions, comprehensive regulatory insights and personalized career resilience tools to upskill, adapt, and lead the way in shaping the future of GRC.
               </p>
               
-              {/* Primary CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8">
+              {/* Primary CTA Button - Stripe style */}
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button
-                  size="lg"
-                  className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-8 py-4 text-lg shadow-xl transition-all duration-200 hover:scale-105"
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 text-base rounded-lg"
+                  style={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}
                   onClick={() => setShowFormDialog(true)}
                 >
-                  Get Early Access
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-                
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white/40 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 text-lg transition-all duration-200"
-                >
-                  Learn More
+                  Get Early Access <ArrowRight size={18} />
                 </Button>
               </div>
 
-              {/* Social Proof */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-white/70 text-sm">
+              {/* Trust indicators - Stripe style */}
+              <div className="mt-6 flex items-center text-sm text-gray-600 space-x-6 font-medium" style={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
                 <span className="flex items-center">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                  300+ Early Adopters
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                  GRC Innovation Hub
                 </span>
                 <span className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-                  AI-Powered Insights
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                  Join early adopters in our private pilot
                 </span>
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
-                  Expert-Built Platform
-                </span>
+              </div>
+
+              {/* USP Features positioned in hero as per image */}
+              <div className="mt-12 pt-8">
+                <USPFeatureSection />
               </div>
             </div>
 
             {/* Right side - Dashboard Embed */}
-            <div className="flex-1 flex justify-center lg:justify-end w-full lg:w-auto">
-              <DashboardHeroEmbed className="w-full max-w-2xl lg:w-auto" />
+            <div className="flex-1 flex justify-center lg:justify-end w-full lg:w-auto mt-8 lg:mt-0 lg:max-w-2xl">
+              <DashboardHeroEmbed className="w-full max-w-[600px] lg:max-w-none" />
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Dialogs */}
       <ExternalFormDialog 

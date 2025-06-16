@@ -8,6 +8,7 @@ interface ShaderCanvasProps {
   colorEnd: string;
   speed: number;
   angle: number;
+  onLoad?: () => void;
 }
 
 // Custom water plane shader based on ShaderGradient specs
@@ -111,7 +112,14 @@ const WaterPlane: React.FC<{ colorStart: string; colorEnd: string; speed: number
   );
 };
 
-const ShaderCanvas: React.FC<ShaderCanvasProps> = ({ colorStart, colorEnd, speed, angle }) => {
+const ShaderCanvas: React.FC<ShaderCanvasProps> = ({ colorStart, colorEnd, speed, angle, onLoad }) => {
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
+  const handleCreated = React.useCallback(() => {
+    setIsLoaded(true);
+    onLoad?.();
+  }, [onLoad]);
+
   return (
     <Canvas
       className="w-full h-full"
@@ -121,7 +129,18 @@ const ShaderCanvas: React.FC<ShaderCanvasProps> = ({ colorStart, colorEnd, speed
         zoom: 1
       }}
       style={{ background: 'transparent' }}
-      performance={{ min: 0.5 }}
+      performance={{ 
+        min: 0.5,
+        max: 1,
+        debounce: 200
+      }}
+      dpr={[1, 2]} // Limit pixel ratio for performance
+      onCreated={handleCreated}
+      gl={{
+        antialias: false, // Disable for better performance
+        alpha: true,
+        powerPreference: 'high-performance'
+      }}
     >
       <WaterPlane colorStart={colorStart} colorEnd={colorEnd} speed={speed} />
     </Canvas>
