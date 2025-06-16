@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AreaChart,
   Area,
@@ -40,8 +40,8 @@ import {
   ScatterChart,
   Scatter,
   ComposedChart,
-  ReferenceLine
-} from 'recharts';
+  ReferenceLine,
+} from "recharts";
 import {
   TrendingUp,
   TrendingDown,
@@ -59,9 +59,9 @@ import {
   Calendar,
   Users,
   FileText,
-  Shield
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+  Shield,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Enhanced types for analytics data
 export interface AnalyticsMetric {
@@ -70,12 +70,12 @@ export interface AnalyticsMetric {
   value: number;
   previousValue?: number;
   change?: number;
-  changeType?: 'increase' | 'decrease' | 'neutral';
-  trend?: 'up' | 'down' | 'stable';
+  changeType?: "increase" | "decrease" | "neutral";
+  trend?: "up" | "down" | "stable";
   target?: number;
   unit?: string;
-  category: 'compliance' | 'risk' | 'performance' | 'efficiency';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  category: "compliance" | "risk" | "performance" | "efficiency";
+  priority: "low" | "medium" | "high" | "critical";
   lastUpdated: string;
 }
 
@@ -91,7 +91,7 @@ export interface ComplianceScore {
   framework: string;
   score: number;
   maxScore: number;
-  status: 'compliant' | 'partial' | 'non_compliant' | 'pending';
+  status: "compliant" | "partial" | "non_compliant" | "pending";
   lastAssessment: string;
   requirements: {
     total: number;
@@ -103,10 +103,10 @@ export interface ComplianceScore {
 
 export interface RiskAssessment {
   category: string;
-  level: 'low' | 'medium' | 'high' | 'critical';
+  level: "low" | "medium" | "high" | "critical";
   score: number;
-  trend: 'improving' | 'stable' | 'deteriorating';
-  mitigationStatus: 'none' | 'planned' | 'in_progress' | 'completed';
+  trend: "improving" | "stable" | "deteriorating";
+  mitigationStatus: "none" | "planned" | "in_progress" | "completed";
   lastReview: string;
 }
 
@@ -128,86 +128,52 @@ interface EnhancedAnalyticsWidgetProps {
   className?: string;
   refreshInterval?: number;
   onRefresh?: () => void;
-  onExport?: (format: 'csv' | 'pdf' | 'json') => void;
+  onExport?: (format: "csv" | "pdf" | "json") => void;
 }
 
 // Color schemes for different chart types
 const CHART_COLORS = {
-  primary: ['#3b82f6', '#1d4ed8', '#1e40af', '#1e3a8a'],
-  success: ['#10b981', '#059669', '#047857', '#065f46'],
-  warning: ['#f59e0b', '#d97706', '#b45309', '#92400e'],
-  danger: ['#ef4444', '#dc2626', '#b91c1c', '#991b1b'],
-  neutral: ['#6b7280', '#4b5563', '#374151', '#1f2937'],
-  gradient: ['#8b5cf6', '#a855f7', '#c084fc', '#d8b4fe']
+  primary: ["#3b82f6", "#1d4ed8", "#1e40af", "#1e3a8a"],
+  success: ["#10b981", "#059669", "#047857", "#065f46"],
+  warning: ["#f59e0b", "#d97706", "#b45309", "#92400e"],
+  danger: ["#ef4444", "#dc2626", "#b91c1c", "#991b1b"],
+  neutral: ["#6b7280", "#4b5563", "#374151", "#1f2937"],
+  gradient: ["#8b5cf6", "#a855f7", "#c084fc", "#d8b4fe"],
 };
 
 const RISK_COLORS = {
-  low: '#10b981',
-  medium: '#f59e0b',
-  high: '#f97316',
-  critical: '#ef4444'
+  low: "#10b981",
+  medium: "#f59e0b",
+  high: "#f97316",
+  critical: "#ef4444",
 };
 
 const STATUS_COLORS = {
-  compliant: '#10b981',
-  partial: '#f59e0b',
-  non_compliant: '#ef4444',
-  pending: '#6b7280'
+  compliant: "#10b981",
+  partial: "#f59e0b",
+  non_compliant: "#ef4444",
+  pending: "#6b7280",
 };
 
-export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = ({
+export const EnhancedAnalyticsWidget: React.FC<
+  EnhancedAnalyticsWidgetProps
+> = ({
   data,
   className,
   refreshInterval = 300000, // 5 minutes
   onRefresh,
-  onExport
+  onExport,
 }) => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [chartType, setChartType] = useState<'area' | 'bar' | 'line' | 'pie'>('area');
+  const [selectedTimeRange, setSelectedTimeRange] = useState("7d");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [chartType, setChartType] = useState<"area" | "bar" | "line" | "pie">(
+    "area"
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
   // Auto-refresh functionality
-  useEffect(() => {
-    if (refreshInterval > 0) {
-      const interval = setInterval(() => {
-        handleRefresh();
-      }, refreshInterval);
-      
-      return () => clearInterval(interval);
-    }
-  }, [refreshInterval]);
-
-  // Filter data based on selected criteria
-  const filteredData = useMemo(() => {
-    if (!data) return null;
-
-    const now = new Date();
-    const timeRangeMs = {
-      '1d': 24 * 60 * 60 * 1000,
-      '7d': 7 * 24 * 60 * 60 * 1000,
-      '30d': 30 * 24 * 60 * 60 * 1000,
-      '90d': 90 * 24 * 60 * 60 * 1000
-    }[selectedTimeRange] || 7 * 24 * 60 * 60 * 1000;
-
-    const cutoffDate = new Date(now.getTime() - timeRangeMs);
-
-    return {
-      ...data,
-      timeSeries: data.timeSeries.filter(item => {
-        const itemDate = new Date(item.timestamp);
-        const matchesTimeRange = itemDate >= cutoffDate;
-        const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-        return matchesTimeRange && matchesCategory;
-      }),
-      metrics: data.metrics.filter(metric => 
-        selectedCategory === 'all' || metric.category === selectedCategory
-      )
-    };
-  }, [data, selectedTimeRange, selectedCategory]);
-
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     setIsLoading(true);
     try {
       await onRefresh?.();
@@ -215,19 +181,60 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [onRefresh]);
 
-  const handleExport = (format: 'csv' | 'pdf' | 'json') => {
+  useEffect(() => {
+    if (refreshInterval > 0) {
+      const interval = setInterval(() => {
+        handleRefresh();
+      }, refreshInterval);
+
+      return () => clearInterval(interval);
+    }
+  }, [refreshInterval, handleRefresh]);
+
+  // Filter data based on selected criteria
+  const filteredData = useMemo(() => {
+    if (!data) return null;
+
+    const now = new Date();
+    const timeRangeMs =
+      {
+        "1d": 24 * 60 * 60 * 1000,
+        "7d": 7 * 24 * 60 * 60 * 1000,
+        "30d": 30 * 24 * 60 * 60 * 1000,
+        "90d": 90 * 24 * 60 * 60 * 1000,
+      }[selectedTimeRange] || 7 * 24 * 60 * 60 * 1000;
+
+    const cutoffDate = new Date(now.getTime() - timeRangeMs);
+
+    return {
+      ...data,
+      timeSeries: data.timeSeries.filter((item) => {
+        const itemDate = new Date(item.timestamp);
+        const matchesTimeRange = itemDate >= cutoffDate;
+        const matchesCategory =
+          selectedCategory === "all" || item.category === selectedCategory;
+        return matchesTimeRange && matchesCategory;
+      }),
+      metrics: data.metrics.filter(
+        (metric) =>
+          selectedCategory === "all" || metric.category === selectedCategory
+      ),
+    };
+  }, [data, selectedTimeRange, selectedCategory]);
+
+  const handleExport = (format: "csv" | "pdf" | "json") => {
     onExport?.(format);
   };
 
   // Calculate trend indicators
   const getTrendIcon = (trend?: string, change?: number) => {
     if (!trend && change === undefined) return null;
-    
-    if (trend === 'up' || (change && change > 0)) {
+
+    if (trend === "up" || (change && change > 0)) {
       return <TrendingUp className="h-4 w-4 text-green-500" />;
-    } else if (trend === 'down' || (change && change < 0)) {
+    } else if (trend === "down" || (change && change < 0)) {
       return <TrendingDown className="h-4 w-4 text-red-500" />;
     }
     return <Activity className="h-4 w-4 text-gray-500" />;
@@ -235,11 +242,11 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'compliant':
+      case "compliant":
         return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'non_compliant':
+      case "non_compliant":
         return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'partial':
+      case "partial":
         return <Clock className="h-4 w-4 text-yellow-500" />;
       default:
         return <Shield className="h-4 w-4 text-gray-500" />;
@@ -274,7 +281,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
 
   if (!data) {
     return (
-      <Card className={cn('w-full', className)}>
+      <Card className={cn("w-full", className)}>
         <CardHeader>
           <CardTitle>Analytics Dashboard</CardTitle>
           <CardDescription>Loading analytics data...</CardDescription>
@@ -289,7 +296,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
   }
 
   return (
-    <div className={cn('space-y-6', className)}>
+    <div className={cn("space-y-6", className)}>
       {/* Header with controls */}
       <Card>
         <CardHeader>
@@ -304,7 +311,10 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Select value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
+              <Select
+                value={selectedTimeRange}
+                onValueChange={setSelectedTimeRange}
+              >
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -315,8 +325,11 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                   <SelectItem value="90d">Last 90 days</SelectItem>
                 </SelectContent>
               </Select>
-              
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -328,16 +341,18 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                   <SelectItem value="efficiency">Efficiency</SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleRefresh}
                 disabled={isLoading}
               >
-                <RefreshCw className={cn('h-4 w-4', isLoading && 'animate-spin')} />
+                <RefreshCw
+                  className={cn("h-4 w-4", isLoading && "animate-spin")}
+                />
               </Button>
-              
+
               <Select onValueChange={handleExport}>
                 <SelectTrigger className="w-32">
                   <Download className="h-4 w-4" />
@@ -360,7 +375,9 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Overall Compliance</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Overall Compliance
+                </p>
                 <p className="text-2xl font-bold text-green-600">
                   {data.summary.totalCompliance.toFixed(1)}%
                 </p>
@@ -374,12 +391,14 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Average Risk Level</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Average Risk Level
+                </p>
                 <p className="text-2xl font-bold text-yellow-600">
                   {data.summary.averageRisk.toFixed(1)}
                 </p>
@@ -393,12 +412,14 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Improving Trends</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Improving Trends
+                </p>
                 <p className="text-2xl font-bold text-blue-600">
                   {data.summary.trendsImproving}
                 </p>
@@ -412,12 +433,14 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Critical Issues</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Critical Issues
+                </p>
                 <p className="text-2xl font-bold text-red-600">
                   {data.summary.criticalIssues}
                 </p>
@@ -450,23 +473,23 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                 <CardTitle>Compliance Trends</CardTitle>
                 <div className="flex items-center gap-2">
                   <Button
-                    variant={chartType === 'area' ? 'default' : 'outline'}
+                    variant={chartType === "area" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setChartType('area')}
+                    onClick={() => setChartType("area")}
                   >
                     Area
                   </Button>
                   <Button
-                    variant={chartType === 'line' ? 'default' : 'outline'}
+                    variant={chartType === "line" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setChartType('line')}
+                    onClick={() => setChartType("line")}
                   >
                     Line
                   </Button>
                   <Button
-                    variant={chartType === 'bar' ? 'default' : 'outline'}
+                    variant={chartType === "bar" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setChartType('bar')}
+                    onClick={() => setChartType("bar")}
                   >
                     Bar
                   </Button>
@@ -476,7 +499,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
             <CardContent>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  {chartType === 'area' && (
+                  {chartType === "area" && (
                     <AreaChart data={filteredData?.timeSeries}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
@@ -492,7 +515,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                       />
                     </AreaChart>
                   )}
-                  {chartType === 'line' && (
+                  {chartType === "line" && (
                     <LineChart data={filteredData?.timeSeries}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
@@ -507,7 +530,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                       />
                     </LineChart>
                   )}
-                  {chartType === 'bar' && (
+                  {chartType === "bar" && (
                     <BarChart data={filteredData?.timeSeries}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
@@ -540,13 +563,17 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                       <Tooltip content={<CustomTooltip />} />
                       <Legend />
                       <Bar dataKey="score" fill={CHART_COLORS.success[0]} />
-                      <Bar dataKey="maxScore" fill={CHART_COLORS.neutral[0]} opacity={0.3} />
+                      <Bar
+                        dataKey="maxScore"
+                        fill={CHART_COLORS.neutral[0]}
+                        opacity={0.3}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Compliance Status Distribution</CardTitle>
@@ -556,15 +583,17 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={data.complianceScores.map(score => ({
+                        data={data.complianceScores.map((score) => ({
                           name: score.framework,
                           value: score.score,
-                          status: score.status
+                          status: score.status,
                         }))}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) =>
+                          `${name} ${(percent * 100).toFixed(0)}%`
+                        }
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="value"
@@ -583,7 +612,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Detailed Compliance Table */}
           <Card>
             <CardHeader>
@@ -592,13 +621,17 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
             <CardContent>
               <div className="space-y-4">
                 {data.complianceScores.map((score, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       {getStatusIcon(score.status)}
                       <div>
                         <h4 className="font-medium">{score.framework}</h4>
                         <p className="text-sm text-gray-600">
-                          Last assessment: {new Date(score.lastAssessment).toLocaleDateString()}
+                          Last assessment:{" "}
+                          {new Date(score.lastAssessment).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -612,9 +645,18 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                     </div>
                     <div className="text-right">
                       <p className="text-sm">
-                        <span className="text-green-600">{score.requirements.met}</span> met,{' '}
-                        <span className="text-yellow-600">{score.requirements.partial}</span> partial,{' '}
-                        <span className="text-red-600">{score.requirements.failed}</span> failed
+                        <span className="text-green-600">
+                          {score.requirements.met}
+                        </span>{" "}
+                        met,{" "}
+                        <span className="text-yellow-600">
+                          {score.requirements.partial}
+                        </span>{" "}
+                        partial,{" "}
+                        <span className="text-red-600">
+                          {score.requirements.failed}
+                        </span>{" "}
+                        failed
                       </p>
                     </div>
                   </div>
@@ -650,7 +692,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Risk Distribution</CardTitle>
@@ -661,15 +703,23 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                     <PieChart>
                       <Pie
                         data={Object.entries(
-                          data.riskAssessments.reduce((acc, risk) => {
-                            acc[risk.level] = (acc[risk.level] || 0) + 1;
-                            return acc;
-                          }, {} as Record<string, number>)
-                        ).map(([level, count]) => ({ name: level, value: count }))}
+                          data.riskAssessments.reduce(
+                            (acc, risk) => {
+                              acc[risk.level] = (acc[risk.level] || 0) + 1;
+                              return acc;
+                            },
+                            {} as Record<string, number>
+                          )
+                        ).map(([level, count]) => ({
+                          name: level,
+                          value: count,
+                        }))}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) =>
+                          `${name} ${(percent * 100).toFixed(0)}%`
+                        }
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="value"
@@ -677,7 +727,9 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                         {Object.keys(RISK_COLORS).map((level, index) => (
                           <Cell
                             key={`cell-${index}`}
-                            fill={RISK_COLORS[level as keyof typeof RISK_COLORS]}
+                            fill={
+                              RISK_COLORS[level as keyof typeof RISK_COLORS]
+                            }
                           />
                         ))}
                       </Pie>
@@ -688,7 +740,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Risk Details */}
           <Card>
             <CardHeader>
@@ -697,7 +749,10 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
             <CardContent>
               <div className="space-y-4">
                 {data.riskAssessments.map((risk, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       <div
                         className="w-4 h-4 rounded-full"
@@ -706,14 +761,19 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                       <div>
                         <h4 className="font-medium">{risk.category}</h4>
                         <p className="text-sm text-gray-600">
-                          Last review: {new Date(risk.lastReview).toLocaleDateString()}
+                          Last review:{" "}
+                          {new Date(risk.lastReview).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="text-center">
                       <p className="text-lg font-bold">{risk.score}/10</p>
                       <Badge
-                        variant={risk.level === 'critical' ? 'destructive' : 'secondary'}
+                        variant={
+                          risk.level === "critical"
+                            ? "destructive"
+                            : "secondary"
+                        }
                         className="text-xs"
                       >
                         {risk.level}
@@ -725,7 +785,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                     </div>
                     <div className="text-right">
                       <Badge variant="outline" className="text-xs">
-                        {risk.mitigationStatus.replace('_', ' ')}
+                        {risk.mitigationStatus.replace("_", " ")}
                       </Badge>
                     </div>
                   </div>
@@ -745,7 +805,10 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
               <CardContent>
                 <div className="space-y-4">
                   {filteredData?.metrics.map((metric, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 border rounded"
+                    >
                       <div className="flex items-center gap-3">
                         {getTrendIcon(metric.trend, metric.change)}
                         <div>
@@ -760,11 +823,16 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                           {formatValue(metric.value, metric.unit)}
                         </p>
                         {metric.change && (
-                          <p className={cn(
-                            'text-sm',
-                            metric.change > 0 ? 'text-green-600' : 'text-red-600'
-                          )}>
-                            {metric.change > 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                          <p
+                            className={cn(
+                              "text-sm",
+                              metric.change > 0
+                                ? "text-green-600"
+                                : "text-red-600"
+                            )}
+                          >
+                            {metric.change > 0 ? "+" : ""}
+                            {metric.change.toFixed(1)}%
                           </p>
                         )}
                       </div>
@@ -773,7 +841,7 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Target vs Actual Performance</CardTitle>
@@ -782,12 +850,14 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart
-                      data={filteredData?.metrics.filter(m => m.target).map(m => ({
-                        name: m.name.substring(0, 10) + '...',
-                        actual: m.value,
-                        target: m.target,
-                        achievement: (m.value / (m.target || 1)) * 100
-                      }))}
+                      data={filteredData?.metrics
+                        .filter((m) => m.target)
+                        .map((m) => ({
+                          name: m.name.substring(0, 10) + "...",
+                          actual: m.value,
+                          target: m.target,
+                          achievement: (m.value / (m.target || 1)) * 100,
+                        }))}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
@@ -795,8 +865,17 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                       <YAxis yAxisId="right" orientation="right" />
                       <Tooltip content={<CustomTooltip />} />
                       <Legend />
-                      <Bar yAxisId="left" dataKey="actual" fill={CHART_COLORS.primary[0]} />
-                      <Bar yAxisId="left" dataKey="target" fill={CHART_COLORS.neutral[0]} opacity={0.5} />
+                      <Bar
+                        yAxisId="left"
+                        dataKey="actual"
+                        fill={CHART_COLORS.primary[0]}
+                      />
+                      <Bar
+                        yAxisId="left"
+                        dataKey="target"
+                        fill={CHART_COLORS.neutral[0]}
+                        opacity={0.5}
+                      />
                       <Line
                         yAxisId="right"
                         type="monotone"
@@ -804,7 +883,12 @@ export const EnhancedAnalyticsWidget: React.FC<EnhancedAnalyticsWidgetProps> = (
                         stroke={CHART_COLORS.success[0]}
                         strokeWidth={2}
                       />
-                      <ReferenceLine yAxisId="right" y={100} stroke="red" strokeDasharray="5 5" />
+                      <ReferenceLine
+                        yAxisId="right"
+                        y={100}
+                        stroke="red"
+                        strokeDasharray="5 5"
+                      />
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>

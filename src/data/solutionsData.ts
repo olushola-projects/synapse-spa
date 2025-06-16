@@ -1,9 +1,18 @@
-
-import { 
-  MessageSquareCode, Bot, Calendar, RefreshCw, Lightbulb, 
-  Briefcase, FilePen, Headphones, Users, 
-  MessageSquare, Folder, School, Award, Badge, 
-  UserCheck, Handshake, Globe
+import {
+  Bot,
+  Calendar,
+  RefreshCw,
+  Lightbulb,
+  Briefcase,
+  Headphones,
+  Users,
+  MessageSquare,
+  Folder,
+  School,
+  Award,
+  Badge,
+  UserCheck,
+  Globe,
 } from "lucide-react";
 import { Solution } from "@/types/solutions";
 
@@ -11,35 +20,40 @@ export const solutions: Solution[] = [
   {
     id: "dara-chatbot",
     title: "Regulatory Analysis Chatbot - Dara",
-    description: "AI-powered insights for complex regulatory interpretation and guidance.",
+    description:
+      "AI-powered insights for complex regulatory interpretation and guidance.",
     icon: Bot,
     color: "from-purple-600 to-indigo-600",
   },
   {
     id: "regulatory-calendar",
     title: "Regulatory Calendar",
-    description: "Track critical regulatory deadlines and upcoming changes with precision.",
+    description:
+      "Track critical regulatory deadlines and upcoming changes with precision.",
     icon: Calendar,
     color: "from-emerald-500 to-teal-600",
   },
   {
     id: "regulatory-updates",
     title: "Regulatory Updates",
-    description: "Stay informed with real-time regulatory change notifications.",
+    description:
+      "Stay informed with real-time regulatory change notifications.",
     icon: RefreshCw,
     color: "from-blue-500 to-cyan-600",
   },
   {
     id: "daily-insights",
     title: "Daily Regulatory Insights",
-    description: "Curated, bite-sized regulatory news tailored to your industry.",
+    description:
+      "Curated, bite-sized regulatory news tailored to your industry.",
     icon: Lightbulb,
     color: "from-amber-500 to-orange-600",
   },
   {
     id: "job-matching",
     title: "Job Matching",
-    description: "Personalized career opportunities aligned with your GRC expertise.",
+    description:
+      "Personalized career opportunities aligned with your GRC expertise.",
     icon: Briefcase,
     color: "from-red-500 to-pink-600",
   },
@@ -47,13 +61,14 @@ export const solutions: Solution[] = [
     id: "cv-surgery",
     title: "CV Surgery",
     description: "AI-powered resume optimization for GRC professionals.",
-    icon: FilePen,
+    icon: Headphones,
     color: "from-indigo-500 to-purple-600",
   },
   {
     id: "coaching-training",
     title: "Coaching & Training",
-    description: "Comprehensive learning paths with AI and expert-guided training.",
+    description:
+      "Comprehensive learning paths with AI and expert-guided training.",
     icon: Headphones,
     color: "from-cyan-500 to-blue-600",
   },
@@ -67,8 +82,9 @@ export const solutions: Solution[] = [
   {
     id: "interview-coaching",
     title: "AI + Human Interview Coaching",
-    description: "Tailored interview preparation with advanced performance analytics.",
-    icon: MessageSquareCode,
+    description:
+      "Tailored interview preparation with advanced performance analytics.",
+    icon: Headphones,
     color: "from-rose-500 to-pink-600",
   },
   {
@@ -88,7 +104,8 @@ export const solutions: Solution[] = [
   {
     id: "events-projects",
     title: "Events & Projects",
-    description: "Engage in collaborative compliance initiatives and networking events.",
+    description:
+      "Engage in collaborative compliance initiatives and networking events.",
     icon: School,
     color: "from-orange-500 to-red-600",
   },
@@ -109,14 +126,16 @@ export const solutions: Solution[] = [
   {
     id: "badges",
     title: "Professional Badges",
-    description: "Showcase your compliance expertise with verifiable digital credentials.",
+    description:
+      "Showcase your compliance expertise with verifiable digital credentials.",
     icon: Badge,
     color: "from-lime-500 to-green-600",
   },
   {
     id: "mentorship",
     title: "Mentorship",
-    description: "Connect with senior GRC professionals for personalized guidance.",
+    description:
+      "Connect with senior GRC professionals for personalized guidance.",
     icon: UserCheck,
     color: "from-pink-500 to-rose-600",
   },
@@ -126,5 +145,5 @@ export const solutions: Solution[] = [
     description: "Break language barriers with expert translation services.",
     icon: Globe,
     color: "from-blue-600 to-indigo-700",
-  }
+  },
 ];
