@@ -1,0 +1,8 @@
+# promptfoo configuration for main project
+# Add providers, environment variables, and other settings as needed
+
+providers:
+  - id: google:gemini-2.5-pro
+
+env:
+  GOOGLE_API_KEY: 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
