@@ -17,8 +17,8 @@ on:
         - production
 
 env:
-  NODE_VERSION: '18'
-  PNPM_VERSION: '8'
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.2.16'
   REGISTRY_URL: 'ghcr.io'
   IMAGE_NAME: 'synapses-grc-platform'
 
@@ -33,28 +33,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Run ESLint
-        run: npm run lint
+        run: bun run lint
         continue-on-error: true
 
       - name: Run Prettier check
-        run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+        run: bunx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
         continue-on-error: true
 
       - name: Run TypeScript check
-        run: npx tsc --noEmit
+        run: bunx tsc --noEmit
 
       - name: Security audit
-        run: npm audit --audit-level=high
+        run: bun audit
         continue-on-error: true
 
       - name: Dependency vulnerability scan
@@ -82,14 +81,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Setup test environment
         run: |
@@ -100,12 +98,12 @@ jobs:
       - name: Run unit tests
         if: matrix.test-type == 'unit'
         run: |
-          npm run test:unit -- --coverage --watchAll=false
-          npx vitest run --coverage
+          bun run test:run --coverage
+          bunx vitest run --coverage
 
       - name: Run integration tests
         if: matrix.test-type == 'integration'
-        run: npm run test:integration
+        run: bun run test:integration
 
       - name: Setup Playwright
         if: matrix.test-type == 'e2e'
@@ -116,10 +114,10 @@ jobs:
       - name: Run E2E tests
         if: matrix.test-type == 'e2e'
         run: |
-          npm run build
-          npm run preview &
+          bun run build
+          bun run preview &
           sleep 10
-          npx playwright test
+          bunx playwright test
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -149,27 +147,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Build application
-        run: npm run build
+        run: bun run build
 
       - name: Run accessibility tests
         run: |
-          npm run preview &
+          bun run preview &
           sleep 10
-          npx axe-core-cli http://localhost:4173 --exit
+          bunx axe-core-cli http://localhost:4173 --exit
 
       - name: Pa11y accessibility test
         run: |
-          npx pa11y-ci --sitemap http://localhost:4173/sitemap.xml
+          bunx pa11y-ci --sitemap http://localhost:4173/sitemap.xml
 
   # Performance Testing
   performance:
@@ -180,17 +177,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Build application
-        run: npm run build
+        run: bun run build
 
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
@@ -201,8 +197,8 @@ jobs:
 
       - name: Bundle size analysis
         run: |
-          npx bundlesize
-          npx webpack-bundle-analyzer dist/assets/*.js --report --mode static --no-open
+          bunx bundlesize
+          bunx webpack-bundle-analyzer dist/assets/*.js --report --mode static --no-open
 
   # Build and Package
   build:
@@ -216,14 +212,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Build application
         env:
@@ -231,7 +226,7 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
           VITE_HUGGINGFACE_API_KEY: ${{ secrets.VITE_HUGGINGFACE_API_KEY }}
-        run: npm run build
+        run: bun run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -274,6 +269,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NODE_VERSION=${{ env.NODE_VERSION }}
+            BUN_VERSION=${{ env.BUN_VERSION }}
             BUILD_DATE=${{ github.event.head_commit.timestamp }}
             VCS_REF=${{ github.sha }}
 
@@ -333,16 +329,21 @@ jobs:
           working-directory: ./
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
+      - name: Setup Bun for deployment
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
       - name: Update Supabase Edge Functions
         run: |
-          npx supabase functions deploy --project-ref ${{ secrets.STAGING_SUPABASE_PROJECT_REF }}
+          bunx supabase functions deploy --project-ref ${{ secrets.STAGING_SUPABASE_PROJECT_REF }}
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
       - name: Run smoke tests
         run: |
-          npm ci
-          npx playwright test --grep "@smoke"
+          bun install --frozen-lockfile
+          bunx playwright test --grep "@smoke"
         env:
           PLAYWRIGHT_BASE_URL: https://staging.synapses-grc.com
 
@@ -383,9 +384,14 @@ jobs:
           working-directory: ./
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
+      - name: Setup Bun for production deployment
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
       - name: Update Supabase Edge Functions
         run: |
-          npx supabase functions deploy --project-ref ${{ secrets.PRODUCTION_SUPABASE_PROJECT_REF }}
+          bunx supabase functions deploy --project-ref ${{ secrets.PRODUCTION_SUPABASE_PROJECT_REF }}
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
@@ -398,8 +404,8 @@ jobs:
 
       - name: Run production smoke tests
         run: |
-          npm ci
-          npx playwright test --grep "@smoke"
+          bun install --frozen-lockfile
+          bunx playwright test --grep "@smoke"
         env:
           PLAYWRIGHT_BASE_URL: https://synapses-grc.com
 

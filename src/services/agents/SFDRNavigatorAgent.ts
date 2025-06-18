@@ -14,15 +14,57 @@ export interface SFDRInput {
   endDate: string;
 }
 
+// Enhanced interfaces for SFDR-enriched data
+export interface SustainabilityPreferences {
+  esgStrategy: string;
+  principalAdverseImpacts: Array<{
+    indicatorId: string;
+    value: number | string | boolean;
+    unit?: string;
+  }>;
+}
+
+export interface ESGCharacteristics {
+  sustainabilityFactors: Array<{
+    indicatorId: string;
+    value: number | string | boolean;
+    unit?: string;
+  }>;
+  socialFactors: Array<{
+    indicatorId: string;
+    value: number | string | boolean;
+    unit?: string;
+  }>;
+}
+
+export interface SustainableInvestmentAllocation {
+  percentage: number;
+  criteria: string;
+  reportingPeriod: string;
+}
+
+export interface EnrichedEntity extends Entity {
+  sfrDisclosure: any;
+  sustainabilityPreferences: SustainabilityPreferences;
+}
+
+export interface EnrichedSecurity extends Security {
+  esgCharacteristics: ESGCharacteristics;
+}
+
+export interface EnrichedAccount extends Account {
+  sustainableInvestmentAllocation: SustainableInvestmentAllocation;
+}
+
 export interface SFDROutput {
   // Entity details with sustainability preferences
-  entity: Entity;
+  entity: EnrichedEntity;
   // Securities with their ESG characteristics
-  securities: Security[];
+  securities: EnrichedSecurity[];
   // Optional customer profile if provided
   customer?: Customer;
   // Related accounts and their sustainable investment allocations
-  accounts: Account[];
+  accounts: EnrichedAccount[];
   // Validation status
   validated: boolean;
 }
@@ -68,16 +110,60 @@ export class SFDRNavigatorAgent {
   }
 
   async run(input: SFDRInput): Promise<SFDROutput> {
-    // Example: fetchRegulatory would need to support 'sfdr' endpoint or similar
-    const raw = await fetchRegulatory<any>('sfdr', input.entityId);
-    const validated = validateResponse<typeof SFDRSchema>(SFDRSchema, raw, 'SFDRNavigatorAgent');
-    // TODO: map validated to SFDROutput as needed
-    return {
-      // ...map fields from validated to SFDROutput...
-      entity: undefined as any,
-      securities: [],
-      accounts: [],
-      validated: true
-    };
+    try {
+      // Fetch SFDR regulatory data
+      const sfrData = await fetchRegulatory<any>('sfdr', input.entityId);
+      const validatedSFDR = validateResponse<typeof SFDRSchema>(SFDRSchema, sfrData, 'SFDRNavigatorAgent');
+      
+      // Fetch related FIRE data in parallel
+      const [entity, securities, customer, accounts] = await Promise.all([
+        this.fetchEntityData(input.entityId),
+        this.fetchSecurities(input.securityIds),
+        input.customerId ? this.fetchCustomer(input.customerId) : Promise.resolve(undefined),
+        this.fetchAccounts(input.entityId)
+      ]);
+      
+      // Map and enrich data with SFDR context
+       const enrichedEntity: EnrichedEntity = {
+         ...entity,
+         sfrDisclosure: validatedSFDR,
+         sustainabilityPreferences: {
+           esgStrategy: validatedSFDR.esgStrategy || 'Not specified',
+           principalAdverseImpacts: validatedSFDR.indicators || []
+         }
+       };
+       
+       const enrichedSecurities: EnrichedSecurity[] = securities.map(security => ({
+         ...security,
+         esgCharacteristics: {
+           sustainabilityFactors: (validatedSFDR.indicators || []).filter((ind: any) => 
+             ['GHG_EMISSIONS', 'WATER_USAGE', 'WASTE_GENERATION'].includes(ind.indicatorId)
+           ),
+           socialFactors: (validatedSFDR.indicators || []).filter((ind: any) => 
+             ['GENDER_PAY_GAP', 'BOARD_GENDER_DIVERSITY'].includes(ind.indicatorId)
+           )
+         }
+       }));
+       
+       const enrichedAccounts: EnrichedAccount[] = accounts.map(account => ({
+         ...account,
+         sustainableInvestmentAllocation: {
+           percentage: Math.random() * 100, // Mock calculation - replace with actual logic
+           criteria: validatedSFDR.esgStrategy || 'Standard ESG criteria',
+           reportingPeriod: validatedSFDR.referencePeriod || new Date().getFullYear().toString()
+         }
+       }));
+      
+      return {
+        entity: enrichedEntity,
+        securities: enrichedSecurities,
+        customer,
+        accounts: enrichedAccounts,
+        validated: true
+      };
+    } catch (error) {
+      console.error('SFDR Navigator error:', error);
+      throw new Error(`SFDR processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 }

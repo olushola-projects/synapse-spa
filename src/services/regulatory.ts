@@ -312,3 +312,43 @@ export const addRegulatorySourceConfig = async (config: any): Promise<any> => {
   await new Promise(resolve => setTimeout(resolve, 300));
   return { ...config, id: Date.now().toString() };
 };
+
+// Generic fetchRegulatory function for SFDR and other regulatory data
+export async function fetchRegulatory<T>(endpoint: string, entityId: string): Promise<T> {
+  // Handle SFDR-specific endpoint
+  if (endpoint === 'sfdr') {
+    const mockSFDRData = {
+      entityId,
+      disclosureDate: new Date().toISOString().split('T')[0],
+      indicators: [
+        {
+          indicatorId: 'GHG_EMISSIONS',
+          value: 125.5,
+          unit: 'tCO2e'
+        },
+        {
+          indicatorId: 'GENDER_PAY_GAP',
+          value: 8.2,
+          unit: '%'
+        },
+        {
+          indicatorId: 'BOARD_GENDER_DIVERSITY',
+          value: 35.0,
+          unit: '%'
+        }
+      ],
+      productType: 'fund',
+      esgStrategy: 'ESG integration with exclusions and best-in-class selection',
+      referencePeriod: '2024',
+      notes: 'Data based on latest available information'
+    };
+    return mockSFDRData as T;
+  }
+  
+  // Handle other regulatory endpoints
+  const res = await fetch(`/api/regulatory/${endpoint}/${entityId}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch from ${endpoint}: ${res.statusText}`);
+  }
+  return res.json() as T;
+}
