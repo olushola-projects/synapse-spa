@@ -1,0 +1,91 @@
+{
+  "scripts": {
+    "esg:setup": "ts-node scripts/setup-free-esg-sources.ts",
+    "esg:setup:verbose": "ts-node scripts/setup-free-esg-sources.ts --verbose",
+    "esg:examples": "ts-node examples/free-esg-integration-example.ts",
+    "esg:test": "jest tests/free-esg-sources-integration.test.ts",
+    "esg:test:watch": "jest tests/free-esg-sources-integration.test.ts --watch",
+    "esg:validate": "ts-node -e \"import { validateAPIConnectivity } from './scripts/setup-free-esg-sources'; validateAPIConnectivity().then(result => console.log('Validation:', result ? 'PASSED' : 'FAILED')).catch(console.error)\"",
+    "esg:worldbank": "ts-node -e \"import { worldBankSovereignAnalysis } from './examples/free-esg-integration-example'; worldBankSovereignAnalysis().catch(console.error)\"",
+    "esg:alphavantage": "ts-node -e \"import { alphaVantageCorporateAnalysis } from './examples/free-esg-integration-example'; alphaVantageCorporateAnalysis().catch(console.error)\"",
+    "esg:quality": "ts-node -e \"import { SFDRNavigatorAgent } from './src/components/agents/SFDRNavigatorAgent'; import { dataQualityAssessment } from './examples/free-esg-integration-example'; const agent = new SFDRNavigatorAgent(); agent.fetchESGData().then(data => dataQualityAssessment(data)).catch(console.error)\"",
+    "esg:sfdr": "ts-node -e \"import { SFDRNavigatorAgent } from './src/components/agents/SFDRNavigatorAgent'; import { sfdrComplianceAnalysis } from './examples/free-esg-integration-example'; const agent = new SFDRNavigatorAgent(); agent.fetchESGData().then(data => sfdrComplianceAnalysis(data)).catch(console.error)\"",
+    "esg:performance": "ts-node -e \"import { performanceMonitoring } from './examples/free-esg-integration-example'; performanceMonitoring().catch(console.error)\"",
+    "esg:config": "ts-node -e \"import { getFreeESGSources, getSourceConfig } from './src/config/esg-sources.config'; console.log('Free ESG Sources:', getFreeESGSources().map(s => ({ source: s, config: getSourceConfig(s) })))\"",
+    "esg:clean": "rimraf test-data/*.json setup.log",
+    "esg:docs": "echo 'Opening ESG integration documentation...' && start FREE_ESG_SOURCES_INTEGRATION.md",
+    "esg:all": "npm run esg:setup && npm run esg:examples && npm run esg:test"
+  },
+  "description": "NPM scripts for Free ESG Data Sources Integration",
+  "usage": {
+    "setup": "Run 'npm run esg:setup' to configure and validate the free ESG data sources",
+    "examples": "Run 'npm run esg:examples' to see comprehensive usage examples",
+    "testing": "Run 'npm run esg:test' to execute integration tests",
+    "validation": "Run 'npm run esg:validate' to check API connectivity",
+    "analysis": {
+      "worldbank": "Run 'npm run esg:worldbank' for World Bank sovereign ESG analysis",
+      "alphavantage": "Run 'npm run esg:alphavantage' for Alpha Vantage corporate ESG analysis",
+      "quality": "Run 'npm run esg:quality' for data quality assessment",
+      "sfdr": "Run 'npm run esg:sfdr' for SFDR compliance analysis",
+      "performance": "Run 'npm run esg:performance' for performance monitoring"
+    },
+    "utilities": {
+      "config": "Run 'npm run esg:config' to view current ESG sources configuration",
+      "clean": "Run 'npm run esg:clean' to remove test data and logs",
+      "docs": "Run 'npm run esg:docs' to open the integration documentation",
+      "all": "Run 'npm run esg:all' to run setup, examples, and tests in sequence"
+    }
+  },
+  "requirements": {
+    "dependencies": [
+      "typescript",
+      "ts-node",
+      "jest",
+      "@types/jest",
+      "rimraf"
+    ],
+    "environment": [
+      "ALPHA_VANTAGE_API_KEY (optional but recommended)",
+      "Node.js >= 16.0.0",
+      "Internet connectivity for API calls"
+    ]
+  },
+  "troubleshooting": {
+    "common_issues": {
+      "api_key_missing": {
+        "error": "Alpha Vantage API key not configured",
+        "solution": "Get a free API key from https://www.alphavantage.co/support/#api-key and add it to your .env file"
+      },
+      "rate_limit_exceeded": {
+        "error": "API rate limit exceeded",
+        "solution": "Wait for the rate limit to reset or upgrade to a premium API plan"
+      },
+      "network_error": {
+        "error": "Network connectivity issues",
+        "solution": "Check your internet connection and firewall settings"
+      },
+      "typescript_errors": {
+        "error": "TypeScript compilation errors",
+        "solution": "Ensure all dependencies are installed and TypeScript is properly configured"
+      }
+    },
+    "debugging": {
+      "verbose_mode": "Use 'npm run esg:setup:verbose' for detailed logging",
+      "log_files": "Check setup.log for detailed error information",
+      "test_data": "Examine files in test-data/ directory for sample API responses"
+    }
+  },
+  "performance_tips": {
+    "caching": "Implement data caching to reduce API calls",
+    "rate_limiting": "Respect API rate limits to avoid being blocked",
+    "batch_processing": "Process data in batches for better performance",
+    "error_handling": "Implement robust error handling and retry logic"
+  },
+  "next_steps": {
+    "premium_sources": "Consider integrating premium ESG data sources like MSCI or Sustainalytics",
+    "data_quality": "Implement advanced data quality monitoring and validation",
+    "automation": "Set up automated ESG data collection and reporting",
+    "compliance": "Enhance SFDR compliance features and reporting",
+    "visualization": "Add ESG data visualization and dashboard components"
+  }
+}
