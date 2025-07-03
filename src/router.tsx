@@ -22,6 +22,7 @@ import Contact from './pages/company/Contact';
 import Careers from './pages/company/Careers';
 import Features from './pages/platform/Features';
 import Solutions from './pages/platform/Solutions';
+import NavbarMenuTest from './pages/NavbarMenuTest';
 
 // Create and export the router
 export const router = createBrowserRouter([
@@ -109,5 +110,10 @@ export const router = createBrowserRouter([
   {
     path: '/solutions',
     element: <Solutions />,
+  },
+  // Test routes
+  {
+    path: '/navbar-test',
+    element: <NavbarMenuTest />,
   }
 ]);

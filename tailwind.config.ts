@@ -112,6 +112,9 @@ const config: Config = {
         "gradient-stripe":
           "linear-gradient(45deg, var(--tw-gradient-stops) 25%, transparent 25%, transparent 50%, var(--tw-gradient-stops) 50%, var(--tw-gradient-stops) 75%, transparent 75%, transparent)",
       },
+      boxShadow: {
+        input: "0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)",
+      },
       textRendering: {
         optimizeSpeed: 'optimizeSpeed',
         optimizeLegibility: 'optimizeLegibility',
