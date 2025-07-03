@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -172,6 +173,7 @@ const Profile = () => {
                     />
                     
                     <Separator className="my-6" />
+                    
                     <div>
                       <h3 className="text-lg font-medium mb-3">Model Preference</h3>
                       <p className="text-sm text-muted-foreground mb-4">
@@ -204,56 +206,65 @@ const Profile = () => {
                         )}
                       />
                     </div>
-                    <h3 className="text-lg font-medium mb-3">Jurisdictional Interests</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Select the jurisdictions you're interested in for content and regulatory updates
-                    </p>
                     
-                    <FormField
-                      control={form.control}
-                      name="jurisdiction"
-                      render={() => (
-                        <FormItem>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {jurisdictions.map((item) => (
-                              <FormField
-                                key={item.id}
-                                control={form.control}
-                                name="jurisdiction"
-                                render={({ field }) => {
-                                  return (
-                                    <FormItem
-                                      key={item.id}
-                                      className="flex flex-row items-start space-x-3 space-y-0"
-                                    >
-                                      <FormControl>
-                                        <Checkbox
-                                          checked={field.value?.includes(item.id)}
-                                          onCheckedChange={(checked) => {
-                                            return checked
-                                              ? field.onChange([...field.value || [], item.id])
-                                              : field.onChange(
-                                                  field.value?.filter(
-                                                    (value) => value !== item.id
+                    <Separator className="my-6" />
+                    
+                    <div>
+                      <h3 className="text-lg font-medium mb-3">Jurisdictional Interests</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Select the jurisdictions you're interested in for content and regulatory updates
+                      </p>
+                      
+                      <FormField
+                        control={form.control}
+                        name="jurisdiction"
+                        render={() => (
+                          <FormItem>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {jurisdictions.map((item) => (
+                                <FormField
+                                  key={item.id}
+                                  control={form.control}
+                                  name="jurisdiction"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={item.id}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(item.id)}
+                                            onCheckedChange={(checked) => {
+                                              return checked
+                                                ? field.onChange([...field.value || [], item.id])
+                                                : field.onChange(
+                                                    field.value?.filter(
+                                                      (value) => value !== item.id
+                                                    )
                                                   )
-                                                )
-                                          }}
-                                        />
-                                      </FormControl>
-                                      <FormLabel className="font-normal">
-                                        {item.label}
-                                      </FormLabel>
-                                    </FormItem>
-                                  )
-                                }}
-                              />
-                            ))}
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                          {item.label}
+                                        </FormLabel>
+                                      </FormItem>
+                                    )
+                                  }}
+                                />
+                              ))}
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    
+                    <Button type="submit" className="w-full">
+                      Save Changes
+                    </Button>
+                  </form>
                 </Form>
               </CardContent>
             </Card>
