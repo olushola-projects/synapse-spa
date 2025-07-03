@@ -1,16 +1,16 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
-import VideoSection from "../components/VideoSection";
 import IndustryPerspectivesSection from "../components/IndustryPerspectivesSection";
 import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
-import PoweredBySection from "../components/PoweredBySection";
 import EnterpriseSection from "../components/EnterpriseSection";
 import HowItWorksSection from "../components/HowItWorksSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import SeoHead from "../components/SEO/SeoHead";
+import { Logos3 } from "@/components/ui/logos3";
 
 const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
@@ -19,6 +19,46 @@ const Index = () => {
     testimonials: false,
     cta: false
   });
+
+  // Custom logos combining existing PoweredBy logos with GRC-focused branding
+  const customLogos = [
+    {
+      id: "openai",
+      description: "OpenAI",
+      image: "/lovable-uploads/bee24c50-c3a4-4ac5-a96a-4e8a6e1d5720.png",
+      className: "h-10 w-auto"
+    },
+    {
+      id: "firebase",
+      description: "Google Firebase",
+      image: "/lovable-uploads/24bc5b6a-2ffe-469d-ae66-bec6fe163be5.png",
+      className: "h-8 w-auto"
+    },
+    {
+      id: "airtable",
+      description: "Airtable",
+      image: "/lovable-uploads/6a778cb7-3cb5-4529-9cc0-fdd90cbe4ddb.png",
+      className: "h-10 w-auto"
+    },
+    {
+      id: "microsoft",
+      description: "Microsoft",
+      image: "/lovable-uploads/c4144d0f-dbcd-4fac-be19-6dd1ae7ffff3.png",
+      className: "h-10 w-auto"
+    },
+    {
+      id: "google",
+      description: "Google",
+      image: "/lovable-uploads/0d37b216-879f-46ea-8740-e50726c3a6a3.png",
+      className: "h-8 w-auto"
+    },
+    {
+      id: "anthropic",
+      description: "Anthropic",
+      image: "/lovable-uploads/a363f7e4-db90-4a53-a679-ddbf92f0cebc.png",
+      className: "h-8 w-auto"
+    }
+  ];
 
   useEffect(() => {
     const observerOptions = {
@@ -148,15 +188,16 @@ const Index = () => {
         <FeaturesSection />
       </div>
       
-      <VideoSection />
-      
       <HowItWorksSection />
       
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
         <IndustryPerspectivesSection />
       </div>
       
-      <PoweredBySection />
+      <Logos3 
+        heading="Powered By"
+        logos={customLogos}
+      />
       
       <EnterpriseSection />
       
