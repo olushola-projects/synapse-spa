@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .shadow-input {
+      box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08);
+    }
+    /* Dark mode styles */
+    .dark {
+      background-color: #111827;
+      color: white;
+    }
+    .dark .bg-white {
+      background-color: #1f2937;
+    }
+    .dark .text-black {
+      color: white;
+    }
+    .dark .border-black\/\[0\.2\] {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold mb-8 text-center">Navbar Test</h1>
+    
+    <!-- Navbar Container -->
+    <div class="relative w-full flex items-center justify-center mb-32">
+      <!-- Navbar -->
+      <div class="fixed top-10 inset-x-0 max-w-2xl mx-auto z-50">
+        <!-- Menu -->
+        <nav class="relative rounded-full border border-transparent bg-white shadow-input flex justify-center space-x-4 px-8 py-6">
+          <!-- Menu Item: Solutions -->
+          <div class="relative">
+            <p class="cursor-pointer text-black hover:opacity-[0.9]">Solutions</p>
+            <!-- Dropdown content would appear here -->
+          </div>
+          
+          <!-- Menu Item: AI Agents -->
+          <div class="relative">
+            <p class="cursor-pointer text-black hover:opacity-[0.9]">AI Agents</p>
+            <!-- Dropdown content would appear here -->
+          </div>
+          
+          <!-- Menu Item: Platform -->
+          <div class="relative">
+            <p class="cursor-pointer text-black hover:opacity-[0.9]">Platform</p>
+            <!-- Dropdown content would appear here -->
+          </div>
+          
+          <!-- Menu Item: Resources -->
+          <div class="relative">
+            <p class="cursor-pointer text-black hover:opacity-[0.9]">Resources</p>
+            <!-- Dropdown content would appear here -->
+          </div>
+        </nav>
+      </div>
+      
+      <p class="text-black">The Navbar will show on top of the page</p>
+    </div>
+    
+    <!-- Content -->
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Static Navbar Test</h2>
+      <p class="mb-4">This is a static HTML version of the navbar to test basic styling and layout.</p>
+      
+      <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+        <h3 class="text-xl font-semibold mb-4">Issues Found:</h3>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>The navbar-menu.tsx file was using Next.js components (Link and Image) but the project is using React Router</li>
+          <li>The ProductItem component was using 'href' prop but needed to use 'to' prop for React Router</li>
+          <li>The 'use client' directive was not needed in a React application without Next.js</li>
+        </ul>
+      </div>
+      
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-semibold mb-4">Fixed Issues:</h3>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>Replaced Next.js Link with React Router Link</li>
+          <li>Replaced Next.js Image with standard img tag</li>
+          <li>Updated ProductItem to use 'to' prop instead of 'href'</li>
+          <li>Removed 'use client' directive from components</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toggle Dark Mode Button -->
+  <button 
+    class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-full"
+    onclick="document.body.classList.toggle('dark')">
+    Toggle Dark Mode
+  </button>
+</body>
+</html>

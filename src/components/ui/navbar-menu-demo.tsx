@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { HoveredLink, Menu, MenuItem, ProductItem } from "@/components/ui/navbar-menu";
 import { cn } from "@/lib/utils";
@@ -39,25 +38,25 @@ function Navbar({ className }: { className?: string }) {
           <div className="text-sm grid grid-cols-2 gap-10 p-4">
             <ProductItem
               title="SFDR Navigator"
-              href="/agents/sfdr-navigator"
+              to="/agents/sfdr-navigator"
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop"
               description="Navigate SFDR compliance with AI-powered guidance and automated reporting."
             />
             <ProductItem
               title="AML Investigator"
-              href="/agents/aml-investigator"
+              to="/agents/aml-investigator"
               src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=200&fit=crop"
               description="Advanced AI agent for anti-money laundering investigations and case management."
             />
             <ProductItem
               title="Risk Analyzer"
-              href="/agents/risk-analyzer"
+              to="/agents/risk-analyzer"
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop"
               description="Real-time risk assessment and predictive analytics for proactive risk management."
             />
             <ProductItem
               title="Compliance Monitor"
-              href="/agents/compliance-monitor"
+              to="/agents/compliance-monitor"
               src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop"
               description="Continuous compliance monitoring with automated alerts and remediation suggestions."
             />

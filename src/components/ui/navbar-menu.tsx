@@ -1,11 +1,7 @@
-"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-/**
- * Transition configuration for smooth animations
- */
 const transition = {
   type: "spring",
   mass: 0.5,
@@ -15,9 +11,6 @@ const transition = {
   restSpeed: 0.001,
 };
 
-/**
- * Individual menu item component with hover animations
- */
 export const MenuItem = ({
   setActive,
   active,
@@ -65,9 +58,6 @@ export const MenuItem = ({
   );
 };
 
-/**
- * Main menu container component
- */
 export const Menu = ({
   setActive,
   children,
@@ -85,28 +75,25 @@ export const Menu = ({
   );
 };
 
-/**
- * Product item component for displaying products with images
- */
 export const ProductItem = ({
   title,
   description,
-  href,
+  to,
   src,
 }: {
   title: string;
   description: string;
-  href: string;
+  to: string;
   src: string;
 }) => {
   return (
-    <Link to={href} className="flex space-x-2">
+    <Link to={to} className="flex space-x-2">
       <img
         src={src}
         width={140}
         height={70}
         alt={title}
-        className="flex-shrink-0 rounded-md shadow-2xl w-[140px] h-[70px] object-cover"
+        className="flex-shrink-0 rounded-md shadow-2xl object-cover"
       />
       <div>
         <h4 className="text-xl font-bold mb-1 text-black dark:text-white">
@@ -120,9 +107,6 @@ export const ProductItem = ({
   );
 };
 
-/**
- * Hovered link component for menu items
- */
 export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
