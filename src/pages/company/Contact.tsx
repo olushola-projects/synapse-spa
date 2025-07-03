@@ -1,13 +1,11 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
-import { toast } from '@/components/ui/use-toast';
 import { 
   MessageSquare, 
   Mail, 
@@ -20,50 +18,6 @@ import {
 } from 'lucide-react';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    subject: '',
-    message: ''
-  });
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [id]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Form validation
-    if (!formData.name || !formData.email || !formData.message) {
-      toast({
-        title: "Please complete all required fields",
-        description: "Name, email, and message are required",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    // Display success message
-    toast({
-      title: "Message sent",
-      description: "We've received your message and will respond soon.",
-    });
-    
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      company: '',
-      subject: '',
-      message: ''
-    });
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -72,7 +26,7 @@ const Contact = () => {
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Have questions about Synapses? Our team is here to help you.
+              Have questions about Synapse? Our team is here to help you.
             </p>
           </div>
           
@@ -81,7 +35,7 @@ const Contact = () => {
             <div className="md:col-span-2">
               <Card className="p-8 shadow-sm">
                 <h2 className="text-2xl font-semibold mb-6">Send a Message</h2>
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
@@ -89,8 +43,6 @@ const Contact = () => {
                         id="name"
                         placeholder="Your name"
                         className="w-full"
-                        value={formData.name}
-                        onChange={handleChange}
                       />
                     </div>
                     <div>
@@ -100,8 +52,6 @@ const Contact = () => {
                         type="email"
                         placeholder="your.email@example.com"
                         className="w-full"
-                        value={formData.email}
-                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -112,19 +62,12 @@ const Contact = () => {
                       id="company"
                       placeholder="Your company name"
                       className="w-full"
-                      value={formData.company}
-                      onChange={handleChange}
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                    <select 
-                      id="subject" 
-                      className="w-full h-10 px-3 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-synapse-primary"
-                      value={formData.subject}
-                      onChange={handleChange}
-                    >
+                    <select id="subject" className="w-full h-10 px-3 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-synapse-primary">
                       <option value="">Select a topic</option>
                       <option value="General Inquiry">General Inquiry</option>
                       <option value="Platform Demo">Platform Demo</option>
@@ -141,8 +84,6 @@ const Contact = () => {
                       placeholder="How can we help you?"
                       rows={6}
                       className="w-full"
-                      value={formData.message}
-                      onChange={handleChange}
                     />
                   </div>
                   
@@ -164,8 +105,8 @@ const Contact = () => {
                     <Mail className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <a href="mailto:info@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        info@joinsynapses.com
+                      <a href="mailto:contact@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        contact@synapse-platform.com
                       </a>
                     </div>
                   </div>
@@ -185,9 +126,9 @@ const Contact = () => {
                     <div>
                       <p className="font-medium">Location</p>
                       <p className="text-sm text-gray-600">
-                        Regina House, 69 Cheapside<br />
-                        London, EC2V 6AZ<br />
-                        United Kingdom
+                        123 Compliance Way<br />
+                        Regulatory District, RC 12345<br />
+                        United States
                       </p>
                     </div>
                   </div>
@@ -201,8 +142,8 @@ const Contact = () => {
                     <Users className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Sales</p>
-                      <a href="mailto:sales@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        sales@joinsynapses.com
+                      <a href="mailto:sales@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        sales@synapse-platform.com
                       </a>
                     </div>
                   </div>
@@ -211,8 +152,8 @@ const Contact = () => {
                     <HelpCircle className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Support</p>
-                      <a href="mailto:support@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        support@joinsynapses.com
+                      <a href="mailto:support@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        support@synapse-platform.com
                       </a>
                     </div>
                   </div>
@@ -221,8 +162,8 @@ const Contact = () => {
                     <Briefcase className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Partnerships</p>
-                      <a href="mailto:partners@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        partners@joinsynapses.com
+                      <a href="mailto:partners@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        partners@synapse-platform.com
                       </a>
                     </div>
                   </div>
@@ -231,8 +172,8 @@ const Contact = () => {
                     <BookOpen className="h-5 w-5 text-synapse-primary mt-1 mr-3" />
                     <div>
                       <p className="font-medium">Press</p>
-                      <a href="mailto:press@joinsynapses.com" className="text-sm text-gray-600 hover:text-synapse-primary">
-                        press@joinsynapses.com
+                      <a href="mailto:press@synapse-platform.com" className="text-sm text-gray-600 hover:text-synapse-primary">
+                        press@synapse-platform.com
                       </a>
                     </div>
                   </div>
@@ -247,16 +188,16 @@ const Contact = () => {
             <div className="space-y-4">
               {[
                 {
-                  question: "How can I request a demo of Synapses?",
-                  answer: "You can request a personalized demo by filling out the contact form above or emailing sales@joinsynapses.com directly. One of our account executives will get in touch to schedule a time that works for you."
+                  question: "How can I request a demo of Synapse?",
+                  answer: "You can request a personalized demo by filling out the contact form above or emailing sales@synapse-platform.com directly. One of our account executives will get in touch to schedule a time that works for you."
                 },
                 {
-                  question: "Is Synapses available internationally?",
-                  answer: "Yes, Synapses is available to customers worldwide. Our platform supports multiple languages and regulatory frameworks across different jurisdictions."
+                  question: "Is Synapse available internationally?",
+                  answer: "Yes, Synapse is available to customers worldwide. Our platform supports multiple languages and regulatory frameworks across different jurisdictions."
                 },
                 {
                   question: "How do I get technical support?",
-                  answer: "If you're a current customer, you can access support through your account dashboard or by emailing support@joinsynapses.com. For urgent issues, we also offer phone support during business hours."
+                  answer: "If you're a current customer, you can access support through your account dashboard or by emailing support@synapse-platform.com. For urgent issues, we also offer phone support during business hours."
                 }
               ].map((faq, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
@@ -266,9 +207,7 @@ const Contact = () => {
               ))}
             </div>
             <div className="text-center mt-8">
-              <Button variant="outline" asChild>
-                <Link to="/resources/faq">View All FAQs</Link>
-              </Button>
+              <Button variant="outline">View All FAQs</Button>
             </div>
           </div>
         </div>

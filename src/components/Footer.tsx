@@ -28,7 +28,7 @@ const Footer = () => {
                 <a href="https://instagram.com/synapsesgrc" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
                   <Instagram size={20} />
                 </a>
-                <a href="mailto:info@joinsynapses.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
+                <a href="mailto:admin@joinsynapses.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-synapse-primary transition-colors">
                   <Mail size={20} />
                 </a>
               </div>

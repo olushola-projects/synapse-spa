@@ -1,9 +1,7 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import HeroParallax from "../components/hero/HeroParallax";
+import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
-import { heroProducts } from "../data/heroProducts";
 import VideoSection from "../components/VideoSection";
 import IndustryPerspectivesSection from "../components/IndustryPerspectivesSection";
 import CTASection from "../components/CTASection";
@@ -75,30 +73,11 @@ const Index = () => {
     };
     
     carouselInit();
-    
-    // Use DOMContentLoaded instead of load
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', carouselInit);
-    } else {
-      carouselInit();
-    }
-
-    // Use screen.orientation.onchange instead of orientationchange
-    const handleOrientationChange = () => {
-      const navToggle = document.querySelector('#nav-toggle') as HTMLInputElement;
-      if (navToggle) navToggle.checked = false;
-    };
-
-    if ('orientation' in screen) {
-      screen.orientation.addEventListener('change', handleOrientationChange);
-    }
+    window.addEventListener('load', carouselInit);
     
     return () => {
       window.removeEventListener('resize', handleResize);
-      document.removeEventListener('DOMContentLoaded', carouselInit);
-      if ('orientation' in screen) {
-        screen.orientation.removeEventListener('change', handleOrientationChange);
-      }
+      window.removeEventListener('load', carouselInit);
     };
   }, []);
 
@@ -129,25 +108,17 @@ const Index = () => {
   return (
     <div className="min-h-screen relative">
       <SeoHead 
-        title="Synapses - GRC Intelligence Platform"
-        description="Empower your GRC career with Synapses - the intelligence platform where compliance professionals connect, grow, and shape the future."
+        title="Synapse - GRC Intelligence Platform"
+        description="Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future."
         ogImage="/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png"
         structuredData={{
           organization: {
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "Synapses",
+            "name": "Synapse",
             "url": "https://www.joinsynapses.com",
             "logo": "https://www.joinsynapses.com/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png",
-            "description": "Empower your GRC career with Synapses - the intelligence platform where compliance professionals connect, grow, and shape the future.",
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "Regina House, 69 Cheapside",
-              "addressLocality": "London",
-              "postalCode": "EC2V 6AZ",
-              "addressCountry": "UK"
-            },
-            "email": "info@joinsynapses.com",
+            "description": "Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future.",
             "sameAs": [
               "https://twitter.com/synapsesgrc",
               "https://www.linkedin.com/company/joinsynapses"
@@ -156,7 +127,7 @@ const Index = () => {
           application: {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "Synapses GRC Platform",
+            "name": "Synapse GRC Platform",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "offers": {
@@ -171,7 +142,7 @@ const Index = () => {
       />
       <AnimatedBackground />
       <Navbar />
-      <HeroParallax products={heroProducts} enableParallax={true} />
+      <HeroSection />
       
       <div id="features" className={`transition-opacity duration-1000 ${visibleSections.features ? 'opacity-100' : 'opacity-0'}`}>
         <FeaturesSection />

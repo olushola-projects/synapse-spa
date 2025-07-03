@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export const AnimatedBackground = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Main gradient background */}
+      {/* Main diagonal gradient background */}
       <motion.div 
         className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-blue-50"
         initial={{ opacity: 0 }}
@@ -14,89 +14,70 @@ export const AnimatedBackground = () => {
       />
       
       {/* Animated diagonal stripes - Stripe-inspired */}
-      <div className="absolute inset-0">
-        {/* Subtle grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f01a_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f01a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-        
-        {/* Animated gradients */}
+      <motion.div 
+        className="absolute -inset-[100%] rotate-[-35deg]"
+        initial={{ opacity: 0, x: '-10%' }}
+        animate={{ opacity: 1, x: '0%' }}
+        transition={{ duration: 2 }}
+      >
+        {/* Stripe 1 */}
         <motion.div 
-          className="absolute -inset-[100%] rotate-[-35deg]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2 }}
-        >
-          {/* Primary gradient stripe */}
-          <motion.div 
-            className="h-[15vh] w-[200%] bg-gradient-to-r from-blue-100/20 via-indigo-100/30 to-blue-50/20 mb-[20vh] blur-xl"
-            animate={{
-              x: [0, 50, 0],
-            }}
-            transition={{
-              duration: 45,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-          
-          {/* Secondary gradient stripe */}
-          <motion.div 
-            className="h-[8vh] w-[200%] bg-gradient-to-r from-indigo-100/10 via-purple-100/20 to-indigo-50/10 mb-[25vh] blur-lg"
-            animate={{
-              x: [50, -30, 50],
-            }}
-            transition={{
-              duration: 60,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-          
-          {/* Tertiary gradient stripe */}
-          <motion.div 
-            className="h-[12vh] w-[200%] bg-gradient-to-r from-blue-50/30 via-indigo-100/10 to-purple-50/20 blur-xl"
-            animate={{
-              x: [-20, 30, -20],
-            }}
-            transition={{
-              duration: 55,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-        </motion.div>
-      </div>
-
-      {/* Floating gradient blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Blob 1 */}
-        <motion.div 
-          className="absolute top-[15%] left-[10%] w-[25vw] h-[25vw] rounded-full bg-gradient-to-br from-blue-100/20 to-indigo-200/10 blur-3xl"
+          className="h-[20vh] w-[200%] bg-gradient-to-r from-indigo-100/40 to-purple-100/40 mb-[15vh] blur-xl"
           animate={{
-            y: [0, -15, 0],
-            x: [0, 10, 0],
-            scale: [1, 1.05, 1]
+            x: [0, 50, 0],
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "linear"
           }}
         />
         
-        {/* Blob 2 */}
+        {/* Stripe 2 */}
         <motion.div 
-          className="absolute bottom-[20%] right-[15%] w-[30vw] h-[30vw] rounded-full bg-gradient-to-tr from-purple-100/10 to-indigo-100/20 blur-3xl"
+          className="h-[10vh] w-[200%] bg-gradient-to-r from-blue-100/30 to-indigo-100/30 mb-[25vh] blur-lg"
           animate={{
-            y: [0, 20, 0],
-            x: [0, -15, 0],
-            scale: [1, 0.95, 1]
+            x: [50, 0, 50],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        {/* Stripe 3 */}
+        <motion.div 
+          className="h-[15vh] w-[200%] bg-gradient-to-r from-purple-100/20 to-blue-100/20 blur-xl"
+          animate={{
+            x: [0, 30, 0],
           }}
           transition={{
             duration: 25,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "linear"
           }}
         />
+      </motion.div>
+
+      {/* Diagonal stripes for header - fixed position */}
+      <div className="absolute top-0 left-0 w-full h-96 overflow-hidden">
+        <div className="absolute inset-0 rotate-[-35deg] translate-y-[-25%] translate-x-[-15%]">
+          <div className="h-4 w-[200%] bg-gradient-to-r from-blue-200/30 to-blue-100/10 mb-16"></div>
+          <div className="h-6 w-[200%] bg-gradient-to-r from-indigo-200/20 to-purple-100/20 mb-20"></div>
+          <div className="h-3 w-[200%] bg-gradient-to-r from-blue-100/20 to-indigo-100/10 mb-14"></div>
+          <div className="h-8 w-[200%] bg-gradient-to-r from-purple-100/15 to-indigo-200/25 mb-24"></div>
+        </div>
+      </div>
+      
+      {/* Diagonal stripes for footer - fixed position */}
+      <div className="absolute bottom-0 left-0 w-full h-96 overflow-hidden">
+        <div className="absolute inset-0 rotate-[-35deg] translate-y-[25%] translate-x-[-15%]">
+          <div className="h-4 w-[200%] bg-gradient-to-r from-blue-200/30 to-blue-100/10 mb-16"></div>
+          <div className="h-6 w-[200%] bg-gradient-to-r from-indigo-200/20 to-purple-100/20 mb-20"></div>
+          <div className="h-3 w-[200%] bg-gradient-to-r from-blue-100/20 to-indigo-100/10 mb-14"></div>
+          <div className="h-8 w-[200%] bg-gradient-to-r from-purple-100/15 to-indigo-200/25 mb-24"></div>
+        </div>
       </div>
     </div>
   );
