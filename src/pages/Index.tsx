@@ -1,7 +1,6 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { HeroParallaxDemo } from "../components/hero/HeroParallaxDemo";
+import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
 import VideoSection from "../components/VideoSection";
 import IndustryPerspectivesSection from "../components/IndustryPerspectivesSection";
@@ -143,9 +142,7 @@ const Index = () => {
       />
       <AnimatedBackground />
       <Navbar />
-      
-      {/* Hero Parallax Section */}
-      <HeroParallaxDemo />
+      <HeroSection />
       
       <div id="features" className={`transition-opacity duration-1000 ${visibleSections.features ? 'opacity-100' : 'opacity-0'}`}>
         <FeaturesSection />
