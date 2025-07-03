@@ -20,7 +20,6 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "types": ["vitest/globals", "@testing-library/jest-dom"]
+    "resolveJsonModule": true
   }
 }
