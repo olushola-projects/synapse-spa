@@ -1,9 +1,7 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import HeroParallax from "../components/hero/HeroParallax";
+import { HeroParallaxDemo } from "../components/hero/HeroParallaxDemo";
 import FeaturesSection from "../components/FeaturesSection";
-import { heroProducts } from "../data/heroProducts";
 import VideoSection from "../components/VideoSection";
 import IndustryPerspectivesSection from "../components/IndustryPerspectivesSection";
 import CTASection from "../components/CTASection";
@@ -171,7 +169,7 @@ const Index = () => {
       />
       <AnimatedBackground />
       <Navbar />
-      <HeroParallax products={heroProducts} enableParallax={true} />
+      <HeroParallaxDemo />
       
       <div id="features" className={`transition-opacity duration-1000 ${visibleSections.features ? 'opacity-100' : 'opacity-0'}`}>
         <FeaturesSection />
