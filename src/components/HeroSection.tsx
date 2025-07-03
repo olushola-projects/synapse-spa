@@ -28,11 +28,11 @@ const HeroSection = () => {
   return (
     <div
       style={{ minHeight: "calc(100vh - 64px)" }}
-      className="w-full px-4 sm:px-6 lg:px-8 py-2 md:py-6 flex flex-col items-center justify-center bg-white"
+      className="w-full px-4 sm:px-6 lg:px-8 py-2 md:py-6 flex flex-col items-start justify-center bg-white"
     >
-      <div className="container mx-auto max-w-4xl text-center">
-        {/* Hero Content - Centered */}
-        <div className="flex flex-col items-center">
+      <div className="container mx-auto max-w-7xl">
+        {/* Hero Content - Left Aligned */}
+        <div className="flex flex-col items-start">
           <HeroContent
             animate={animate}
             onGetAccess={handleGetAccessClick}
