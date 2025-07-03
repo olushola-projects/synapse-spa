@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Trash2, Copy, MessageSquare, LineChart, Award, BarChart3, Activity, AlertCircle, FileText } from "lucide-react";
+import { Plus, Trash2, Copy, MessageSquare, LineChart, Award, BarChart3, Activity, AlertCircle, FileText, Database, Brain, Zap, TrendingUp } from "lucide-react";
 import { WidgetType, WidgetGrid, DashboardContextProvider } from "@/components/dashboard/WidgetGrid";
 import RegulationTrendWidget from "@/components/widgets/RegulationTrendWidget";
 import ForumPreviewWidget from "@/components/widgets/ForumPreviewWidget";
@@ -16,6 +16,12 @@ import RecentQueriesWidget from "@/components/widgets/RecentQueriesWidget";
 import ComplianceStatusWidget from "@/components/widgets/ComplianceStatusWidget";
 import EnhancedRegulatoryCalendar from "@/components/widgets/EnhancedRegulatoryCalendar";
 import { toast } from "@/components/ui/use-toast";
+import { dataPipelineService } from "@/services/DataPipelineService";
+import type { DataEvent, PipelineJob } from "@/services/DataPipelineService";
+import AIInsightsWidget from "@/components/widgets/AIInsightsWidget";
+import DataPipelineWidget from "@/components/widgets/DataPipelineWidget";
+import RealTimeEventsWidget from "@/components/widgets/RealTimeEventsWidget";
+import RiskAnalyticsWidget from "@/components/widgets/RiskAnalyticsWidget";
 
 // Define available widget types
 const availableWidgets: WidgetType[] = [
@@ -25,6 +31,10 @@ const availableWidgets: WidgetType[] = [
   { id: "recent-queries", name: "Recent Queries", description: "Your recent queries to Dara", icon: MessageSquare },
   { id: "compliance-status", name: "Compliance Status", description: "Your compliance status overview", icon: AlertCircle },
   { id: "regulatory-calendar", name: "Regulatory Calendar", description: "View upcoming regulatory events and deadlines", icon: FileText },
+  { id: "data-pipeline", name: "Data Pipeline Monitor", description: "Monitor real-time data ingestion and quality metrics", icon: Database },
+  { id: "ai-insights", name: "AI Regulatory Insights", description: "AI-powered regulatory analysis and predictions", icon: Brain },
+  { id: "real-time-events", name: "Real-time Events", description: "Live regulatory and compliance events feed", icon: Zap },
+  { id: "risk-analytics", name: "Risk Analytics", description: "Advanced risk metrics and predictive analytics", icon: TrendingUp },
 ];
 
 const Dashboard = () => {
@@ -132,6 +142,14 @@ const Dashboard = () => {
             </CardFooter>
           </Card>
         );
+      case "data-pipeline":
+        return <DataPipelineWidget onRemove={() => removeWidget(widgetId)} />;
+      case "ai-insights":
+        return <AIInsightsWidget onRemove={() => removeWidget(widgetId)} />;
+      case "real-time-events":
+        return <RealTimeEventsWidget onRemove={() => removeWidget(widgetId)} />;
+      case "risk-analytics":
+        return <RiskAnalyticsWidget onRemove={() => removeWidget(widgetId)} />;
       default:
         return null;
     }

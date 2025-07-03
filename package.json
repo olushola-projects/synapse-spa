@@ -54,7 +54,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@huggingface/inference": "^2.6.4",
     "@langchain/community": "^0.0.20",
-    "@langchain/core": "^0.2.21",
+    "@langchain/core": "^0.3.59",
     "@langchain/qdrant": "^0.1.2",
     "@monaco-editor/react": "^4.6.0",
     "@opentelemetry/api": "^1.7.0",
@@ -96,7 +96,7 @@
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
-    "@react-three/fiber": "^8.18.0",
+
     "@sentry/react": "^7.91.0",
     "@sentry/tracing": "^7.91.0",
     "@supabase/supabase-js": "^2.49.4",
@@ -129,7 +129,7 @@
     "jotai": "^2.6.0",
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.1",
-    "langchain": "^0.1.7",
+    "langchain": "^0.3.59",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.294.0",
@@ -188,7 +188,6 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^4.0.0",
     "@eslint/js": "^9.9.0",
-    "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-navigation-menu": "^1.2.13",
     "@radix-ui/react-slot": "^1.2.3",
     "@storybook/addon-a11y": "^9.1.0-alpha.6",
@@ -236,8 +235,7 @@
     "react": ">=18.0.0"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": "22.x"
   },
   "browserslist": {
     "production": [
@@ -292,5 +290,5 @@
   "bugs": {
     "url": "https://github.com/synapses/grc-platform/issues"
   },
-  "homepage": "https://synapses-grc.com"
+  "homepage": "https://joinsynapses.com"
 }

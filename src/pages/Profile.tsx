@@ -37,6 +37,7 @@ const profileFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   jurisdiction: z.array(z.string()).optional(),
+  modelPreference: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -58,6 +59,7 @@ const Profile = () => {
       name: user?.name || "",
       email: user?.email || "",
       jurisdiction: user?.jurisdiction || [],
+      modelPreference: user?.modelPreference || "",
     },
   });
 
@@ -68,6 +70,7 @@ const Profile = () => {
         name: user.name,
         email: user.email,
         jurisdiction: user.jurisdiction || [],
+        modelPreference: user.modelPreference || "",
       });
     }
   }, [user, form]);
@@ -169,61 +172,88 @@ const Profile = () => {
                     />
                     
                     <Separator className="my-6" />
-                    
                     <div>
-                      <h3 className="text-lg font-medium mb-3">Jurisdictional Interests</h3>
+                      <h3 className="text-lg font-medium mb-3">Model Preference</h3>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Select the jurisdictions you're interested in for content and regulatory updates
+                        Select your preferred AI model for agentic tasks
                       </p>
-                      
                       <FormField
                         control={form.control}
-                        name="jurisdiction"
-                        render={() => (
+                        name="modelPreference"
+                        render={({ field }) => (
                           <FormItem>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              {jurisdictions.map((item) => (
-                                <FormField
-                                  key={item.id}
-                                  control={form.control}
-                                  name="jurisdiction"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={item.id}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(item.id)}
-                                            onCheckedChange={(checked) => {
-                                              return checked
-                                                ? field.onChange([...field.value || [], item.id])
-                                                : field.onChange(
-                                                    field.value?.filter(
-                                                      (value) => value !== item.id
-                                                    )
-                                                  )
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal">
-                                          {item.label}
-                                        </FormLabel>
-                                      </FormItem>
-                                    )
-                                  }}
-                                />
-                              ))}
-                            </div>
+                            <FormLabel>AI Model</FormLabel>
+                            <FormControl>
+                              <Select value={field.value} onValueChange={field.onChange}>
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a model" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="gemini-2.5-pro">Gemini 2.5 Pro (Google)</SelectItem>
+                                  <SelectItem value="text-embedding-3-small">DeepSeek Embedding Small</SelectItem>
+                                  <SelectItem value="text-embedding-3-large">DeepSeek Embedding Large</SelectItem>
+                                  <SelectItem value="sentence-transformers/all-MiniLM-L6-v2">MiniLM-L6-v2 (HF)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormDescription>
+                              This will be used as your default model for agentic workflows.
+                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
-
-                    <Button type="submit">Save changes</Button>
-                  </form>
+                    <h3 className="text-lg font-medium mb-3">Jurisdictional Interests</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Select the jurisdictions you're interested in for content and regulatory updates
+                    </p>
+                    
+                    <FormField
+                      control={form.control}
+                      name="jurisdiction"
+                      render={() => (
+                        <FormItem>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {jurisdictions.map((item) => (
+                              <FormField
+                                key={item.id}
+                                control={form.control}
+                                name="jurisdiction"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={item.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(item.id)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([...field.value || [], item.id])
+                                              : field.onChange(
+                                                  field.value?.filter(
+                                                    (value) => value !== item.id
+                                                  )
+                                                )
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {item.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  )
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </Form>
               </CardContent>
             </Card>

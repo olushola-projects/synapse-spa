@@ -10,6 +10,7 @@ export interface User {
   name: string;
   avatar?: string;
   jurisdiction?: string[];
+  modelPreference?: string;
 }
 
 interface AuthContextType {
@@ -34,7 +35,8 @@ const mockUsers: User[] = [
     email: 'demo@synapse.com',
     name: 'Demo User',
     avatar: 'https://i.pravatar.cc/150?u=demo',
-    jurisdiction: ['EU', 'UK']
+    jurisdiction: ['EU', 'UK'],
+    modelPreference: 'gemini-2.5-pro',
   },
 ];
 

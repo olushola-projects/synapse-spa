@@ -1,8 +1,16 @@
 # promptfoo configuration for main project
 # Add providers, environment variables, and other settings as needed
 
+prompts:
+  - id: sfdr-navigator
+    provider:
+      default: google:gemini-2.5-pro
+      fallback: deepseek:text-embedding-3-small
+
 providers:
   - id: google:gemini-2.5-pro
+  - id: deepseek:text-embedding-3-small
 
 env:
   GOOGLE_API_KEY: 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
+  DEEPSEEK_API_KEY: "your-deepseek-api-key-here"

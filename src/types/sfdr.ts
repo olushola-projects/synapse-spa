@@ -3,6 +3,88 @@
 
 import { FromSchema } from 'json-schema-to-ts';
 
+// NayaOne ESG Data Integration Types
+export interface NayaOneESGData {
+  provider: 'nayaone';
+  companyId: string;
+  companyName: string;
+  ticker?: string;
+  sector?: string;
+  industry?: string;
+  country?: string;
+  esgScore: {
+    overall?: number;
+    environmental?: number;
+    social?: number;
+    governance?: number;
+  };
+  ratings: {
+    esgRating?: string;
+    environmentalRating?: string;
+    socialRating?: string;
+    governanceRating?: string;
+  };
+  metrics: {
+    carbonIntensity?: number;
+    waterUsage?: number;
+    wasteGeneration?: number;
+    employeeTurnover?: number;
+    boardDiversity?: number;
+    executiveCompensation?: number;
+  };
+  sfdrIndicators: {
+    principalAdverseImpacts: Record<string, any>;
+    taxonomyAlignment: number;
+    sustainableInvestment: number;
+  };
+  lastUpdated?: string;
+  dataQuality: {
+    completeness: number;
+    reliability: 'high' | 'medium' | 'low';
+    source: string;
+  };
+}
+
+export interface ESGDataCollection {
+  nayaone: NayaOneESGData[];
+  bloomberg: any[];
+  msci: any[];
+  sustainalytics: any[];
+}
+
+export interface ESGDataQuality {
+  totalRecords: number;
+  completenessScore: number;
+  reliabilityScore: number;
+  lastUpdated: string;
+  sourceBreakdown: Record<string, number>;
+}
+
+export interface SFDRRiskAnalysis {
+  climateRisk: {
+    score: number;
+    factors: string[];
+    mitigation: string[];
+  };
+  biodiversityRisk: {
+    score: number;
+    factors: string[];
+    mitigation: string[];
+  };
+  socialRisk: {
+    score: number;
+    factors: string[];
+    mitigation: string[];
+  };
+  governanceRisk: {
+    score: number;
+    factors: string[];
+    mitigation: string[];
+  };
+  overallRiskScore: number;
+  confidenceLevel: number;
+}
+
 export type SFDR = FromSchema<{
   "$id": "http://joinsynapes.com/schemas/sfdr.json",
   "$schema": "http://json-schema.org/draft-07/schema#",

@@ -60,6 +60,82 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## ESG Data Integration
+
+This project integrates with **NayaOne Global ESG Company Ratings (2022-2023) Dataset** to provide real-time ESG scores and sustainability metrics for SFDR compliance analysis.
+
+### NayaOne ESG Data Features
+
+- **Comprehensive Coverage**: Global ESG company ratings from 2022-2023
+- **Multi-dimensional Scoring**: Environmental, Social, and Governance scores
+- **SFDR Compliance**: Principal Adverse Impact (PAI) indicators and taxonomy alignment
+- **Real-time Updates**: Automatic data fetching with pagination support
+- **Data Quality Assessment**: Built-in completeness and reliability scoring
+
+### API Configuration
+
+To use the NayaOne ESG data integration, you need to configure your API key:
+
+1. **Get your NayaOne Sandpit API Key**:
+   - Visit [NayaOne Data Platform](https://data.nayaone.com/esg_scores)
+   - Sign up for an account and obtain your sandpit API key
+
+2. **Configure Environment Variables**:
+   ```bash
+   # Add to your .env file
+   NAYAONE_SANDPIT_KEY=your-actual-sandpit-api-key
+   ```
+
+3. **API Usage**:
+   ```javascript
+   // The integration automatically handles:
+   // - Pagination (10 records per request)
+   // - Rate limiting compliance
+   // - Data transformation to internal format
+   // - Error handling and retries
+   ```
+
+### Data Structure
+
+The NayaOne integration provides:
+
+```typescript
+interface ESGData {
+  provider: 'nayaone';
+  companyId: string;
+  companyName: string;
+  ticker: string;
+  sector: string;
+  industry: string;
+  country: string;
+  esgScore: {
+    overall: number;
+    environmental: number;
+    social: number;
+    governance: number;
+  };
+  sfdrIndicators: {
+    principalAdverseImpacts: object;
+    taxonomyAlignment: number;
+    sustainableInvestment: number;
+  };
+  dataQuality: {
+    completeness: number;
+    reliability: string;
+    source: string;
+  };
+}
+```
+
+### SFDR Navigator Agent Integration
+
+The ESG data is automatically integrated into the SFDR Navigator Agent for:
+
+- **Risk Analysis**: Climate, biodiversity, social, and governance risk assessment
+- **Compliance Checking**: Article 8/9 compliance, PAI disclosure requirements
+- **Report Generation**: Automated SFDR disclosure reports with ESG metrics
+- **Real-time Monitoring**: Continuous compliance monitoring with live ESG data
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/720c14e8-6905-43b8-8578-d76972eb4120) and click on Share -> Publish.
