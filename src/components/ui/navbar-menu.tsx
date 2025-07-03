@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const transition = {
-  type: "spring",
+  type: "spring" as const,
   mass: 0.5,
   damping: 11.5,
   stiffness: 100,

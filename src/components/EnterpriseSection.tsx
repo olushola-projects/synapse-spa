@@ -190,7 +190,7 @@ const EnterpriseSection = () => {
     setShowFormDialog(true);
   };
 
-  // Animation variants
+  // Animation variants with correct TypeScript types
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -207,7 +207,7 @@ const EnterpriseSection = () => {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+      transition: { duration: 0.6, ease: "easeOut" }
     }
   };
 
@@ -302,7 +302,7 @@ const EnterpriseSection = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
             viewport={{ once: true }}
             className="mt-4 md:mt-0"
           >
