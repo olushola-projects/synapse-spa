@@ -6,7 +6,7 @@ import ExternalFormDialog from "./ExternalFormDialog";
 import InviteDialog from "./InviteDialog";
 
 /**
- * HeroSection component - Main landing page hero section with improved layout and alignment
+ * HeroSection component - Main landing page hero section with glass visualization
  * Features precise container alignment, optimized spacing, and enhanced visual hierarchy
  */
 const HeroSection = () => {
@@ -33,26 +33,22 @@ const HeroSection = () => {
   return (
     <div
       style={{ minHeight: "calc(100vh - 64px)" }}
-      className="w-full py-8 md:py-12 lg:py-16 flex flex-col items-start justify-center bg-gradient-to-b from-white to-slate-50/30 relative overflow-hidden"
+      className="w-full py-8 md:py-12 lg:py-16 flex flex-col items-start justify-center bg-white relative overflow-hidden"
     >
-      {/* Earth Video Background - Positioned creatively in front of text */}
-      <div className="absolute inset-0 flex items-center justify-end pr-8 md:pr-16 lg:pr-24 pointer-events-none">
-        <div className="relative w-96 h-96 md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] opacity-20 hover:opacity-30 transition-opacity duration-1000">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover rounded-full shadow-2xl filter blur-[1px] hover:blur-0 transition-all duration-1000"
+      {/* Glass Visualization Background - Positioned to replace dashboard area */}
+      <div className="absolute inset-0 flex items-center justify-center md:justify-end pointer-events-none">
+        <div className="relative w-full h-full max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+          <img
+            src="/lovable-uploads/f6b960c4-dad9-41ed-a356-34b2bac4663c.png"
+            alt="GRC Data Visualization"
+            className="w-full h-full object-contain object-center md:object-right opacity-80 hover:opacity-90 transition-opacity duration-1000"
             style={{
-              maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 60%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%)',
-              WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 60%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%)'
+              filter: 'drop-shadow(0 4px 20px rgba(59, 130, 246, 0.1))',
+              maxHeight: '85vh'
             }}
-          >
-            <source src="/Earth.mp4" type="video/mp4" />
-          </video>
-          {/* Subtle glow effect */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/10 via-indigo-400/10 to-purple-400/10 animate-pulse"></div>
+          />
+          {/* Subtle overlay to ensure text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-transparent md:from-white/60"></div>
         </div>
       </div>
 
