@@ -21,7 +21,7 @@ const uspItems: USPItem[] = [
   {
     title: "Agents Gallery",
     description: "Purpose-built AI agents designed to reduce manual work in compliance.",
-    icon: <Brain className="h-7 w-7 opacity-90" />,
+    icon: <Brain className="h-5 w-5 opacity-90" />,
     color: "text-purple-600",
     modalContent: {
       position: "Modular thematic AI agents trained to support regulatory analysis, exception reviews, GRC operations and document drafting.",
@@ -33,7 +33,7 @@ const uspItems: USPItem[] = [
   {
     title: "Regulatory Intelligence",
     description: "Agent summarized bespoke updates filtered by jurisdiction, risk area, and role.",
-    icon: <Globe className="h-7 w-7 opacity-90" />,
+    icon: <Globe className="h-5 w-5 opacity-90" />,
     color: "text-blue-500",
     modalContent: {
       position: "Synapses turn fragmented change updates into instant, personalized contextualized insights.",
@@ -45,7 +45,7 @@ const uspItems: USPItem[] = [
   {
     title: "Ecosystem",
     description: "A vibrant professional community built for governance, compliance, risk, and audit teams.",
-    icon: <Users className="h-7 w-7 opacity-90" />,
+    icon: <Users className="h-5 w-5 opacity-90" />,
     color: "text-indigo-500",
     modalContent: {
       position: "Not a professional social network, a real-time environment for collaboration, recognition, and learning.",
@@ -57,8 +57,8 @@ const uspItems: USPItem[] = [
 ];
 
 /**
- * USPFeatureSection component - Enhanced feature showcase with improved visual design
- * Features better spacing, hover effects, and professional card-based layout
+ * USPFeatureSection component - Compact side-by-side layout with premium design
+ * Features tight spacing, smaller typography, and professional card-based presentation
  */
 export const USPFeatureSection = () => {
   const [selectedUSP, setSelectedUSP] = useState<USPItem | null>(null);
@@ -70,28 +70,38 @@ export const USPFeatureSection = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-start justify-start gap-8 lg:gap-12">
+    <div className="flex flex-col md:flex-row items-start justify-start gap-3 md:gap-4 lg:gap-6 max-w-5xl">
       {uspItems.map((usp, index) => (
         <motion.div
           key={index}
-          className="flex flex-col items-center text-center group"
+          className="flex flex-col items-start text-left group flex-1 min-w-0"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: index * 0.15 }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
         >
-          <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-3 ${usp.color}`}>
+          {/* Icon container - smaller and more refined */}
+          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-105 transition-all duration-200 mb-3 ${usp.color} shadow-sm`}>
             {usp.icon}
           </div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">{usp.title}</h3>
+          
+          {/* Title with info button - compact layout */}
+          <div className="flex items-start gap-1.5 mb-2 w-full">
+            <h3 className="text-sm font-semibold text-slate-800 group-hover:text-blue-600 transition-colors leading-tight flex-1 min-w-0">
+              {usp.title}
+            </h3>
             <button
               onClick={() => handleUSPClick(usp)}
-              className="text-slate-400 hover:text-blue-600 transition-colors p-1"
+              className="text-slate-400 hover:text-blue-600 transition-colors p-0.5 flex-shrink-0"
               aria-label={`More information about ${usp.title}`}
             >
-              <Info className="h-4 w-4" />
+              <Info className="h-3.5 w-3.5" />
             </button>
           </div>
+          
+          {/* Description - smaller text with better line height */}
+          <p className="text-xs text-slate-600 leading-relaxed">
+            {usp.description}
+          </p>
         </motion.div>
       ))}
 
