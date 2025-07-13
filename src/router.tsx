@@ -24,6 +24,7 @@ import Careers from './pages/company/Careers';
 import Features from './pages/platform/Features';
 import Solutions from './pages/platform/Solutions';
 import NavbarMenuTest from './pages/NavbarMenuTest';
+import Map from './pages/Map';
 
 // Create and export the router
 export const router = createBrowserRouter([
@@ -111,6 +112,11 @@ export const router = createBrowserRouter([
   {
     path: '/solutions',
     element: <Solutions />,
+  },
+  // Platform routes
+  {
+    path: '/map',
+    element: <Map />,
   },
   // Test routes
   {
