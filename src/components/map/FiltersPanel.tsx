@@ -14,6 +14,9 @@ interface Startup {
   founded: string;
   description: string;
   website?: string;
+  company_stage: string;
+  implementation_complexity: string;
+  solution_integrity: string;
   use_cases: string[];
   regulations: string[];
   technologies: string[];
@@ -33,6 +36,9 @@ interface FiltersPanelProps {
     geographies: string[];
     investors: string[];
     funding_stages: string[];
+    company_stages: string[];
+    implementation_complexity: string[];
+    solution_integrity: string[];
   };
   onFiltersChange: (filters: Record<string, string[]>) => void;
   startups: Startup[];
@@ -41,8 +47,11 @@ interface FiltersPanelProps {
 export function FiltersPanel({ className, filters, onFiltersChange, startups }: FiltersPanelProps) {
   const [openSections, setOpenSections] = useState({
     use_cases: true,
-    regulations: true,
-    technologies: true,
+    company_stages: true,
+    implementation_complexity: true,
+    solution_integrity: false,
+    regulations: false,
+    technologies: false,
     industries: false,
     geographies: false,
     investors: false,
@@ -51,13 +60,16 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
 
   // Extract unique values from startup data for filter options
   const filterOptions = {
-    use_cases: [...new Set(startups.flatMap(s => s.use_cases))].sort(),
+    use_cases: [...new Set(startups.flatMap(s => s.use_cases.map(uc => uc.split(' → ')[0])))].sort(),
     regulations: [...new Set(startups.flatMap(s => s.regulations))].sort(),
     technologies: [...new Set(startups.flatMap(s => s.technologies))].sort(),
     industries: [...new Set(startups.flatMap(s => s.industry))].sort(),
     geographies: [...new Set(startups.map(s => s.geography))].sort(),
     investors: [...new Set(startups.flatMap(s => s.investors))].sort(),
     funding_stages: [...new Set(startups.map(s => s.funding_stage))].sort(),
+    company_stages: [...new Set(startups.map(s => s.company_stage))].sort(),
+    implementation_complexity: [...new Set(startups.map(s => s.implementation_complexity))].sort(),
+    solution_integrity: [...new Set(startups.map(s => s.solution_integrity))].sort(),
   };
 
   const toggleSection = (section: keyof typeof openSections) => {
@@ -90,6 +102,9 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
       geographies: [],
       investors: [],
       funding_stages: [],
+      company_stages: [],
+      implementation_complexity: [],
+      solution_integrity: [],
     });
   };
 
@@ -97,6 +112,9 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
 
   const filterSections = [
     { key: 'use_cases', label: 'Use Cases', icon: '🎯' },
+    { key: 'company_stages', label: 'Company Stage', icon: '🚀' },
+    { key: 'implementation_complexity', label: 'Implementation', icon: '⚙️' },
+    { key: 'solution_integrity', label: 'Solution Maturity', icon: '✅' },
     { key: 'regulations', label: 'Regulations', icon: '📋' },
     { key: 'technologies', label: 'AI Technologies', icon: '🤖' },
     { key: 'industries', label: 'Industries', icon: '🏢' },

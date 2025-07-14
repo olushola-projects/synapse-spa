@@ -17,6 +17,9 @@ interface Startup {
   founded: string;
   description: string;
   website?: string;
+  company_stage: string;
+  implementation_complexity: string;
+  solution_integrity: string;
   use_cases: string[];
   regulations: string[];
   technologies: string[];
@@ -44,6 +47,9 @@ export default function Map() {
     geographies: searchParams.getAll('geography'),
     investors: searchParams.getAll('investor'),
     funding_stages: searchParams.getAll('funding_stage'),
+    company_stages: searchParams.getAll('company_stage'),
+    implementation_complexity: searchParams.getAll('implementation_complexity'),
+    solution_integrity: searchParams.getAll('solution_integrity'),
   }), [searchParams]);
 
   // Load startup data
@@ -81,13 +87,16 @@ export default function Map() {
       }
 
       // Apply category filters
-      if (filters.use_cases.length > 0 && !filters.use_cases.some(uc => startup.use_cases.includes(uc))) return false;
+      if (filters.use_cases.length > 0 && !filters.use_cases.some(uc => startup.use_cases.some(suc => suc.includes(uc)))) return false;
       if (filters.regulations.length > 0 && !filters.regulations.some(reg => startup.regulations.includes(reg))) return false;
       if (filters.technologies.length > 0 && !filters.technologies.some(tech => startup.technologies.includes(tech))) return false;
       if (filters.industries.length > 0 && !filters.industries.some(ind => startup.industry.includes(ind))) return false;
       if (filters.geographies.length > 0 && !filters.geographies.includes(startup.geography)) return false;
       if (filters.investors.length > 0 && !filters.investors.some(inv => startup.investors.includes(inv))) return false;
       if (filters.funding_stages.length > 0 && !filters.funding_stages.includes(startup.funding_stage)) return false;
+      if (filters.company_stages.length > 0 && !filters.company_stages.includes(startup.company_stage)) return false;
+      if (filters.implementation_complexity.length > 0 && !filters.implementation_complexity.includes(startup.implementation_complexity)) return false;
+      if (filters.solution_integrity.length > 0 && !filters.solution_integrity.includes(startup.solution_integrity)) return false;
 
       return true;
     });
@@ -135,12 +144,17 @@ export default function Map() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            Explore AI RegTech Solutions
+            AI RegTech Solutions Mapping
           </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl">
-            Discover VC-backed startups transforming compliance with AI. Filter by use case, 
-            regulation, and technology to find the perfect solution for your GRC needs.
+          <p className="text-lg text-muted-foreground max-w-4xl">
+            Explore RegTech solutions for GRC professionals at regulated firms. Filter by implementation complexity, 
+            solution maturity, and business outcomes. Compare emerging startups with established leaders.
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <span className="text-sm bg-primary/10 text-primary px-2 py-1 rounded">Process → Technology → Outcome</span>
+            <span className="text-sm bg-secondary/10 text-secondary-foreground px-2 py-1 rounded">VC-Backed & Leaders</span>
+            <span className="text-sm bg-accent/10 text-accent-foreground px-2 py-1 rounded">Expert Validated</span>
+          </div>
         </div>
 
         {/* Search and Controls */}

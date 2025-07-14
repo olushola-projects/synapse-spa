@@ -12,6 +12,9 @@ interface Startup {
   founded: string;
   description: string;
   website?: string;
+  company_stage: string;
+  implementation_complexity: string;
+  solution_integrity: string;
   use_cases: string[];
   regulations: string[];
   technologies: string[];
@@ -83,8 +86,8 @@ export function StartupCard({ startup, viewMode, className }: StartupCardProps) 
                       <Calendar className="h-3 w-3" />
                       Founded {founded}
                     </div>
-                    <Badge className={BadgeColors.funding_stage}>
-                      {funding_stage}
+                     <Badge className={startup.company_stage === 'Mature Leader' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200' : BadgeColors.funding_stage}>
+                      {startup.company_stage === 'Mature Leader' ? 'Leader' : funding_stage}
                     </Badge>
                   </div>
                 </div>
