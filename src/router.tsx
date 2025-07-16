@@ -18,6 +18,7 @@ import Blog from './pages/resources/Blog';
 import BlogArticleDetails from './components/blog/BlogArticleDetails';
 import Documentation from './pages/resources/Documentation';
 import FAQ from './pages/resources/FAQ';
+import Webinars from './pages/resources/Webinars';
 import About from './pages/company/About';
 import Contact from './pages/company/Contact';
 import Careers from './pages/company/Careers';
@@ -74,6 +75,22 @@ export const router = createBrowserRouter([
     path: '/cookie-policy',
     element: <CookiePolicy />,
   },
+  {
+    path: '/legal/privacy',
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: '/legal/terms',
+    element: <TermsOfService />,
+  },
+  {
+    path: '/legal/security',
+    element: <SecurityPolicy />,
+  },
+  {
+    path: '/legal/cookies',
+    element: <CookiePolicy />,
+  },
   // Resources routes
   {
     path: '/blog',
@@ -91,6 +108,22 @@ export const router = createBrowserRouter([
     path: '/faq',
     element: <FAQ />,
   },
+  {
+    path: '/resources/blog',
+    element: <Blog />,
+  },
+  {
+    path: '/resources/documentation',
+    element: <Documentation />,
+  },
+  {
+    path: '/resources/faq',
+    element: <FAQ />,
+  },
+  {
+    path: '/resources/webinars',
+    element: <Webinars />,
+  },
   // Company routes
   {
     path: '/about',
@@ -104,6 +137,18 @@ export const router = createBrowserRouter([
     path: '/careers',
     element: <Careers />,
   },
+  {
+    path: '/company/about',
+    element: <About />,
+  },
+  {
+    path: '/company/careers',
+    element: <Careers />,
+  },
+  {
+    path: '/company/contact',
+    element: <Contact />,
+  },
   // Platform routes
   {
     path: '/features',
@@ -111,6 +156,14 @@ export const router = createBrowserRouter([
   },
   {
     path: '/solutions',
+    element: <Solutions />,
+  },
+  {
+    path: '/platform/features',
+    element: <Features />,
+  },
+  {
+    path: '/platform/solutions',
     element: <Solutions />,
   },
   // Platform routes
