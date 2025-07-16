@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
+import UseCases from "./pages/UseCases";
 
 // Legal pages
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
@@ -58,6 +59,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/use-cases" element={<UseCases />} />
             
             {/* Legal Routes */}
             <Route path="/legal/privacy" element={<PrivacyPolicy />} />

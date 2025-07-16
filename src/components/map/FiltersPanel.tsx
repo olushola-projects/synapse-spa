@@ -124,14 +124,19 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
   ];
 
   return (
-    <div className={cn("bg-card border border-border rounded-lg p-6 h-fit", className)}>
+    <div className={cn("bg-white border border-gray-200 rounded-xl p-6 h-fit shadow-sm", className)}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <Filter className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold text-lg text-foreground">Filters</h3>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
+            <Filter className="h-5 w-5 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-lg text-gray-900">Filters</h3>
+            <p className="text-sm text-gray-500">Refine your search</p>
+          </div>
           {totalActiveFilters > 0 && (
-            <Badge variant="secondary" className="ml-1">
+            <Badge className="bg-blue-100 text-blue-700 border-blue-200">
               {totalActiveFilters}
             </Badge>
           )}
@@ -141,7 +146,7 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
             variant="ghost"
             size="sm"
             onClick={clearAllFilters}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
           >
             Clear all
           </Button>
@@ -150,20 +155,22 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
 
       {/* Active Filters */}
       {totalActiveFilters > 0 && (
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-foreground mb-3">Active Filters</h4>
+        <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+          <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+            Active Filters
+          </h4>
           <div className="flex flex-wrap gap-2">
             {Object.entries(filters).map(([category, values]) =>
               values.map(value => (
                 <Badge
                   key={`${category}-${value}`}
-                  variant="secondary"
-                  className="flex items-center gap-1 pr-1"
+                  className="flex items-center gap-1 pr-1 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   <span className="text-xs truncate max-w-24">{value}</span>
                   <button
                     onClick={() => removeFilter(category, value)}
-                    className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
+                    className="ml-1 hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 transition-colors"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -189,41 +196,43 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
               <CollapsibleTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="w-full justify-between p-3 h-auto hover:bg-muted/50"
+                  className="w-full justify-between p-4 h-auto hover:bg-gray-50 border border-transparent hover:border-gray-200 rounded-lg transition-all duration-200"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">{icon}</span>
-                    <span className="font-medium text-foreground">{label}</span>
-                    {activeFilters.length > 0 && (
-                      <Badge variant="default" className="ml-1">
-                        {activeFilters.length}
-                      </Badge>
-                    )}
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{icon}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-900">{label}</span>
+                      {activeFilters.length > 0 && (
+                        <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-xs px-2 py-0.5">
+                          {activeFilters.length}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                   <ChevronDown 
                     className={cn(
-                      "h-4 w-4 transition-transform",
+                      "h-4 w-4 transition-transform duration-200 text-gray-500",
                       openSections[key as keyof typeof openSections] ? "rotate-180" : ""
                     )} 
                   />
                 </Button>
               </CollapsibleTrigger>
               
-              <CollapsibleContent className="pt-2 pb-4">
-                <div className="space-y-3 max-h-48 overflow-y-auto pl-4">
+              <CollapsibleContent className="pt-3 pb-4">
+                <div className="space-y-3 max-h-48 overflow-y-auto pl-4 pr-2">
                   {options.map(option => (
-                    <div key={option} className="flex items-center space-x-2">
+                    <div key={option} className="flex items-center space-x-3 group hover:bg-gray-50 p-2 rounded-md transition-colors">
                       <Checkbox
                         id={`${key}-${option}`}
                         checked={activeFilters.includes(option)}
                         onCheckedChange={(checked) =>
                           handleFilterChange(key, option, checked as boolean)
                         }
-                        className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 border-gray-300"
                       />
                       <label
                         htmlFor={`${key}-${option}`}
-                        className="text-sm font-medium text-foreground cursor-pointer flex-1 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        className="text-sm font-medium text-gray-700 cursor-pointer flex-1 leading-relaxed group-hover:text-gray-900 transition-colors"
                       >
                         {option}
                       </label>

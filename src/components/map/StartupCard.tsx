@@ -1,4 +1,4 @@
-import { ExternalLink, MapPin, Calendar, Building, Users } from 'lucide-react';
+import { ExternalLink, MapPin, Calendar, Building, Users, Heart, Star } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,20 +26,32 @@ interface Startup {
 
 interface StartupCardProps {
   startup: Startup;
-  viewMode: 'grid' | 'list';
+  viewMode: 'grid' | 'list' | 'table';
   className?: string;
+  onToggleSaved?: () => void;
+  onToggleInterested?: () => void;
+  isSaved?: boolean;
+  isInterested?: boolean;
 }
 
 const BadgeColors = {
-  use_cases: 'bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200',
-  regulations: 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-200',
-  technologies: 'bg-purple-100 text-purple-800 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-200',
-  industries: 'bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900 dark:text-orange-200',
-  investors: 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-900 dark:text-emerald-200',
-  funding_stage: 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200 dark:bg-indigo-900 dark:text-indigo-200',
+  use_cases: 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100',
+  regulations: 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100',
+  technologies: 'bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100',
+  industries: 'bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100',
+  investors: 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100',
+  funding_stage: 'bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100',
 };
 
-export function StartupCard({ startup, viewMode, className }: StartupCardProps) {
+export function StartupCard({ 
+  startup, 
+  viewMode, 
+  className, 
+  onToggleSaved, 
+  onToggleInterested, 
+  isSaved = false, 
+  isInterested = false 
+}: StartupCardProps) {
   const {
     name,
     logo,
@@ -62,13 +74,13 @@ export function StartupCard({ startup, viewMode, className }: StartupCardProps) 
 
   if (viewMode === 'list') {
     return (
-      <Card className={cn("hover:shadow-md transition-all duration-200", className)}>
+      <Card className={cn("hover:shadow-lg transition-all duration-300 border border-gray-200 bg-white", className)}>
         <CardContent className="p-6">
           <div className="flex gap-6">
             {/* Logo */}
             <div className="shrink-0">
-              <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center">
-                <Building className="h-8 w-8 text-muted-foreground" />
+              <div className="w-16 h-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                <Building className="h-8 w-8 text-gray-600" />
               </div>
             </div>
 
@@ -76,30 +88,58 @@ export function StartupCard({ startup, viewMode, className }: StartupCardProps) 
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-1">{name}</h3>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{name}</h3>
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
                     <div className="flex items-center gap-1">
-                      <MapPin className="h-3 w-3" />
+                      <MapPin className="h-4 w-4 text-gray-400" />
                       {country}
                     </div>
                     <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
+                      <Calendar className="h-4 w-4 text-gray-400" />
                       Founded {founded}
                     </div>
-                     <Badge className={startup.company_stage === 'Mature Leader' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200' : BadgeColors.funding_stage}>
+                     <Badge className={startup.company_stage === 'Mature Leader' ? 'bg-amber-50 text-amber-700 border border-amber-200' : BadgeColors.funding_stage}>
                       {startup.company_stage === 'Mature Leader' ? 'Leader' : funding_stage}
                     </Badge>
                   </div>
                 </div>
-                {website && (
-                  <Button variant="outline" size="sm" onClick={handleLearnMore}>
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Learn More
-                  </Button>
-                )}
+                <div className="flex items-center gap-2">
+                  {onToggleSaved && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={onToggleSaved}
+                      className={cn(
+                        "h-8 w-8 p-0",
+                        isSaved ? "text-red-600" : "text-gray-400"
+                      )}
+                    >
+                      <Heart className="h-4 w-4" fill={isSaved ? "currentColor" : "none"} />
+                    </Button>
+                  )}
+                  {onToggleInterested && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={onToggleInterested}
+                      className={cn(
+                        "h-8 w-8 p-0",
+                        isInterested ? "text-yellow-600" : "text-gray-400"
+                      )}
+                    >
+                      <Star className="h-4 w-4" fill={isInterested ? "currentColor" : "none"} />
+                    </Button>
+                  )}
+                  {website && (
+                    <Button variant="outline" size="sm" onClick={handleLearnMore} className="border-gray-300 text-gray-700 hover:bg-gray-50">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Learn More
+                    </Button>
+                  )}
+                </div>
               </div>
 
-              <p className="text-muted-foreground mb-4 line-clamp-2">{description}</p>
+              <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">{description}</p>
 
               {/* Tags */}
               <div className="space-y-3">
@@ -271,11 +311,42 @@ export function StartupCard({ startup, viewMode, className }: StartupCardProps) 
           </div>
         )}
 
-        {/* Learn More Button */}
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2">
+          {onToggleSaved && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onToggleSaved}
+              className={cn(
+                "flex-1 h-9",
+                isSaved ? "text-red-600 bg-red-50 hover:bg-red-100" : "text-gray-400 hover:bg-gray-50"
+              )}
+            >
+              <Heart className="h-4 w-4 mr-2" fill={isSaved ? "currentColor" : "none"} />
+              {isSaved ? "Saved" : "Save"}
+            </Button>
+          )}
+          {onToggleInterested && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onToggleInterested}
+              className={cn(
+                "flex-1 h-9",
+                isInterested ? "text-yellow-600 bg-yellow-50 hover:bg-yellow-100" : "text-gray-400 hover:bg-gray-50"
+              )}
+            >
+              <Star className="h-4 w-4 mr-2" fill={isInterested ? "currentColor" : "none"} />
+              {isInterested ? "Interested" : "Interest"}
+            </Button>
+          )}
+        </div>
+        
         {website && (
           <Button 
             variant="outline" 
-            className="w-full group" 
+            className="w-full group mt-2" 
             onClick={handleLearnMore}
           >
             Learn More

@@ -56,7 +56,7 @@ const Navbar = () => {
             
             <nav className="hidden md:flex items-center gap-8">
               <Link to="/" className="text-slate-600 hover:text-blue-600 transition-colors font-medium text-sm tracking-wide">Home</Link>
-              <Link to="/map" className="text-slate-600 hover:text-blue-600 transition-colors font-medium text-sm tracking-wide">Use Cases</Link>
+              <Link to="/use-cases" className="text-slate-600 hover:text-blue-600 transition-colors font-medium text-sm tracking-wide">Use Cases</Link>
               <Link to="/partners" className="text-slate-600 hover:text-blue-600 transition-colors font-medium text-sm tracking-wide">Partners</Link>
               <Link to="/resources/faq" className="text-slate-600 hover:text-blue-600 transition-colors font-medium text-sm tracking-wide">FAQ</Link>
             </nav>
@@ -91,7 +91,7 @@ const Navbar = () => {
           >
             <nav className="container mx-auto p-4 flex flex-col gap-4">
               <Link to="/" className="text-blue-600 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-blue-50 font-medium">Home</Link>
-              <Link to="/map" className="text-blue-600 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-blue-50 font-medium">Use Cases</Link>
+              <Link to="/use-cases" className="text-blue-600 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-blue-50 font-medium">Use Cases</Link>
               <Link to="/partners" className="text-blue-600 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-blue-50 font-medium">Become a Partner</Link>
               <Link to="/resources/faq" className="text-blue-600 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-blue-50 font-medium">FAQ</Link>
               <div onClick={openInviteDialog} className="text-blue-600 hover:text-blue-700 transition-colors py-2 px-4 rounded-md hover:bg-blue-50 cursor-pointer">
