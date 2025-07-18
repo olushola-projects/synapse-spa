@@ -25,7 +25,7 @@ import { toast } from "@/components/ui/use-toast";
 
 /**
  * Interface for SFDR classification request structure
- * Based on the Nexus Agent API schema
+ * Based on the SFDR Navigator API schema
  */
 interface SFDRClassificationRequest {
   metadata: {
@@ -52,7 +52,7 @@ interface SFDRClassificationRequest {
 }
 
 /**
- * Interface for Nexus Agent API response
+ * Interface for SFDR Navigator API response
  */
 interface NexusAgentResponse {
   isValid: boolean;
@@ -95,7 +95,7 @@ interface NexusAgentChatProps {
 
 /**
  * NexusAgentChat component - Interactive chat interface for SFDR compliance validation
- * Integrates with the Nexus Agent API for real-time regulatory compliance checking
+ * Integrates with the SFDR Navigator API for real-time regulatory compliance checking
  */
 export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({ 
   apiEndpoint = 'https://api.nexus-agent.com/v1/sfdr/validate',
@@ -105,7 +105,7 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
     {
       id: '1',
       type: 'system',
-      content: 'Welcome to Nexus Agent! I can help you validate SFDR compliance for your fund classifications. You can ask questions or submit fund data for validation.',
+      content: 'Welcome to SFDR Navigator! I can help you validate SFDR compliance for your fund classifications. You can ask questions or submit fund data for validation.',
       timestamp: new Date()
     }
   ]);
@@ -161,7 +161,7 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
   };
 
   /**
-   * Call the Nexus Agent API for SFDR validation
+   * Call the SFDR Navigator API for SFDR validation
    */
   const callNexusAPI = async (request: SFDRClassificationRequest): Promise<NexusAgentResponse> => {
     try {
@@ -369,7 +369,7 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Bot className="w-5 h-5 text-blue-600" />
-              <CardTitle className="text-lg">Nexus Agent</CardTitle>
+              <CardTitle className="text-lg">SFDR Navigator</CardTitle>
             </div>
             <div className="flex gap-2">
               <Button

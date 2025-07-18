@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { NexusAgentChat } from "@/components/NexusAgentChat";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ import {
 
 /**
  * NexusAgent page - Main interface for SFDR compliance validation
- * Provides both chat and form-based interaction with the Nexus Agent API
+ * Provides both chat and form-based interaction with the SFDR Navigator API
  */
 const NexusAgent = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
@@ -64,7 +64,7 @@ const NexusAgent = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Bot className="w-8 h-8 text-blue-600" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Nexus Agent
+              SFDR Navigator
             </h1>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -175,7 +175,7 @@ const NexusAgent = () => {
             {/* How It Works */}
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle className="text-2xl text-center">How Nexus Agent Works</CardTitle>
+                <CardTitle className="text-2xl text-center">How SFDR Navigator Works</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

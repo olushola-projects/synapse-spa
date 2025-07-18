@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 /**
- * NexusAgentSection component - Showcases the Nexus Agent on the landing page
+ * NexusAgentSection component - Showcases the SFDR Navigator on the landing page
  * Provides an overview and call-to-action to try the SFDR compliance validation tool
  */
 const NexusAgentSection = () => {
@@ -57,7 +57,7 @@ const NexusAgentSection = () => {
               <Bot className="w-8 h-8 text-blue-600" />
             </div>
             <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Introducing Nexus Agent
+              Introducing SFDR Navigator
             </h2>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
@@ -87,7 +87,7 @@ const NexusAgentSection = () => {
               Streamline Your SFDR Compliance Process
             </h3>
             <p className="text-gray-600 mb-8">
-              Nexus Agent leverages advanced AI to validate fund classifications, analyze PAI indicators, 
+              SFDR Navigator leverages advanced AI to validate fund classifications, analyze PAI indicators, 
               and ensure your financial products meet SFDR requirements before submission.
             </p>
             
@@ -119,7 +119,7 @@ const NexusAgentSection = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/nexus-agent">
                 <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
-                  Try Nexus Agent
+                  Try SFDR Navigator
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
@@ -136,7 +136,7 @@ const NexusAgentSection = () => {
                 <div className="flex items-center gap-3">
                   <Bot className="w-6 h-6" />
                   <div>
-                    <CardTitle className="text-white">Nexus Agent</CardTitle>
+                    <CardTitle className="text-white">SFDR Navigator</CardTitle>
                     <CardDescription className="text-blue-100">
                       SFDR Compliance Validation
                     </CardDescription>
@@ -223,7 +223,7 @@ const NexusAgentSection = () => {
               Ready to Streamline Your SFDR Compliance?
             </h3>
             <p className="text-gray-600 mb-6">
-              Join hundreds of financial institutions already using Nexus Agent to ensure regulatory compliance.
+              Join hundreds of financial institutions already using SFDR Navigator to ensure regulatory compliance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/nexus-agent">
