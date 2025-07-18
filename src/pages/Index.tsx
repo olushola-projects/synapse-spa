@@ -8,6 +8,7 @@ import CTASection from "../components/CTASection";
 import Footer from "../components/Footer";
 import EnterpriseSection from "../components/EnterpriseSection";
 import HowItWorksSection from "../components/HowItWorksSection";
+import NexusAgentSection from "@/components/NexusAgentSection";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import SeoHead from "../components/SEO/SeoHead";
 import { Logos3 } from "@/components/ui/logos3";
@@ -189,6 +190,8 @@ const Index = () => {
       </div>
       
       <HowItWorksSection />
+      
+      <NexusAgentSection />
       
       <div id="testimonials" className={`transition-opacity duration-1000 ${visibleSections.testimonials ? 'opacity-100' : 'opacity-0'}`}>
         <IndustryPerspectivesSection />

@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
 import UseCases from "./pages/UseCases";
+import NexusAgent from "./pages/NexusAgent";
 
 // Legal pages
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/use-cases" element={<UseCases />} />
+            <Route path="/nexus-agent" element={<NexusAgent />} />
             
             {/* Legal Routes */}
             <Route path="/legal/privacy" element={<PrivacyPolicy />} />
