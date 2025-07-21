@@ -27,6 +27,7 @@ import Solutions from './pages/platform/Solutions';
 import NavbarMenuTest from './pages/NavbarMenuTest';
 import Map from './pages/Map';
 import UseCases from './pages/UseCases';
+import SFDRNavigator from './pages/SFDRNavigator';
 
 // Create and export the router
 export const router = createBrowserRouter([
@@ -180,5 +181,10 @@ export const router = createBrowserRouter([
   {
     path: '/navbar-test',
     element: <NavbarMenuTest />,
+  },
+  {
+    path: '/sfdr-navigator',
+    element: <SFDRNavigator />,
+    name: 'SFDR Navigator'
   }
 ]);
