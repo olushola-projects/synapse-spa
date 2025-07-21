@@ -453,7 +453,7 @@ const UseCases = () => {
                           max={2}
                           step={1}
                           value={complexityRange}
-                          onValueChange={setComplexityRange}
+                          onValueChange={(value) => setComplexityRange(value as [number, number])}
                           className="w-full"
                         />
                       </motion.div>
