@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { NexusAgentChat } from "@/components/NexusAgentChat";
@@ -24,6 +24,11 @@ import {
 const NexusAgent = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
   const [chatRef, setChatRef] = useState<any>(null);
+
+  // Use useCallback to prevent infinite re-renders
+  const handleChatRef = useCallback((ref: any) => {
+    setChatRef(ref);
+  }, []);
 
   const features = [
     {
@@ -152,7 +157,7 @@ const NexusAgent = () => {
           <div className="max-w-4xl mx-auto">
             <NexusAgentChat 
               className="shadow-lg" 
-              ref={(ref) => setChatRef(ref)}
+              ref={handleChatRef}
             />
             
             {/* Quick Actions */}
