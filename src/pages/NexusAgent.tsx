@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useRef, useEffect } from "react";
 import { createClient } from '@supabase/supabase-js';
 import posthog from 'posthog-js';
@@ -25,8 +26,8 @@ import {
  */
 // Initialize Supabase client
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  'https://hnwwykttyzfvflmcswjk.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhud3d5a3R0eXpmdmZsbWNzd2prIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MjA1NTgsImV4cCI6MjA2MDI5NjU1OH0.50J8-EdyyjDGfOLOoMgzoXCgP7URWZTJZkqlb0Zxwos'
 );
 
 const NexusAgent = () => {
@@ -40,6 +41,7 @@ const NexusAgent = () => {
     status: 'pre-validated' | 'needs-review';
     esmaReference: string;
   }>({ status: 'pre-validated', esmaReference: '2024/1357' });
+  
   useEffect(() => {
     // Authentication check
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -48,15 +50,21 @@ const NexusAgent = () => {
       }
     });
 
-    // Initialize analytics
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST!
-    });
+    // Initialize analytics - only if keys are available
+    const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
+    const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
+    
+    if (posthogKey && posthogHost) {
+      posthog.init(posthogKey, {
+        api_host: posthogHost
+      });
+    }
 
     return () => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
+
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
   const chatRef = useRef<any>(null);
 
@@ -90,7 +98,7 @@ const NexusAgent = () => {
     { label: "Active Users", value: "500+", icon: <Users className="w-5 h-5 text-purple-600" /> }
   ];
 
-  const handleQuickAction = (actionType: string) => {
+  const handleQuickAction = useCallback((actionType: string) => {
     // Switch to chat mode if not already active
     setActiveTab('chat');
     
@@ -121,7 +129,7 @@ const NexusAgent = () => {
         }));
       }
     }, 100);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -189,7 +197,6 @@ const NexusAgent = () => {
           <NexusAgentChat 
               className="shadow-lg" 
               ref={chatRef}
-              apiKey={process.env.OPENAI_API_KEY!}
               onResponse={(response) => {
                 // Global First: Quantum-Resistant Audit Trail
                 quantumHash(response);
