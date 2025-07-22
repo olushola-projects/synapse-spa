@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -51,9 +52,6 @@ interface SFDRClassificationRequest {
   };
 }
 
-/**
- * Interface for SFDR Navigator API response
- */
 interface NexusAgentResponse {
   isValid: boolean;
   classification?: string;
@@ -73,9 +71,6 @@ interface NexusAgentResponse {
   };
 }
 
-/**
- * Interface for chat message structure
- */
 interface ChatMessage {
   id: string;
   type: 'user' | 'agent' | 'system';
@@ -85,9 +80,6 @@ interface ChatMessage {
   isLoading?: boolean;
 }
 
-/**
- * Props for NexusAgentChat component
- */
 interface NexusAgentChatProps {
   apiEndpoint?: string;
   className?: string;
@@ -97,10 +89,10 @@ interface NexusAgentChatProps {
  * NexusAgentChat component - Interactive chat interface for SFDR compliance validation
  * Integrates with the SFDR Navigator API for real-time regulatory compliance checking
  */
-export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({ 
+export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({ 
   apiEndpoint = 'https://api.nexus-agent.com/v1/sfdr/validate',
   className = ''
-}) => {
+}, ref) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -127,6 +119,14 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
   });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Expose methods to parent component
+  useImperativeHandle(ref, () => ({
+    sendMessage: (message: string) => {
+      setInputMessage(message);
+      setTimeout(() => handleSendMessage(message), 100);
+    }
+  }));
+
   /**
    * Scroll to bottom of messages when new message is added
    */
@@ -137,6 +137,20 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Listen for quick action events from parent
+  useEffect(() => {
+    const handleQuickAction = (event: CustomEvent) => {
+      const { message } = event.detail;
+      setInputMessage(message);
+      setTimeout(() => handleSendMessage(message), 100);
+    };
+
+    window.addEventListener('nexus-quick-action', handleQuickAction as EventListener);
+    return () => {
+      window.removeEventListener('nexus-quick-action', handleQuickAction as EventListener);
+    };
+  }, []);
 
   /**
    * Add a new message to the chat
@@ -216,10 +230,10 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
   /**
    * Handle sending a text message
    */
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+  const handleSendMessage = async (messageText?: string) => {
+    const userMessage = messageText || inputMessage;
+    if (!userMessage.trim()) return;
 
-    const userMessage = inputMessage;
     setInputMessage('');
     
     // Add user message
@@ -243,12 +257,16 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
 
       // Generate response based on user input
       let response = '';
-      if (userMessage.toLowerCase().includes('article 8')) {
+      if (userMessage.toLowerCase().includes('quick validation') || userMessage.toLowerCase().includes('validate')) {
+        response = '🔍 **Quick Validation Started**\n\nI can help you validate your fund classification quickly! To get started, I need some basic information:\n\n• Fund name\n• Target SFDR article (6, 8, or 9)\n• Fund type (UCITS, AIF, etc.)\n• Investment objective\n\nYou can either tell me these details in our conversation or switch to Form Mode for a structured approach. Which would you prefer?';
+      } else if (userMessage.toLowerCase().includes('pai') || userMessage.toLowerCase().includes('principal adverse impact')) {
+        response = '📊 **PAI Analysis Ready**\n\nPrincipal Adverse Impact (PAI) indicators are crucial for SFDR compliance. I can help you check:\n\n✅ **Mandatory PAI Indicators (18 total):**\n• Environmental: GHG emissions, carbon footprint, energy consumption\n• Social: Gender diversity, human rights violations\n\n✅ **Optional Indicators:**\n• Additional environmental and social metrics\n\nTo analyze your fund\'s PAI compliance, please provide:\n1. Your fund\'s PAI data or report\n2. Target article classification\n3. Asset allocation details\n\nWould you like to start with the PAI checklist or upload your current PAI documentation?';
+      } else if (userMessage.toLowerCase().includes('risk assessment') || userMessage.toLowerCase().includes('compliance risk')) {
+        response = '⚠️ **Risk Assessment Initiated**\n\nI\'ll help identify potential compliance risks early in your SFDR journey. My analysis covers:\n\n🔍 **Key Risk Areas:**\n• Article classification accuracy\n• PAI indicator completeness\n• Taxonomy alignment calculations\n• Disclosure statement quality\n• Documentation gaps\n\n📋 **Assessment Process:**\n1. Fund structure review\n2. Regulatory requirement mapping\n3. Gap analysis\n4. Risk prioritization\n5. Mitigation recommendations\n\nTo begin, please share:\n• Your fund\'s current classification\n• Investment strategy summary\n• Any specific concerns or areas of uncertainty\n\nWhat aspect would you like me to assess first?';
+      } else if (userMessage.toLowerCase().includes('article 8')) {
         response = 'Article 8 funds promote environmental or social characteristics. They must disclose how these characteristics are met and provide information on PAI indicators. Would you like me to validate a specific Article 8 fund classification?';
       } else if (userMessage.toLowerCase().includes('article 9')) {
         response = 'Article 9 funds have sustainable investment as their objective. They require more stringent disclosure requirements and must demonstrate measurable positive impact. I can help validate your Article 9 classification.';
-      } else if (userMessage.toLowerCase().includes('pai')) {
-        response = 'Principal Adverse Impact (PAI) indicators are mandatory for large financial market participants. There are 18 mandatory indicators covering environmental and social factors. Would you like me to check PAI compliance for your fund?';
       } else {
         response = 'I can help you with SFDR compliance validation, fund classification (Article 6, 8, or 9), PAI indicators, and taxonomy alignment. What specific aspect would you like assistance with?';
       }
@@ -496,7 +514,7 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
                     disabled={isLoading}
                   />
                   <Button 
-                    onClick={handleSendMessage} 
+                    onClick={() => handleSendMessage()} 
                     disabled={isLoading || !inputMessage.trim()}
                     size="sm"
                   >
@@ -624,6 +642,8 @@ export const NexusAgentChat: React.FC<NexusAgentChatProps> = ({
       </Card>
     </div>
   );
-};
+});
+
+NexusAgentChat.displayName = "NexusAgentChat";
 
 export default NexusAgentChat;

@@ -23,6 +23,7 @@ import {
  */
 const NexusAgent = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
+  const [chatRef, setChatRef] = useState<any>(null);
 
   const features = [
     {
@@ -53,6 +54,39 @@ const NexusAgent = () => {
     { label: "Regulatory Coverage", value: "EU+UK", icon: <Globe className="w-5 h-5 text-blue-600" /> },
     { label: "Active Users", value: "500+", icon: <Users className="w-5 h-5 text-purple-600" /> }
   ];
+
+  const handleQuickAction = (actionType: string) => {
+    // Switch to chat mode if not already active
+    setActiveTab('chat');
+    
+    // Prepare pre-filled messages for different actions
+    let message = '';
+    switch (actionType) {
+      case 'validation':
+        message = 'I need to validate my fund classification for SFDR compliance. Can you help me with a quick validation?';
+        break;
+      case 'pai':
+        message = 'I want to check PAI (Principal Adverse Impact) indicator compliance for my fund. What information do you need?';
+        break;
+      case 'risk':
+        message = 'I need a risk assessment to identify potential compliance issues early. Can you analyze my fund structure?';
+        break;
+      default:
+        message = 'How can I get started with SFDR compliance validation?';
+    }
+    
+    // Send message to chat after a brief delay to ensure chat is rendered
+    setTimeout(() => {
+      if (chatRef && chatRef.sendMessage) {
+        chatRef.sendMessage(message);
+      } else {
+        // Fallback: trigger a custom event that the chat component can listen to
+        window.dispatchEvent(new CustomEvent('nexus-quick-action', { 
+          detail: { message, actionType } 
+        }));
+      }
+    }, 100);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -116,36 +150,57 @@ const NexusAgent = () => {
         {/* Content Section */}
         {activeTab === 'chat' ? (
           <div className="max-w-4xl mx-auto">
-            <NexusAgentChat className="shadow-lg" />
+            <NexusAgentChat 
+              className="shadow-lg" 
+              ref={(ref) => setChatRef(ref)}
+            />
             
             {/* Quick Actions */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <Card 
+                className="cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-105 border-2 hover:border-green-200" 
+                onClick={() => handleQuickAction('validation')}
+              >
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <FileCheck className="w-8 h-8 text-green-600 mx-auto mb-2" />
                     <h3 className="font-semibold mb-1">Quick Validation</h3>
                     <p className="text-sm text-gray-600">Validate fund classification in seconds</p>
+                    <Button size="sm" className="mt-3 bg-green-600 hover:bg-green-700">
+                      Start Validation
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <Card 
+                className="cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-105 border-2 hover:border-purple-200" 
+                onClick={() => handleQuickAction('pai')}
+              >
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <TrendingUp className="w-8 h-8 text-purple-600 mx-auto mb-2" />
                     <h3 className="font-semibold mb-1">PAI Analysis</h3>
                     <p className="text-sm text-gray-600">Check PAI indicator compliance</p>
+                    <Button size="sm" className="mt-3 bg-purple-600 hover:bg-purple-700">
+                      Analyze PAI
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <Card 
+                className="cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-105 border-2 hover:border-orange-200" 
+                onClick={() => handleQuickAction('risk')}
+              >
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <AlertTriangle className="w-8 h-8 text-orange-600 mx-auto mb-2" />
                     <h3 className="font-semibold mb-1">Risk Assessment</h3>
                     <p className="text-sm text-gray-600">Identify compliance risks early</p>
+                    <Button size="sm" className="mt-3 bg-orange-600 hover:bg-orange-700">
+                      Assess Risk
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
