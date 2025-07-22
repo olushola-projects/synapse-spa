@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { NexusAgentChat } from "@/components/NexusAgentChat";
@@ -23,12 +23,7 @@ import {
  */
 const NexusAgent = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
-  const [chatRef, setChatRef] = useState<any>(null);
-
-  // Use useCallback to prevent infinite re-renders
-  const handleChatRef = useCallback((ref: any) => {
-    setChatRef(ref);
-  }, []);
+  const chatRef = useRef<any>(null);
 
   const features = [
     {
@@ -82,8 +77,8 @@ const NexusAgent = () => {
     
     // Send message to chat after a brief delay to ensure chat is rendered
     setTimeout(() => {
-      if (chatRef && chatRef.sendMessage) {
-        chatRef.sendMessage(message);
+      if (chatRef.current && chatRef.current.sendMessage) {
+        chatRef.current.sendMessage(message);
       } else {
         // Fallback: trigger a custom event that the chat component can listen to
         window.dispatchEvent(new CustomEvent('nexus-quick-action', { 
@@ -157,7 +152,7 @@ const NexusAgent = () => {
           <div className="max-w-4xl mx-auto">
             <NexusAgentChat 
               className="shadow-lg" 
-              ref={handleChatRef}
+              ref={chatRef}
             />
             
             {/* Quick Actions */}
