@@ -28,25 +28,165 @@ export type Database = {
       }
       badges: {
         Row: {
+          created_at: string | null
           description: string
           icon_url: string | null
           id: string
           name: string
           points: number
+          updated_at: string | null
+          user_id: string | null
         }
         Insert: {
+          created_at?: string | null
           description: string
           icon_url?: string | null
           id?: string
           name: string
           points?: number
+          updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
+          created_at?: string | null
           description?: string
           icon_url?: string | null
           id?: string
           name?: string
           points?: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      compliance_assessments: {
+        Row: {
+          assessment_data: Json
+          compliance_score: number | null
+          created_at: string
+          entity_id: string
+          fund_name: string
+          id: string
+          status: string
+          target_article: string
+          updated_at: string
+          user_id: string
+          validation_results: Json | null
+        }
+        Insert: {
+          assessment_data: Json
+          compliance_score?: number | null
+          created_at?: string
+          entity_id: string
+          fund_name: string
+          id?: string
+          status?: string
+          target_article: string
+          updated_at?: string
+          user_id: string
+          validation_results?: Json | null
+        }
+        Update: {
+          assessment_data?: Json
+          compliance_score?: number | null
+          created_at?: string
+          entity_id?: string
+          fund_name?: string
+          id?: string
+          status?: string
+          target_article?: string
+          updated_at?: string
+          user_id?: string
+          validation_results?: Json | null
+        }
+        Relationships: []
+      }
+      compliance_reports: {
+        Row: {
+          assessment_id: string | null
+          created_at: string
+          expires_at: string | null
+          file_path: string | null
+          generated_at: string
+          id: string
+          report_data: Json
+          report_type: string
+          user_id: string
+        }
+        Insert: {
+          assessment_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          file_path?: string | null
+          generated_at?: string
+          id?: string
+          report_data: Json
+          report_type: string
+          user_id: string
+        }
+        Update: {
+          assessment_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          file_path?: string | null
+          generated_at?: string
+          id?: string
+          report_data?: Json
+          report_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_reports_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          analysis_results: Json | null
+          created_at: string
+          document_type: string
+          file_size: number | null
+          file_type: string
+          filename: string
+          id: string
+          processing_status: string
+          storage_path: string
+          updated_at: string
+          upload_date: string
+          user_id: string
+        }
+        Insert: {
+          analysis_results?: Json | null
+          created_at?: string
+          document_type: string
+          file_size?: number | null
+          file_type: string
+          filename: string
+          id?: string
+          processing_status?: string
+          storage_path: string
+          updated_at?: string
+          upload_date?: string
+          user_id: string
+        }
+        Update: {
+          analysis_results?: Json | null
+          created_at?: string
+          document_type?: string
+          file_size?: number | null
+          file_type?: string
+          filename?: string
+          id?: string
+          processing_status?: string
+          storage_path?: string
+          updated_at?: string
+          upload_date?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -134,6 +274,65 @@ export type Database = {
           published_at?: string
           title?: string
           url?: string | null
+        }
+        Relationships: []
+      }
+      risk_assessments: {
+        Row: {
+          assessment_id: string | null
+          created_at: string
+          id: string
+          identified_risks: Json | null
+          mitigation_recommendations: Json | null
+          risk_categories: Json
+          risk_score: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assessment_id?: string | null
+          created_at?: string
+          id?: string
+          identified_risks?: Json | null
+          mitigation_recommendations?: Json | null
+          risk_categories: Json
+          risk_score?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assessment_id?: string | null
+          created_at?: string
+          id?: string
+          identified_risks?: Json | null
+          mitigation_recommendations?: Json | null
+          risk_categories?: Json
+          risk_score?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "risk_assessments_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      "SFDR Navigator Beta": {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
         }
         Relationships: []
       }
