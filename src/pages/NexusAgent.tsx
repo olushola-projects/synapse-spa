@@ -17,9 +17,15 @@ import {
   Clock,
   CheckCircle,
   AlertTriangle,
-  Bot
+  Bot,
+  Brain,
+  Zap,
+  Target,
+  Search
 } from "lucide-react";
 import { NexusAgentChat } from "@/components/NexusAgentChat";
+import { nexusAgent } from "@/services/nexusAgent";
+import { QuickActionType } from "@/types/nexus";
 
 /**
  * SFDR Navigator - Regulatory Agent for ESG Compliance
@@ -90,31 +96,77 @@ const NexusAgent = () => {
     { label: "Active Users", value: "500+", icon: <Users className="w-5 h-5 text-purple-600" /> }
   ];
 
-  const handleQuickAction = useCallback((actionType: string) => {
+  // Enhanced quick actions with Nexus capabilities
+  const quickActions = [
+    {
+      type: 'upload-document' as QuickActionType,
+      label: 'Upload Document',
+      description: 'Upload and analyze compliance documents',
+      icon: <FileText className="w-4 h-4" />,
+      message: 'I need help uploading and analyzing a compliance document for SFDR validation.'
+    },
+    {
+      type: 'check-compliance' as QuickActionType,
+      label: 'Check Compliance',
+      description: 'Validate SFDR classification',
+      icon: <Shield className="w-4 h-4" />,
+      message: 'Please check the compliance status of my fund classification against SFDR requirements.'
+    },
+    {
+      type: 'article-classification' as QuickActionType,
+      label: 'Article Classification',
+      description: 'Determine Article 6/8/9 classification',
+      icon: <Target className="w-4 h-4" />,
+      message: 'Help me determine the correct SFDR article classification for my fund (Article 6, 8, or 9).'
+    },
+    {
+      type: 'pai-analysis' as QuickActionType,
+      label: 'PAI Analysis',
+      description: 'Principal Adverse Impact validation',
+      icon: <Brain className="w-4 h-4" />,
+      message: 'I need help with Principal Adverse Impact (PAI) indicators analysis and validation.'
+    },
+    {
+      type: 'taxonomy-check' as QuickActionType,
+      label: 'Taxonomy Check',
+      description: 'EU Taxonomy alignment verification',
+      icon: <Search className="w-4 h-4" />,
+      message: 'Please help me verify EU Taxonomy alignment for my sustainable investment fund.'
+    },
+    {
+      type: 'generate-report' as QuickActionType,
+      label: 'Generate Report',
+      description: 'Create compliance reports',
+      icon: <BarChart3 className="w-4 h-4" />,
+      message: 'I need to generate a comprehensive SFDR compliance report.'
+    },
+    {
+      type: 'risk-assessment' as QuickActionType,
+      label: 'Risk Assessment',
+      description: 'Identify compliance risks',
+      icon: <AlertTriangle className="w-4 h-4" />,
+      message: 'Can you help me with a regulatory risk assessment for SFDR compliance?'
+    }
+  ];
+
+  const handleQuickAction = useCallback((actionType: QuickActionType) => {
     // Switch to chat mode if not already active
     setActiveTab('chat');
     
+    // Find the action details
+    const action = quickActions.find(a => a.type === actionType);
+    
     // Add a small delay to ensure tab switch completes
     setTimeout(() => {
-      if (chatRef.current && typeof chatRef.current.handleQuickAction === 'function') {
-        chatRef.current.handleQuickAction(actionType);
-      } else {
-        // Fallback: send a message to the chat
-        const messages = {
-          'upload-document': 'I need help uploading and analyzing a compliance document.',
-          'check-compliance': 'Please check the compliance status of my current setup.',
-          'generate-report': 'I need to generate a compliance report.',
-          'risk-assessment': 'Can you help me with a risk assessment?'
-        };
-        
-        const message = messages[actionType as keyof typeof messages] || 'How can you help me today?';
-        
-        // Simulate sending a message to the chat
-        setComplianceData(prev => ({
-          ...prev,
-          status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
-        }));
+      if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
+        chatRef.current.sendMessage(action?.message || 'How can you help me today?');
       }
+      
+      // Update compliance data based on action
+      setComplianceData(prev => ({
+        ...prev,
+        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
+      }));
     }, 100);
   }, []);
 

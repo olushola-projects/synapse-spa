@@ -23,62 +23,16 @@ import {
   RefreshCw
 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { nexusAgent } from "@/services/nexusAgent";
+import { 
+  SFDRClassificationRequest, 
+  NexusValidationResponse, 
+  NexusMessage,
+  QuickActionType 
+} from "@/types/nexus";
 
-/**
- * Interface for SFDR classification request structure
- * Based on the SFDR Navigator API schema
- */
-interface SFDRClassificationRequest {
-  metadata: {
-    entityId: string;
-    reportingPeriod: string;
-    regulatoryVersion: string;
-    submissionType: string;
-  };
-  fundProfile: {
-    fundType: string;
-    fundName: string;
-    targetArticleClassification: string;
-    investmentObjective?: string;
-    sustainabilityCharacteristics?: string[];
-  };
-  paiIndicators?: {
-    mandatoryIndicators: string[];
-    optionalIndicators?: string[];
-  };
-  taxonomyAlignment?: {
-    environmentalObjectives: string[];
-    alignmentPercentage?: number;
-  };
-}
-
-interface NexusAgentResponse {
-  isValid: boolean;
-  classification?: string;
-  confidence?: number;
-  issues?: {
-    message: string;
-    severity: 'error' | 'warning' | 'info';
-    field?: string;
-  }[];
-  recommendations?: string[];
-  sources?: string[];
-  validationDetails?: {
-    articleCompliance: boolean;
-    paiConsistency: boolean;
-    taxonomyAlignment: boolean;
-    dataQuality: boolean;
-  };
-}
-
-interface ChatMessage {
-  id: string;
-  type: 'user' | 'agent' | 'system';
-  content: string;
-  timestamp: Date;
-  data?: SFDRClassificationRequest | NexusAgentResponse;
-  isLoading?: boolean;
-}
+// Use imported types from Nexus agent
+type ChatMessage = NexusMessage;
 
 interface NexusAgentChatProps {
   apiEndpoint?: string;
@@ -175,56 +129,10 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   };
 
   /**
-   * Call the SFDR Navigator API for SFDR validation
+   * Call the Nexus Agent for SFDR validation
    */
-  const callNexusAPI = async (request: SFDRClassificationRequest): Promise<NexusAgentResponse> => {
-    try {
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.REACT_APP_NEXUS_API_KEY || 'demo-key'}`
-        },
-        body: JSON.stringify(request)
-      });
-
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status} ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      // For demo purposes, return a mock response
-      console.warn('Using mock response due to API error:', error);
-      return {
-        isValid: true,
-        classification: request.fundProfile.targetArticleClassification,
-        confidence: 0.92,
-        issues: [
-          {
-            message: 'PAI consideration statement could be more detailed',
-            severity: 'warning',
-            field: 'fundProfile.sustainabilityCharacteristics'
-          }
-        ],
-        recommendations: [
-          'Consider adding more specific ESG integration policies',
-          'Ensure PAI indicators are properly documented',
-          'Review taxonomy alignment calculations'
-        ],
-        sources: [
-          'SFDR Regulation (EU) 2019/2088',
-          'Commission Delegated Regulation (EU) 2022/1288',
-          'ESMA Guidelines on SFDR'
-        ],
-        validationDetails: {
-          articleCompliance: true,
-          paiConsistency: true,
-          taxonomyAlignment: true,
-          dataQuality: true
-        }
-      };
-    }
+  const callNexusAPI = async (request: SFDRClassificationRequest): Promise<NexusValidationResponse> => {
+    return await nexusAgent.validateClassification(request);
   };
 
   /**
@@ -320,8 +228,9 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
       const response = await callNexusAPI(request);
       
       let responseContent = `**Validation Complete**\n\n`;
-      responseContent += `**Classification:** ${response.classification}\n`;
-      responseContent += `**Confidence:** ${(response.confidence! * 100).toFixed(1)}%\n\n`;
+      responseContent += `**Classification:** ${response.classification?.recommendedArticle || 'N/A'}\n`;
+      responseContent += `**Confidence:** ${((response.classification?.confidence || 0) * 100).toFixed(1)}%\n\n`;
+      responseContent += `**Compliance Score:** ${response.complianceScore}%\n\n`;
       
       if (response.issues && response.issues.length > 0) {
         responseContent += `**Issues Found:**\n`;
@@ -346,7 +255,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
 
       toast({
         title: 'Validation Complete',
-        description: `Classification: ${response.classification} (${(response.confidence! * 100).toFixed(1)}% confidence)`
+        description: `Classification: ${response.classification?.recommendedArticle || 'N/A'} (${((response.classification?.confidence || 0) * 100).toFixed(1)}% confidence)`
       });
     } catch (error) {
       updateMessage(loadingId, {
@@ -368,7 +277,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   /**
    * Render validation result badge
    */
-  const renderValidationBadge = (response: NexusAgentResponse) => {
+  const renderValidationBadge = (response: NexusValidationResponse) => {
     const variant = response.isValid ? 'default' : 'destructive';
     const icon = response.isValid ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />;
     
@@ -582,7 +491,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
                     value={formData.fundProfile?.fundType || 'UCITS'}
                     onChange={(e) => setFormData(prev => ({
                       ...prev,
-                      fundProfile: { ...prev.fundProfile!, fundType: e.target.value }
+                      fundProfile: { ...prev.fundProfile!, fundType: e.target.value as 'UCITS' | 'AIF' | 'MMF' | 'PEPP' | 'IORP' | 'OTHER' }
                     }))}
                   >
                     <option value="UCITS">UCITS</option>
@@ -600,7 +509,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
                     value={formData.fundProfile?.targetArticleClassification || 'Article8'}
                     onChange={(e) => setFormData(prev => ({
                       ...prev,
-                      fundProfile: { ...prev.fundProfile!, targetArticleClassification: e.target.value }
+                      fundProfile: { ...prev.fundProfile!, targetArticleClassification: e.target.value as 'Article6' | 'Article8' | 'Article9' }
                     }))}
                   >
                     <option value="Article6">Article 6 (Basic)</option>
