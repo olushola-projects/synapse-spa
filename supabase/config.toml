@@ -21,3 +21,15 @@ port = 54325
 [functions]
 [functions.send-invitation]
 verify_jwt = false
+
+[functions.upload-document]
+verify_jwt = true
+
+[functions.check-compliance]
+verify_jwt = true
+
+[functions.generate-report]
+verify_jwt = true
+
+[functions.risk-assessment]
+verify_jwt = true

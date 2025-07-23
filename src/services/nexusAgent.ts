@@ -80,6 +80,73 @@ class NexusAgentService {
   }
 
   /**
+   * Upload document for analysis
+   */
+  async uploadDocument(file: File, documentType: string): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('documentType', documentType);
+    
+    const response = await fetch('https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/upload-document', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${this.apiKey}`
+      }
+    });
+    
+    return await response.json();
+  }
+
+  /**
+   * Check compliance
+   */
+  async checkCompliance(data: any): Promise<any> {
+    const response = await fetch('https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/check-compliance', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      },
+      body: JSON.stringify(data)
+    });
+    
+    return await response.json();
+  }
+
+  /**
+   * Generate compliance report
+   */
+  async generateReport(assessmentId: string, reportType: string = 'full_compliance'): Promise<any> {
+    const response = await fetch('https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/generate-report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      },
+      body: JSON.stringify({ assessmentId, reportType })
+    });
+    
+    return await response.json();
+  }
+
+  /**
+   * Perform risk assessment
+   */
+  async performRiskAssessment(assessmentId: string): Promise<any> {
+    const response = await fetch('https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/risk-assessment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      },
+      body: JSON.stringify({ assessmentId })
+    });
+    
+    return await response.json();
+  }
+
+  /**
    * Get article classification recommendation
    */
   async classifyFund(request: SFDRClassificationRequest): Promise<ClassificationResult> {
