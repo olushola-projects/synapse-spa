@@ -24,10 +24,45 @@ import {
  * Provides both chat and form-based interaction with the SFDR Navigator API
  */
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+let supabase;
+try {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  
+  if (supabaseUrl && supabaseKey) {
+    supabase = createClient(supabaseUrl, supabaseKey);
+  } else {
+    console.warn('Supabase URL or key not provided. Supabase functionality will be limited.');
+    // Create a mock or disabled client
+    supabase = {
+      from: () => ({
+        select: () => Promise.resolve({ data: [], error: null }),
+        insert: () => Promise.resolve({ data: null, error: null }),
+        update: () => Promise.resolve({ data: null, error: null }),
+        delete: () => Promise.resolve({ data: null, error: null }),
+      }),
+      auth: {
+        onAuthStateChange: () => ({ data: null, error: null }),
+        signOut: () => Promise.resolve({ error: null }),
+      },
+    };
+  }
+} catch (error) {
+  console.error('Failed to initialize Supabase client:', error);
+  // Provide fallback client
+  supabase = {
+    from: () => ({
+      select: () => Promise.resolve({ data: [], error: null }),
+      insert: () => Promise.resolve({ data: null, error: null }),
+      update: () => Promise.resolve({ data: null, error: null }),
+      delete: () => Promise.resolve({ data: null, error: null }),
+    }),
+    auth: {
+      onAuthStateChange: () => ({ data: null, error: null }),
+      signOut: () => Promise.resolve({ error: null }),
+    },
+  };
+}
 
 const NexusAgent = () => {
   // Patent Pending: Dynamic Task Engine (REQ-UI-MVP-002 Enhanced)
@@ -49,9 +84,20 @@ const NexusAgent = () => {
     });
 
     // Initialize analytics
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST!
-    });
+    try {
+      const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
+      const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
+      
+      if (posthogKey && posthogHost) {
+        posthog.init(posthogKey, {
+          api_host: posthogHost
+        });
+      } else {
+        console.warn('PostHog key or host not provided. Analytics will be disabled.');
+      }
+    } catch (error) {
+      console.error('Failed to initialize PostHog:', error);
+    }
 
     return () => {
       authListener?.subscription.unsubscribe();
@@ -185,11 +231,11 @@ const NexusAgent = () => {
         {/* Content Section */}
         {activeTab === 'chat' ? (
           <div className="max-w-4xl mx-auto">
-          {/* World First: Cross Compliance Mapping (Differentiator #3) */}
-          <NexusAgentChat 
+            {/* World First: Cross Compliance Mapping (Differentiator #3) */}
+            <NexusAgentChat 
               className="shadow-lg" 
               ref={chatRef}
-              apiKey={process.env.OPENAI_API_KEY!}
+              apiKey={import.meta.env.VITE_OPENAI_API_KEY || ''}
               onResponse={(response) => {
                 // Global First: Quantum-Resistant Audit Trail
                 quantumHash(response);

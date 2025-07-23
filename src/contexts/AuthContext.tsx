@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "@/components/ui/use-toast";
+import { handleAuthError, ErrorCategory, ErrorSeverity } from '@/utils/error-handler';
 
 // Define types
 export interface User {
@@ -12,16 +13,34 @@ export interface User {
   jurisdiction?: string[];
 }
 
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+interface RegisterData {
+  email: string;
+  password: string;
+  name: string;
+}
+
+interface AuthError {
+  message: string;
+  code?: string;
+}
+
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (credentials: LoginCredentials) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   loginWithLinkedIn: () => Promise<void>;
   logout: () => void;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
+  error: string | null;
+  clearError: () => void;
 }
 
 // Create context
@@ -41,24 +60,59 @@ const mockUsers: User[] = [
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Check for stored user on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem('synapseUser');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      const storedUser = localStorage.getItem('synapseUser');
+      if (storedUser) {
+        const userData = JSON.parse(storedUser) as User;
+        // Validate saved user data
+        if (userData && userData.id && userData.email && userData.name) {
+          setUser(userData);
+        } else {
+          // Invalid saved data, clear it
+          localStorage.removeItem('synapseUser');
+        }
+      }
+    } catch (error) {
+      // Invalid JSON in localStorage, clear it
+      localStorage.removeItem('synapseUser');
+      handleAuthError(error instanceof Error ? error : new Error('Failed to load saved user data'), {
+        component: 'AuthContext',
+        action: 'loadSavedUser'
+      });
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
+  
+  // Helper function to validate email
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   // Login function - this would connect to your backend in production
-  const login = async (email: string, password: string) => {
+  const login = async (credentials: LoginCredentials) => {
     setIsLoading(true);
     try {
+      setError(null);
+      
+      // Validate input
+      if (!credentials.email || !credentials.password) {
+        throw new Error('Email and password are required');
+      }
+      
+      if (!isValidEmail(credentials.email)) {
+        throw new Error('Please enter a valid email address');
+      }
+      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      const foundUser = mockUsers.find(u => u.email === email);
+      const foundUser = mockUsers.find(u => u.email === credentials.email);
       if (!foundUser) {
         throw new Error('Invalid credentials');
       }
@@ -72,10 +126,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: `Welcome back, ${foundUser.name}!`,
       });
     } catch (error) {
-      console.error('Login failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Login failed';
+      setError(errorMessage);
+      
+      handleAuthError(error instanceof Error ? error : new Error(errorMessage), {
+        component: 'AuthContext',
+        action: 'login',
+        metadata: { email: credentials.email }
+      });
+      
       toast({
         title: "Login failed",
-        description: error instanceof Error ? error.message : "An error occurred during login",
+        description: errorMessage,
         variant: "destructive",
       });
       throw error;
@@ -85,22 +147,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Register function - would connect to backend in production
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (data: RegisterData) => {
     setIsLoading(true);
     try {
+      setError(null);
+      
+      // Validate input
+      if (!data.email || !data.password || !data.name) {
+        throw new Error('All fields are required');
+      }
+      
+      if (!isValidEmail(data.email)) {
+        throw new Error('Please enter a valid email address');
+      }
+      
+      if (data.password.length < 6) {
+        throw new Error('Password must be at least 6 characters long');
+      }
+      
+      if (data.name.trim().length < 2) {
+        throw new Error('Name must be at least 2 characters long');
+      }
+      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      if (mockUsers.some(u => u.email === email)) {
+      if (mockUsers.some(u => u.email === data.email)) {
         throw new Error('Email already in use');
       }
       
       // Create new user
       const newUser: User = {
         id: (mockUsers.length + 1).toString(),
-        email,
-        name,
-        avatar: `https://i.pravatar.cc/150?u=${email}`,
+        email: data.email,
+        name: data.name.trim(),
+        avatar: `https://i.pravatar.cc/150?u=${data.email}`,
       };
       
       mockUsers.push(newUser);
@@ -111,13 +192,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       toast({
         title: "Registration successful",
-        description: `Welcome to Synapse, ${name}!`,
+        description: `Welcome to Synapse, ${data.name}!`,
       });
     } catch (error) {
-      console.error('Registration failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Registration failed';
+      setError(errorMessage);
+      
+      handleAuthError(error instanceof Error ? error : new Error(errorMessage), {
+        component: 'AuthContext',
+        action: 'register',
+        metadata: { email: data.email, name: data.name }
+      });
+      
       toast({
         title: "Registration failed",
-        description: error instanceof Error ? error.message : "An error occurred during registration",
+        description: errorMessage,
         variant: "destructive",
       });
       throw error;
@@ -145,12 +234,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Logout function
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('synapseUser');
-    toast({
-      title: "Logout successful",
-      description: "You have been logged out",
-    });
+    try {
+      setUser(null);
+      setError(null);
+      localStorage.removeItem('synapseUser');
+      toast({
+        title: "Logout successful",
+        description: "You have been logged out",
+      });
+    } catch (error) {
+      handleAuthError(error instanceof Error ? error : new Error('Logout failed'), {
+        component: 'AuthContext',
+        action: 'logout'
+      });
+    }
+  };
+  
+  const clearError = () => {
+    setError(null);
   };
 
   // Update profile function
@@ -195,6 +296,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         register,
         updateProfile,
+        error,
+        clearError,
       }}
     >
       {children}

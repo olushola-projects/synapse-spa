@@ -28,6 +28,7 @@ import NavbarMenuTest from './pages/NavbarMenuTest';
 import Map from './pages/Map';
 import UseCases from './pages/UseCases';
 import NexusAgent from './pages/NexusAgent';
+import SFDRGem from './pages/SFDRGem';
 
 // Create and export the router
 export const router = createBrowserRouter([
@@ -190,5 +191,10 @@ export const router = createBrowserRouter([
   {
     path: '/sfdr-navigator',
     element: <NexusAgent />,
+  },
+  // SFDR Gem - Advanced AI compliance assistant
+  {
+    path: '/sfdr-gem',
+    element: <SFDRGem />,
   }
 ]);

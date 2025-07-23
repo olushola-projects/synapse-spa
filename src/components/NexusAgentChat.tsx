@@ -177,55 +177,56 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   /**
    * Call the SFDR Navigator API for SFDR validation
    */
-  const callNexusAPI = async (request: SFDRClassificationRequest): Promise<NexusAgentResponse> => {
-    try {
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.REACT_APP_NEXUS_API_KEY || 'demo-key'}`
-        },
-        body: JSON.stringify(request)
-      });
-
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status} ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      // For demo purposes, return a mock response
-      console.warn('Using mock response due to API error:', error);
-      return {
-        isValid: true,
-        classification: request.fundProfile.targetArticleClassification,
-        confidence: 0.92,
-        issues: [
-          {
-            message: 'PAI consideration statement could be more detailed',
-            severity: 'warning',
-            field: 'fundProfile.sustainabilityCharacteristics'
-          }
-        ],
-        recommendations: [
-          'Consider adding more specific ESG integration policies',
-          'Ensure PAI indicators are properly documented',
-          'Review taxonomy alignment calculations'
-        ],
-        sources: [
-          'SFDR Regulation (EU) 2019/2088',
-          'Commission Delegated Regulation (EU) 2022/1288',
-          'ESMA Guidelines on SFDR'
-        ],
-        validationDetails: {
-          articleCompliance: true,
-          paiConsistency: true,
-          taxonomyAlignment: true,
-          dataQuality: true
-        }
-      };
-    }
+  // Add new agent type
+  enum AgentType {
+    LOCAL = 'local',
+    GITHUB = 'github',
+    CLOUD = 'cloud'
+  }
+  
+  // Add GitHub API configuration
+  const GITHUB_AGENT_API = {
+    BASE_URL: process.env.NEXT_PUBLIC_GITHUB_AGENT_URL || 'https://api.github.com/repos/[OWNER]/[REPO]/contents',
+    API_KEY: process.env.NEXT_PUBLIC_GITHUB_AGENT_API_KEY
   };
+  
+  // Modify callNexusAPI function
+  const callNexusAPI = async (request: SFDRClassificationRequest): Promise<NexusAgentResponse> => {
+    switch (selectedAgent) {
+      case AgentType.GITHUB:
+        const response = await axios.post(
+          `${GITHUB_AGENT_API.BASE_URL}/analyze`,
+          {
+            message: 'SFDR Analysis Request',
+            content: btoa(JSON.stringify(request)),
+            branch: 'main'
+          },
+          {
+            headers: {
+              Authorization: `token ${GITHUB_AGENT_API.API_KEY}`,
+              Accept: 'application/vnd.github.v3+json'
+            }
+          }
+        );
+        return parseGitHubResponse(response.data);
+      // ... existing cases ...
+  }
+  };
+  
+  // Add GitHub response parser
+  const parseGitHubResponse = (data: any): NexusAgentResponse => {
+    return {
+      complianceStatus: data.content?.results?.status || 'UNKNOWN',
+      validationMetrics: data.content?.metrics || {},
+      suggestedActions: data.content?.recommendations || []
+    };
+  };
+  
+  // Update component props and state
+  interface NexusAgentChatProps {
+    agentType?: AgentType;
+    className?: string;
+  }
 
   /**
    * Handle sending a text message
@@ -647,3 +648,54 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
 NexusAgentChat.displayName = "NexusAgentChat";
 
 export default NexusAgentChat;
+
+const [xaiOpen, setXaiOpen] = useState(false);
+
+const handleFeedback = (messageId: string, type: 'positive' | 'negative') => {
+  setMessages(prev => prev.map(msg => {
+    if (msg.id === messageId) {
+      return { ...msg, feedback: type };
+    }
+    return msg;
+  }));
+  toast({
+    title: 'Feedback recorded',
+    description: 'Thank you for helping improve Nexus Agent!',
+    duration: 2000
+  });
+};
+
+{message.type === 'agent' && (
+  <div className="relative group">
+    <div className="absolute right-0 top-0 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-6 w-6"
+        onClick={() => handleFeedback(message.id, 'positive')}
+      >
+        👍
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-6 w-6"
+        onClick={() => handleFeedback(message.id, 'negative')}
+      >
+        👎
+      </Button>
+    </div>
+    <Badge variant="blue" className="mb-2">
+      <Shield className="w-3 h-3 mr-1" />
+      AI-Generated
+    </Badge>
+    <Button
+      variant="link"
+      className="text-blue-600 h-auto p-0 ml-2"
+      onClick={() => setXaiOpen(true)}
+    >
+      Why this answer?
+    </Button>
+    {/* Existing message content */}
+  </div>
+)}

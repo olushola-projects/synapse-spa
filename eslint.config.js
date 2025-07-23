@@ -1,29 +1,136 @@
-import js from "@eslint/js";
-import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import tseslint from "typescript-eslint";
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ["dist"] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ["**/*.{ts,tsx}"],
+    ignores: [
+      'dist/**/*',
+      'node_modules/**/*',
+      '*.config.js',
+      '*.config.ts',
+      'coverage/**/*',
+      'build/**/*',
+      'Nexus/dist/**/*',
+      '**/*.d.ts',
+      'supabase/**/*'
+    ]
+  },
+  {
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended
+    ],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parserOptions: {
+        project: ['./tsconfig.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname
+      }
     },
     plugins: {
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true }
       ],
-      "@typescript-eslint/no-unused-vars": "off",
+      
+      // TypeScript specific rules (non-type-aware)
+      '@typescript-eslint/no-unused-vars': ['error', { 
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_'
+      }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/prefer-as-const': 'error',
+      '@typescript-eslint/no-inferrable-types': 'error',
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+      '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
+      '@typescript-eslint/prefer-for-of': 'error',
+      
+      // General code quality rules
+      'no-console': 'warn',
+      'no-debugger': 'error',
+      'no-alert': 'error',
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
+      'no-script-url': 'error',
+      'no-void': 'error',
+      'no-with': 'error',
+      'prefer-const': 'error',
+      'no-var': 'error',
+      'object-shorthand': 'error',
+      'prefer-arrow-callback': 'error',
+      'prefer-template': 'error',
+      'prefer-spread': 'error',
+      'prefer-rest-params': 'error',
+      'no-useless-concat': 'error',
+      'no-useless-return': 'error',
+      'no-duplicate-imports': 'error',
+      'template-curly-spacing': 'error',
+      'arrow-spacing': 'error',
+      'comma-dangle': ['error', 'never'],
+      'quotes': ['error', 'single'],
+      'semi': ['error', 'always'],
+      'indent': ['error', 2],
+      'no-trailing-spaces': 'error',
+      'eol-last': 'error',
+      
+      // Error handling
+      'no-throw-literal': 'error',
+      'prefer-promise-reject-errors': 'error',
+      
+      // Best practices
+      'eqeqeq': ['error', 'always'],
+      'curly': ['error', 'all'],
+      'default-case': 'error',
+      'no-fallthrough': 'error',
+      'no-empty': ['error', { allowEmptyCatch: false }],
+      'no-empty-function': 'error',
+      'no-magic-numbers': ['warn', { 
+        ignore: [-1, 0, 1, 2],
+        ignoreArrayIndexes: true,
+        ignoreDefaultValues: true
+      }],
+      'dot-notation': 'error',
+      'no-sequences': 'error',
+      'no-unused-expressions': 'error',
+      'radix': 'error',
+      'yoda': 'error',
+      
+      // Complexity rules
+      'complexity': ['warn', 10],
+      'max-depth': ['warn', 4],
+      'max-lines-per-function': ['warn', 50],
+      'max-params': ['warn', 4]
+    }
+  },
+  {
+    // Specific rules for test files
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-magic-numbers': 'off',
+      'max-lines-per-function': 'off',
+    },
+  },
+  {
+    // Specific rules for configuration files
+    files: ['**/*.config.{ts,js}', '**/vite.config.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-magic-numbers': 'off',
     },
   }
-);
+)
