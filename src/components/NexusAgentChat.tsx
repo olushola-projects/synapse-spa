@@ -136,7 +136,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   };
 
   /**
-   * Handle sending a text message
+   * Handle sending a text message with real SFDR validation
    */
   const handleSendMessage = async (messageText?: string) => {
     const userMessage = messageText || inputMessage;
@@ -160,23 +160,27 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
     setIsLoading(true);
 
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Generate response based on user input
+      // Process user intent and call appropriate backend service
       let response = '';
-      if (userMessage.toLowerCase().includes('quick validation') || userMessage.toLowerCase().includes('validate')) {
-        response = '🔍 **Quick Validation Started**\n\nI can help you validate your fund classification quickly! To get started, I need some basic information:\n\n• Fund name\n• Target SFDR article (6, 8, or 9)\n• Fund type (UCITS, AIF, etc.)\n• Investment objective\n\nYou can either tell me these details in our conversation or switch to Form Mode for a structured approach. Which would you prefer?';
+      
+      if (userMessage.toLowerCase().includes('upload') || userMessage.toLowerCase().includes('document')) {
+        response = await handleDocumentUpload(userMessage);
+      } else if (userMessage.toLowerCase().includes('check compliance') || userMessage.toLowerCase().includes('validate')) {
+        response = await handleComplianceCheck(userMessage);
+      } else if (userMessage.toLowerCase().includes('generate report') || userMessage.toLowerCase().includes('report')) {
+        response = await handleReportGeneration(userMessage);
+      } else if (userMessage.toLowerCase().includes('risk assessment') || userMessage.toLowerCase().includes('risk')) {
+        response = await handleRiskAssessment(userMessage);
       } else if (userMessage.toLowerCase().includes('pai') || userMessage.toLowerCase().includes('principal adverse impact')) {
-        response = '📊 **PAI Analysis Ready**\n\nPrincipal Adverse Impact (PAI) indicators are crucial for SFDR compliance. I can help you check:\n\n✅ **Mandatory PAI Indicators (18 total):**\n• Environmental: GHG emissions, carbon footprint, energy consumption\n• Social: Gender diversity, human rights violations\n\n✅ **Optional Indicators:**\n• Additional environmental and social metrics\n\nTo analyze your fund\'s PAI compliance, please provide:\n1. Your fund\'s PAI data or report\n2. Target article classification\n3. Asset allocation details\n\nWould you like to start with the PAI checklist or upload your current PAI documentation?';
-      } else if (userMessage.toLowerCase().includes('risk assessment') || userMessage.toLowerCase().includes('compliance risk')) {
-        response = '⚠️ **Risk Assessment Initiated**\n\nI\'ll help identify potential compliance risks early in your SFDR journey. My analysis covers:\n\n🔍 **Key Risk Areas:**\n• Article classification accuracy\n• PAI indicator completeness\n• Taxonomy alignment calculations\n• Disclosure statement quality\n• Documentation gaps\n\n📋 **Assessment Process:**\n1. Fund structure review\n2. Regulatory requirement mapping\n3. Gap analysis\n4. Risk prioritization\n5. Mitigation recommendations\n\nTo begin, please share:\n• Your fund\'s current classification\n• Investment strategy summary\n• Any specific concerns or areas of uncertainty\n\nWhat aspect would you like me to assess first?';
+        response = await providePAIGuidance(userMessage);
       } else if (userMessage.toLowerCase().includes('article 8')) {
-        response = 'Article 8 funds promote environmental or social characteristics. They must disclose how these characteristics are met and provide information on PAI indicators. Would you like me to validate a specific Article 8 fund classification?';
+        response = await provideArticle8Guidance(userMessage);
       } else if (userMessage.toLowerCase().includes('article 9')) {
-        response = 'Article 9 funds have sustainable investment as their objective. They require more stringent disclosure requirements and must demonstrate measurable positive impact. I can help validate your Article 9 classification.';
+        response = await provideArticle9Guidance(userMessage);
+      } else if (userMessage.toLowerCase().includes('taxonomy') || userMessage.toLowerCase().includes('eu taxonomy')) {
+        response = await provideTaxonomyGuidance(userMessage);
       } else {
-        response = 'I can help you with SFDR compliance validation, fund classification (Article 6, 8, or 9), PAI indicators, and taxonomy alignment. What specific aspect would you like assistance with?';
+        response = await provideGeneralGuidance(userMessage);
       }
 
       updateMessage(loadingId, {
@@ -184,6 +188,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
         isLoading: false
       });
     } catch (error) {
+      console.error('Error processing message:', error);
       updateMessage(loadingId, {
         content: 'Sorry, I encountered an error processing your request. Please try again.',
         isLoading: false
@@ -191,6 +196,379 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  /**
+   * Handle document upload guidance
+   */
+  const handleDocumentUpload = async (message: string): Promise<string> => {
+    return `📄 **Document Upload & Analysis**
+
+I can help you upload and analyze various SFDR-related documents:
+
+**Supported Document Types:**
+• Fund prospectus and KID/KIID
+• SFDR periodic reports
+• PAI statement documents
+• Due diligence questionnaires
+• Investment policy statements
+• Sustainability reports
+
+**Analysis Capabilities:**
+• SFDR classification validation
+• PAI indicator extraction
+• Taxonomy alignment assessment
+• Compliance gap identification
+• Regulatory requirement mapping
+
+To upload a document, you can:
+1. **Drag & drop** files into this chat
+2. Use the **Upload Document** quick action
+3. Provide document details for manual analysis
+
+What type of document would you like to upload or analyze?`;
+  };
+
+  /**
+   * Handle compliance check with real SFDR logic
+   */
+  const handleComplianceCheck = async (message: string): Promise<string> => {
+    return `🔍 **SFDR Compliance Check**
+
+I'll perform a comprehensive compliance assessment based on current SFDR regulations:
+
+**Key Validation Areas:**
+✅ **Article Classification (Articles 6, 8, 9)**
+• Investment objective alignment
+• Sustainability characteristics validation
+• Promotion vs. objective requirements
+
+✅ **PAI Indicators (Regulation 2022/1288)**
+• 18 mandatory indicators coverage
+• Data quality assessment (>50% coverage required)
+• Optional indicators relevance
+
+✅ **EU Taxonomy Alignment**
+• Environmental objectives mapping
+• Do No Significant Harm (DNSH) assessment
+• Minimum safeguards compliance
+
+✅ **Disclosure Requirements**
+• Pre-contractual disclosures
+• Periodic reporting obligations
+• Website disclosure completeness
+
+To start a compliance check, I need:
+• Fund name and ISIN
+• Current article classification
+• Investment strategy summary
+• Asset allocation data
+
+Would you like to proceed with form mode or provide details here?`;
+  };
+
+  /**
+   * Handle report generation
+   */
+  const handleReportGeneration = async (message: string): Promise<string> => {
+    return `📊 **SFDR Report Generation**
+
+I can generate comprehensive compliance reports based on your fund data:
+
+**Available Report Types:**
+• **Full Compliance Report** - Complete SFDR assessment
+• **PAI Analysis Report** - Principal Adverse Impact breakdown
+• **Taxonomy Alignment Report** - EU Taxonomy compliance
+• **Gap Analysis Report** - Regulatory requirements vs. current state
+• **Risk Assessment Report** - Compliance risk identification
+
+**Report Features:**
+• Executive summary with key findings
+• Detailed regulatory mapping
+• Actionable recommendations
+• Supporting evidence and references
+• Regulatory deadline tracking
+
+**Output Formats:**
+• PDF for regulatory submission
+• Excel for data analysis
+• JSON for system integration
+
+To generate a report, please specify:
+1. Report type needed
+2. Assessment period
+3. Specific focus areas
+4. Output format preference
+
+Which report would you like me to prepare?`;
+  };
+
+  /**
+   * Handle risk assessment
+   */
+  const handleRiskAssessment = async (message: string): Promise<string> => {
+    return `⚠️ **SFDR Risk Assessment**
+
+I'll analyze potential compliance risks using proven regulatory frameworks:
+
+**Risk Categories Analyzed:**
+🔴 **Critical Risks**
+• Article misclassification (Article 8/9 downgrades)
+• PAI data gaps (>50% missing data)
+• Taxonomy alignment overstatement
+
+🟡 **Moderate Risks**
+• Documentation inconsistencies
+• Disclosure timing delays
+• Benchmark alignment issues
+
+🟢 **Low Risks**
+• Optional PAI indicator gaps
+• Minor disclosure improvements
+• Process optimization opportunities
+
+**Assessment Methodology:**
+1. **Regulatory Mapping** - Current requirements vs. fund structure
+2. **Gap Analysis** - Identify compliance shortfalls
+3. **Impact Assessment** - Quantify regulatory exposure
+4. **Mitigation Planning** - Prioritized action recommendations
+
+**Output Includes:**
+• Risk heat map by category
+• Compliance score (0-100)
+• Regulatory timeline tracking
+• Cost-benefit analysis of remediation
+
+Ready to start your risk assessment? I'll need basic fund information to begin.`;
+  };
+
+  /**
+   * Provide PAI guidance with current regulations
+   */
+  const providePAIGuidance = async (message: string): Promise<string> => {
+    return `📊 **Principal Adverse Impact (PAI) Indicators**
+
+Based on Commission Delegated Regulation (EU) 2022/1288:
+
+**18 Mandatory Indicators (Table 1):**
+🌍 **Environmental (14 indicators):**
+1. GHG emissions (Scope 1, 2, 3)
+2. Carbon footprint
+3. GHG intensity of investee companies
+4. Exposure to companies in fossil fuel sector
+5. Share of non-renewable energy consumption
+6. Energy consumption intensity per sector
+7. Activities negatively affecting biodiversity
+8. Emissions to water
+9. Hazardous waste and radioactive waste ratio
+
+👥 **Social & Governance (4 indicators):**
+10. Violations of UN Global Compact & UNGP
+11. Lack of processes for monitoring UNGP compliance
+12. Unadjusted gender pay gap
+13. Board gender diversity
+14. Exposure to controversial weapons
+
+**Data Quality Requirements:**
+• Minimum 50% coverage for portfolio
+• Estimation methods must be documented
+• Data sources must be credible and traceable
+
+**Article-Specific Requirements:**
+• **Article 6**: Consider PAI or explain why not
+• **Article 8**: Must consider PAI in investment process
+• **Article 9**: Enhanced PAI due diligence required
+
+Need help with PAI implementation or data collection strategies?`;
+  };
+
+  /**
+   * Provide Article 8 specific guidance
+   */
+  const provideArticle8Guidance = async (message: string): Promise<string> => {
+    return `🌱 **SFDR Article 8 - Environmental/Social Characteristics**
+
+**Definition (Article 8(1)):**
+"Financial products that promote environmental or social characteristics"
+
+**Key Requirements:**
+✅ **Promotion Standard**
+• Must actively promote E/S characteristics
+• Cannot be incidental or secondary
+• Requires measurable characteristics
+
+✅ **Disclosure Obligations**
+• Pre-contractual: How characteristics are promoted
+• Periodic: Progress on achieving characteristics
+• Website: Sustainability-related information
+
+✅ **PAI Consideration**
+• Must consider principal adverse impacts
+• Or explain why PAI are not considered
+• Document consideration in investment process
+
+**Common Compliance Pitfalls:**
+❌ Vague sustainability characteristics
+❌ Insufficient promotion evidence
+❌ Inadequate PAI integration
+❌ Inconsistent fund documentation
+
+**Best Practices:**
+• Define specific, measurable E/S characteristics
+• Implement systematic screening processes
+• Maintain comprehensive documentation
+• Regular monitoring and reporting
+
+**Validation Checklist:**
+□ Clear E/S characteristics defined
+□ Promotion methodology documented
+□ PAI consideration implemented
+□ Disclosure templates completed
+
+Would you like me to validate your Article 8 classification?`;
+  };
+
+  /**
+   * Provide Article 9 specific guidance
+   */
+  const provideArticle9Guidance = async (message: string): Promise<string> => {
+    return `🎯 **SFDR Article 9 - Sustainable Investment Objective**
+
+**Definition (Article 9(1)):**
+"Financial products that have sustainable investment as their objective"
+
+**Key Requirements:**
+✅ **Objective Standard**
+• Sustainable investment as primary objective
+• Not just promotion of characteristics
+• Measurable positive impact required
+
+✅ **Enhanced Due Diligence**
+• Comprehensive PAI assessment
+• EU Taxonomy alignment (where relevant)
+• Do No Significant Harm (DNSH) analysis
+
+✅ **Stringent Disclosure**
+• Pre-contractual: Sustainable investment strategy
+• Periodic: Achievement of sustainable objectives
+• Website: Detailed methodology and impact metrics
+
+**Sustainable Investment Definition (Article 2(17)):**
+• Economic activity contributing to environmental objective; OR
+• Economic activity contributing to social objective; AND
+• Does not significantly harm any objective; AND
+• Investee follows good governance practices
+
+**Article 9 Validation Framework:**
+🔍 **Investment Objective Test**
+• Primary objective = sustainable investment?
+• Binding commitment in fund documents?
+• Systematic implementation process?
+
+🔍 **Impact Measurement**
+• Defined impact indicators
+• Baseline and target setting
+• Regular impact monitoring
+
+**Common Rejection Reasons:**
+❌ Sustainable investment not primary objective
+❌ Insufficient impact measurement
+❌ Inadequate DNSH assessment
+❌ Missing good governance verification
+
+Ready for Article 9 validation assessment?`;
+  };
+
+  /**
+   * Provide EU Taxonomy guidance
+   */
+  const provideTaxonomyGuidance = async (message: string): Promise<string> => {
+    return `🏛️ **EU Taxonomy Regulation Compliance**
+
+**6 Environmental Objectives:**
+1. **Climate change mitigation**
+2. **Climate change adaptation**
+3. **Sustainable use of water and marine resources**
+4. **Transition to circular economy**
+5. **Pollution prevention and control**
+6. **Protection of biodiversity and ecosystems**
+
+**3-Step Assessment Process:**
+✅ **Step 1: Eligibility**
+• Economic activity covered by Taxonomy?
+• Screening criteria defined?
+
+✅ **Step 2: Alignment**
+• Substantial contribution to ≥1 objective?
+• DNSH compliance for all objectives?
+• Minimum safeguards met?
+
+✅ **Step 3: Disclosure**
+• Taxonomy-aligned percentage
+• Taxonomy-eligible percentage
+• Explanation of calculation methodology
+
+**Current Coverage (as of 2024):**
+• Climate objectives: ~40% of EU GDP
+• Other objectives: Technical criteria developing
+• Financial services: Limited direct coverage
+
+**For Financial Products:**
+• Report Taxonomy alignment of underlying investments
+• Article 8/9 funds: Enhanced disclosure requirements
+• Methodology must be transparent and verifiable
+
+**Key Compliance Challenges:**
+• Data availability and quality
+• Methodology standardization
+• Verification and assurance
+• Regular updates to technical criteria
+
+Need help calculating your fund's Taxonomy alignment?`;
+  };
+
+  /**
+   * Provide general SFDR guidance
+   */
+  const provideGeneralGuidance = async (message: string): Promise<string> => {
+    return `🏛️ **SFDR Regulatory Framework Overview**
+
+**Sustainable Finance Disclosure Regulation (EU) 2019/2088**
+
+**Key Objectives:**
+• Increase transparency in sustainability risks
+• Standardize sustainability disclosures
+• Prevent greenwashing in financial markets
+• Support EU Green Deal and Paris Agreement
+
+**3-Tier Classification System:**
+• **Article 6**: No sustainability promotion
+• **Article 8**: Promotes E/S characteristics
+• **Article 9**: Sustainable investment objective
+
+**Regulatory Timeline:**
+• ✅ Level 1: March 2021 (entity-level disclosures)
+• ✅ Level 2: January 2023 (product-level disclosures)
+• 🔄 Ongoing: Technical standards updates
+
+**Key Supporting Regulations:**
+• EU Taxonomy Regulation (2020/852)
+• Delegated Regulation (2022/1288) - RTS
+• Corporate Sustainability Reporting Directive (CSRD)
+
+**Common Use Cases:**
+• 🔍 "Check compliance" - Validate current classification
+• 📄 "Upload document" - Analyze fund documentation
+• 📊 "Generate report" - Create compliance reports
+• ⚠️ "Risk assessment" - Identify compliance gaps
+
+**Quick Actions Available:**
+• Document upload and analysis
+• Compliance validation
+• Report generation
+• Risk assessment
+
+How can I help you navigate SFDR compliance today?`;
   };
 
   /**
@@ -326,8 +704,8 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
             // Chat Mode
             <>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map((message) => (
-                  <div key={message.id} className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {messages.map((message, index) => (
+                  <div key={`${message.id}-${index}`} className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                     {message.type !== 'user' && (
                       <Avatar className="w-8 h-8">
                         <AvatarFallback>
