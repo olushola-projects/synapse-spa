@@ -1,10 +1,9 @@
 
-import React from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Check } from 'lucide-react';
 import JoinWaitlistDialog from './JoinWaitlistDialog';
-import { useState } from 'react';
 
 const RegulatoryEvolutionSection = () => {
   const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);

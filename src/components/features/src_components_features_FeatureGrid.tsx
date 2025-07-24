@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import { cloudyAnimation } from "@/styles/animations";
+// cloudyAnimation import removed - not used in this component
 
 const FeatureContainer = styled.div`
   display: grid;

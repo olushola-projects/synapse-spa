@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// React import removed - using modern JSX transform
+import { useState, useEffect } from 'react';
 import { X, MessageCircle, Star, Camera, Send, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -119,8 +120,8 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
       if (response.ok) {
         setStep('success');
         // Track feedback submission event
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'feedback_submitted', {
+        if (typeof window !== 'undefined' && 'gtag' in window) {
+          (window as any).gtag('event', 'feedback_submitted', {
             event_category: 'engagement',
             event_label: feedback.category,
             value: feedback.rating

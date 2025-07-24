@@ -1,13 +1,14 @@
 
 import { useState } from "react";
 import { solutions } from "@/data/solutionsData";
+import { Solution } from "@/types/solutions";
 import SolutionNavigation from "./solutions/SolutionNavigation";
 import SolutionDetail from "./solutions/SolutionDetail";
 
 const ModularSolutionsSection = () => {
-  const [activeSolution, setActiveSolution] = useState<string>(solutions[0].id);
+  const [activeSolution, setActiveSolution] = useState<string>(solutions[0]?.id || "");
   
-  const activeSolutionData = solutions.find((solution) => solution.id === activeSolution) || solutions[0];
+  const activeSolutionData: Solution = solutions.find((solution) => solution.id === activeSolution) || solutions[0];
   
   return (
     <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">

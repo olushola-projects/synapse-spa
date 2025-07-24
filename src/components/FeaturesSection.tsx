@@ -1,15 +1,13 @@
 
 import { 
   LayoutDashboard, Bot, Calendar, Newspaper, Briefcase, FilePen,
-  GamepadIcon, Users, Mic, Lightbulb, Rocket, UsersRound, 
+  GamepadIcon, Users, Lightbulb, Rocket, UsersRound, 
   Award, Globe, ChevronLeft, ChevronRight, Play, Cpu
 } from "lucide-react";
 import { 
   Carousel, 
   CarouselContent, 
-  CarouselItem, 
-  CarouselNext, 
-  CarouselPrevious,
+  CarouselItem,
   type CarouselApi
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
@@ -129,18 +127,9 @@ const features = [
 const FeaturesSection = () => {
   const [activeFeature, setActiveFeature] = useState(4); // Start with Job Matching selected 
   const [api, setApi] = useState<CarouselApi>();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [autoPlayEnabled, setAutoPlayEnabled] = useState(true);
   const autoPlayIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
-
-  // Check if we're on mobile
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Auto-scroll functionality
   useEffect(() => {
@@ -206,7 +195,7 @@ const FeaturesSection = () => {
 
     // Initialize to Job Matching (index 4)
     setTimeout(() => {
-      newApi.scrollTo(4, false);
+      newApi?.scrollTo(4, false);
     }, 100);
   }, [onApiChange]);
 

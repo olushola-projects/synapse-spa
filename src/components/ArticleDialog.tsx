@@ -1,5 +1,5 @@
 
-import React from 'react';
+// React import removed as it's not needed in modern React with JSX transform
 import { 
   Dialog, 
   DialogContent, 

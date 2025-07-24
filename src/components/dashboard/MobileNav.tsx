@@ -12,7 +12,7 @@ interface MobileNavProps {
   onLogout: () => void;
 }
 
-const MobileNav: React.FC<MobileNavProps> = ({ user, onLogout }) => {
+const MobileNav: React.FC<MobileNavProps> = ({ user: _user, onLogout }) => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   return (

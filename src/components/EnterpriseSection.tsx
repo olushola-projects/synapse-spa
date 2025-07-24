@@ -1,11 +1,9 @@
 
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ShieldCheck, Shield, FileText, CheckCircle2, Briefcase, Users, Award, Compass, Settings, MessageSquareText, AlertTriangle, BarChart3, LineChart, FileSearch } from 'lucide-react';
+import { ArrowRight, Shield, CheckCircle2, Briefcase, Users, MessageSquareText, AlertTriangle, BarChart3, LineChart, FileSearch } from 'lucide-react';
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import ExternalFormDialog from './ExternalFormDialog';
 import {
   Carousel,
@@ -211,7 +209,7 @@ const EnterpriseSection = () => {
     }
   };
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef] = useEmblaCarousel({ loop: true });
 
   return (
     <section className="bg-[#F9FAFB] py-16 md:py-[90px]">

@@ -1,8 +1,8 @@
 
-import React from "react";
 import { motion } from "framer-motion";
+import { ReactNode } from "react";
 
-export const EnhancedDashboardContainer = ({ children, className = "" }) => {
+export const EnhancedDashboardContainer = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
   return (
     <div className={`w-[150%] max-w-[1440px] mx-auto p-8 overflow-hidden relative md:w-full md:p-4 ${className}`}>
       {children}
@@ -10,7 +10,7 @@ export const EnhancedDashboardContainer = ({ children, className = "" }) => {
   );
 };
 
-export const DashboardGrid = ({ children, className = "" }) => {
+export const DashboardGrid = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
   return (
     <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 ${className}`}>
       {children}
@@ -18,7 +18,7 @@ export const DashboardGrid = ({ children, className = "" }) => {
   );
 };
 
-export const MobileDashboard = ({ children, className = "" }) => {
+export const MobileDashboard = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
   return (
     <motion.div 
       className={`hidden md:block w-full overflow-x-auto p-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 ${className}`}

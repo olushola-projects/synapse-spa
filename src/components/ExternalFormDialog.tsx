@@ -1,5 +1,5 @@
 
-import React from 'react';
+// React import removed - using modern JSX transform
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ExternalFormDialogProps {

@@ -1,8 +1,7 @@
 
-import React from 'react';
+// React import removed - using modern JSX transform
 import { PieChart as PieChartIcon, Cpu } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { Button } from '@/components/ui/button';
 
 // Chart data
 const pieChartData = [

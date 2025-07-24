@@ -1,5 +1,5 @@
 
-import React from 'react';
+// React import removed - using modern JSX transform
 import { 
   Accordion,
   AccordionContent,

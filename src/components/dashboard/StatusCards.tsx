@@ -1,5 +1,5 @@
 
-import React from 'react';
+// React import removed - using modern JSX transform
 import { BadgeCheck, GamepadIcon, Users, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { blogPosts } from '@/data/blogData';

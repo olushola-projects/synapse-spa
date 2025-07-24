@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { BarChart, Bar, XAxis, ResponsiveContainer, Cell, LineChart, Line, YAxis, CartesianGrid, Tooltip } from 'recharts';
+// React import removed - using modern JSX transform
+import { BarChart, Bar, XAxis, ResponsiveContainer, Cell } from 'recharts';
 import { Bot } from 'lucide-react';
 
 // Sample data for mobile charts
@@ -12,15 +12,7 @@ const regulationData = [
   { name: 'SFDR', value: 5 },
 ];
 
-// Sample line data
-const lineData = [
-  { name: 'Jan', risk: 40, compliance: 24 },
-  { name: 'Feb', risk: 30, compliance: 28 },
-  { name: 'Mar', risk: 20, compliance: 39 },
-  { name: 'Apr', risk: 27, compliance: 43 },
-  { name: 'May', risk: 18, compliance: 52 },
-  { name: 'Jun', risk: 23, compliance: 65 },
-];
+// Line data removed - not used in this component
 
 // Agent types - matching desktop version
 const agentTypes = ['AML', 'ESG', 'MiFID II', 'DORA', 'Privacy'];
@@ -38,7 +30,7 @@ const MobileCharts: React.FC = () => {
         >
           <XAxis type="number" hide />
           <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-            {regulationData.map((entry, index) => (
+            {regulationData.map((_, index) => (
               <Cell 
                 key={`cell-${index}`} 
                 fill={

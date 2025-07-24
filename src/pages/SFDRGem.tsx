@@ -1,5 +1,5 @@
 import React from 'react';
-import { SFDRGem } from '@/components/sfdr-gem/SFDRGem';
+import SFDRGem from '@/components/SFDRGem';
 import { motion } from 'framer-motion';
 
 /**
