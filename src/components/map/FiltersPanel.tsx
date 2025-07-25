@@ -226,7 +226,7 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
                         id={`${key}-${option}`}
                         checked={activeFilters.includes(option)}
                         onCheckedChange={(checked) =>
-                          handleFilterChange(key, option, checked as boolean)
+                          handleFilterChange(key, option, Boolean(checked))
                         }
                         className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 border-gray-300"
                       />

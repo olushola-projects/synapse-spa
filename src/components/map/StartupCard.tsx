@@ -54,7 +54,7 @@ export function StartupCard({
 }: StartupCardProps) {
   const {
     name,
-    logo,
+    // logo, // Removed - not used in current implementation
     country,
     founded,
     description,

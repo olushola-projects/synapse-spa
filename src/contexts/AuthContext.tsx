@@ -24,10 +24,11 @@ interface RegisterData {
   name: string;
 }
 
-interface AuthError {
-  message: string;
-  code?: string;
-}
+// interface AuthError {
+//   message: string;
+//   code?: string;
+// }
+// AuthError interface removed - not used in this context
 
 interface AuthContextType {
   user: User | null;

@@ -1,5 +1,7 @@
 
-import React, { useState } from "react";
+// import React, { useState } from 'react';
+// React import removed - using modern JSX transform
+import { useState } from 'react';
 import { HoveredLink, Menu, MenuItem, ProductItem } from "@/components/ui/navbar-menu";
 import { cn } from "@/lib/utils";
 

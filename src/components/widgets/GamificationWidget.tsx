@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import { Widget } from '../dashboard/WidgetGrid';
 import { Button } from '@/components/ui/button';
-import { Award, Trophy, Medal, Star, Gift, Flag, Target, Zap } from 'lucide-react';
+import { Award, Trophy, Medal, Star, /* Gift, */ Flag, Target, Zap } from 'lucide-react';
+// Gift import removed - not used in this component
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import GamificationComponent from '@/components/GamificationComponent';
 

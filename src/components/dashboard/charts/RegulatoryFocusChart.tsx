@@ -2,6 +2,7 @@
 // React import removed - using modern JSX transform
 import { PieChart } from 'lucide-react';
 import { PieChart as ReChartPie, Cell, ResponsiveContainer } from 'recharts';
+// Pie import removed - not used in this component
 
 const pieChartData = [
   { name: 'GDPR', value: 35, fill: '#4F46E5' },

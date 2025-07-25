@@ -84,7 +84,7 @@ const sampleResponse = {
 
 const AskDara = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  // const { user } = useAuth(); // user variable removed - not used in this component
   const [query, setQuery] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isTeamDialogOpen, setIsTeamDialogOpen] = useState(false);
@@ -284,13 +284,13 @@ const AskDara = () => {
             <div className="py-4 space-y-6">
               <div className="flex items-start gap-4">
                 <Avatar className="w-16 h-16">
-                  <AvatarImage src={teamMembers[0].avatar} alt={teamMembers[0].name} />
-                  <AvatarFallback>{teamMembers[0].name.charAt(0)}</AvatarFallback>
+                  <AvatarImage src={teamMembers[0]?.avatar} alt={teamMembers[0]?.name} />
+                  <AvatarFallback>{teamMembers[0]?.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-medium text-lg">{teamMembers[0].name}</h3>
-                  <p className="text-blue-600 text-sm mb-2">{teamMembers[0].role}</p>
-                  <p className="text-gray-600">{teamMembers[0].bio}</p>
+                  <h3 className="font-medium text-lg">{teamMembers[0]?.name}</h3>
+                  <p className="text-blue-600 text-sm mb-2">{teamMembers[0]?.role}</p>
+                  <p className="text-gray-600">{teamMembers[0]?.bio}</p>
                 </div>
               </div>
 

@@ -17,7 +17,7 @@ import {
   TrendingUp,
   AlertTriangle,
   CheckCircle,
-  Clock,
+  // Clock, // Removed - not used in this component
   Zap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

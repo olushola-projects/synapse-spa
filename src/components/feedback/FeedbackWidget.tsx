@@ -92,7 +92,6 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
       // Use html2canvas or similar library for screenshot capture
       // This is a placeholder for the actual implementation
       const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
       // Implementation would go here
       console.log('Screenshot capture would be implemented here');
       return Promise.resolve();

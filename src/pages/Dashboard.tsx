@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Trash2, Copy, MessageSquare, LineChart, Award, BarChart3, Activity, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Copy, MessageSquare, LineChart, Award, /* BarChart3, Activity, */ AlertCircle } from "lucide-react";
+// BarChart3 and Activity imports removed - not used in this component
 import { WidgetType, WidgetGrid, DashboardContextProvider } from "@/components/dashboard/WidgetGrid";
 import RegulationTrendWidget from "@/components/widgets/RegulationTrendWidget";
 import ForumPreviewWidget from "@/components/widgets/ForumPreviewWidget";

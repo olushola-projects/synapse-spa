@@ -1,5 +1,6 @@
 
-import { Code, Users, Gavel, Briefcase, UserSearch, GraduationCap, Globe } from "lucide-react";
+import { Code, Users, Gavel, Briefcase, UserSearch, GraduationCap, /* Globe */ } from "lucide-react";
+// Globe import removed - not used in this data file
 import { PartnerCategory } from "@/types/partners";
 
 export const partnerCategories: PartnerCategory[] = [
