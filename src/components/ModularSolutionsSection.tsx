@@ -8,7 +8,13 @@ import SolutionDetail from "./solutions/SolutionDetail";
 const ModularSolutionsSection = () => {
   const [activeSolution, setActiveSolution] = useState<string>(solutions[0]?.id || "");
   
-  const activeSolutionData: Solution = solutions.find((solution) => solution.id === activeSolution) || solutions[0];
+  const activeSolutionData: Solution = solutions.find((solution) => solution.id === activeSolution) || solutions[0] || {
+    id: 'default',
+    title: 'Default Solution',
+    description: 'Default solution description',
+    icon: () => null,
+    color: 'from-blue-500 to-indigo-600'
+  };
   
   return (
     <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">

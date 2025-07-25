@@ -87,7 +87,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
   };
 
   // Handle screenshot capture
-  const captureScreenshot = async () => {
+  const captureScreenshot = async (): Promise<void> => {
     try {
       // Use html2canvas or similar library for screenshot capture
       // This is a placeholder for the actual implementation
@@ -95,8 +95,10 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
       const ctx = canvas.getContext('2d');
       // Implementation would go here
       console.log('Screenshot capture would be implemented here');
+      return Promise.resolve();
     } catch (error) {
       console.error('Screenshot capture failed:', error);
+      return Promise.reject(error);
     }
   };
 
@@ -121,7 +123,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
         setStep('success');
         // Track feedback submission event
         if (typeof window !== 'undefined' && 'gtag' in window) {
-          (window as any).gtag('event', 'feedback_submitted', {
+          window.gtag('event', 'feedback_submitted', {
             event_category: 'engagement',
             event_label: feedback.category,
             value: feedback.rating
