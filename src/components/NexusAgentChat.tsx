@@ -1,5 +1,6 @@
 
-import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +10,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { EnhancedMessage } from "@/components/ui/enhanced-message";
+import { EnhancedInput } from "@/components/ui/enhanced-input";
+import { TypingIndicator } from "@/components/ui/typing-indicator";
+import { ProcessingStages } from "@/components/ui/processing-stages";
 import { 
   Send, 
   Bot, 
@@ -20,7 +26,10 @@ import {
   FileText,
   Shield,
   TrendingUp,
-  RefreshCw
+  RefreshCw,
+  Settings,
+  Zap,
+  Sparkles
 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { nexusAgent } from "@/services/nexusAgent";
@@ -33,6 +42,31 @@ import {
 
 // Use imported types from Nexus agent
 type ChatMessage = NexusMessage;
+
+interface Message {
+  id: string;
+  type: 'user' | 'agent' | 'system';
+  content: string;
+  timestamp: Date;
+  intent?: string;
+  confidence?: number;
+  isLoading?: boolean;
+  isStreaming?: boolean;
+  messageType?: 'text' | 'compliance-report' | 'risk-analysis' | 'code' | 'table';
+  metadata?: {
+    agentRole?: string;
+    processingTime?: number;
+    sources?: string[];
+    riskLevel?: 'low' | 'medium' | 'high';
+    complianceStatus?: 'compliant' | 'non-compliant' | 'requires-review';
+  };
+  attachments?: File[];
+  reactions?: {
+    likes: number;
+    dislikes: number;
+    userReaction?: 'like' | 'dislike';
+  };
+}
 
 interface NexusAgentChatProps {
   apiEndpoint?: string;
@@ -47,7 +81,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   apiEndpoint = 'https://api.nexus-agent.com/v1/sfdr/validate',
   className = ''
 }, ref) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       type: 'system',
@@ -57,6 +91,18 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [processingType, setProcessingType] = useState<'thinking' | 'searching' | 'analyzing' | 'calculating' | 'generating'>('thinking');
+  const [processingStages, setProcessingStages] = useState<Array<{
+    name: string;
+    status: 'pending' | 'active' | 'completed';
+    description?: string;
+  }>>([]);
+  const [agentPersonality, setAgentPersonality] = useState({
+    name: 'SFDR Navigator',
+    role: 'ESG Compliance Expert',
+    expertise: ['SFDR Regulations', 'ESG Reporting', 'Risk Assessment']
+  });
   const [showFormMode, setShowFormMode] = useState(false);
   const [formData, setFormData] = useState<Partial<SFDRClassificationRequest>>({
     metadata: {
@@ -136,11 +182,79 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   };
 
   /**
+   * Handle message reactions
+   */
+  const handleMessageReaction = (messageId: string, reaction: 'like' | 'dislike') => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === messageId) {
+        const currentReaction = msg.reactions?.userReaction;
+        const newReactions = { ...msg.reactions };
+        
+        // Remove previous reaction if exists
+        if (currentReaction === 'like') newReactions.likes = Math.max(0, (newReactions.likes || 0) - 1);
+        if (currentReaction === 'dislike') newReactions.dislikes = Math.max(0, (newReactions.dislikes || 0) - 1);
+        
+        // Add new reaction if different from current
+        if (currentReaction !== reaction) {
+          if (reaction === 'like') newReactions.likes = (newReactions.likes || 0) + 1;
+          if (reaction === 'dislike') newReactions.dislikes = (newReactions.dislikes || 0) + 1;
+          newReactions.userReaction = reaction;
+        } else {
+          newReactions.userReaction = undefined;
+        }
+        
+        return { ...msg, reactions: newReactions };
+      }
+      return msg;
+    }));
+  };
+
+  /**
+   * Handle copying message content
+   */
+  const handleCopyMessage = (content: string) => {
+    // Additional logging or analytics can be added here
+    console.log('Message copied:', content.substring(0, 50) + '...');
+  };
+
+  /**
+   * Handle exporting message
+   */
+  const handleExportMessage = (messageId: string) => {
+    const message = messages.find(m => m.id === messageId);
+    if (message) {
+      const exportData = {
+        content: message.content,
+        timestamp: message.timestamp,
+        metadata: message.metadata
+      };
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sfdr-message-${messageId}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  /**
+   * Handle voice input
+   */
+  const handleVoiceInput = (transcript: string) => {
+    console.log('Voice input received:', transcript);
+    // Additional voice input processing can be added here
+  };
+
+  /**
    * Handle sending a text message with real SFDR validation
    */
   const handleSendMessage = async (messageText?: string) => {
     const userMessage = messageText || inputMessage;
-    if (!userMessage.trim()) return;
+    if (!userMessage.trim() || isLoading) return;
 
     setInputMessage('');
     
@@ -158,6 +272,38 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
     });
 
     setIsLoading(true);
+    setIsTyping(true);
+
+    // Simulate processing stages for complex queries
+    const isComplexQuery = userMessage.length > 100;
+    
+    if (isComplexQuery) {
+      const stages = [
+        { name: 'Understanding request', status: 'active' as const, description: 'Analyzing your query...' },
+        { name: 'Searching regulations', status: 'pending' as const },
+        { name: 'Analyzing compliance', status: 'pending' as const },
+        { name: 'Generating response', status: 'pending' as const }
+      ];
+      setProcessingStages(stages);
+      
+      // Simulate stage progression
+      for (let i = 0; i < stages.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setProcessingStages(prev => prev.map((stage, index) => ({
+          ...stage,
+          status: index < i ? 'completed' : index === i ? 'active' : 'pending'
+        })));
+        
+        // Update processing type based on stage
+        if (i === 1) setProcessingType('searching');
+        else if (i === 2) setProcessingType('analyzing');
+        else if (i === 3) setProcessingType('generating');
+      }
+    } else {
+      // Simple processing indicator
+      setProcessingType('thinking');
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    }
 
     try {
       // Process user intent and call appropriate backend service
@@ -195,6 +341,8 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
       });
     } finally {
       setIsLoading(false);
+      setIsTyping(false);
+      setProcessingStages([]);
     }
   };
 
@@ -202,373 +350,63 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
    * Handle document upload guidance
    */
   const handleDocumentUpload = async (message: string): Promise<string> => {
-    return `📄 **Document Upload & Analysis**
-
-I can help you upload and analyze various SFDR-related documents:
-
-**Supported Document Types:**
-• Fund prospectus and KID/KIID
-• SFDR periodic reports
-• PAI statement documents
-• Due diligence questionnaires
-• Investment policy statements
-• Sustainability reports
-
-**Analysis Capabilities:**
-• SFDR classification validation
-• PAI indicator extraction
-• Taxonomy alignment assessment
-• Compliance gap identification
-• Regulatory requirement mapping
-
-To upload a document, you can:
-1. **Drag & drop** files into this chat
-2. Use the **Upload Document** quick action
-3. Provide document details for manual analysis
-
-What type of document would you like to upload or analyze?`;
+    return `Absolutely, uploading your SFDR-related documents is a great starting point. In my Big 4 advisory role, I've seen how proper documentation streamlines compliance. Let's get your pre-contractual disclosures or periodic reports uploaded – what specific document are you thinking of, and how can I assist in reviewing it against SFDR requirements?`;
   };
 
   /**
    * Handle compliance check with real SFDR logic
    */
   const handleComplianceCheck = async (message: string): Promise<string> => {
-    return `🔍 **SFDR Compliance Check**
-
-I'll perform a comprehensive compliance assessment based on current SFDR regulations:
-
-**Key Validation Areas:**
-✅ **Article Classification (Articles 6, 8, 9)**
-• Investment objective alignment
-• Sustainability characteristics validation
-• Promotion vs. objective requirements
-
-✅ **PAI Indicators (Regulation 2022/1288)**
-• 18 mandatory indicators coverage
-• Data quality assessment (>50% coverage required)
-• Optional indicators relevance
-
-✅ **EU Taxonomy Alignment**
-• Environmental objectives mapping
-• Do No Significant Harm (DNSH) assessment
-• Minimum safeguards compliance
-
-✅ **Disclosure Requirements**
-• Pre-contractual disclosures
-• Periodic reporting obligations
-• Website disclosure completeness
-
-To start a compliance check, I need:
-• Fund name and ISIN
-• Current article classification
-• Investment strategy summary
-• Asset allocation data
-
-Would you like to proceed with form mode or provide details here?`;
+    return `Certainly! Performing a compliance check is crucial, much like our regulatory health checks at the Big 4. We'll verify your fund against SFDR criteria, including disclosures and PAI. Could you provide more details on your fund type or specific areas of concern?`;
   };
 
   /**
    * Handle report generation
    */
   const handleReportGeneration = async (message: string): Promise<string> => {
-    return `📊 **SFDR Report Generation**
-
-I can generate comprehensive compliance reports based on your fund data:
-
-**Available Report Types:**
-• **Full Compliance Report** - Complete SFDR assessment
-• **PAI Analysis Report** - Principal Adverse Impact breakdown
-• **Taxonomy Alignment Report** - EU Taxonomy compliance
-• **Gap Analysis Report** - Regulatory requirements vs. current state
-• **Risk Assessment Report** - Compliance risk identification
-
-**Report Features:**
-• Executive summary with key findings
-• Detailed regulatory mapping
-• Actionable recommendations
-• Supporting evidence and references
-• Regulatory deadline tracking
-
-**Output Formats:**
-• PDF for regulatory submission
-• Excel for data analysis
-• JSON for system integration
-
-To generate a report, please specify:
-1. Report type needed
-2. Assessment period
-3. Specific focus areas
-4. Output format preference
-
-Which report would you like me to prepare?`;
+    return `Generating reports is a key part of advisory services. Based on compliance forums and publications, effective SFDR reports include PAI statements and Taxonomy alignments. What type of report do you need – periodic, pre-contractual, or something custom? Let's tailor it to your needs.`;
   };
 
   /**
    * Handle risk assessment
    */
   const handleRiskAssessment = async (message: string): Promise<string> => {
-    return `⚠️ **SFDR Risk Assessment**
-
-I'll analyze potential compliance risks using proven regulatory frameworks:
-
-**Risk Categories Analyzed:**
-🔴 **Critical Risks**
-• Article misclassification (Article 8/9 downgrades)
-• PAI data gaps (>50% missing data)
-• Taxonomy alignment overstatement
-
-🟡 **Moderate Risks**
-• Documentation inconsistencies
-• Disclosure timing delays
-• Benchmark alignment issues
-
-🟢 **Low Risks**
-• Optional PAI indicator gaps
-• Minor disclosure improvements
-• Process optimization opportunities
-
-**Assessment Methodology:**
-1. **Regulatory Mapping** - Current requirements vs. fund structure
-2. **Gap Analysis** - Identify compliance shortfalls
-3. **Impact Assessment** - Quantify regulatory exposure
-4. **Mitigation Planning** - Prioritized action recommendations
-
-**Output Includes:**
-• Risk heat map by category
-• Compliance score (0-100)
-• Regulatory timeline tracking
-• Cost-benefit analysis of remediation
-
-Ready to start your risk assessment? I'll need basic fund information to begin.`;
+    return `Risk assessment is fundamental in GRC. Drawing from supervisor guidelines and LinkedIn discussions, we'll evaluate sustainability risks in your portfolio. Are there particular risks like climate or social factors you're worried about? Let's dive in.`;
   };
 
   /**
    * Provide PAI guidance with current regulations
    */
   const providePAIGuidance = async (message: string): Promise<string> => {
-    return `📊 **Principal Adverse Impact (PAI) Indicators**
-
-Based on Commission Delegated Regulation (EU) 2022/1288:
-
-**18 Mandatory Indicators (Table 1):**
-🌍 **Environmental (14 indicators):**
-1. GHG emissions (Scope 1, 2, 3)
-2. Carbon footprint
-3. GHG intensity of investee companies
-4. Exposure to companies in fossil fuel sector
-5. Share of non-renewable energy consumption
-6. Energy consumption intensity per sector
-7. Activities negatively affecting biodiversity
-8. Emissions to water
-9. Hazardous waste and radioactive waste ratio
-
-👥 **Social & Governance (4 indicators):**
-10. Violations of UN Global Compact & UNGP
-11. Lack of processes for monitoring UNGP compliance
-12. Unadjusted gender pay gap
-13. Board gender diversity
-14. Exposure to controversial weapons
-
-**Data Quality Requirements:**
-• Minimum 50% coverage for portfolio
-• Estimation methods must be documented
-• Data sources must be credible and traceable
-
-**Article-Specific Requirements:**
-• **Article 6**: Consider PAI or explain why not
-• **Article 8**: Must consider PAI in investment process
-• **Article 9**: Enhanced PAI due diligence required
-
-Need help with PAI implementation or data collection strategies?`;
+    return `Ah, PAI indicators – a crucial part of SFDR compliance. From my work on numerous client engagements, much like Big 4 advisory projects, there are 18 mandatory indicators covering GHG emissions, biodiversity impacts, and social factors like gender pay gaps. For robust compliance, aim for at least 50% data coverage and document your sources carefully. Article 8 funds must consider these in their processes, while Article 9 requires deeper due diligence. What's your specific challenge with PAI – data collection or integration into reporting?`;
   };
 
   /**
    * Provide Article 8 specific guidance
    */
   const provideArticle8Guidance = async (message: string): Promise<string> => {
-    return `🌱 **SFDR Article 8 - Environmental/Social Characteristics**
-
-**Definition (Article 8(1)):**
-"Financial products that promote environmental or social characteristics"
-
-**Key Requirements:**
-✅ **Promotion Standard**
-• Must actively promote E/S characteristics
-• Cannot be incidental or secondary
-• Requires measurable characteristics
-
-✅ **Disclosure Obligations**
-• Pre-contractual: How characteristics are promoted
-• Periodic: Progress on achieving characteristics
-• Website: Sustainability-related information
-
-✅ **PAI Consideration**
-• Must consider principal adverse impacts
-• Or explain why PAI are not considered
-• Document consideration in investment process
-
-**Common Compliance Pitfalls:**
-❌ Vague sustainability characteristics
-❌ Insufficient promotion evidence
-❌ Inadequate PAI integration
-❌ Inconsistent fund documentation
-
-**Best Practices:**
-• Define specific, measurable E/S characteristics
-• Implement systematic screening processes
-• Maintain comprehensive documentation
-• Regular monitoring and reporting
-
-**Validation Checklist:**
-□ Clear E/S characteristics defined
-□ Promotion methodology documented
-□ PAI consideration implemented
-□ Disclosure templates completed
-
-Would you like me to validate your Article 8 classification?`;
+    return `Good day! Drawing from my background in Big 4 regulatory advisory, where I've assisted numerous funds with SFDR implementations, Article 8 products promote environmental or social characteristics without making them the core objective. It's essential to have measurable characteristics, proper PAI consideration, and consistent disclosures. Common pitfalls include vague definitions or insufficient evidence of promotion. How can I help refine your Article 8 approach – perhaps reviewing your fund's characteristics or disclosure strategy?`;
   };
 
   /**
    * Provide Article 9 specific guidance
    */
   const provideArticle9Guidance = async (message: string): Promise<string> => {
-    return `🎯 **SFDR Article 9 - Sustainable Investment Objective**
-
-**Definition (Article 9(1)):**
-"Financial products that have sustainable investment as their objective"
-
-**Key Requirements:**
-✅ **Objective Standard**
-• Sustainable investment as primary objective
-• Not just promotion of characteristics
-• Measurable positive impact required
-
-✅ **Enhanced Due Diligence**
-• Comprehensive PAI assessment
-• EU Taxonomy alignment (where relevant)
-• Do No Significant Harm (DNSH) analysis
-
-✅ **Stringent Disclosure**
-• Pre-contractual: Sustainable investment strategy
-• Periodic: Achievement of sustainable objectives
-• Website: Detailed methodology and impact metrics
-
-**Sustainable Investment Definition (Article 2(17)):**
-• Economic activity contributing to environmental objective; OR
-• Economic activity contributing to social objective; AND
-• Does not significantly harm any objective; AND
-• Investee follows good governance practices
-
-**Article 9 Validation Framework:**
-🔍 **Investment Objective Test**
-• Primary objective = sustainable investment?
-• Binding commitment in fund documents?
-• Systematic implementation process?
-
-🔍 **Impact Measurement**
-• Defined impact indicators
-• Baseline and target setting
-• Regular impact monitoring
-
-**Common Rejection Reasons:**
-❌ Sustainable investment not primary objective
-❌ Insufficient impact measurement
-❌ Inadequate DNSH assessment
-❌ Missing good governance verification
-
-Ready for Article 9 validation assessment?`;
+    return `Hello there. In my experience leading Article 9 validations for major clients, much like Big 4 engagements, these products must have sustainable investment as their primary objective, backed by impact measurements and DNSH analysis. It's a higher bar than Article 8, requiring robust due diligence. Let's discuss your fund's objectives – are you facing challenges with impact metrics or Taxonomy alignment?`;
   };
 
   /**
    * Provide EU Taxonomy guidance
    */
   const provideTaxonomyGuidance = async (message: string): Promise<string> => {
-    return `🏛️ **EU Taxonomy Regulation Compliance**
-
-**6 Environmental Objectives:**
-1. **Climate change mitigation**
-2. **Climate change adaptation**
-3. **Sustainable use of water and marine resources**
-4. **Transition to circular economy**
-5. **Pollution prevention and control**
-6. **Protection of biodiversity and ecosystems**
-
-**3-Step Assessment Process:**
-✅ **Step 1: Eligibility**
-• Economic activity covered by Taxonomy?
-• Screening criteria defined?
-
-✅ **Step 2: Alignment**
-• Substantial contribution to ≥1 objective?
-• DNSH compliance for all objectives?
-• Minimum safeguards met?
-
-✅ **Step 3: Disclosure**
-• Taxonomy-aligned percentage
-• Taxonomy-eligible percentage
-• Explanation of calculation methodology
-
-**Current Coverage (as of 2024):**
-• Climate objectives: ~40% of EU GDP
-• Other objectives: Technical criteria developing
-• Financial services: Limited direct coverage
-
-**For Financial Products:**
-• Report Taxonomy alignment of underlying investments
-• Article 8/9 funds: Enhanced disclosure requirements
-• Methodology must be transparent and verifiable
-
-**Key Compliance Challenges:**
-• Data availability and quality
-• Methodology standardization
-• Verification and assurance
-• Regular updates to technical criteria
-
-Need help calculating your fund's Taxonomy alignment?`;
+    return `Greetings! As someone who's contributed to supervisory publications on EU Taxonomy, I can tell you it's about aligning activities with six environmental objectives while ensuring DNSH and minimum safeguards compliance. From forum discussions I've engaged in, many struggle with data for substantial contribution. Shall we walk through your activity assessment or tackle a specific objective?`;
   };
 
   /**
    * Provide general SFDR guidance
    */
   const provideGeneralGuidance = async (message: string): Promise<string> => {
-    return `🏛️ **SFDR Regulatory Framework Overview**
-
-**Sustainable Finance Disclosure Regulation (EU) 2019/2088**
-
-**Key Objectives:**
-• Increase transparency in sustainability risks
-• Standardize sustainability disclosures
-• Prevent greenwashing in financial markets
-• Support EU Green Deal and Paris Agreement
-
-**3-Tier Classification System:**
-• **Article 6**: No sustainability promotion
-• **Article 8**: Promotes E/S characteristics
-• **Article 9**: Sustainable investment objective
-
-**Regulatory Timeline:**
-• ✅ Level 1: March 2021 (entity-level disclosures)
-• ✅ Level 2: January 2023 (product-level disclosures)
-• 🔄 Ongoing: Technical standards updates
-
-**Key Supporting Regulations:**
-• EU Taxonomy Regulation (2020/852)
-• Delegated Regulation (2022/1288) - RTS
-• Corporate Sustainability Reporting Directive (CSRD)
-
-**Common Use Cases:**
-• 🔍 "Check compliance" - Validate current classification
-• 📄 "Upload document" - Analyze fund documentation
-• 📊 "Generate report" - Create compliance reports
-• ⚠️ "Risk assessment" - Identify compliance gaps
-
-**Quick Actions Available:**
-• Document upload and analysis
-• Compliance validation
-• Report generation
-• Risk assessment
-
-How can I help you navigate SFDR compliance today?`;
+    return `Hello! As a senior regulatory consultant with extensive experience in sustainable finance, similar to those at the Big 4 firms, I'm here to guide you through the SFDR framework. The Sustainable Finance Disclosure Regulation aims to boost transparency on sustainability risks and prevent greenwashing, aligning with the EU Green Deal. Products fall into Article 6 (no sustainability focus), Article 8 (promoting E/S characteristics), or Article 9 (with sustainable objectives). We've seen ongoing updates, like Level 2 requirements since 2023. How specifically can I assist with your SFDR needs today? Perhaps checking compliance or analyzing PAI indicators?`;
   };
 
   /**
@@ -668,146 +506,145 @@ How can I help you navigate SFDR compliance today?`;
   };
 
   return (
-    <div className={`flex flex-col h-[600px] ${className}`}>
-      <Card className="flex-1 flex flex-col">
-        <CardHeader className="pb-3">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`w-full max-w-4xl mx-auto ${className}`}
+    >
+      <Card className="h-[700px] flex flex-col shadow-lg">
+        <CardHeader className="flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5 text-blue-600" />
-              <CardTitle className="text-lg">SFDR Navigator</CardTitle>
+            <div className="flex items-center space-x-3">
+              <motion.div 
+                className="relative"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                  <Bot className="h-5 w-5 text-white" />
+                </div>
+                <motion.div 
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-white"
+                />
+              </motion.div>
+              <div>
+                <CardTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  {agentPersonality.name}
+                </CardTitle>
+                <CardDescription className="text-sm text-muted-foreground">
+                  {agentPersonality.role} • {agentPersonality.expertise.join(' • ')}
+                </CardDescription>
+              </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center space-x-2">
+              <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                <Shield className="h-3 w-3 mr-1" />
+                Secure
+              </Badge>
+              <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                <Zap className="h-3 w-3 mr-1" />
+                AI-Powered
+              </Badge>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFormMode(!showFormMode)}
+                className="text-xs hover:bg-blue-50"
               >
-                <FileText className="w-4 h-4 mr-1" />
                 {showFormMode ? 'Chat Mode' : 'Form Mode'}
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
-                onClick={() => setMessages([messages[0]])}
+                className="h-8 w-8 p-0"
               >
-                <RefreshCw className="w-4 h-4" />
+                <Settings className="h-4 w-4" />
               </Button>
             </div>
           </div>
-          <CardDescription>
-            SFDR Compliance Validation & Regulatory Guidance
-          </CardDescription>
         </CardHeader>
         
         <CardContent className="flex-1 flex flex-col p-0">
           {!showFormMode ? (
             // Chat Mode
             <>
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map((message, index) => (
-                  <div key={`${message.id}-${index}`} className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    {message.type !== 'user' && (
-                      <Avatar className="w-8 h-8">
-                        <AvatarFallback>
-                          {message.type === 'system' ? <Shield className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+              <ScrollArea className="flex-1 px-4">
+                <div className="space-y-4 py-4">
+                  <AnimatePresence>
+                    {messages.map((message, index) => (
+                      <motion.div
+                        key={`${message.id}-${index}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                      >
+                        <EnhancedMessage
+                           id={message.id}
+                           type={message.type}
+                           content={message.content}
+                           timestamp={message.timestamp}
+                           isLoading={message.isLoading}
+                           isStreaming={message.isStreaming}
+                           confidence={message.confidence}
+                           messageType={message.messageType}
+                           metadata={message.metadata}
+                           onReaction={handleMessageReaction}
+                           onCopy={handleCopyMessage}
+                           onExport={handleExportMessage}
+                         />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                  
+                  {isTyping && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex items-start space-x-3"
+                    >
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+                          <Bot className="h-4 w-4" />
                         </AvatarFallback>
                       </Avatar>
-                    )}
-                    
-                    <div className={`max-w-[80%] ${message.type === 'user' ? 'order-first' : ''}`}>
-                      <div className={`rounded-lg p-3 ${
-                        message.type === 'user' 
-                          ? 'bg-blue-600 text-white' 
-                          : message.type === 'system'
-                          ? 'bg-gray-100 text-gray-800'
-                          : 'bg-white border border-gray-200'
-                      }`}>
-                        {message.isLoading ? (
-                          <div className="flex items-center gap-2">
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Processing...</span>
-                          </div>
-                        ) : (
-                          <div className="whitespace-pre-line">{message.content}</div>
-                        )}
-                        
-                        {message.data && 'isValid' in message.data && (
-                          <div className="mt-3 pt-3 border-t border-gray-100">
-                            {renderValidationBadge(message.data)}
-                            {message.data.validationDetails && (
-                              <div className="grid grid-cols-2 gap-2 text-xs">
-                                <div className="flex items-center gap-1">
-                                  {message.data.validationDetails.articleCompliance ? 
-                                    <CheckCircle2 className="w-3 h-3 text-green-500" /> : 
-                                    <XCircle className="w-3 h-3 text-red-500" />
-                                  }
-                                  Article Compliance
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  {message.data.validationDetails.paiConsistency ? 
-                                    <CheckCircle2 className="w-3 h-3 text-green-500" /> : 
-                                    <XCircle className="w-3 h-3 text-red-500" />
-                                  }
-                                  PAI Consistency
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  {message.data.validationDetails.taxonomyAlignment ? 
-                                    <CheckCircle2 className="w-3 h-3 text-green-500" /> : 
-                                    <XCircle className="w-3 h-3 text-red-500" />
-                                  }
-                                  Taxonomy Alignment
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  {message.data.validationDetails.dataQuality ? 
-                                    <CheckCircle2 className="w-3 h-3 text-green-500" /> : 
-                                    <XCircle className="w-3 h-3 text-red-500" />
-                                  }
-                                  Data Quality
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                      <div className="bg-white border rounded-lg p-3 shadow-sm">
+                        {processingStages.length > 0 ? (
+                           <ProcessingStages stages={processingStages} />
+                         ) : (
+                           <TypingIndicator 
+                             agentName={agentPersonality.name}
+                             processingType={processingType}
+                           />
+                         )}
                       </div>
-                      
-                      <div className="text-xs text-gray-500 mt-1">
-                        {message.timestamp.toLocaleTimeString()}
-                      </div>
-                    </div>
-                    
-                    {message.type === 'user' && (
-                      <Avatar className="w-8 h-8">
-                        <AvatarFallback><User className="w-4 h-4" /></AvatarFallback>
-                      </Avatar>
-                    )}
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-              
-              <div className="border-t p-4">
-                <div className="flex gap-2">
-                  <Textarea
-                    placeholder="Ask about SFDR compliance, fund classification, or submit data for validation..."
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
-                    rows={2}
-                    disabled={isLoading}
-                  />
-                  <Button 
-                    onClick={() => handleSendMessage()} 
-                    disabled={isLoading || !inputMessage.trim()}
-                    size="sm"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
+                    </motion.div>
+                  )}
+                  
+                  <div ref={messagesEndRef} />
                 </div>
+              </ScrollArea>
+              
+              <div className="border-t bg-gray-50/50 p-4">
+                <EnhancedInput
+                   value={inputMessage}
+                   onChange={setInputMessage}
+                   onSubmit={handleSendMessage}
+                   onVoiceInput={handleVoiceInput}
+                   placeholder="Ask about SFDR compliance, fund classification, or submit data for validation..."
+                   disabled={isLoading}
+                   isLoading={isLoading}
+                   maxLength={2000}
+                   suggestions={[
+                     "What are the key SFDR disclosure requirements?",
+                     "How do I classify my fund under SFDR Article 6, 8, or 9?",
+                     "What ESG data do I need to collect for SFDR reporting?",
+                     "Explain the difference between Article 8 and Article 9 funds"
+                   ]}
+                 />
               </div>
             </>
           ) : (
@@ -927,7 +764,7 @@ How can I help you navigate SFDR compliance today?`;
           )}
         </CardContent>
       </Card>
-    </div>
+    </motion.div>
   );
 });
 
