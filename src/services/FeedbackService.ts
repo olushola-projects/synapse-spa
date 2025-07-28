@@ -54,7 +54,7 @@ class FeedbackService {
       retryDelay: 1000,
       ...config
     };
-    
+
     this.sessionId = this.generateSessionId();
     this.initializeIntegrations();
   }
@@ -108,7 +108,9 @@ class FeedbackService {
   /**
    * Submit feedback with retry mechanism and analytics tracking
    */
-  async submitFeedback(feedbackData: Omit<FeedbackData, 'id' | 'timestamp' | 'sessionId'>): Promise<boolean> {
+  async submitFeedback(
+    feedbackData: Omit<FeedbackData, 'id' | 'timestamp' | 'sessionId'>
+  ): Promise<boolean> {
     const enrichedFeedback: FeedbackData = {
       ...feedbackData,
       id: this.generateFeedbackId(),
@@ -132,17 +134,17 @@ class FeedbackService {
     try {
       // Attempt to submit feedback
       const success = await this.sendFeedbackToAPI(enrichedFeedback);
-      
+
       if (success) {
         // Track successful submission
         this.trackFeedbackEvent(enrichedFeedback);
-        
+
         // Store locally for analytics
         this.storeFeedbackLocally(enrichedFeedback);
-        
+
         // Send to third-party services
         this.sendToIntegrations(enrichedFeedback);
-        
+
         return true;
       } else {
         // Add to retry queue
@@ -228,10 +230,10 @@ class FeedbackService {
     try {
       const existingFeedback = this.getLocalFeedback();
       existingFeedback.push(feedback);
-      
+
       // Keep only last 100 feedback items to prevent storage bloat
       const trimmedFeedback = existingFeedback.slice(-100);
-      
+
       localStorage.setItem(this.config.storageKey, JSON.stringify(trimmedFeedback));
     } catch (error) {
       console.error('Local storage error:', error);
@@ -282,7 +284,7 @@ class FeedbackService {
    */
   private addToRetryQueue(feedback: FeedbackData): void {
     this.retryQueue.push(feedback);
-    
+
     // Store retry queue in localStorage
     try {
       localStorage.setItem(`${this.config.storageKey}_retry`, JSON.stringify(this.retryQueue));
@@ -304,7 +306,7 @@ class FeedbackService {
 
       // Process queued items
       const failedItems: FeedbackData[] = [];
-      
+
       for (const feedback of this.retryQueue) {
         const success = await this.sendFeedbackToAPI(feedback);
         if (!success) {
@@ -312,7 +314,7 @@ class FeedbackService {
         } else {
           this.trackFeedbackEvent(feedback);
         }
-        
+
         // Add delay between retries
         await new Promise(resolve => setTimeout(resolve, this.config.retryDelay));
       }
@@ -330,7 +332,7 @@ class FeedbackService {
    */
   getFeedbackAnalytics(): FeedbackAnalytics {
     const localFeedback = this.getLocalFeedback();
-    
+
     if (localFeedback.length === 0) {
       return {
         totalFeedback: 0,
@@ -344,18 +346,24 @@ class FeedbackService {
     // Calculate analytics
     const totalFeedback = localFeedback.length;
     const averageRating = localFeedback.reduce((sum, f) => sum + f.rating, 0) / totalFeedback;
-    
+
     // Category breakdown
-    const categoryBreakdown = localFeedback.reduce((acc, f) => {
-      acc[f.category] = (acc[f.category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const categoryBreakdown = localFeedback.reduce(
+      (acc, f) => {
+        acc[f.category] = (acc[f.category] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     // Page breakdown
-    const pageBreakdown = localFeedback.reduce((acc, f) => {
-      acc[f.page] = (acc[f.page] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const pageBreakdown = localFeedback.reduce(
+      (acc, f) => {
+        acc[f.page] = (acc[f.page] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     // Trend data (last 30 days)
     const trendData = this.calculateTrendData(localFeedback);
@@ -372,28 +380,35 @@ class FeedbackService {
   /**
    * Calculate trend data for analytics
    */
-  private calculateTrendData(feedback: FeedbackData[]): Array<{ date: string; count: number; avgRating: number }> {
+  private calculateTrendData(
+    feedback: FeedbackData[]
+  ): Array<{ date: string; count: number; avgRating: number }> {
     const last30Days = new Date();
     last30Days.setDate(last30Days.getDate() - 30);
 
     const recentFeedback = feedback.filter(f => new Date(f.timestamp) >= last30Days);
-    
+
     // Group by date
-    const groupedByDate = recentFeedback.reduce((acc, f) => {
-      const date = new Date(f.timestamp).toISOString().split('T')[0];
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(f);
-      return acc;
-    }, {} as Record<string, FeedbackData[]>);
+    const groupedByDate = recentFeedback.reduce(
+      (acc, f) => {
+        const date = new Date(f.timestamp).toISOString().split('T')[0];
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(f);
+        return acc;
+      },
+      {} as Record<string, FeedbackData[]>
+    );
 
     // Calculate daily metrics
-    return Object.entries(groupedByDate).map(([date, dayFeedback]) => ({
-      date,
-      count: dayFeedback.length,
-      avgRating: dayFeedback.reduce((sum, f) => sum + f.rating, 0) / dayFeedback.length
-    })).sort((a, b) => a.date.localeCompare(b.date));
+    return Object.entries(groupedByDate)
+      .map(([date, dayFeedback]) => ({
+        date,
+        count: dayFeedback.length,
+        avgRating: dayFeedback.reduce((sum, f) => sum + f.rating, 0) / dayFeedback.length
+      }))
+      .sort((a, b) => a.date.localeCompare(b.date));
   }
 
   /**
@@ -401,25 +416,27 @@ class FeedbackService {
    */
   exportFeedbackData(format: 'json' | 'csv' = 'json'): string {
     const feedback = this.getLocalFeedback();
-    
+
     if (format === 'csv') {
       const headers = ['id', 'rating', 'category', 'message', 'page', 'timestamp', 'userAgent'];
       const csvContent = [
         headers.join(','),
-        ...feedback.map(f => [
-          f.id,
-          f.rating,
-          f.category,
-          `"${f.message.replace(/"/g, '""')}"`,
-          f.page,
-          f.timestamp,
-          `"${f.userAgent}"`
-        ].join(','))
+        ...feedback.map(f =>
+          [
+            f.id,
+            f.rating,
+            f.category,
+            `"${f.message.replace(/"/g, '""')}"`,
+            f.page,
+            f.timestamp,
+            `"${f.userAgent}"`
+          ].join(',')
+        )
       ].join('\n');
-      
+
       return csvContent;
     }
-    
+
     return JSON.stringify(feedback, null, 2);
   }
 

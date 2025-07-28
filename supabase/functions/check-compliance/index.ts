@@ -1,11 +1,11 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
+};
 
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -15,33 +15,31 @@ Deno.serve(async (req) => {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    )
+    );
 
     // Get user from JWT
-    const authHeader = req.headers.get('Authorization')!
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const authHeader = req.headers.get('Authorization')!;
+    const token = authHeader.replace('Bearer ', '');
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
-    const { 
-      fundName, 
-      entityId, 
-      targetArticle, 
-      assessmentData 
-    } = await req.json()
+    const { fundName, entityId, targetArticle, assessmentData } = await req.json();
 
     // Validate required fields
     if (!fundName || !entityId || !targetArticle) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields: fundName, entityId, targetArticle' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     }
 
     // Perform comprehensive SFDR compliance check
@@ -50,7 +48,7 @@ Deno.serve(async (req) => {
       entityId,
       targetArticle,
       assessmentData: assessmentData || {}
-    })
+    });
 
     // Save assessment to database
     const { data: assessment, error: dbError } = await supabase
@@ -66,14 +64,14 @@ Deno.serve(async (req) => {
         status: 'validated'
       })
       .select()
-      .single()
+      .single();
 
     if (dbError) {
-      console.error('Database error:', dbError)
-      return new Response(
-        JSON.stringify({ error: 'Failed to save compliance assessment' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      console.error('Database error:', dbError);
+      return new Response(JSON.stringify({ error: 'Failed to save compliance assessment' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
     return new Response(
@@ -84,20 +82,19 @@ Deno.serve(async (req) => {
         message: 'Compliance check completed successfully'
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
-
+    );
   } catch (error) {
-    console.error('Function error:', error)
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    console.error('Function error:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
   }
-})
+});
 
 async function performComplianceCheck(data: any) {
-  const { fundName, targetArticle, assessmentData } = data
-  
+  const { fundName, targetArticle, assessmentData } = data;
+
   const results = {
     overallScore: 0,
     checks: [] as any[],
@@ -110,43 +107,43 @@ async function performComplianceCheck(data: any) {
       dataQuality: false,
       disclosureCompleteness: false
     }
-  }
+  };
 
-  let passedChecks = 0
-  const totalChecks = 5
+  let passedChecks = 0;
+  const totalChecks = 5;
 
   // Article Classification Check
-  const articleCheck = checkArticleClassification(targetArticle, assessmentData)
-  results.checks.push(articleCheck)
-  if (articleCheck.passed) passedChecks++
-  results.validationDetails.articleCompliance = articleCheck.passed
+  const articleCheck = checkArticleClassification(targetArticle, assessmentData);
+  results.checks.push(articleCheck);
+  if (articleCheck.passed) passedChecks++;
+  results.validationDetails.articleCompliance = articleCheck.passed;
 
   // PAI Indicators Check
-  const paiCheck = checkPAIIndicators(targetArticle, assessmentData)
-  results.checks.push(paiCheck)
-  if (paiCheck.passed) passedChecks++
-  results.validationDetails.paiConsistency = paiCheck.passed
+  const paiCheck = checkPAIIndicators(targetArticle, assessmentData);
+  results.checks.push(paiCheck);
+  if (paiCheck.passed) passedChecks++;
+  results.validationDetails.paiConsistency = paiCheck.passed;
 
   // Taxonomy Alignment Check
-  const taxonomyCheck = checkTaxonomyAlignment(targetArticle, assessmentData)
-  results.checks.push(taxonomyCheck)
-  if (taxonomyCheck.passed) passedChecks++
-  results.validationDetails.taxonomyAlignment = taxonomyCheck.passed
+  const taxonomyCheck = checkTaxonomyAlignment(targetArticle, assessmentData);
+  results.checks.push(taxonomyCheck);
+  if (taxonomyCheck.passed) passedChecks++;
+  results.validationDetails.taxonomyAlignment = taxonomyCheck.passed;
 
   // Data Quality Check
-  const dataQualityCheck = checkDataQuality(assessmentData)
-  results.checks.push(dataQualityCheck)
-  if (dataQualityCheck.passed) passedChecks++
-  results.validationDetails.dataQuality = dataQualityCheck.passed
+  const dataQualityCheck = checkDataQuality(assessmentData);
+  results.checks.push(dataQualityCheck);
+  if (dataQualityCheck.passed) passedChecks++;
+  results.validationDetails.dataQuality = dataQualityCheck.passed;
 
   // Disclosure Completeness Check
-  const disclosureCheck = checkDisclosureCompleteness(targetArticle, assessmentData)
-  results.checks.push(disclosureCheck)
-  if (disclosureCheck.passed) passedChecks++
-  results.validationDetails.disclosureCompleteness = disclosureCheck.passed
+  const disclosureCheck = checkDisclosureCompleteness(targetArticle, assessmentData);
+  results.checks.push(disclosureCheck);
+  if (disclosureCheck.passed) passedChecks++;
+  results.validationDetails.disclosureCompleteness = disclosureCheck.passed;
 
   // Calculate overall score
-  results.overallScore = Math.round((passedChecks / totalChecks) * 100)
+  results.overallScore = Math.round((passedChecks / totalChecks) * 100);
 
   // Collect issues and recommendations
   results.checks.forEach(check => {
@@ -155,22 +152,24 @@ async function performComplianceCheck(data: any) {
         category: check.category,
         message: check.message,
         severity: check.severity || 'warning'
-      })
+      });
     }
     if (check.recommendations) {
-      results.recommendations.push(...check.recommendations)
+      results.recommendations.push(...check.recommendations);
     }
-  })
+  });
 
   // Add general recommendations based on score
   if (results.overallScore < 70) {
-    results.recommendations.push('Consider reviewing SFDR requirements more thoroughly before submission')
+    results.recommendations.push(
+      'Consider reviewing SFDR requirements more thoroughly before submission'
+    );
   }
   if (results.overallScore > 90) {
-    results.recommendations.push('Excellent compliance level - ready for regulatory submission')
+    results.recommendations.push('Excellent compliance level - ready for regulatory submission');
   }
 
-  return results
+  return results;
 }
 
 function checkArticleClassification(targetArticle: string, data: any) {
@@ -180,30 +179,33 @@ function checkArticleClassification(targetArticle: string, data: any) {
     message: '',
     severity: 'error',
     recommendations: [] as string[]
-  }
+  };
 
   if (targetArticle === 'Article8') {
     if (data.sustainabilityCharacteristics && data.sustainabilityCharacteristics.length > 0) {
-      check.passed = true
-      check.message = 'Article 8 classification requirements met'
+      check.passed = true;
+      check.message = 'Article 8 classification requirements met';
     } else {
-      check.message = 'Article 8 funds must specify sustainability characteristics being promoted'
-      check.recommendations.push('Define specific environmental or social characteristics')
+      check.message = 'Article 8 funds must specify sustainability characteristics being promoted';
+      check.recommendations.push('Define specific environmental or social characteristics');
     }
   } else if (targetArticle === 'Article9') {
-    if (data.investmentObjective && data.investmentObjective.toLowerCase().includes('sustainable')) {
-      check.passed = true
-      check.message = 'Article 9 classification requirements met'
+    if (
+      data.investmentObjective &&
+      data.investmentObjective.toLowerCase().includes('sustainable')
+    ) {
+      check.passed = true;
+      check.message = 'Article 9 classification requirements met';
     } else {
-      check.message = 'Article 9 funds must have sustainable investment as primary objective'
-      check.recommendations.push('Clarify sustainable investment objective in fund documentation')
+      check.message = 'Article 9 funds must have sustainable investment as primary objective';
+      check.recommendations.push('Clarify sustainable investment objective in fund documentation');
     }
   } else {
-    check.passed = true
-    check.message = 'Article 6 classification is appropriate'
+    check.passed = true;
+    check.message = 'Article 6 classification is appropriate';
   }
 
-  return check
+  return check;
 }
 
 function checkPAIIndicators(targetArticle: string, data: any) {
@@ -213,25 +215,25 @@ function checkPAIIndicators(targetArticle: string, data: any) {
     message: '',
     severity: 'warning',
     recommendations: [] as string[]
-  }
+  };
 
   if (data.paiIndicators) {
-    const mandatoryIndicators = data.paiIndicators.mandatoryIndicators || []
-    const requiredCount = 18
+    const mandatoryIndicators = data.paiIndicators.mandatoryIndicators || [];
+    const requiredCount = 18;
 
     if (mandatoryIndicators.length >= requiredCount) {
-      check.passed = true
-      check.message = `All ${requiredCount} mandatory PAI indicators provided`
+      check.passed = true;
+      check.message = `All ${requiredCount} mandatory PAI indicators provided`;
     } else {
-      check.message = `Missing PAI indicators: ${requiredCount - mandatoryIndicators.length} remaining`
-      check.recommendations.push('Complete all 18 mandatory PAI indicators')
+      check.message = `Missing PAI indicators: ${requiredCount - mandatoryIndicators.length} remaining`;
+      check.recommendations.push('Complete all 18 mandatory PAI indicators');
     }
   } else {
-    check.message = 'PAI indicators data not provided'
-    check.recommendations.push('Provide Principal Adverse Impact indicators data')
+    check.message = 'PAI indicators data not provided';
+    check.recommendations.push('Provide Principal Adverse Impact indicators data');
   }
 
-  return check
+  return check;
 }
 
 function checkTaxonomyAlignment(targetArticle: string, data: any) {
@@ -241,22 +243,22 @@ function checkTaxonomyAlignment(targetArticle: string, data: any) {
     message: '',
     severity: 'info',
     recommendations: [] as string[]
-  }
+  };
 
   if (targetArticle === 'Article9') {
     if (data.taxonomyAlignment && data.taxonomyAlignment.alignmentPercentage !== undefined) {
-      check.passed = true
-      check.message = `Taxonomy alignment: ${data.taxonomyAlignment.alignmentPercentage}%`
+      check.passed = true;
+      check.message = `Taxonomy alignment: ${data.taxonomyAlignment.alignmentPercentage}%`;
     } else {
-      check.message = 'EU Taxonomy alignment percentage not provided'
-      check.recommendations.push('Calculate and report EU Taxonomy alignment percentage')
+      check.message = 'EU Taxonomy alignment percentage not provided';
+      check.recommendations.push('Calculate and report EU Taxonomy alignment percentage');
     }
   } else {
-    check.passed = true
-    check.message = 'EU Taxonomy alignment optional for this article classification'
+    check.passed = true;
+    check.message = 'EU Taxonomy alignment optional for this article classification';
   }
 
-  return check
+  return check;
 }
 
 function checkDataQuality(data: any) {
@@ -266,23 +268,23 @@ function checkDataQuality(data: any) {
     message: '',
     severity: 'warning',
     recommendations: [] as string[]
-  }
+  };
 
-  const dataQuality = data.dataQuality || {}
-  const coveragePercentage = dataQuality.coveragePercentage || 0
+  const dataQuality = data.dataQuality || {};
+  const coveragePercentage = dataQuality.coveragePercentage || 0;
 
   if (coveragePercentage >= 80) {
-    check.passed = true
-    check.message = `Data coverage: ${coveragePercentage}% - Excellent quality`
+    check.passed = true;
+    check.message = `Data coverage: ${coveragePercentage}% - Excellent quality`;
   } else if (coveragePercentage >= 60) {
-    check.message = `Data coverage: ${coveragePercentage}% - Acceptable but could be improved`
-    check.recommendations.push('Improve data coverage to above 80%')
+    check.message = `Data coverage: ${coveragePercentage}% - Acceptable but could be improved`;
+    check.recommendations.push('Improve data coverage to above 80%');
   } else {
-    check.message = `Data coverage: ${coveragePercentage}% - Insufficient for reliable analysis`
-    check.recommendations.push('Significantly improve data collection and coverage')
+    check.message = `Data coverage: ${coveragePercentage}% - Insufficient for reliable analysis`;
+    check.recommendations.push('Significantly improve data collection and coverage');
   }
 
-  return check
+  return check;
 }
 
 function checkDisclosureCompleteness(targetArticle: string, data: any) {
@@ -292,22 +294,22 @@ function checkDisclosureCompleteness(targetArticle: string, data: any) {
     message: '',
     severity: 'error',
     recommendations: [] as string[]
-  }
+  };
 
-  const requiredFields = ['investmentObjective', 'riskProfile']
+  const requiredFields = ['investmentObjective', 'riskProfile'];
   if (targetArticle !== 'Article6') {
-    requiredFields.push('sustainabilityCharacteristics')
+    requiredFields.push('sustainabilityCharacteristics');
   }
 
-  const missingFields = requiredFields.filter(field => !data[field])
+  const missingFields = requiredFields.filter(field => !data[field]);
 
   if (missingFields.length === 0) {
-    check.passed = true
-    check.message = 'All required disclosure fields completed'
+    check.passed = true;
+    check.message = 'All required disclosure fields completed';
   } else {
-    check.message = `Missing required fields: ${missingFields.join(', ')}`
-    check.recommendations.push(`Complete the following fields: ${missingFields.join(', ')}`)
+    check.message = `Missing required fields: ${missingFields.join(', ')}`;
+    check.recommendations.push(`Complete the following fields: ${missingFields.join(', ')}`);
   }
 
-  return check
+  return check;
 }

@@ -55,12 +55,14 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
     industries: false,
     geographies: false,
     investors: false,
-    funding_stages: false,
+    funding_stages: false
   });
 
   // Extract unique values from startup data for filter options
   const filterOptions = {
-    use_cases: [...new Set(startups.flatMap(s => s.use_cases.map(uc => uc.split(' → ')[0])))].sort(),
+    use_cases: [
+      ...new Set(startups.flatMap(s => s.use_cases.map(uc => uc.split(' → ')[0])))
+    ].sort(),
     regulations: [...new Set(startups.flatMap(s => s.regulations))].sort(),
     technologies: [...new Set(startups.flatMap(s => s.technologies))].sort(),
     industries: [...new Set(startups.flatMap(s => s.industry))].sort(),
@@ -69,7 +71,7 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
     funding_stages: [...new Set(startups.map(s => s.funding_stage))].sort(),
     company_stages: [...new Set(startups.map(s => s.company_stage))].sort(),
     implementation_complexity: [...new Set(startups.map(s => s.implementation_complexity))].sort(),
-    solution_integrity: [...new Set(startups.map(s => s.solution_integrity))].sort(),
+    solution_integrity: [...new Set(startups.map(s => s.solution_integrity))].sort()
   };
 
   const toggleSection = (section: keyof typeof openSections) => {
@@ -79,13 +81,13 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
   const handleFilterChange = (category: string, value: string, checked: boolean) => {
     const currentFilters = { ...filters };
     const categoryKey = category as keyof typeof filters;
-    
+
     if (checked) {
       currentFilters[categoryKey] = [...currentFilters[categoryKey], value];
     } else {
       currentFilters[categoryKey] = currentFilters[categoryKey].filter(item => item !== value);
     }
-    
+
     onFiltersChange(currentFilters);
   };
 
@@ -104,7 +106,7 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
       funding_stages: [],
       company_stages: [],
       implementation_complexity: [],
-      solution_integrity: [],
+      solution_integrity: []
     });
   };
 
@@ -120,33 +122,35 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
     { key: 'industries', label: 'Industries', icon: '🏢' },
     { key: 'geographies', label: 'Geography', icon: '🌍' },
     { key: 'investors', label: 'Investors', icon: '💰' },
-    { key: 'funding_stages', label: 'Funding Stage', icon: '📈' },
+    { key: 'funding_stages', label: 'Funding Stage', icon: '📈' }
   ];
 
   return (
-    <div className={cn("bg-white border border-gray-200 rounded-xl p-6 h-fit shadow-sm", className)}>
+    <div
+      className={cn('bg-white border border-gray-200 rounded-xl p-6 h-fit shadow-sm', className)}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
-            <Filter className="h-5 w-5 text-blue-600" />
+      <div className='flex items-center justify-between mb-6'>
+        <div className='flex items-center gap-3'>
+          <div className='p-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg'>
+            <Filter className='h-5 w-5 text-blue-600' />
           </div>
           <div>
-            <h3 className="font-semibold text-lg text-gray-900">Filters</h3>
-            <p className="text-sm text-gray-500">Refine your search</p>
+            <h3 className='font-semibold text-lg text-gray-900'>Filters</h3>
+            <p className='text-sm text-gray-500'>Refine your search</p>
           </div>
           {totalActiveFilters > 0 && (
-            <Badge className="bg-blue-100 text-blue-700 border-blue-200">
+            <Badge className='bg-blue-100 text-blue-700 border-blue-200'>
               {totalActiveFilters}
             </Badge>
           )}
         </div>
         {totalActiveFilters > 0 && (
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             onClick={clearAllFilters}
-            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            className='text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors'
           >
             Clear all
           </Button>
@@ -155,24 +159,24 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
 
       {/* Active Filters */}
       {totalActiveFilters > 0 && (
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
-          <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+        <div className='mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100'>
+          <h4 className='text-sm font-medium text-gray-700 mb-3 flex items-center gap-2'>
+            <span className='w-2 h-2 bg-blue-500 rounded-full'></span>
             Active Filters
           </h4>
-          <div className="flex flex-wrap gap-2">
+          <div className='flex flex-wrap gap-2'>
             {Object.entries(filters).map(([category, values]) =>
               values.map(value => (
                 <Badge
                   key={`${category}-${value}`}
-                  className="flex items-center gap-1 pr-1 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+                  className='flex items-center gap-1 pr-1 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors'
                 >
-                  <span className="text-xs truncate max-w-24">{value}</span>
+                  <span className='text-xs truncate max-w-24'>{value}</span>
                   <button
                     onClick={() => removeFilter(category, value)}
-                    className="ml-1 hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 transition-colors"
+                    className='ml-1 hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 transition-colors'
                   >
-                    <X className="h-3 w-3" />
+                    <X className='h-3 w-3' />
                   </button>
                 </Badge>
               ))
@@ -182,11 +186,11 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
       )}
 
       {/* Filter Sections */}
-      <div className="space-y-4">
+      <div className='space-y-4'>
         {filterSections.map(({ key, label, icon }) => {
           const options = filterOptions[key as keyof typeof filterOptions];
           const activeFilters = filters[key as keyof typeof filters];
-          
+
           return (
             <Collapsible
               key={key}
@@ -195,44 +199,47 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
             >
               <CollapsibleTrigger asChild>
                 <Button
-                  variant="ghost"
-                  className="w-full justify-between p-4 h-auto hover:bg-gray-50 border border-transparent hover:border-gray-200 rounded-lg transition-all duration-200"
+                  variant='ghost'
+                  className='w-full justify-between p-4 h-auto hover:bg-gray-50 border border-transparent hover:border-gray-200 rounded-lg transition-all duration-200'
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">{icon}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-900">{label}</span>
+                  <div className='flex items-center gap-3'>
+                    <span className='text-lg'>{icon}</span>
+                    <div className='flex items-center gap-2'>
+                      <span className='font-medium text-gray-900'>{label}</span>
                       {activeFilters.length > 0 && (
-                        <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-xs px-2 py-0.5">
+                        <Badge className='bg-blue-100 text-blue-700 border-blue-200 text-xs px-2 py-0.5'>
                           {activeFilters.length}
                         </Badge>
                       )}
                     </div>
                   </div>
-                  <ChevronDown 
+                  <ChevronDown
                     className={cn(
-                      "h-4 w-4 transition-transform duration-200 text-gray-500",
-                      openSections[key as keyof typeof openSections] ? "rotate-180" : ""
-                    )} 
+                      'h-4 w-4 transition-transform duration-200 text-gray-500',
+                      openSections[key as keyof typeof openSections] ? 'rotate-180' : ''
+                    )}
                   />
                 </Button>
               </CollapsibleTrigger>
-              
-              <CollapsibleContent className="pt-3 pb-4">
-                <div className="space-y-3 max-h-48 overflow-y-auto pl-4 pr-2">
+
+              <CollapsibleContent className='pt-3 pb-4'>
+                <div className='space-y-3 max-h-48 overflow-y-auto pl-4 pr-2'>
                   {options.map(option => (
-                    <div key={option} className="flex items-center space-x-3 group hover:bg-gray-50 p-2 rounded-md transition-colors">
+                    <div
+                      key={option}
+                      className='flex items-center space-x-3 group hover:bg-gray-50 p-2 rounded-md transition-colors'
+                    >
                       <Checkbox
                         id={`${key}-${option}`}
                         checked={activeFilters.includes(option)}
-                        onCheckedChange={(checked) =>
+                        onCheckedChange={checked =>
                           handleFilterChange(key, option, Boolean(checked))
                         }
-                        className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 border-gray-300"
+                        className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 border-gray-300'
                       />
                       <label
                         htmlFor={`${key}-${option}`}
-                        className="text-sm font-medium text-gray-700 cursor-pointer flex-1 leading-relaxed group-hover:text-gray-900 transition-colors"
+                        className='text-sm font-medium text-gray-700 cursor-pointer flex-1 leading-relaxed group-hover:text-gray-900 transition-colors'
                       >
                         {option}
                       </label>

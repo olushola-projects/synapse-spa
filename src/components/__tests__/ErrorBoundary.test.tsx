@@ -27,14 +27,12 @@ const ThrowError: React.FC<{ shouldThrow?: boolean }> = ({ shouldThrow = false }
 // Component that throws an error on button click
 const ThrowErrorOnClick: React.FC = () => {
   const [shouldThrow, setShouldThrow] = React.useState(false);
-  
+
   if (shouldThrow) {
     throw new Error('Click error');
   }
-  
-  return (
-    <button onClick={() => setShouldThrow(true)}>Throw Error</button>
-  );
+
+  return <button onClick={() => setShouldThrow(true)}>Throw Error</button>;
 };
 
 describe('ErrorBoundary', () => {
@@ -177,7 +175,7 @@ describe('ErrorBoundary', () => {
 
     // Reset and throw another error
     fireEvent.click(screen.getByRole('button', { name: /try again/i }));
-    
+
     rerender(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
@@ -190,7 +188,7 @@ describe('ErrorBoundary', () => {
 
   it('should preserve error information in error handler call', () => {
     const testError = new Error('Specific test error');
-    
+
     const ThrowSpecificError = () => {
       throw testError;
     };
@@ -248,9 +246,9 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Count: 0')).toBeInTheDocument();
-    
+
     fireEvent.click(screen.getByRole('button', { name: /increment/i }));
-    
+
     expect(screen.getByText('Count: 1')).toBeInTheDocument();
     expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
   });

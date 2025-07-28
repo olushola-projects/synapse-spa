@@ -5,6 +5,7 @@ This guide provides comprehensive instructions for implementing the UAT testing 
 ## 📋 Overview
 
 The testing framework includes:
+
 - **UAT Checklist**: Systematic user acceptance testing with 20+ test cases
 - **User Testing Sessions**: Live testing session management with real-time collaboration
 - **Feedback Collection**: Multi-channel user feedback widgets and analytics
@@ -47,7 +48,7 @@ function Layout() {
   return (
     <div>
       {/* Your existing layout */}
-      
+
       {/* Add feedback widget */}
       <FeedbackWidget />
     </div>
@@ -77,30 +78,36 @@ Testing Hub ← Test Reports ← Analytics Processing ← Data Aggregation
 ## 📊 Testing Categories
 
 ### 1. Navigation & Layout
+
 - Main navigation functionality
 - Responsive design testing
 - Footer links verification
 
 ### 2. Content & Messaging
+
 - Hero section effectiveness
 - Feature descriptions clarity
 - SFDR content accuracy
 
 ### 3. Core Functionality
+
 - Contact form submission
 - SFDR Gem tool usage
 - Search functionality
 
 ### 4. Performance & Loading
+
 - Page load speed testing
 - Mobile performance evaluation
 
 ### 5. Accessibility & Usability
+
 - Keyboard navigation
 - Screen reader compatibility
 - Color contrast compliance
 
 ### 6. Security & Privacy
+
 - Form security testing
 - Privacy compliance verification
 
@@ -138,12 +145,14 @@ const analyticsConfig = {
 ## 📈 Testing Workflow
 
 ### Phase 1: Preparation
+
 1. Review test cases in UAT Checklist
 2. Set up testing environment
 3. Configure feedback collection
 4. Prepare test data and scenarios
 
 ### Phase 2: Execution
+
 1. **Alpha Testing** (Internal team)
    - Execute all UAT test cases
    - Document issues and observations
@@ -160,6 +169,7 @@ const analyticsConfig = {
    - Analyze user satisfaction
 
 ### Phase 3: Analysis & Reporting
+
 1. Generate comprehensive reports
 2. Analyze feedback trends
 3. Prioritize issues and improvements
@@ -168,18 +178,21 @@ const analyticsConfig = {
 ## 🎯 Key Metrics to Track
 
 ### Testing Metrics
+
 - **Test Coverage**: Percentage of tests completed
 - **Pass Rate**: Percentage of tests passing
 - **Critical Issues**: High-priority failures
 - **Testing Velocity**: Tests completed per day
 
 ### User Feedback Metrics
+
 - **Average Rating**: Overall user satisfaction (1-5 scale)
 - **Feedback Volume**: Number of feedback submissions
 - **Category Distribution**: Types of feedback received
 - **Response Time**: Time to address user issues
 
 ### Performance Metrics
+
 - **Page Load Time**: Average loading speed
 - **Mobile Performance**: Mobile-specific metrics
 - **Accessibility Score**: WCAG compliance level
@@ -188,12 +201,14 @@ const analyticsConfig = {
 ## 🔍 SFDR-Specific Testing
 
 ### Regulatory Compliance
+
 - Verify SFDR terminology accuracy
 - Test classification tool functionality
 - Validate regulatory disclaimers
 - Check compliance statements
 
 ### Content Accuracy
+
 - Review technical explanations
 - Verify regulatory references
 - Test example scenarios
@@ -204,18 +219,24 @@ const analyticsConfig = {
 ### Recommended Tools
 
 1. **Hotjar** - Heatmaps and session recordings
+
    ```javascript
    // Integration example
-   window.hj = window.hj || function(){(hj.q=hj.q||[]).push(arguments)};
+   window.hj =
+     window.hj ||
+     function () {
+       (hj.q = hj.q || []).push(arguments);
+     };
    hj('trigger', 'feedback_submitted');
    ```
 
 2. **Google Analytics** - User behavior tracking
+
    ```javascript
    // Event tracking
    gtag('event', 'test_completed', {
-     'test_category': 'UAT',
-     'test_result': 'passed'
+     test_category: 'UAT',
+     test_result: 'passed'
    });
    ```
 
@@ -226,12 +247,14 @@ const analyticsConfig = {
 ## 📱 Mobile Testing Considerations
 
 ### Device Testing Matrix
+
 - **iOS**: iPhone 12/13/14, iPad
 - **Android**: Samsung Galaxy, Google Pixel
 - **Screen Sizes**: 375px, 768px, 1024px, 1920px
 - **Browsers**: Safari, Chrome, Firefox, Edge
 
 ### Mobile-Specific Test Cases
+
 - Touch interaction responsiveness
 - Swipe gestures functionality
 - Orientation change handling
@@ -241,12 +264,14 @@ const analyticsConfig = {
 ## 🔒 Security & Privacy
 
 ### Data Protection
+
 - All feedback data stored locally by default
 - No sensitive information collected without consent
 - GDPR-compliant data handling
 - Option to anonymize user data
 
 ### Security Testing
+
 - Form input validation
 - XSS prevention testing
 - CSRF protection verification
@@ -255,11 +280,13 @@ const analyticsConfig = {
 ## 📊 Reporting & Export
 
 ### Available Export Formats
+
 - **JSON**: Complete data export
 - **CSV**: Tabular data for analysis
 - **PDF**: Executive summary reports
 
 ### Report Types
+
 1. **Executive Summary**: High-level metrics and status
 2. **Detailed Test Results**: Complete test case outcomes
 3. **User Feedback Analysis**: Feedback trends and insights
@@ -268,6 +295,7 @@ const analyticsConfig = {
 ## 🚀 Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] All components tested and working
 - [ ] Analytics integration configured
 - [ ] Feedback widgets positioned correctly
@@ -275,6 +303,7 @@ const analyticsConfig = {
 - [ ] Performance impact assessed
 
 ### Post-Deployment
+
 - [ ] Feedback collection active
 - [ ] Analytics tracking verified
 - [ ] Test reporting accessible
@@ -306,7 +335,7 @@ Enable debug logging:
 
 ```typescript
 // Add to your environment variables
-REACT_APP_DEBUG_TESTING=true
+REACT_APP_DEBUG_TESTING = true;
 
 // In components
 if (process.env.REACT_APP_DEBUG_TESTING) {
@@ -317,12 +346,14 @@ if (process.env.REACT_APP_DEBUG_TESTING) {
 ## 📞 Support & Maintenance
 
 ### Regular Maintenance Tasks
+
 - Review and update test cases monthly
 - Analyze feedback trends weekly
 - Export and archive test data quarterly
 - Update testing tools and dependencies
 
 ### Performance Monitoring
+
 - Monitor feedback widget performance impact
 - Track testing tool usage metrics
 - Optimize data storage and retrieval
@@ -331,6 +362,7 @@ if (process.env.REACT_APP_DEBUG_TESTING) {
 ## 🎓 Training & Documentation
 
 ### Team Training Topics
+
 1. UAT testing methodology
 2. User testing session facilitation
 3. Feedback analysis and prioritization
@@ -338,6 +370,7 @@ if (process.env.REACT_APP_DEBUG_TESTING) {
 5. Tool configuration and customization
 
 ### Documentation Maintenance
+
 - Keep test cases updated with feature changes
 - Document new testing procedures
 - Maintain troubleshooting guides

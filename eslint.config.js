@@ -1,8 +1,10 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+import prettier from 'eslint-config-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
 
 export default tseslint.config(
   {
@@ -13,16 +15,13 @@ export default tseslint.config(
       '*.config.ts',
       'coverage/**/*',
       'build/**/*',
-      'Nexus/dist/**/*',
+      'Nexus/**/*',
       '**/*.d.ts',
       'supabase/**/*'
     ]
   },
   {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended
-    ],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended, prettier],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -35,20 +34,21 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      prettier: prettierPlugin
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true }
-      ],
-      
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+
       // TypeScript specific rules (non-type-aware)
-      '@typescript-eslint/no-unused-vars': ['error', { 
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-        caughtErrorsIgnorePattern: '^_'
-      }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_'
+        }
+      ],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/prefer-as-const': 'error',
@@ -57,7 +57,7 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
       '@typescript-eslint/prefer-for-of': 'error',
-      
+
       // General code quality rules
       'no-console': 'warn',
       'no-debugger': 'error',
@@ -80,37 +80,36 @@ export default tseslint.config(
       'no-duplicate-imports': 'error',
       'template-curly-spacing': 'error',
       'arrow-spacing': 'error',
-      'comma-dangle': ['error', 'never'],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
-      'indent': ['error', 2],
-      'no-trailing-spaces': 'error',
-      'eol-last': 'error',
-      
+      'prettier/prettier': 'error',
+
       // Error handling
       'no-throw-literal': 'error',
       'prefer-promise-reject-errors': 'error',
-      
+
       // Best practices
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
       'default-case': 'error',
       'no-fallthrough': 'error',
       'no-empty': ['error', { allowEmptyCatch: false }],
       'no-empty-function': 'error',
-      'no-magic-numbers': ['warn', { 
-        ignore: [-1, 0, 1, 2],
-        ignoreArrayIndexes: true,
-        ignoreDefaultValues: true
-      }],
+      'no-magic-numbers': [
+        'warn',
+        {
+          ignore: [-1, 0, 1, 2, 5, 10, 50, 100, 500],
+          ignoreArrayIndexes: true,
+          ignoreDefaultValues: true,
+          ignoreClassFieldInitialValues: true
+        }
+      ],
       'dot-notation': 'error',
       'no-sequences': 'error',
       'no-unused-expressions': 'error',
-      'radix': 'error',
-      'yoda': 'error',
-      
+      radix: 'error',
+      yoda: 'error',
+
       // Complexity rules
-      'complexity': ['warn', 10],
+      complexity: ['warn', 10],
       'max-depth': ['warn', 4],
       'max-lines-per-function': ['warn', 50],
       'max-params': ['warn', 4]
@@ -122,15 +121,15 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       'no-magic-numbers': 'off',
-      'max-lines-per-function': 'off',
-    },
+      'max-lines-per-function': 'off'
+    }
   },
   {
     // Specific rules for configuration files
     files: ['**/*.config.{ts,js}', '**/vite.config.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      'no-magic-numbers': 'off',
-    },
+      'no-magic-numbers': 'off'
+    }
   }
-)
+);

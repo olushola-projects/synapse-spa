@@ -1,22 +1,11 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -101,7 +90,8 @@ const SFDRGem: React.FC = () => {
     {
       id: '1',
       role: 'assistant',
-      content: 'Welcome to SFDR Gem! I\'m your AI-powered SFDR compliance assistant. I can help you classify funds, analyze documents, and ensure regulatory compliance. How can I assist you today?',
+      content:
+        "Welcome to SFDR Gem! I'm your AI-powered SFDR compliance assistant. I can help you classify funds, analyze documents, and ensure regulatory compliance. How can I assist you today?",
       timestamp: new Date(),
       metadata: {
         sources: ['SFDR Regulation (EU) 2019/2088', 'ESMA Guidelines']
@@ -110,7 +100,8 @@ const SFDRGem: React.FC = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [classificationResult, setClassificationResult] = useState<SFDRClassificationResponse | null>(null);
+  const [classificationResult, setClassificationResult] =
+    useState<SFDRClassificationResponse | null>(null);
   const [uploadedDocuments, setUploadedDocuments] = useState<DocumentAnalysis[]>([]);
   const [contextualMemory, setContextualMemory] = useState<ContextualMemory>({
     userPreferences: {},
@@ -135,7 +126,9 @@ const SFDRGem: React.FC = () => {
 
   // Handlers
   const handleSendMessage = useCallback(async () => {
-    if (!inputValue.trim() || isLoading) return;
+    if (!inputValue.trim() || isLoading) {
+      return;
+    }
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -152,7 +145,8 @@ const SFDRGem: React.FC = () => {
     setTimeout(() => {
       const responses = [
         {
-          content: 'Based on SFDR Article 8 requirements, your fund would need to promote environmental or social characteristics. I can help you assess the specific disclosure requirements.',
+          content:
+            'Based on SFDR Article 8 requirements, your fund would need to promote environmental or social characteristics. I can help you assess the specific disclosure requirements.',
           metadata: {
             classification: 'Article 8',
             confidence: 85,
@@ -160,7 +154,8 @@ const SFDRGem: React.FC = () => {
           }
         },
         {
-          content: 'For Article 9 classification, your fund must have sustainable investment as its objective. Let me analyze your investment strategy against the technical criteria.',
+          content:
+            'For Article 9 classification, your fund must have sustainable investment as its objective. Let me analyze your investment strategy against the technical criteria.',
           metadata: {
             classification: 'Article 9',
             confidence: 92,
@@ -168,7 +163,8 @@ const SFDRGem: React.FC = () => {
           }
         },
         {
-          content: 'I\'ve identified potential PAI (Principal Adverse Impact) considerations for your fund. Would you like me to generate a detailed compliance checklist?',
+          content:
+            "I've identified potential PAI (Principal Adverse Impact) considerations for your fund. Would you like me to generate a detailed compliance checklist?",
           metadata: {
             sources: ['PAI Technical Standards', 'ESMA Q&A']
           }
@@ -221,21 +217,29 @@ const SFDRGem: React.FC = () => {
 
     // Simulate document processing
     setTimeout(() => {
-      setUploadedDocuments(prev => prev.map(doc => {
-        if (newDocuments.find(newDoc => newDoc.id === doc.id)) {
-          return {
-            ...doc,
-            status: 'completed',
-            sfdrRelevance: Math.floor(Math.random() * 40) + 60, // 60-100%
-            summary: 'Document contains relevant SFDR disclosure information including ESG integration methodology and PAI considerations.',
-            extractedEntities: ['ESG Integration', 'Sustainable Investment', 'PAI Indicators', 'Taxonomy Alignment'],
-            sentiment: 'positive',
-            topics: ['Environmental Factors', 'Social Characteristics', 'Governance Practices'],
-            complianceIssues: Math.random() > 0.7 ? ['Missing PAI disclosure details'] : []
-          };
-        }
-        return doc;
-      }));
+      setUploadedDocuments(prev =>
+        prev.map(doc => {
+          if (newDocuments.find(newDoc => newDoc.id === doc.id)) {
+            return {
+              ...doc,
+              status: 'completed',
+              sfdrRelevance: Math.floor(Math.random() * 40) + 60, // 60-100%
+              summary:
+                'Document contains relevant SFDR disclosure information including ESG integration methodology and PAI considerations.',
+              extractedEntities: [
+                'ESG Integration',
+                'Sustainable Investment',
+                'PAI Indicators',
+                'Taxonomy Alignment'
+              ],
+              sentiment: 'positive',
+              topics: ['Environmental Factors', 'Social Characteristics', 'Governance Practices'],
+              complianceIssues: Math.random() > 0.7 ? ['Missing PAI disclosure details'] : []
+            };
+          }
+          return doc;
+        })
+      );
     }, 3000);
   }, []);
 
@@ -253,7 +257,8 @@ const SFDRGem: React.FC = () => {
         {
           classification: 'Article 8',
           confidence: 87,
-          reasoning: 'Fund promotes environmental characteristics through ESG integration but does not have sustainable investment as primary objective.',
+          reasoning:
+            'Fund promotes environmental characteristics through ESG integration but does not have sustainable investment as primary objective.',
           recommendations: [
             'Enhance disclosure on environmental characteristics promoted',
             'Provide clear methodology for ESG integration',
@@ -265,7 +270,8 @@ const SFDRGem: React.FC = () => {
         {
           classification: 'Article 9',
           confidence: 93,
-          reasoning: 'Fund has sustainable investment as its objective with clear taxonomy alignment and measurable sustainability outcomes.',
+          reasoning:
+            'Fund has sustainable investment as its objective with clear taxonomy alignment and measurable sustainability outcomes.',
           recommendations: [
             'Maintain robust sustainability measurement framework',
             'Regular review of taxonomy alignment',
@@ -277,7 +283,8 @@ const SFDRGem: React.FC = () => {
         {
           classification: 'Article 6',
           confidence: 78,
-          reasoning: 'Fund does not promote environmental or social characteristics as primary focus, standard financial disclosures apply.',
+          reasoning:
+            'Fund does not promote environmental or social characteristics as primary focus, standard financial disclosures apply.',
           recommendations: [
             'Consider if any ESG factors are integrated',
             'Review investment process for sustainability considerations',
@@ -300,102 +307,118 @@ const SFDRGem: React.FC = () => {
     }, 2000);
   }, [classificationForm]);
 
-  const handleExport = useCallback((format: 'pdf' | 'excel' | 'json') => {
-    const exportData = {
-      classification: classificationResult,
-      documents: uploadedDocuments,
-      chatHistory: messages,
-      timestamp: new Date().toISOString(),
-      summary: {
-        totalDocuments: uploadedDocuments.length,
-        averageRelevance: uploadedDocuments.reduce((acc, doc) => acc + doc.sfdrRelevance, 0) / uploadedDocuments.length || 0,
-        complianceIssues: uploadedDocuments.reduce((acc, doc) => acc + doc.complianceIssues.length, 0)
-      }
-    };
+  const handleExport = useCallback(
+    (format: 'pdf' | 'excel' | 'json') => {
+      const exportData = {
+        classification: classificationResult,
+        documents: uploadedDocuments,
+        chatHistory: messages,
+        timestamp: new Date().toISOString(),
+        summary: {
+          totalDocuments: uploadedDocuments.length,
+          averageRelevance:
+            uploadedDocuments.reduce((acc, doc) => acc + doc.sfdrRelevance, 0) /
+              uploadedDocuments.length || 0,
+          complianceIssues: uploadedDocuments.reduce(
+            (acc, doc) => acc + doc.complianceIssues.length,
+            0
+          )
+        }
+      };
 
-    if (format === 'json') {
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `sfdr-analysis-${Date.now()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } else {
-      // Placeholder for PDF/Excel export
-      alert(`${format.toUpperCase()} export functionality will be implemented with backend integration.`);
-    }
-  }, [classificationResult, uploadedDocuments, messages]);
+      if (format === 'json') {
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `sfdr-analysis-${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        // Placeholder for PDF/Excel export
+        alert(
+          `${format.toUpperCase()} export functionality will be implemented with backend integration.`
+        );
+      }
+    },
+    [classificationResult, uploadedDocuments, messages]
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4'>
+      <div className='max-w-7xl mx-auto'>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className='text-center mb-8'
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="relative">
-              <Sparkles className="w-10 h-10 text-purple-600" />
+          <div className='flex items-center justify-center gap-3 mb-4'>
+            <div className='relative'>
+              <Sparkles className='w-10 h-10 text-purple-600' />
               <motion.div
-                className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full"
+                className='absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full'
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 2 }}
               />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className='text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'>
               SFDR Gem
             </h1>
-            <Badge variant="secondary" className="bg-green-100 text-green-800">
+            <Badge variant='secondary' className='bg-green-100 text-green-800'>
               MVP
             </Badge>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            AI-powered SFDR compliance navigator with document intelligence and real-time classification
+          <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
+            AI-powered SFDR compliance navigator with document intelligence and real-time
+            classification
           </p>
         </motion.div>
 
         {/* Main Interface */}
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
-            <TabsTrigger value="chat" className="flex items-center gap-2">
-              <Bot className="w-4 h-4" />
+        <Tabs
+          value={activeTab}
+          onValueChange={value => setActiveTab(value as any)}
+          className='w-full'
+        >
+          <TabsList className='grid w-full grid-cols-4 mb-6'>
+            <TabsTrigger value='chat' className='flex items-center gap-2'>
+              <Bot className='w-4 h-4' />
               AI Chat
             </TabsTrigger>
-            <TabsTrigger value="classify" className="flex items-center gap-2">
-              <Target className="w-4 h-4" />
+            <TabsTrigger value='classify' className='flex items-center gap-2'>
+              <Target className='w-4 h-4' />
               Classify
             </TabsTrigger>
-            <TabsTrigger value="documents" className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
+            <TabsTrigger value='documents' className='flex items-center gap-2'>
+              <FileText className='w-4 h-4' />
               Documents
             </TabsTrigger>
-            <TabsTrigger value="export" className="flex items-center gap-2">
-              <Download className="w-4 h-4" />
+            <TabsTrigger value='export' className='flex items-center gap-2'>
+              <Download className='w-4 h-4' />
               Export
             </TabsTrigger>
           </TabsList>
 
           {/* AI Chat Tab */}
-          <TabsContent value="chat">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="lg:col-span-3">
-                <Card className="h-[600px] flex flex-col">
+          <TabsContent value='chat'>
+            <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
+              <div className='lg:col-span-3'>
+                <Card className='h-[600px] flex flex-col'>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Brain className="w-5 h-5 text-blue-600" />
+                    <CardTitle className='flex items-center gap-2'>
+                      <Brain className='w-5 h-5 text-blue-600' />
                       SFDR AI Navigator
                     </CardTitle>
                     <CardDescription>
-                      Ask questions about SFDR compliance, fund classification, and regulatory requirements
+                      Ask questions about SFDR compliance, fund classification, and regulatory
+                      requirements
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="flex-1 flex flex-col">
-                    <ScrollArea className="flex-1 pr-4 mb-4">
-                      <div className="space-y-4">
-                        {messages.map((message) => (
+                  <CardContent className='flex-1 flex flex-col'>
+                    <ScrollArea className='flex-1 pr-4 mb-4'>
+                      <div className='space-y-4'>
+                        {messages.map(message => (
                           <motion.div
                             key={message.id}
                             initial={{ opacity: 0, y: 10 }}
@@ -409,22 +432,22 @@ const SFDRGem: React.FC = () => {
                                   : 'bg-gray-100 text-gray-900'
                               }`}
                             >
-                              <p className="text-sm">{message.content}</p>
+                              <p className='text-sm'>{message.content}</p>
                               {message.metadata && (
-                                <div className="mt-2 pt-2 border-t border-gray-200 text-xs">
+                                <div className='mt-2 pt-2 border-t border-gray-200 text-xs'>
                                   {message.metadata.classification && (
-                                    <Badge variant="outline" className="mr-2">
+                                    <Badge variant='outline' className='mr-2'>
                                       {message.metadata.classification}
                                     </Badge>
                                   )}
                                   {message.metadata.confidence && (
-                                    <span className="text-gray-500">
+                                    <span className='text-gray-500'>
                                       Confidence: {message.metadata.confidence}%
                                     </span>
                                   )}
                                   {message.metadata.sources && (
-                                    <div className="mt-1">
-                                      <span className="text-gray-500">Sources: </span>
+                                    <div className='mt-1'>
+                                      <span className='text-gray-500'>Sources: </span>
                                       {message.metadata.sources.join(', ')}
                                     </div>
                                   )}
@@ -437,13 +460,19 @@ const SFDRGem: React.FC = () => {
                           <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="flex justify-start"
+                            className='flex justify-start'
                           >
-                            <div className="bg-gray-100 p-3 rounded-lg">
-                              <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" />
-                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                            <div className='bg-gray-100 p-3 rounded-lg'>
+                              <div className='flex items-center gap-2'>
+                                <div className='w-2 h-2 bg-blue-600 rounded-full animate-bounce' />
+                                <div
+                                  className='w-2 h-2 bg-blue-600 rounded-full animate-bounce'
+                                  style={{ animationDelay: '0.1s' }}
+                                />
+                                <div
+                                  className='w-2 h-2 bg-blue-600 rounded-full animate-bounce'
+                                  style={{ animationDelay: '0.2s' }}
+                                />
                               </div>
                             </div>
                           </motion.div>
@@ -451,16 +480,19 @@ const SFDRGem: React.FC = () => {
                       </div>
                       <div ref={messagesEndRef} />
                     </ScrollArea>
-                    <div className="flex gap-2">
+                    <div className='flex gap-2'>
                       <Input
                         value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Ask about SFDR compliance, fund classification, or regulatory requirements..."
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        onChange={e => setInputValue(e.target.value)}
+                        placeholder='Ask about SFDR compliance, fund classification, or regulatory requirements...'
+                        onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
                         disabled={isLoading}
                       />
-                      <Button onClick={handleSendMessage} disabled={isLoading || !inputValue.trim()}>
-                        <Send className="w-4 h-4" />
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={isLoading || !inputValue.trim()}
+                      >
+                        <Send className='w-4 h-4' />
                       </Button>
                     </div>
                   </CardContent>
@@ -468,37 +500,35 @@ const SFDRGem: React.FC = () => {
               </div>
 
               {/* Contextual Memory Sidebar */}
-              <div className="space-y-4">
+              <div className='space-y-4'>
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Zap className="w-5 h-5 text-yellow-600" />
+                    <CardTitle className='text-lg flex items-center gap-2'>
+                      <Zap className='w-5 h-5 text-yellow-600' />
                       Contextual Memory
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
+                    <div className='space-y-3'>
                       <div>
-                        <h4 className="font-medium text-sm mb-2">Recent Context</h4>
-                        <div className="space-y-1">
+                        <h4 className='font-medium text-sm mb-2'>Recent Context</h4>
+                        <div className='space-y-1'>
                           {contextualMemory.conversationContext.slice(-3).map((context, index) => (
-                            <p key={index} className="text-xs text-gray-600 truncate">
+                            <p key={index} className='text-xs text-gray-600 truncate'>
                               {context}
                             </p>
                           ))}
                         </div>
                       </div>
                       <div>
-                        <h4 className="font-medium text-sm mb-2">Classifications</h4>
-                        <p className="text-xs text-gray-600">
+                        <h4 className='font-medium text-sm mb-2'>Classifications</h4>
+                        <p className='text-xs text-gray-600'>
                           {contextualMemory.recentClassifications.length} recent
                         </p>
                       </div>
                       <div>
-                        <h4 className="font-medium text-sm mb-2">Documents</h4>
-                        <p className="text-xs text-gray-600">
-                          {uploadedDocuments.length} analyzed
-                        </p>
+                        <h4 className='font-medium text-sm mb-2'>Documents</h4>
+                        <p className='text-xs text-gray-600'>{uploadedDocuments.length} analyzed</p>
                       </div>
                     </div>
                   </CardContent>
@@ -506,24 +536,26 @@ const SFDRGem: React.FC = () => {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <BarChart3 className="w-5 h-5 text-green-600" />
+                    <CardTitle className='text-lg flex items-center gap-2'>
+                      <BarChart3 className='w-5 h-5 text-green-600' />
                       Quick Stats
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">Messages</span>
-                        <Badge variant="outline">{messages.length}</Badge>
+                    <div className='space-y-3'>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-sm'>Messages</span>
+                        <Badge variant='outline'>{messages.length}</Badge>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">Documents</span>
-                        <Badge variant="outline">{uploadedDocuments.length}</Badge>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-sm'>Documents</span>
+                        <Badge variant='outline'>{uploadedDocuments.length}</Badge>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">Classifications</span>
-                        <Badge variant="outline">{contextualMemory.recentClassifications.length}</Badge>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-sm'>Classifications</span>
+                        <Badge variant='outline'>
+                          {contextualMemory.recentClassifications.length}
+                        </Badge>
                       </div>
                     </div>
                   </CardContent>
@@ -533,85 +565,117 @@ const SFDRGem: React.FC = () => {
           </TabsContent>
 
           {/* Classification Tab */}
-          <TabsContent value="classify">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value='classify'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Target className="w-5 h-5 text-purple-600" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <Target className='w-5 h-5 text-purple-600' />
                     Fund Classification
                   </CardTitle>
                   <CardDescription>
                     Provide fund details for SFDR article classification
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className='space-y-4'>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Fund Name *</label>
+                    <label className='text-sm font-medium mb-2 block'>Fund Name *</label>
                     <Input
                       value={classificationForm.fundName}
-                      onChange={(e) => setClassificationForm(prev => ({ ...prev, fundName: e.target.value }))}
-                      placeholder="Enter fund name"
+                      onChange={e =>
+                        setClassificationForm(prev => ({ ...prev, fundName: e.target.value }))
+                      }
+                      placeholder='Enter fund name'
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Description *</label>
+                    <label className='text-sm font-medium mb-2 block'>Description *</label>
                     <Textarea
                       value={classificationForm.description}
-                      onChange={(e) => setClassificationForm(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={e =>
+                        setClassificationForm(prev => ({ ...prev, description: e.target.value }))
+                      }
                       placeholder="Describe the fund's investment approach and objectives"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Investment Strategy</label>
+                    <label className='text-sm font-medium mb-2 block'>Investment Strategy</label>
                     <Textarea
                       value={classificationForm.investmentStrategy}
-                      onChange={(e) => setClassificationForm(prev => ({ ...prev, investmentStrategy: e.target.value }))}
-                      placeholder="Detail the investment strategy and methodology"
+                      onChange={e =>
+                        setClassificationForm(prev => ({
+                          ...prev,
+                          investmentStrategy: e.target.value
+                        }))
+                      }
+                      placeholder='Detail the investment strategy and methodology'
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">ESG Integration</label>
+                    <label className='text-sm font-medium mb-2 block'>ESG Integration</label>
                     <Textarea
                       value={classificationForm.esgIntegration}
-                      onChange={(e) => setClassificationForm(prev => ({ ...prev, esgIntegration: e.target.value }))}
-                      placeholder="Describe how ESG factors are integrated"
+                      onChange={e =>
+                        setClassificationForm(prev => ({ ...prev, esgIntegration: e.target.value }))
+                      }
+                      placeholder='Describe how ESG factors are integrated'
                       rows={2}
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Sustainability Objectives</label>
+                    <label className='text-sm font-medium mb-2 block'>
+                      Sustainability Objectives
+                    </label>
                     <Textarea
                       value={classificationForm.sustainabilityObjectives}
-                      onChange={(e) => setClassificationForm(prev => ({ ...prev, sustainabilityObjectives: e.target.value }))}
-                      placeholder="List specific sustainability objectives"
+                      onChange={e =>
+                        setClassificationForm(prev => ({
+                          ...prev,
+                          sustainabilityObjectives: e.target.value
+                        }))
+                      }
+                      placeholder='List specific sustainability objectives'
                       rows={2}
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Principal Adverse Impacts</label>
+                    <label className='text-sm font-medium mb-2 block'>
+                      Principal Adverse Impacts
+                    </label>
                     <Textarea
                       value={classificationForm.principalAdverseImpacts}
-                      onChange={(e) => setClassificationForm(prev => ({ ...prev, principalAdverseImpacts: e.target.value }))}
-                      placeholder="Describe consideration of principal adverse impacts"
+                      onChange={e =>
+                        setClassificationForm(prev => ({
+                          ...prev,
+                          principalAdverseImpacts: e.target.value
+                        }))
+                      }
+                      placeholder='Describe consideration of principal adverse impacts'
                       rows={2}
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Taxonomy Alignment</label>
+                    <label className='text-sm font-medium mb-2 block'>Taxonomy Alignment</label>
                     <Textarea
                       value={classificationForm.taxonomyAlignment}
-                      onChange={(e) => setClassificationForm(prev => ({ ...prev, taxonomyAlignment: e.target.value }))}
-                      placeholder="Detail EU Taxonomy alignment approach"
+                      onChange={e =>
+                        setClassificationForm(prev => ({
+                          ...prev,
+                          taxonomyAlignment: e.target.value
+                        }))
+                      }
+                      placeholder='Detail EU Taxonomy alignment approach'
                       rows={2}
                     />
                   </div>
                   <Button
                     onClick={handleClassification}
-                    disabled={isLoading || !classificationForm.fundName || !classificationForm.description}
-                    className="w-full"
+                    disabled={
+                      isLoading || !classificationForm.fundName || !classificationForm.description
+                    }
+                    className='w-full'
                   >
                     {isLoading ? 'Classifying...' : 'Classify Fund'}
                   </Button>
@@ -619,48 +683,60 @@ const SFDRGem: React.FC = () => {
               </Card>
 
               {/* Classification Results */}
-              <div className="space-y-6">
+              <div className='space-y-6'>
                 {classificationResult && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                  >
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                     <Card>
                       <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <CheckCircle className="w-5 h-5 text-green-600" />
+                        <CardTitle className='flex items-center gap-2'>
+                          <CheckCircle className='w-5 h-5 text-green-600' />
                           Classification Result
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">SFDR Classification:</span>
+                      <CardContent className='space-y-4'>
+                        <div className='flex items-center justify-between'>
+                          <span className='font-medium'>SFDR Classification:</span>
                           <Badge
-                            variant={classificationResult.classification === 'Article 9' ? 'default' : 'secondary'}
-                            className={classificationResult.classification === 'Article 9' ? 'bg-green-600' : classificationResult.classification === 'Article 8' ? 'bg-blue-600' : 'bg-gray-600'}
+                            variant={
+                              classificationResult.classification === 'Article 9'
+                                ? 'default'
+                                : 'secondary'
+                            }
+                            className={
+                              classificationResult.classification === 'Article 9'
+                                ? 'bg-green-600'
+                                : classificationResult.classification === 'Article 8'
+                                  ? 'bg-blue-600'
+                                  : 'bg-gray-600'
+                            }
                           >
                             {classificationResult.classification}
                           </Badge>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">Confidence:</span>
-                          <span className="text-sm">{classificationResult.confidence}%</span>
+                        <div className='flex items-center justify-between'>
+                          <span className='font-medium'>Confidence:</span>
+                          <span className='text-sm'>{classificationResult.confidence}%</span>
                         </div>
                         <div>
-                          <span className="font-medium block mb-2">Compliance Score:</span>
-                          <Progress value={classificationResult.complianceScore} className="h-2" />
-                          <span className="text-sm text-gray-600">{classificationResult.complianceScore}%</span>
+                          <span className='font-medium block mb-2'>Compliance Score:</span>
+                          <Progress value={classificationResult.complianceScore} className='h-2' />
+                          <span className='text-sm text-gray-600'>
+                            {classificationResult.complianceScore}%
+                          </span>
                         </div>
                         <div>
-                          <span className="font-medium block mb-2">Reasoning:</span>
-                          <p className="text-sm text-gray-700">{classificationResult.reasoning}</p>
+                          <span className='font-medium block mb-2'>Reasoning:</span>
+                          <p className='text-sm text-gray-700'>{classificationResult.reasoning}</p>
                         </div>
                         <div>
-                          <span className="font-medium block mb-2">Recommendations:</span>
-                          <ul className="space-y-1">
+                          <span className='font-medium block mb-2'>Recommendations:</span>
+                          <ul className='space-y-1'>
                             {classificationResult.recommendations.map((rec, index) => (
-                              <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
-                                <CheckCircle className="w-3 h-3 text-green-600 mt-0.5 flex-shrink-0" />
+                              <li
+                                key={index}
+                                className='text-sm text-gray-700 flex items-start gap-2'
+                              >
+                                <CheckCircle className='w-3 h-3 text-green-600 mt-0.5 flex-shrink-0' />
                                 {rec}
                               </li>
                             ))}
@@ -668,11 +744,14 @@ const SFDRGem: React.FC = () => {
                         </div>
                         {classificationResult.issues.length > 0 && (
                           <div>
-                            <span className="font-medium block mb-2">Issues to Address:</span>
-                            <ul className="space-y-1">
+                            <span className='font-medium block mb-2'>Issues to Address:</span>
+                            <ul className='space-y-1'>
                               {classificationResult.issues.map((issue, index) => (
-                                <li key={index} className="text-sm text-red-700 flex items-start gap-2">
-                                  <AlertTriangle className="w-3 h-3 text-red-600 mt-0.5 flex-shrink-0" />
+                                <li
+                                  key={index}
+                                  className='text-sm text-red-700 flex items-start gap-2'
+                                >
+                                  <AlertTriangle className='w-3 h-3 text-red-600 mt-0.5 flex-shrink-0' />
                                   {issue}
                                 </li>
                               ))}
@@ -686,10 +765,13 @@ const SFDRGem: React.FC = () => {
 
                 {!classificationResult && (
                   <Card>
-                    <CardContent className="pt-6">
-                      <div className="text-center text-gray-500">
-                        <Target className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                        <p>Fill out the form and click "Classify Fund" to get your SFDR classification</p>
+                    <CardContent className='pt-6'>
+                      <div className='text-center text-gray-500'>
+                        <Target className='w-12 h-12 mx-auto mb-4 text-gray-300' />
+                        <p>
+                          Fill out the form and click "Classify Fund" to get your SFDR
+                          classification
+                        </p>
                       </div>
                     </CardContent>
                   </Card>
@@ -699,13 +781,13 @@ const SFDRGem: React.FC = () => {
           </TabsContent>
 
           {/* Documents Tab */}
-          <TabsContent value="documents">
-            <div className="space-y-6">
+          <TabsContent value='documents'>
+            <div className='space-y-6'>
               {/* Upload Area */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Upload className="w-5 h-5 text-blue-600" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <Upload className='w-5 h-5 text-blue-600' />
                     Document Upload & Analysis
                   </CardTitle>
                   <CardDescription>
@@ -714,27 +796,27 @@ const SFDRGem: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div
-                    className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer"
+                    className='border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer'
                     onClick={() => fileInputRef.current?.click()}
-                    onDrop={(e) => {
+                    onDrop={e => {
                       e.preventDefault();
                       const files = e.dataTransfer.files;
                       if (files.length > 0) {
                         handleDocumentUpload(files);
                       }
                     }}
-                    onDragOver={(e) => e.preventDefault()}
+                    onDragOver={e => e.preventDefault()}
                   >
-                    <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                    <p className="text-lg font-medium mb-2">Drop files here or click to upload</p>
-                    <p className="text-sm text-gray-600">Supports PDF, DOC, DOCX, TXT files</p>
+                    <Upload className='w-12 h-12 mx-auto mb-4 text-gray-400' />
+                    <p className='text-lg font-medium mb-2'>Drop files here or click to upload</p>
+                    <p className='text-sm text-gray-600'>Supports PDF, DOC, DOCX, TXT files</p>
                     <input
                       ref={fileInputRef}
-                      type="file"
+                      type='file'
                       multiple
-                      accept=".pdf,.doc,.docx,.txt"
-                      className="hidden"
-                      onChange={(e) => {
+                      accept='.pdf,.doc,.docx,.txt'
+                      className='hidden'
+                      onChange={e => {
                         if (e.target.files && e.target.files.length > 0) {
                           handleDocumentUpload(e.target.files);
                         }
@@ -748,72 +830,87 @@ const SFDRGem: React.FC = () => {
               {uploadedDocuments.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-green-600" />
+                    <CardTitle className='flex items-center gap-2'>
+                      <FileText className='w-5 h-5 text-green-600' />
                       Analyzed Documents ({uploadedDocuments.length})
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      {uploadedDocuments.map((doc) => (
+                    <div className='space-y-4'>
+                      {uploadedDocuments.map(doc => (
                         <motion.div
                           key={doc.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="border rounded-lg p-4"
+                          className='border rounded-lg p-4'
                         >
-                          <div className="flex items-start justify-between mb-3">
+                          <div className='flex items-start justify-between mb-3'>
                             <div>
-                              <h4 className="font-medium">{doc.fileName}</h4>
-                              <p className="text-sm text-gray-600">
-                                {(doc.fileSize / 1024).toFixed(1)} KB • {doc.uploadDate.toLocaleDateString()}
+                              <h4 className='font-medium'>{doc.fileName}</h4>
+                              <p className='text-sm text-gray-600'>
+                                {(doc.fileSize / 1024).toFixed(1)} KB •{' '}
+                                {doc.uploadDate.toLocaleDateString()}
                               </p>
                             </div>
                             <Badge
-                              variant={doc.status === 'completed' ? 'default' : doc.status === 'processing' ? 'secondary' : 'destructive'}
+                              variant={
+                                doc.status === 'completed'
+                                  ? 'default'
+                                  : doc.status === 'processing'
+                                    ? 'secondary'
+                                    : 'destructive'
+                              }
                             >
                               {doc.status}
                             </Badge>
                           </div>
 
                           {doc.status === 'completed' && (
-                            <div className="space-y-3">
+                            <div className='space-y-3'>
                               <div>
-                                <span className="text-sm font-medium">SFDR Relevance:</span>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <Progress value={doc.sfdrRelevance} className="flex-1 h-2" />
-                                  <span className="text-sm">{doc.sfdrRelevance}%</span>
+                                <span className='text-sm font-medium'>SFDR Relevance:</span>
+                                <div className='flex items-center gap-2 mt-1'>
+                                  <Progress value={doc.sfdrRelevance} className='flex-1 h-2' />
+                                  <span className='text-sm'>{doc.sfdrRelevance}%</span>
                                 </div>
                               </div>
                               <div>
-                                <span className="text-sm font-medium block mb-1">Summary:</span>
-                                <p className="text-sm text-gray-700">{doc.summary}</p>
+                                <span className='text-sm font-medium block mb-1'>Summary:</span>
+                                <p className='text-sm text-gray-700'>{doc.summary}</p>
                               </div>
                               <div>
-                                <span className="text-sm font-medium block mb-1">Extracted Entities:</span>
-                                <div className="flex flex-wrap gap-1">
+                                <span className='text-sm font-medium block mb-1'>
+                                  Extracted Entities:
+                                </span>
+                                <div className='flex flex-wrap gap-1'>
                                   {doc.extractedEntities.map((entity, index) => (
-                                    <Badge key={index} variant="outline" className="text-xs">
+                                    <Badge key={index} variant='outline' className='text-xs'>
                                       {entity}
                                     </Badge>
                                   ))}
                                 </div>
                               </div>
-                              <div className="grid grid-cols-2 gap-4">
+                              <div className='grid grid-cols-2 gap-4'>
                                 <div>
-                                  <span className="text-sm font-medium block mb-1">Sentiment:</span>
+                                  <span className='text-sm font-medium block mb-1'>Sentiment:</span>
                                   <Badge
-                                    variant={doc.sentiment === 'positive' ? 'default' : doc.sentiment === 'negative' ? 'destructive' : 'secondary'}
-                                    className="text-xs"
+                                    variant={
+                                      doc.sentiment === 'positive'
+                                        ? 'default'
+                                        : doc.sentiment === 'negative'
+                                          ? 'destructive'
+                                          : 'secondary'
+                                    }
+                                    className='text-xs'
                                   >
                                     {doc.sentiment}
                                   </Badge>
                                 </div>
                                 <div>
-                                  <span className="text-sm font-medium block mb-1">Topics:</span>
-                                  <div className="flex flex-wrap gap-1">
+                                  <span className='text-sm font-medium block mb-1'>Topics:</span>
+                                  <div className='flex flex-wrap gap-1'>
                                     {doc.topics.slice(0, 2).map((topic, index) => (
-                                      <Badge key={index} variant="outline" className="text-xs">
+                                      <Badge key={index} variant='outline' className='text-xs'>
                                         {topic}
                                       </Badge>
                                     ))}
@@ -822,9 +919,10 @@ const SFDRGem: React.FC = () => {
                               </div>
                               {doc.complianceIssues.length > 0 && (
                                 <Alert>
-                                  <AlertTriangle className="h-4 w-4" />
+                                  <AlertTriangle className='h-4 w-4' />
                                   <AlertDescription>
-                                    <strong>Compliance Issues:</strong> {doc.complianceIssues.join(', ')}
+                                    <strong>Compliance Issues:</strong>{' '}
+                                    {doc.complianceIssues.join(', ')}
                                   </AlertDescription>
                                 </Alert>
                               )}
@@ -832,9 +930,9 @@ const SFDRGem: React.FC = () => {
                           )}
 
                           {doc.status === 'processing' && (
-                            <div className="flex items-center gap-2">
-                              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                              <span className="text-sm text-gray-600">Analyzing document...</span>
+                            <div className='flex items-center gap-2'>
+                              <div className='w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin' />
+                              <span className='text-sm text-gray-600'>Analyzing document...</span>
                             </div>
                           )}
                         </motion.div>
@@ -846,11 +944,11 @@ const SFDRGem: React.FC = () => {
 
               {uploadedDocuments.length === 0 && (
                 <Card>
-                  <CardContent className="pt-6">
-                    <div className="text-center text-gray-500">
-                      <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <CardContent className='pt-6'>
+                    <div className='text-center text-gray-500'>
+                      <FileText className='w-12 h-12 mx-auto mb-4 text-gray-300' />
                       <p>No documents uploaded yet</p>
-                      <p className="text-sm">Upload documents to start analysis</p>
+                      <p className='text-sm'>Upload documents to start analysis</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -859,12 +957,15 @@ const SFDRGem: React.FC = () => {
           </TabsContent>
 
           {/* Export Tab */}
-          <TabsContent value="export">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleExport('pdf')}>
+          <TabsContent value='export'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+              <Card
+                className='cursor-pointer hover:shadow-lg transition-shadow'
+                onClick={() => handleExport('pdf')}
+              >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-red-600" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <FileText className='w-5 h-5 text-red-600' />
                     PDF Report
                   </CardTitle>
                   <CardDescription>
@@ -872,17 +973,20 @@ const SFDRGem: React.FC = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" className="w-full">
-                    <Download className="w-4 h-4 mr-2" />
+                  <Button variant='outline' className='w-full'>
+                    <Download className='w-4 h-4 mr-2' />
                     Export PDF
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleExport('excel')}>
+              <Card
+                className='cursor-pointer hover:shadow-lg transition-shadow'
+                onClick={() => handleExport('excel')}
+              >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-green-600" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <BarChart3 className='w-5 h-5 text-green-600' />
                     Excel Workbook
                   </CardTitle>
                   <CardDescription>
@@ -890,17 +994,20 @@ const SFDRGem: React.FC = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" className="w-full">
-                    <Download className="w-4 h-4 mr-2" />
+                  <Button variant='outline' className='w-full'>
+                    <Download className='w-4 h-4 mr-2' />
                     Export Excel
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleExport('json')}>
+              <Card
+                className='cursor-pointer hover:shadow-lg transition-shadow'
+                onClick={() => handleExport('json')}
+              >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-blue-600" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <Globe className='w-5 h-5 text-blue-600' />
                     JSON Data
                   </CardTitle>
                   <CardDescription>
@@ -908,31 +1015,33 @@ const SFDRGem: React.FC = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" className="w-full">
-                    <Download className="w-4 h-4 mr-2" />
+                  <Button variant='outline' className='w-full'>
+                    <Download className='w-4 h-4 mr-2' />
                     Export JSON
                   </Button>
                 </CardContent>
               </Card>
             </div>
 
-            <Card className="mt-6">
+            <Card className='mt-6'>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileCheck className="w-5 h-5 text-purple-600" />
+                <CardTitle className='flex items-center gap-2'>
+                  <FileCheck className='w-5 h-5 text-purple-600' />
                   Export Summary
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTriangle className='h-4 w-4' />
                   <AlertDescription>
                     <strong>Ready for Export:</strong>
-                    <ul className="mt-2 space-y-1">
+                    <ul className='mt-2 space-y-1'>
                       <li>• {classificationResult ? '1' : '0'} fund classification</li>
                       <li>• {uploadedDocuments.length} analyzed documents</li>
                       <li>• {messages.length} chat messages</li>
-                      <li>• {contextualMemory.recentClassifications.length} historical classifications</li>
+                      <li>
+                        • {contextualMemory.recentClassifications.length} historical classifications
+                      </li>
                     </ul>
                   </AlertDescription>
                 </Alert>

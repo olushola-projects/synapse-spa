@@ -1,9 +1,11 @@
 # QA Testing Plan for Synapse Landing Page and SFDR Navigator
 
 ## Overview
+
 This comprehensive QA testing plan ensures the Synapse landing page and SFDR Navigator AI functionality are bug-free and fully functional for beta testing. The plan follows industry best practices for web application and AI agent testing.
 
 ## Testing Scope
+
 - **Landing Page**: All components, navigation, forms, and user interactions
 - **SFDR Navigator**: AI chat functionality, SFDR compliance validation, API integration
 - **Cross-browser Compatibility**: Chrome, Firefox, Safari, Edge
@@ -13,6 +15,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 1. Pre-Testing Setup
 
 ### 1.1 Environment Preparation
+
 - [ ] Verify development server is running (http://localhost:5173)
 - [ ] Check all dependencies are installed and up-to-date
 - [ ] Ensure API endpoints are accessible
@@ -20,6 +23,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 - [ ] Configure browser developer tools for debugging
 
 ### 1.2 Testing Tools
+
 - Browser Developer Tools (Network, Console, Performance tabs)
 - Responsive design testing (browser dev tools)
 - Accessibility testing tools (axe-core, WAVE)
@@ -29,6 +33,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 2. Landing Page Testing
 
 ### 2.1 Navigation Testing
+
 - [ ] **Navbar functionality**
   - [ ] All navigation links work correctly
   - [ ] Mobile hamburger menu opens/closes properly
@@ -42,6 +47,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Legal page links work (Privacy, Terms, etc.)
 
 ### 2.2 Page Content Testing
+
 - [ ] **Hero Section**
   - [ ] Hero text displays correctly
   - [ ] CTA buttons are functional
@@ -61,6 +67,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Feature cards are interactive
 
 ### 2.3 Form Testing
+
 - [ ] **Waitlist Forms**
   - [ ] Email validation works correctly
   - [ ] Required field validation
@@ -75,6 +82,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Confirmation emails are sent (if applicable)
 
 ### 2.4 Interactive Elements
+
 - [ ] **Buttons and CTAs**
   - [ ] All buttons have proper hover states
   - [ ] Click events trigger correctly
@@ -90,6 +98,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 3. SFDR Navigator AI Testing
 
 ### 3.1 Chat Interface Testing
+
 - [ ] **Basic Chat Functionality**
   - [ ] Chat interface loads correctly
   - [ ] Message input field accepts text
@@ -106,6 +115,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Message history persists during session
 
 ### 3.2 SFDR Navigator Functionality Testing
+
 - [ ] **SFDR Compliance Validation**
   - [ ] Navigator responds to SFDR-related queries
   - [ ] Classification requests are processed
@@ -121,6 +131,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Navigator handles unclear or invalid inputs gracefully
 
 ### 3.3 API Integration Testing
+
 - [ ] **API Connectivity**
   - [ ] API endpoints are reachable
   - [ ] Authentication works correctly
@@ -135,6 +146,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Mock responses work for demo purposes
 
 ### 3.4 Form Mode Testing
+
 - [ ] **Structured Input Form**
   - [ ] Form fields accept appropriate data types
   - [ ] Dropdown selections work correctly
@@ -145,6 +157,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 4. Cross-Browser Testing
 
 ### 4.1 Browser Compatibility
+
 - [ ] **Chrome (Latest)**
   - [ ] All functionality works correctly
   - [ ] CSS styles render properly
@@ -166,6 +179,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Legacy Edge compatibility (if required)
 
 ### 4.2 Device Testing
+
 - [ ] **Desktop (1920x1080+)**
   - [ ] Layout scales properly
   - [ ] All elements are accessible
@@ -185,6 +199,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 5. Performance Testing
 
 ### 5.1 Page Load Performance
+
 - [ ] **Initial Load Times**
   - [ ] Homepage loads in under 3 seconds
   - [ ] Critical resources load first
@@ -198,6 +213,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Battery usage is optimized (mobile)
 
 ### 5.2 API Performance
+
 - [ ] **Response Times**
   - [ ] SFDR Navigator responses under 2 seconds
   - [ ] Timeout handling for slow responses
@@ -207,6 +223,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 6. Accessibility Testing
 
 ### 6.1 WCAG Compliance
+
 - [ ] **Keyboard Navigation**
   - [ ] All interactive elements are keyboard accessible
   - [ ] Tab order is logical and intuitive
@@ -228,6 +245,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 7. Security Testing
 
 ### 7.1 Input Validation
+
 - [ ] **XSS Prevention**
   - [ ] User inputs are properly sanitized
   - [ ] No script injection vulnerabilities
@@ -241,6 +259,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 8. Error Handling Testing
 
 ### 8.1 Network Errors
+
 - [ ] **Offline Scenarios**
   - [ ] Graceful degradation when offline
   - [ ] Appropriate error messages
@@ -252,6 +271,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] Timeout errors are properly communicated
 
 ### 8.2 User Input Errors
+
 - [ ] **Invalid Data**
   - [ ] Form validation prevents invalid submissions
   - [ ] Clear error messages guide users
@@ -260,6 +280,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 9. Beta Testing Preparation
 
 ### 9.1 User Acceptance Testing
+
 - [ ] **Test User Scenarios**
   - [ ] New user onboarding flow
   - [ ] Typical user journey through the site
@@ -272,6 +293,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
   - [ ] User analytics are properly configured
 
 ### 9.2 Monitoring and Logging
+
 - [ ] **Error Tracking**
   - [ ] JavaScript errors are logged
   - [ ] API errors are monitored
@@ -285,6 +307,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 10. Testing Checklist Summary
 
 ### Critical Path Testing (Must Pass)
+
 - [ ] Homepage loads without errors
 - [ ] Navigation works across all pages
 - [ ] SFDR Navigator chat interface is functional
@@ -294,6 +317,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 - [ ] Cross-browser compatibility confirmed
 
 ### Nice-to-Have Testing (Should Pass)
+
 - [ ] Performance optimizations work
 - [ ] Accessibility features function
 - [ ] Advanced AI features work correctly
@@ -303,6 +327,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 11. Bug Reporting Template
 
 ### Bug Report Format
+
 ```
 **Bug Title**: [Brief description]
 **Severity**: Critical/High/Medium/Low
@@ -323,24 +348,28 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 12. Testing Timeline
 
 ### Phase 1: Core Functionality (Days 1-2)
+
 - Landing page basic functionality
 - Navigation and routing
 - Form submissions
 - Basic SFDR Navigator functionality
 
 ### Phase 2: Advanced Features (Days 3-4)
+
 - SFDR Navigator advanced features
 - API integration testing
 - Performance optimization
 - Cross-browser testing
 
 ### Phase 3: Polish and Edge Cases (Days 5-6)
+
 - Accessibility testing
 - Security testing
 - Error handling
 - Beta testing preparation
 
 ### Phase 4: Final Validation (Day 7)
+
 - End-to-end testing
 - User acceptance testing
 - Final bug fixes
@@ -349,6 +378,7 @@ This comprehensive QA testing plan ensures the Synapse landing page and SFDR Nav
 ## 13. Success Criteria
 
 ### Launch Readiness Criteria
+
 - [ ] Zero critical bugs
 - [ ] Less than 5 high-priority bugs
 - [ ] All core user journeys work flawlessly

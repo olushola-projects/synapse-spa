@@ -84,11 +84,14 @@ Object.defineProperty(URL, 'revokeObjectURL', {
 });
 
 // Suppress console errors during tests unless explicitly testing them
+// eslint-disable-next-line no-console
 const originalConsoleError = console.error;
 beforeEach(() => {
+  // eslint-disable-next-line no-console
   console.error = vi.fn();
 });
 
 afterEach(() => {
+  // eslint-disable-next-line no-console
   console.error = originalConsoleError;
 });

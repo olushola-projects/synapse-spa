@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Copy, 
-  ThumbsUp, 
-  ThumbsDown, 
-  Bot, 
-  User, 
+import {
+  Copy,
+  ThumbsUp,
+  ThumbsDown,
+  Bot,
+  User,
   CheckCircle2,
   AlertCircle,
   Clock,
@@ -70,7 +70,7 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
 }) => {
   const isUser = message.role === 'user';
   const isSystem = message.role === 'system';
-  
+
   /**
    * Handle copying message content to clipboard
    */
@@ -79,12 +79,12 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
       .filter(c => c.type === 'text')
       .map(c => c.content)
       .join('\n');
-    
+
     navigator.clipboard.writeText(textContent);
     onCopy?.(textContent);
     toast({
-      title: "Copied to clipboard",
-      description: "Message content has been copied."
+      title: 'Copied to clipboard',
+      description: 'Message content has been copied.'
     });
   };
 
@@ -115,73 +115,73 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
     switch (content.type) {
       case 'code':
         return (
-          <Card key={index} className="bg-muted p-4 font-mono text-sm">
-            <div className="flex items-center justify-between mb-2">
-              <Badge variant="secondary">{content.language || 'code'}</Badge>
+          <Card key={index} className='bg-muted p-4 font-mono text-sm'>
+            <div className='flex items-center justify-between mb-2'>
+              <Badge variant='secondary'>{content.language || 'code'}</Badge>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={() => navigator.clipboard.writeText(content.content)}
               >
-                <Copy className="h-4 w-4" />
+                <Copy className='h-4 w-4' />
               </Button>
             </div>
-            <pre className="whitespace-pre-wrap">{content.content}</pre>
+            <pre className='whitespace-pre-wrap'>{content.content}</pre>
           </Card>
         );
-      
+
       case 'compliance-report':
         return (
-          <Card key={index} className="border-green-200 bg-green-50 dark:bg-green-950 p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
-              <span className="font-semibold text-green-800 dark:text-green-200">
+          <Card key={index} className='border-green-200 bg-green-50 dark:bg-green-950 p-4'>
+            <div className='flex items-center gap-2 mb-3'>
+              <CheckCircle2 className='h-5 w-5 text-green-600' />
+              <span className='font-semibold text-green-800 dark:text-green-200'>
                 SFDR Compliance Report
               </span>
               {content.metadata?.confidence && (
-                <Badge variant="secondary">
+                <Badge variant='secondary'>
                   {Math.round(content.metadata.confidence * 100)}% confidence
                 </Badge>
               )}
             </div>
-            <div className="prose prose-sm max-w-none">
-              <pre className="whitespace-pre-wrap text-sm">{content.content}</pre>
+            <div className='prose prose-sm max-w-none'>
+              <pre className='whitespace-pre-wrap text-sm'>{content.content}</pre>
             </div>
           </Card>
         );
-      
+
       case 'table':
         return (
-          <Card key={index} className="p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <BarChart3 className="h-5 w-5" />
-              <span className="font-semibold">Data Analysis</span>
+          <Card key={index} className='p-4'>
+            <div className='flex items-center gap-2 mb-3'>
+              <BarChart3 className='h-5 w-5' />
+              <span className='font-semibold'>Data Analysis</span>
             </div>
-            <div className="overflow-x-auto">
+            <div className='overflow-x-auto'>
               <div dangerouslySetInnerHTML={{ __html: content.content }} />
             </div>
           </Card>
         );
-      
+
       case 'file':
         return (
-          <Card key={index} className="p-4 border-blue-200 bg-blue-50 dark:bg-blue-950">
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-blue-600" />
-              <span className="font-medium text-blue-800 dark:text-blue-200">
+          <Card key={index} className='p-4 border-blue-200 bg-blue-50 dark:bg-blue-950'>
+            <div className='flex items-center gap-2'>
+              <FileText className='h-5 w-5 text-blue-600' />
+              <span className='font-medium text-blue-800 dark:text-blue-200'>
                 {content.content}
               </span>
             </div>
           </Card>
         );
-      
+
       default:
         return (
-          <div key={index} className="prose prose-sm max-w-none dark:prose-invert">
+          <div key={index} className='prose prose-sm max-w-none dark:prose-invert'>
             {message.isStreaming ? (
               <StreamingText text={content.content} />
             ) : (
-              <p className="whitespace-pre-wrap">{content.content}</p>
+              <p className='whitespace-pre-wrap'>{content.content}</p>
             )}
           </div>
         );
@@ -194,56 +194,61 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "flex gap-3 p-4",
-        isUser ? "flex-row-reverse" : "flex-row",
-        isSystem && "justify-center",
+        'flex gap-3 p-4',
+        isUser ? 'flex-row-reverse' : 'flex-row',
+        isSystem && 'justify-center',
         className
       )}
     >
       {!isSystem && (
-        <Avatar className={cn("h-8 w-8", isUser && "order-2")}>
-          <AvatarImage 
-            src={isUser ? undefined : getAgentAvatar()} 
-            alt={isUser ? "User" : "SFDR Navigator"} 
+        <Avatar className={cn('h-8 w-8', isUser && 'order-2')}>
+          <AvatarImage
+            src={isUser ? undefined : getAgentAvatar()}
+            alt={isUser ? 'User' : 'SFDR Navigator'}
           />
           <AvatarFallback>
-            {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+            {isUser ? <User className='h-4 w-4' /> : <Bot className='h-4 w-4' />}
           </AvatarFallback>
         </Avatar>
       )}
-      
-      <div className={cn(
-        "flex-1 space-y-2",
-        isUser ? "items-end" : "items-start",
-        isSystem && "text-center"
-      )}>
+
+      <div
+        className={cn(
+          'flex-1 space-y-2',
+          isUser ? 'items-end' : 'items-start',
+          isSystem && 'text-center'
+        )}
+      >
         {/* Message Header */}
         {!isSystem && (
-          <div className={cn(
-            "flex items-center gap-2 text-xs text-muted-foreground",
-            isUser && "flex-row-reverse"
-          )}>
-            <span className="font-medium">
-              {isUser ? "You" : message.metadata?.agentType?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) || "SFDR Navigator"}
+          <div
+            className={cn(
+              'flex items-center gap-2 text-xs text-muted-foreground',
+              isUser && 'flex-row-reverse'
+            )}
+          >
+            <span className='font-medium'>
+              {isUser
+                ? 'You'
+                : message.metadata?.agentType
+                    ?.replace('-', ' ')
+                    .replace(/\b\w/g, l => l.toUpperCase()) || 'SFDR Navigator'}
             </span>
             <span>{message.timestamp.toLocaleTimeString()}</span>
             {message.metadata?.processingTime && (
-              <Badge variant="outline" className="text-xs">
-                <Clock className="h-3 w-3 mr-1" />
+              <Badge variant='outline' className='text-xs'>
+                <Clock className='h-3 w-3 mr-1' />
                 {message.metadata.processingTime}ms
               </Badge>
             )}
           </div>
         )}
-        
+
         {/* Message Content */}
-        <div className={cn(
-          "space-y-2",
-          isUser && "flex flex-col items-end"
-        )}>
+        <div className={cn('space-y-2', isUser && 'flex flex-col items-end')}>
           {message.content.map((content, index) => renderContent(content, index))}
         </div>
-        
+
         {/* Loading Indicator */}
         <AnimatePresence>
           {message.isLoading && (
@@ -251,60 +256,55 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-2 text-sm text-muted-foreground"
+              className='flex items-center gap-2 text-sm text-muted-foreground'
             >
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>
+              <div className='flex space-x-1'>
+                <div className='w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                <div className='w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                <div className='w-2 h-2 bg-current rounded-full animate-bounce'></div>
               </div>
               <span>SFDR Navigator is analyzing...</span>
             </motion.div>
           )}
         </AnimatePresence>
-        
+
         {/* Message Actions */}
         {!isUser && !isSystem && !message.isLoading && (
-          <div className="flex items-center gap-2 mt-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleCopy}
-              className="h-8 px-2"
-            >
-              <Copy className="h-3 w-3" />
+          <div className='flex items-center gap-2 mt-2'>
+            <Button variant='ghost' size='sm' onClick={handleCopy} className='h-8 px-2'>
+              <Copy className='h-3 w-3' />
             </Button>
-            
-            <div className="flex items-center gap-1">
+
+            <div className='flex items-center gap-1'>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={() => handleReaction('up')}
                 className={cn(
-                  "h-8 px-2",
-                  message.reactions?.userReaction === 'up' && "bg-green-100 text-green-700"
+                  'h-8 px-2',
+                  message.reactions?.userReaction === 'up' && 'bg-green-100 text-green-700'
                 )}
               >
-                <ThumbsUp className="h-3 w-3" />
+                <ThumbsUp className='h-3 w-3' />
                 {message.reactions?.thumbsUp || 0}
               </Button>
-              
+
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={() => handleReaction('down')}
                 className={cn(
-                  "h-8 px-2",
-                  message.reactions?.userReaction === 'down' && "bg-red-100 text-red-700"
+                  'h-8 px-2',
+                  message.reactions?.userReaction === 'down' && 'bg-red-100 text-red-700'
                 )}
               >
-                <ThumbsDown className="h-3 w-3" />
+                <ThumbsDown className='h-3 w-3' />
                 {message.reactions?.thumbsDown || 0}
               </Button>
             </div>
-            
+
             {message.metadata?.confidence && (
-              <Badge variant="outline" className="text-xs">
+              <Badge variant='outline' className='text-xs'>
                 {Math.round(message.metadata.confidence * 100)}% confident
               </Badge>
             )}
@@ -320,7 +320,7 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
  */
 const StreamingText: React.FC<{ text: string }> = ({ text }) => {
   const [displayedText, setDisplayedText] = React.useState('');
-  
+
   React.useEffect(() => {
     let index = 0;
     const timer = setInterval(() => {
@@ -331,17 +331,17 @@ const StreamingText: React.FC<{ text: string }> = ({ text }) => {
         clearInterval(timer);
       }
     }, 20); // Adjust speed as needed
-    
+
     return () => clearInterval(timer);
   }, [text]);
-  
+
   return (
-    <p className="whitespace-pre-wrap">
+    <p className='whitespace-pre-wrap'>
       {displayedText}
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.8, repeat: Infinity }}
-        className="inline-block w-2 h-4 bg-current ml-1"
+        className='inline-block w-2 h-4 bg-current ml-1'
       />
     </p>
   );

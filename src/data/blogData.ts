@@ -22,8 +22,9 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     id: 1,
-    title: "The Evolution of Agentic AI in Regulatory Compliance",
-    excerpt: "How autonomous AI systems are reshaping the governance, risk, and compliance landscape for financial institutions worldwide.",
+    title: 'The Evolution of Agentic AI in Regulatory Compliance',
+    excerpt:
+      'How autonomous AI systems are reshaping the governance, risk, and compliance landscape for financial institutions worldwide.',
     content: `
       <h2>Introduction</h2>
       <p>In the rapidly evolving landscape of regulatory compliance, agentic AI systems are emerging as transformative tools that promise to fundamentally reshape how financial institutions approach governance, risk, and compliance (GRC) challenges.</p>
@@ -67,22 +68,25 @@ export const blogPosts: BlogPost[] = [
       
       <p>The future of compliance is not about choosing between human expertise and artificial intelligence—it's about creating systems where each complements the other, resulting in compliance functions that are smarter, more efficient, and better equipped to navigate an increasingly complex regulatory landscape.</p>
     `,
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2034&q=80",
+    image:
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2034&q=80',
     author: {
-      name: "Dr. Alexandra Chen",
-      role: "Partner, Global Financial Services",
-      avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80"
+      name: 'Dr. Alexandra Chen',
+      role: 'Partner, Global Financial Services',
+      avatar:
+        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80'
     },
-    date: "April 18, 2025",
-    readTime: "8 min read",
-    category: "AI Governance",
-    tags: ["Agentic AI", "Regulatory Compliance", "Financial Services", "Governance"],
+    date: 'April 18, 2025',
+    readTime: '8 min read',
+    category: 'AI Governance',
+    tags: ['Agentic AI', 'Regulatory Compliance', 'Financial Services', 'Governance'],
     featured: true
   },
   {
     id: 2,
-    title: "Building Resilient Compliance Programs in the Age of AI",
-    excerpt: "A framework for developing compliance structures that can withstand technological disruption while leveraging AI advantages.",
+    title: 'Building Resilient Compliance Programs in the Age of AI',
+    excerpt:
+      'A framework for developing compliance structures that can withstand technological disruption while leveraging AI advantages.',
     content: `
       <h2>Introduction</h2>
       <p>In an era of rapid technological change, compliance programs must evolve to become more resilient and adaptive. This article outlines a comprehensive framework for building compliance structures that not only withstand disruption but strategically leverage AI capabilities to enhance effectiveness.</p>
@@ -133,21 +137,24 @@ export const blogPosts: BlogPost[] = [
       
       <p>The future of compliance isn't about choosing between traditional approaches and AI-driven innovation—it's about creating frameworks that integrate both, combining human judgment with technological capabilities to create compliance programs that are smarter, more efficient, and better equipped to navigate an increasingly complex regulatory landscape.</p>
     `,
-    image: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+    image:
+      'https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
     author: {
-      name: "James Wilson",
-      role: "Principal, Risk Advisory Services",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80"
+      name: 'James Wilson',
+      role: 'Principal, Risk Advisory Services',
+      avatar:
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
     },
-    date: "April 10, 2025",
-    readTime: "10 min read",
-    category: "Compliance Strategy",
-    tags: ["Compliance", "Resilience", "AI Integration", "Risk Management"]
+    date: 'April 10, 2025',
+    readTime: '10 min read',
+    category: 'Compliance Strategy',
+    tags: ['Compliance', 'Resilience', 'AI Integration', 'Risk Management']
   },
   {
     id: 3,
-    title: "The Emerging Landscape of Cross-Border Data Regulation",
-    excerpt: "How multinational organizations can navigate increasingly complex data sovereignty requirements while maintaining operational efficiency.",
+    title: 'The Emerging Landscape of Cross-Border Data Regulation',
+    excerpt:
+      'How multinational organizations can navigate increasingly complex data sovereignty requirements while maintaining operational efficiency.',
     content: `
       <h2>Introduction</h2>
       <p>The global regulatory landscape for data is becoming increasingly fragmented, with jurisdictions worldwide implementing distinct approaches to data sovereignty, privacy, and security. For multinational organizations, navigating this complex terrain requires sophisticated strategies that balance compliance with operational efficiency.</p>
@@ -209,21 +216,24 @@ export const blogPosts: BlogPost[] = [
       <h2>Conclusion</h2>
       <p>The fragmentation of data regulation presents significant challenges for multinational organizations, but with strategic approaches to data governance and infrastructure, these challenges can be managed effectively. By implementing sophisticated classification systems, modular infrastructures, and automated compliance tools, organizations can maintain global operations while respecting the increasing diversity of regulatory requirements.</p>
     `,
-    image: "https://images.unsplash.com/photo-1423592707957-3b212afa6733?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80",
+    image:
+      'https://images.unsplash.com/photo-1423592707957-3b212afa6733?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80',
     author: {
-      name: "Dr. Sophia Garcia",
-      role: "Director, Data Privacy & Governance",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80"
+      name: 'Dr. Sophia Garcia',
+      role: 'Director, Data Privacy & Governance',
+      avatar:
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
     },
-    date: "April 2, 2025",
-    readTime: "12 min read",
-    category: "Data Governance",
-    tags: ["Data Privacy", "International Compliance", "GDPR", "Data Sovereignty"]
+    date: 'April 2, 2025',
+    readTime: '12 min read',
+    category: 'Data Governance',
+    tags: ['Data Privacy', 'International Compliance', 'GDPR', 'Data Sovereignty']
   },
   {
     id: 4,
-    title: "Operational Resilience in Financial Services: Beyond Business Continuity",
-    excerpt: "How leading financial institutions are implementing comprehensive operational resilience frameworks that address regulatory requirements and enhance competitive advantage.",
+    title: 'Operational Resilience in Financial Services: Beyond Business Continuity',
+    excerpt:
+      'How leading financial institutions are implementing comprehensive operational resilience frameworks that address regulatory requirements and enhance competitive advantage.',
     content: `
       <h2>Introduction</h2>
       <p>Operational resilience has emerged as a central concern for financial regulators worldwide, moving beyond traditional business continuity planning to encompass a more comprehensive approach to maintaining critical functions through disruption. This shift has significant implications for how financial institutions approach governance, risk management, and technology strategy.</p>
@@ -296,21 +306,29 @@ export const blogPosts: BlogPost[] = [
       
       <p>The financial institutions that thrive in an environment of increasing operational complexity and heightened regulatory expectations will be those that view operational resilience not as a cost center but as a strategic capability that enables sustainable growth and customer trust.</p>
     `,
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+    image:
+      'https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
     author: {
-      name: "Jonathan Parker",
-      role: "Partner, Financial Services Risk",
-      avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80"
+      name: 'Jonathan Parker',
+      role: 'Partner, Financial Services Risk',
+      avatar:
+        'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
     },
-    date: "March 28, 2025",
-    readTime: "9 min read",
-    category: "Operational Risk",
-    tags: ["Operational Resilience", "Financial Services", "Risk Management", "Regulatory Compliance"]
+    date: 'March 28, 2025',
+    readTime: '9 min read',
+    category: 'Operational Risk',
+    tags: [
+      'Operational Resilience',
+      'Financial Services',
+      'Risk Management',
+      'Regulatory Compliance'
+    ]
   },
   {
     id: 5,
-    title: "ESG Data Governance: Building Trust in Sustainability Reporting",
-    excerpt: "How organizations can develop robust data governance frameworks to support credible and regulatory-compliant ESG reporting.",
+    title: 'ESG Data Governance: Building Trust in Sustainability Reporting',
+    excerpt:
+      'How organizations can develop robust data governance frameworks to support credible and regulatory-compliant ESG reporting.',
     content: `
       <h2>Introduction</h2>
       <p>As Environmental, Social, and Governance (ESG) reporting transitions from voluntary disclosure to mandatory reporting under frameworks like the EU's Corporate Sustainability Reporting Directive (CSRD) and the International Sustainability Standards Board (ISSB) standards, the quality and reliability of ESG data has come under increased scrutiny. This article explores how organizations can develop robust data governance frameworks to support credible and regulatory-compliant ESG reporting.</p>
@@ -411,21 +429,24 @@ export const blogPosts: BlogPost[] = [
       
       <p>By implementing comprehensive ESG data governance practices, organizations can not only meet regulatory requirements but enhance decision-making, build stakeholder trust, and potentially gain competitive advantage in markets where sustainability performance is increasingly valued.</p>
     `,
-    image: "https://images.unsplash.com/photo-1507668339897-8a035aa9527d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80",
+    image:
+      'https://images.unsplash.com/photo-1507668339897-8a035aa9527d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80',
     author: {
-      name: "Emma Richards",
-      role: "Director, ESG & Sustainability Services",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69527d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
+      name: 'Emma Richards',
+      role: 'Director, ESG & Sustainability Services',
+      avatar:
+        'https://images.unsplash.com/photo-1534528741775-53994a69527d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80'
     },
-    date: "March 15, 2025",
-    readTime: "11 min read",
-    category: "ESG",
-    tags: ["Sustainability", "Data Governance", "ESG Reporting", "CSRD"]
+    date: 'March 15, 2025',
+    readTime: '11 min read',
+    category: 'ESG',
+    tags: ['Sustainability', 'Data Governance', 'ESG Reporting', 'CSRD']
   },
   {
     id: 6,
-    title: "Third-Party Risk Management in the Age of AI and Extended Supply Chains",
-    excerpt: "How organizations can evolve their third-party risk management practices to address emerging challenges in an increasingly interconnected business ecosystem.",
+    title: 'Third-Party Risk Management in the Age of AI and Extended Supply Chains',
+    excerpt:
+      'How organizations can evolve their third-party risk management practices to address emerging challenges in an increasingly interconnected business ecosystem.',
     content: `
       <h2>Introduction</h2>
       <p>Third-party risk management has evolved significantly from a narrow focus on vendor financial stability to a comprehensive discipline addressing a spectrum of risks across extended business ecosystems. This evolution reflects the increasing reliance on third parties for critical business functions and the growing regulatory focus on supply chain resilience.</p>
@@ -525,15 +546,17 @@ export const blogPosts: BlogPost[] = [
       
       <p>By implementing next-generation third-party risk management practices that address extended ecosystem visibility, AI-specific risks, and continuous monitoring capabilities, organizations can leverage the benefits of an interconnected ecosystem while effectively managing the associated risks.</p>
     `,
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+    image:
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
     author: {
-      name: "Michael Zhang",
-      role: "Partner, Third-Party Risk Advisory",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80"
+      name: 'Michael Zhang',
+      role: 'Partner, Third-Party Risk Advisory',
+      avatar:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
     },
-    date: "March 5, 2025",
-    readTime: "10 min read",
-    category: "Risk Management",
-    tags: ["Third-Party Risk", "Supply Chain", "AI Governance", "Vendor Management"]
+    date: 'March 5, 2025',
+    readTime: '10 min read',
+    category: 'Risk Management',
+    tags: ['Third-Party Risk', 'Supply Chain', 'AI Governance', 'Vendor Management']
   }
 ];

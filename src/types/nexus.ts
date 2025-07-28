@@ -47,12 +47,12 @@ export interface PAIIndicators {
 
 export interface TaxonomyAlignment {
   environmentalObjectives: Array<
-    'climate_change_mitigation' | 
-    'climate_change_adaptation' | 
-    'water_marine_resources' | 
-    'circular_economy' | 
-    'pollution_prevention' | 
-    'biodiversity_ecosystems'
+    | 'climate_change_mitigation'
+    | 'climate_change_adaptation'
+    | 'water_marine_resources'
+    | 'circular_economy'
+    | 'pollution_prevention'
+    | 'biodiversity_ecosystems'
   >;
   alignmentPercentage?: number;
   eligibilityPercentage?: number;
@@ -81,7 +81,7 @@ export interface SFDRClassificationRequest {
   paiIndicators?: PAIIndicators;
   taxonomyAlignment?: TaxonomyAlignment;
   regulatoryFramework?: RegulatoryFramework;
-  additionalDisclosures?: Record<string, any>;
+  additionalDisclosures?: Record<string, unknown>;
 }
 
 // Validation Response Structure
@@ -164,7 +164,7 @@ export interface NexusCapabilities {
 }
 
 // Quick Action Types
-export type QuickActionType = 
+export type QuickActionType =
   | 'upload-document'
   | 'check-compliance'
   | 'generate-report'

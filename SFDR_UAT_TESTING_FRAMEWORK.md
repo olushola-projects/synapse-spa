@@ -117,30 +117,30 @@ The following automated tests should be implemented to validate SFDR compliance:
 async function testArticle8Compliance() {
   const tester = new SynapseQATester();
   await tester.startTest('Article 8 Compliance Test');
-  
+
   try {
     // Navigate to SFDR Navigator
     await tester.navigateToPage('/sfdr-navigator');
-    
+
     // Load Article 8 test data
     const article8Data = await fetch('/test/fixtures/article8-esg.json').then(r => r.json());
-    
+
     // Submit data for classification
     await tester.fillFormWithData('#sfdr-form', article8Data);
     await tester.clickElement('#submit-button');
-    
+
     // Validate classification result
     const classification = await tester.getElementText('#classification-result');
     tester.assert(classification.includes('Article 8'), 'Fund should be classified as Article 8');
-    
+
     // Validate PAI consideration
     const paiValidation = await tester.getElementText('#pai-validation');
     tester.assert(paiValidation.includes('Valid'), 'PAI consideration should be valid');
-    
+
     // Validate taxonomy alignment
     const taxonomyValidation = await tester.getElementText('#taxonomy-validation');
     tester.assert(taxonomyValidation.includes('Valid'), 'Taxonomy alignment should be valid');
-    
+
     tester.endTest(true);
   } catch (error) {
     tester.endTest(false, error.message);
@@ -217,29 +217,29 @@ function generateSFDRComplianceReport(testResults) {
     complianceIssues: testResults.flatMap(t => t.issues || []),
     recommendations: testResults.flatMap(t => t.recommendations || [])
   };
-  
+
   console.log('SFDR Compliance Report');
   console.log('=====================');
   console.log(`Test Date: ${report.testDate}`);
   console.log(`Total Tests: ${report.totalTests}`);
   console.log(`Passed: ${report.passedTests}`);
   console.log(`Failed: ${report.failedTests}`);
-  console.log(`Compliance Rate: ${(report.passedTests / report.totalTests * 100).toFixed(1)}%`);
-  
+  console.log(`Compliance Rate: ${((report.passedTests / report.totalTests) * 100).toFixed(1)}%`);
+
   if (report.complianceIssues.length > 0) {
     console.log('\nCompliance Issues:');
     report.complianceIssues.forEach(issue => {
       console.log(`- ${issue.severity}: ${issue.description}`);
     });
   }
-  
+
   if (report.recommendations.length > 0) {
     console.log('\nRecommendations:');
     report.recommendations.forEach(rec => {
       console.log(`- ${rec}`);
     });
   }
-  
+
   return report;
 }
 ```
@@ -269,4 +269,4 @@ The UAT testing framework will be considered successful if:
 
 ---
 
-*This UAT testing framework should be regularly updated to reflect changes in SFDR requirements and best practices in sustainable finance compliance testing.*
+_This UAT testing framework should be regularly updated to reflect changes in SFDR requirements and best practices in sustainable finance compliance testing._

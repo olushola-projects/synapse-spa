@@ -3,6 +3,8 @@
  * Provides consistent error handling, logging, and user feedback across the application
  */
 
+import { logger } from './logger';
+
 export enum ErrorSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
@@ -38,6 +40,13 @@ export interface AppError {
   stack?: string;
 }
 
+export interface CustomErrorOptions {
+  category: ErrorCategory;
+  severity?: ErrorSeverity;
+  context?: ErrorContext;
+  originalError?: Error;
+}
+
 export class CustomError extends Error {
   public readonly id: string;
   public readonly category: ErrorCategory;
@@ -45,29 +54,28 @@ export class CustomError extends Error {
   public readonly context?: ErrorContext;
   public readonly timestamp: Date;
 
-  constructor(
-    message: string,
-    category: ErrorCategory,
-    severity: ErrorSeverity = ErrorSeverity.MEDIUM,
-    context?: ErrorContext,
-    originalError?: Error
-  ) {
+  constructor(message: string, options: CustomErrorOptions) {
     super(message);
     this.name = 'CustomError';
     this.id = this.generateErrorId();
-    this.category = category;
-    this.severity = severity;
-    this.context = context;
+    this.category = options.category;
+    this.severity = options.severity ?? ErrorSeverity.MEDIUM;
+    this.context = options.context;
     this.timestamp = new Date();
-    
-    if (originalError) {
-      this.stack = originalError.stack;
-      this.cause = originalError;
+
+    if (options.originalError) {
+      this.stack = options.originalError.stack;
+      this.cause = options.originalError;
     }
   }
 
   private generateErrorId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const RADIX_BASE = 36;
+    const SUBSTRING_LENGTH = 9;
+    const SUBSTRING_START = 2;
+    return `${Date.now()}-${Math.random()
+      .toString(RADIX_BASE)
+      .substr(SUBSTRING_START, SUBSTRING_LENGTH)}`;
   }
 
   toJSON(): AppError {
@@ -83,12 +91,22 @@ export class CustomError extends Error {
   }
 }
 
+const ERROR_HANDLER_CONSTANTS = {
+  MAX_LOG_SIZE: 1000,
+  DEFAULT_RETRY_LIMIT: 20,
+  DEFAULT_RETRY_DAYS: 7
+} as const;
+
 export class ErrorHandler {
   private static instance: ErrorHandler;
   private errorLog: AppError[] = [];
-  private maxLogSize = 1000;
+  private maxLogSize = ERROR_HANDLER_CONSTANTS.MAX_LOG_SIZE;
 
-  private constructor() {}
+  private constructor() {
+    // Initialize error handler singleton
+    this.errorLog = [];
+    this.maxLogSize = ERROR_HANDLER_CONSTANTS.MAX_LOG_SIZE;
+  }
 
   public static getInstance(): ErrorHandler {
     if (!ErrorHandler.instance) {
@@ -102,30 +120,31 @@ export class ErrorHandler {
    */
   public handleError(
     error: Error | CustomError | string,
-    category: ErrorCategory = ErrorCategory.SYSTEM,
-    severity: ErrorSeverity = ErrorSeverity.MEDIUM,
-    context?: ErrorContext
+    options: {
+      category?: ErrorCategory;
+      severity?: ErrorSeverity;
+      context?: ErrorContext;
+    } = {}
   ): AppError {
+    const { category = ErrorCategory.SYSTEM, severity = ErrorSeverity.MEDIUM, context } = options;
     let appError: AppError;
 
     if (error instanceof CustomError) {
       appError = error.toJSON();
     } else if (error instanceof Error) {
-      const customError = new CustomError(
-        error.message,
+      const customError = new CustomError(error.message, {
         category,
         severity,
         context,
-        error
-      );
+        originalError: error
+      });
       appError = customError.toJSON();
     } else {
-      const customError = new CustomError(
-        error,
+      const customError = new CustomError(error, {
         category,
         severity,
         context
-      );
+      });
       appError = customError.toJSON();
     }
 
@@ -158,13 +177,16 @@ export class ErrorHandler {
     switch (error.severity) {
       case ErrorSeverity.CRITICAL:
       case ErrorSeverity.HIGH:
-        console.error(logMessage, logData);
+        logger.error(logMessage, logData);
         break;
       case ErrorSeverity.MEDIUM:
-        console.warn(logMessage, logData);
+        logger.warn(logMessage, logData);
         break;
       case ErrorSeverity.LOW:
-        console.info(logMessage, logData);
+        logger.info(logMessage, logData);
+        break;
+      default:
+        logger.debug(logMessage, logData);
         break;
     }
   }
@@ -174,7 +196,7 @@ export class ErrorHandler {
    */
   private addToErrorLog(error: AppError): void {
     this.errorLog.push(error);
-    
+
     // Maintain log size limit
     if (this.errorLog.length > this.maxLogSize) {
       this.errorLog = this.errorLog.slice(-this.maxLogSize);
@@ -186,7 +208,7 @@ export class ErrorHandler {
    */
   private reportCriticalError(error: AppError): void {
     // TODO: Implement external error reporting (e.g., Sentry, LogRocket)
-    console.error('CRITICAL ERROR REPORTED:', error);
+    logger.error('CRITICAL ERROR REPORTED:', error);
   }
 
   /**
@@ -222,19 +244,19 @@ export class ErrorHandler {
    */
   public getErrorStats(): Record<string, number> {
     const stats: Record<string, number> = {};
-    
+
     // Count by category
     Object.values(ErrorCategory).forEach(category => {
       stats[`category_${category}`] = this.getErrorsByCategory(category).length;
     });
-    
+
     // Count by severity
     Object.values(ErrorSeverity).forEach(severity => {
       stats[`severity_${severity}`] = this.getErrorsBySeverity(severity).length;
     });
-    
+
     stats.total = this.errorLog.length;
-    
+
     return stats;
   }
 }
@@ -243,21 +265,41 @@ export class ErrorHandler {
 export const errorHandler = ErrorHandler.getInstance();
 
 export const handleAuthError = (error: Error | string, context?: ErrorContext): AppError => {
-  return errorHandler.handleError(error, ErrorCategory.AUTHENTICATION, ErrorSeverity.HIGH, context);
+  return errorHandler.handleError(error, {
+    category: ErrorCategory.AUTHENTICATION,
+    severity: ErrorSeverity.HIGH,
+    context
+  });
 };
 
 export const handleNetworkError = (error: Error | string, context?: ErrorContext): AppError => {
-  return errorHandler.handleError(error, ErrorCategory.NETWORK, ErrorSeverity.MEDIUM, context);
+  return errorHandler.handleError(error, {
+    category: ErrorCategory.NETWORK,
+    severity: ErrorSeverity.MEDIUM,
+    context
+  });
 };
 
 export const handleValidationError = (error: Error | string, context?: ErrorContext): AppError => {
-  return errorHandler.handleError(error, ErrorCategory.VALIDATION, ErrorSeverity.LOW, context);
+  return errorHandler.handleError(error, {
+    category: ErrorCategory.VALIDATION,
+    severity: ErrorSeverity.LOW,
+    context
+  });
 };
 
 export const handleSystemError = (error: Error | string, context?: ErrorContext): AppError => {
-  return errorHandler.handleError(error, ErrorCategory.SYSTEM, ErrorSeverity.CRITICAL, context);
+  return errorHandler.handleError(error, {
+    category: ErrorCategory.SYSTEM,
+    severity: ErrorSeverity.CRITICAL,
+    context
+  });
 };
 
 export const handleUserInputError = (error: Error | string, context?: ErrorContext): AppError => {
-  return errorHandler.handleError(error, ErrorCategory.USER_INPUT, ErrorSeverity.LOW, context);
+  return errorHandler.handleError(error, {
+    category: ErrorCategory.USER_INPUT,
+    severity: ErrorSeverity.LOW,
+    context
+  });
 };

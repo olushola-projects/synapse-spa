@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -13,69 +12,71 @@ const RegulatoryEvolutionSection = () => {
   };
 
   const features = [
-    "Upskill in GRC and AI competencies",
-    "Collaborate with compliance leaders",
-    "Test and leverage GRC Agent Gallery", 
-    "GRC Agent Gallery and Super Agents",
-    "Future-proof your practice"
+    'Upskill in GRC and AI competencies',
+    'Collaborate with compliance leaders',
+    'Test and leverage GRC Agent Gallery',
+    'GRC Agent Gallery and Super Agents',
+    'Future-proof your practice'
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-white to-blue-50">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+    <section className='py-16 md:py-24 bg-gradient-to-b from-white to-blue-50'>
+      <div className='container mx-auto px-4 md:px-6'>
+        <div className='grid md:grid-cols-2 gap-12 items-center'>
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 tracking-tight text-gray-900 leading-tight">
+            <h2 className='text-3xl md:text-4xl font-display font-bold mb-6 tracking-tight text-gray-900 leading-tight'>
               Join the GRC revolution with Synapses
             </h2>
-            
-            <ul className="space-y-3 mb-8">
+
+            <ul className='space-y-3 mb-8'>
               {features.map((feature, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <div className="mt-1 rounded-full bg-green-100 p-1 text-green-600">
+                <li key={index} className='flex items-start gap-3'>
+                  <div className='mt-1 rounded-full bg-green-100 p-1 text-green-600'>
                     <Check size={14} />
                   </div>
-                  <span className="text-gray-700">{feature}</span>
+                  <span className='text-gray-700'>{feature}</span>
                 </li>
               ))}
             </ul>
-            
+
             <div onClick={openWaitlistDialog}>
-              <Button size="lg" className="group">
+              <Button size='lg' className='group'>
                 Join Waitlist
-                <ArrowRight className="ml-1 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className='ml-1 h-5 w-5 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
-            className="relative"
+            className='relative'
           >
-            <div className="relative aspect-square md:aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-lg">
+            <div className='relative aspect-square md:aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-lg'>
               <img
-                src="/lovable-uploads/318526a2-7e1a-426e-97da-6a20311cb631.png"
-                alt="Regulatory Evolution Platform"
-                className="w-full h-full object-cover"
+                src='/lovable-uploads/318526a2-7e1a-426e-97da-6a20311cb631.png'
+                alt='Regulatory Evolution Platform'
+                className='w-full h-full object-cover'
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+              <div className='absolute inset-0 bg-gradient-to-t from-black/40 to-transparent'></div>
             </div>
-            
-            <div className="absolute -bottom-6 -right-6 bg-white rounded-lg p-4 shadow-lg max-w-[200px] border border-gray-100">
-              <p className="text-sm font-medium">Join 300+ GRC professionals already on the waitlist</p>
+
+            <div className='absolute -bottom-6 -right-6 bg-white rounded-lg p-4 shadow-lg max-w-[200px] border border-gray-100'>
+              <p className='text-sm font-medium'>
+                Join 300+ GRC professionals already on the waitlist
+              </p>
             </div>
           </motion.div>
         </div>
       </div>
-      
+
       <JoinWaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} />
     </section>
   );

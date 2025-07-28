@@ -35,7 +35,9 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
   apiEndpoint = '/api/feedback'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState<'trigger' | 'rating' | 'category' | 'details' | 'success'>('trigger');
+  const [step, setStep] = useState<'trigger' | 'rating' | 'category' | 'details' | 'success'>(
+    'trigger'
+  );
   const [feedback, setFeedback] = useState<Partial<FeedbackData>>({
     rating: 0,
     category: '',
@@ -108,7 +110,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
       const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           ...feedback,
@@ -145,7 +147,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
       await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           rating: type === 'positive' ? 5 : 1,
@@ -156,7 +158,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
           userAgent: navigator.userAgent
         })
       });
-      
+
       setShowQuickFeedback(true);
       setTimeout(() => setShowQuickFeedback(false), 2000);
     } catch (error) {
@@ -192,77 +194,72 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
     <div className={getPositionStyles()}>
       {/* Quick Feedback Notification */}
       {showQuickFeedback && (
-        <div className="mb-4 p-3 bg-green-500 text-white rounded-lg shadow-lg animate-in slide-in-from-bottom">
-          <p className="text-sm font-medium">Thanks for your feedback! 🙏</p>
+        <div className='mb-4 p-3 bg-green-500 text-white rounded-lg shadow-lg animate-in slide-in-from-bottom'>
+          <p className='text-sm font-medium'>Thanks for your feedback! 🙏</p>
         </div>
       )}
 
       {/* Main Widget */}
       {!isOpen ? (
-        <div className="flex flex-col gap-2">
+        <div className='flex flex-col gap-2'>
           {/* Quick Feedback Buttons */}
-          <div className="flex gap-2 opacity-75 hover:opacity-100 transition-opacity">
+          <div className='flex gap-2 opacity-75 hover:opacity-100 transition-opacity'>
             <Button
-              size="sm"
-              variant="outline"
-              className="bg-white shadow-lg hover:bg-green-50"
+              size='sm'
+              variant='outline'
+              className='bg-white shadow-lg hover:bg-green-50'
               onClick={() => handleQuickFeedback('positive')}
             >
-              <ThumbsUp className="h-4 w-4" />
+              <ThumbsUp className='h-4 w-4' />
             </Button>
             <Button
-              size="sm"
-              variant="outline"
-              className="bg-white shadow-lg hover:bg-red-50"
+              size='sm'
+              variant='outline'
+              className='bg-white shadow-lg hover:bg-red-50'
               onClick={() => handleQuickFeedback('negative')}
             >
-              <ThumbsDown className="h-4 w-4" />
+              <ThumbsDown className='h-4 w-4' />
             </Button>
           </div>
 
           {/* Main Trigger Button */}
           <Button
             onClick={() => setIsOpen(true)}
-            className="rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className='rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
             style={{ backgroundColor: primaryColor }}
           >
-            <MessageCircle className="h-6 w-6" />
+            <MessageCircle className='h-6 w-6' />
           </Button>
         </div>
       ) : (
-        <Card className="w-80 shadow-xl border-0 animate-in slide-in-from-bottom duration-300">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-semibold">
+        <Card className='w-80 shadow-xl border-0 animate-in slide-in-from-bottom duration-300'>
+          <CardHeader className='pb-3'>
+            <div className='flex items-center justify-between'>
+              <CardTitle className='text-lg font-semibold'>
                 {step === 'rating' && 'Rate Your Experience'}
                 {step === 'category' && 'What Type of Feedback?'}
                 {step === 'details' && 'Tell Us More'}
                 {step === 'success' && 'Thank You!'}
               </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={resetWidget}
-                className="h-8 w-8 p-0"
-              >
-                <X className="h-4 w-4" />
+              <Button variant='ghost' size='sm' onClick={resetWidget} className='h-8 w-8 p-0'>
+                <X className='h-4 w-4' />
               </Button>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-4">
+          <CardContent className='space-y-4'>
             {/* Rating Step */}
             {step === 'rating' && (
-              <div className="space-y-4">
-                <p className="text-sm text-gray-600">
+              <div className='space-y-4'>
+                <p className='text-sm text-gray-600'>
                   How would you rate your experience on this page?
                 </p>
-                <div className="flex justify-center gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
+                <div className='flex justify-center gap-2'>
+                  {[1, 2, 3, 4, 5].map(star => (
                     <button
                       key={star}
                       onClick={() => handleRatingSelect(star)}
-                      className="transition-all duration-200 hover:scale-110"
+                      className='transition-all duration-200 hover:scale-110'
                     >
                       <Star
                         className={`h-8 w-8 ${
@@ -279,20 +276,20 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
 
             {/* Category Step */}
             {step === 'category' && (
-              <div className="space-y-3">
-                <p className="text-sm text-gray-600">
+              <div className='space-y-3'>
+                <p className='text-sm text-gray-600'>
                   What would you like to share feedback about?
                 </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {categories.map((category) => (
+                <div className='grid grid-cols-2 gap-2'>
+                  {categories.map(category => (
                     <Button
                       key={category.id}
-                      variant="outline"
-                      className="h-auto p-3 text-left justify-start hover:bg-blue-50"
+                      variant='outline'
+                      className='h-auto p-3 text-left justify-start hover:bg-blue-50'
                       onClick={() => handleCategorySelect(category.id)}
                     >
-                      <span className="mr-2">{category.icon}</span>
-                      <span className="text-xs">{category.label}</span>
+                      <span className='mr-2'>{category.icon}</span>
+                      <span className='text-xs'>{category.label}</span>
                     </Button>
                   ))}
                 </div>
@@ -301,14 +298,14 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
 
             {/* Details Step */}
             {step === 'details' && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary">
+              <div className='space-y-4'>
+                <div className='flex items-center gap-2'>
+                  <Badge variant='secondary'>
                     {categories.find(c => c.id === feedback.category)?.icon}
                     {categories.find(c => c.id === feedback.category)?.label}
                   </Badge>
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((star) => (
+                  <div className='flex'>
+                    {[1, 2, 3, 4, 5].map(star => (
                       <Star
                         key={star}
                         className={`h-4 w-4 ${
@@ -320,27 +317,27 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
                     ))}
                   </div>
                 </div>
-                
+
                 <div>
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className='text-sm font-medium text-gray-700'>
                     Your feedback (optional)
                   </label>
                   <Textarea
-                    placeholder="Tell us more about your experience..."
+                    placeholder='Tell us more about your experience...'
                     value={feedback.message}
-                    onChange={(e) => setFeedback(prev => ({ ...prev, message: e.target.value }))}
-                    className="mt-1 min-h-[80px]"
+                    onChange={e => setFeedback(prev => ({ ...prev, message: e.target.value }))}
+                    className='mt-1 min-h-[80px]'
                   />
                 </div>
 
                 {showScreenshot && (
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={captureScreenshot}
-                    className="w-full"
+                    className='w-full'
                   >
-                    <Camera className="h-4 w-4 mr-2" />
+                    <Camera className='h-4 w-4 mr-2' />
                     Attach Screenshot
                   </Button>
                 )}
@@ -348,17 +345,17 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
                 <Button
                   onClick={submitFeedback}
                   disabled={isSubmitting}
-                  className="w-full"
+                  className='w-full'
                   style={{ backgroundColor: primaryColor }}
                 >
                   {isSubmitting ? (
-                    <div className="flex items-center gap-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div className='flex items-center gap-2'>
+                      <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white'></div>
                       Submitting...
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <Send className="h-4 w-4" />
+                    <div className='flex items-center gap-2'>
+                      <Send className='h-4 w-4' />
                       Submit Feedback
                     </div>
                   )}
@@ -368,12 +365,12 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
 
             {/* Success Step */}
             {step === 'success' && (
-              <div className="text-center space-y-3">
-                <div className="text-4xl">🎉</div>
-                <p className="text-sm text-gray-600">
+              <div className='text-center space-y-3'>
+                <div className='text-4xl'>🎉</div>
+                <p className='text-sm text-gray-600'>
                   Thank you for your feedback! It helps us improve the experience for everyone.
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className='text-xs text-gray-500'>
                   This window will close automatically in a few seconds.
                 </p>
               </div>
@@ -386,9 +383,9 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
       {step === 'trigger' && !isOpen && (
         <Button
           onClick={() => setStep('rating')}
-          className="mt-2 text-xs opacity-75 hover:opacity-100"
-          variant="ghost"
-          size="sm"
+          className='mt-2 text-xs opacity-75 hover:opacity-100'
+          variant='ghost'
+          size='sm'
         >
           Detailed Feedback
         </Button>

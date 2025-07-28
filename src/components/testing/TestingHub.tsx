@@ -4,14 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  TestTube, 
-  Users, 
-  BarChart3, 
-  MessageSquare, 
-  Settings, 
-  Play, 
-  CheckCircle, 
+import {
+  TestTube,
+  Users,
+  BarChart3,
+  MessageSquare,
+  Settings,
+  Play,
+  CheckCircle,
   AlertTriangle,
   TrendingUp,
   FileText,
@@ -67,8 +67,8 @@ const TestingHub: React.FC = () => {
     const loadMetrics = () => {
       // Load UAT test results
       const uatResults = localStorage.getItem('uat_test_results');
-      let testMetrics = { total: 0, completed: 0, passed: 0, failed: 0 };
-      
+      const testMetrics = { total: 0, completed: 0, passed: 0, failed: 0 };
+
       if (uatResults) {
         const results = Object.values(JSON.parse(uatResults)) as any[];
         testMetrics.total = results.length;
@@ -79,18 +79,20 @@ const TestingHub: React.FC = () => {
 
       // Load feedback data
       const feedbackData = localStorage.getItem('user_feedback_data');
-      let feedbackMetrics = { total: 0, avgRating: 0 };
-      
+      const feedbackMetrics = { total: 0, avgRating: 0 };
+
       if (feedbackData) {
         const feedback = JSON.parse(feedbackData) as any[];
         feedbackMetrics.total = feedback.length;
-        feedbackMetrics.avgRating = feedback.length > 0 
-          ? feedback.reduce((sum, f) => sum + f.rating, 0) / feedback.length 
-          : 0;
+        feedbackMetrics.avgRating =
+          feedback.length > 0
+            ? feedback.reduce((sum, f) => sum + f.rating, 0) / feedback.length
+            : 0;
       }
 
       // Calculate critical issues
-      const criticalIssues = testMetrics.failed + 
+      const criticalIssues =
+        testMetrics.failed +
         (feedbackData ? JSON.parse(feedbackData).filter((f: any) => f.rating <= 2).length : 0);
 
       setMetrics({
@@ -106,7 +108,7 @@ const TestingHub: React.FC = () => {
     };
 
     loadMetrics();
-    
+
     // Refresh metrics every 30 seconds
     const interval = setInterval(loadMetrics, 30000);
     return () => clearInterval(interval);
@@ -118,7 +120,7 @@ const TestingHub: React.FC = () => {
       id: 'start-uat',
       title: 'Start UAT Testing',
       description: 'Begin systematic user acceptance testing',
-      icon: <TestTube className="h-5 w-5" />,
+      icon: <TestTube className='h-5 w-5' />,
       action: () => setActiveTab('uat'),
       variant: 'default'
     },
@@ -126,7 +128,7 @@ const TestingHub: React.FC = () => {
       id: 'new-session',
       title: 'New Testing Session',
       description: 'Start a live user testing session',
-      icon: <Play className="h-5 w-5" />,
+      icon: <Play className='h-5 w-5' />,
       action: () => setActiveTab('sessions'),
       variant: 'default'
     },
@@ -134,7 +136,7 @@ const TestingHub: React.FC = () => {
       id: 'view-reports',
       title: 'View Reports',
       description: 'Access testing analytics and reports',
-      icon: <BarChart3 className="h-5 w-5" />,
+      icon: <BarChart3 className='h-5 w-5' />,
       action: () => setActiveTab('reports'),
       variant: 'outline'
     },
@@ -142,7 +144,7 @@ const TestingHub: React.FC = () => {
       id: 'collect-feedback',
       title: 'Collect Feedback',
       description: 'Enable feedback widget for users',
-      icon: <MessageSquare className="h-5 w-5" />,
+      icon: <MessageSquare className='h-5 w-5' />,
       action: () => setShowFeedbackWidget(true),
       variant: 'outline'
     },
@@ -150,7 +152,7 @@ const TestingHub: React.FC = () => {
       id: 'export-data',
       title: 'Export All Data',
       description: 'Download comprehensive testing data',
-      icon: <Download className="h-5 w-5" />,
+      icon: <Download className='h-5 w-5' />,
       action: exportAllData,
       variant: 'secondary'
     }
@@ -161,7 +163,7 @@ const TestingHub: React.FC = () => {
     const uatResults = localStorage.getItem('uat_test_results');
     const feedbackData = localStorage.getItem('user_feedback_data');
     const testerName = localStorage.getItem('uat_tester_name');
-    
+
     const exportData = {
       metadata: {
         exportedAt: new Date().toISOString(),
@@ -189,8 +191,12 @@ const TestingHub: React.FC = () => {
 
   // Get status color based on metrics
   const getStatusColor = () => {
-    if (metrics.criticalIssues > 5) return 'text-red-600';
-    if (metrics.criticalIssues > 2) return 'text-yellow-600';
+    if (metrics.criticalIssues > 5) {
+      return 'text-red-600';
+    }
+    if (metrics.criticalIssues > 2) {
+      return 'text-yellow-600';
+    }
     return 'text-green-600';
   };
 
@@ -200,57 +206,63 @@ const TestingHub: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className='max-w-7xl mx-auto p-6 space-y-6'>
       {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-gray-900">Testing Hub</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Comprehensive testing and feedback management for the Synapses Landing Page.
-          Coordinate UAT, user testing sessions, and feedback collection from a single interface.
+      <div className='text-center space-y-4'>
+        <h1 className='text-4xl font-bold text-gray-900'>Testing Hub</h1>
+        <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
+          Comprehensive testing and feedback management for the Synapses Landing Page. Coordinate
+          UAT, user testing sessions, and feedback collection from a single interface.
         </p>
       </div>
 
       {/* Testing Status Overview */}
-      <Card className="border-2">
+      <Card className='border-2'>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-6 w-6" />
+          <CardTitle className='flex items-center gap-2'>
+            <TrendingUp className='h-6 w-6' />
             Testing Status Overview
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{metrics.totalTests}</div>
-              <div className="text-sm text-gray-600">Total Tests</div>
+          <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4'>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-blue-600'>{metrics.totalTests}</div>
+              <div className='text-sm text-gray-600'>Total Tests</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{metrics.passedTests}</div>
-              <div className="text-sm text-gray-600">Passed</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-green-600'>{metrics.passedTests}</div>
+              <div className='text-sm text-gray-600'>Passed</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-red-600">{metrics.failedTests}</div>
-              <div className="text-sm text-gray-600">Failed</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-red-600'>{metrics.failedTests}</div>
+              <div className='text-sm text-gray-600'>Failed</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-600">{getCompletionPercentage().toFixed(0)}%</div>
-              <div className="text-sm text-gray-600">Complete</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-gray-600'>
+                {getCompletionPercentage().toFixed(0)}%
+              </div>
+              <div className='text-sm text-gray-600'>Complete</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{metrics.totalFeedback}</div>
-              <div className="text-sm text-gray-600">Feedback</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-purple-600'>{metrics.totalFeedback}</div>
+              <div className='text-sm text-gray-600'>Feedback</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">{metrics.avgRating.toFixed(1)}/5</div>
-              <div className="text-sm text-gray-600">Avg Rating</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-yellow-600'>
+                {metrics.avgRating.toFixed(1)}/5
+              </div>
+              <div className='text-sm text-gray-600'>Avg Rating</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">{metrics.activeSessions}</div>
-              <div className="text-sm text-gray-600">Active Sessions</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-orange-600'>{metrics.activeSessions}</div>
+              <div className='text-sm text-gray-600'>Active Sessions</div>
             </div>
-            <div className="text-center">
-              <div className={`text-2xl font-bold ${getStatusColor()}`}>{metrics.criticalIssues}</div>
-              <div className="text-sm text-gray-600">Critical Issues</div>
+            <div className='text-center'>
+              <div className={`text-2xl font-bold ${getStatusColor()}`}>
+                {metrics.criticalIssues}
+              </div>
+              <div className='text-sm text-gray-600'>Critical Issues</div>
             </div>
           </div>
         </CardContent>
@@ -262,18 +274,18 @@ const TestingHub: React.FC = () => {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {quickActions.map((action) => (
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4'>
+            {quickActions.map(action => (
               <Button
                 key={action.id}
                 variant={action.variant}
                 onClick={action.action}
-                className="h-auto p-4 flex flex-col items-center gap-2"
+                className='h-auto p-4 flex flex-col items-center gap-2'
               >
                 {action.icon}
-                <div className="text-center">
-                  <div className="font-medium">{action.title}</div>
-                  <div className="text-xs opacity-70">{action.description}</div>
+                <div className='text-center'>
+                  <div className='font-medium'>{action.title}</div>
+                  <div className='text-xs opacity-70'>{action.description}</div>
                 </div>
               </Button>
             ))}
@@ -283,60 +295,62 @@ const TestingHub: React.FC = () => {
 
       {/* Status Alerts */}
       {metrics.criticalIssues > 0 && (
-        <Alert className="border-red-200 bg-red-50">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-800">
-            <strong>Attention Required:</strong> {metrics.criticalIssues} critical issues detected. 
+        <Alert className='border-red-200 bg-red-50'>
+          <AlertTriangle className='h-4 w-4 text-red-600' />
+          <AlertDescription className='text-red-800'>
+            <strong>Attention Required:</strong> {metrics.criticalIssues} critical issues detected.
             Review failed tests and low-rating feedback in the Reports section.
           </AlertDescription>
         </Alert>
       )}
 
-      {metrics.totalTests > 0 && getCompletionPercentage() === 100 && metrics.criticalIssues === 0 && (
-        <Alert className="border-green-200 bg-green-50">
-          <CheckCircle className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-800">
-            <strong>Excellent!</strong> All tests completed successfully with no critical issues. 
-            The application is ready for deployment.
-          </AlertDescription>
-        </Alert>
-      )}
+      {metrics.totalTests > 0 &&
+        getCompletionPercentage() === 100 &&
+        metrics.criticalIssues === 0 && (
+          <Alert className='border-green-200 bg-green-50'>
+            <CheckCircle className='h-4 w-4 text-green-600' />
+            <AlertDescription className='text-green-800'>
+              <strong>Excellent!</strong> All tests completed successfully with no critical issues.
+              The application is ready for deployment.
+            </AlertDescription>
+          </Alert>
+        )}
 
       {/* Main Testing Interface */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
+      <Tabs value={activeTab} onValueChange={setActiveTab} className='space-y-6'>
+        <TabsList className='grid w-full grid-cols-4'>
+          <TabsTrigger value='overview' className='flex items-center gap-2'>
+            <Settings className='h-4 w-4' />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="uat" className="flex items-center gap-2">
-            <TestTube className="h-4 w-4" />
+          <TabsTrigger value='uat' className='flex items-center gap-2'>
+            <TestTube className='h-4 w-4' />
             UAT Testing
           </TabsTrigger>
-          <TabsTrigger value="sessions" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
+          <TabsTrigger value='sessions' className='flex items-center gap-2'>
+            <Users className='h-4 w-4' />
             User Sessions
           </TabsTrigger>
-          <TabsTrigger value="reports" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
+          <TabsTrigger value='reports' className='flex items-center gap-2'>
+            <BarChart3 className='h-4 w-4' />
             Reports
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TabsContent value='overview' className='space-y-6'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             {/* Testing Guidelines */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
+                <CardTitle className='flex items-center gap-2'>
+                  <FileText className='h-5 w-5' />
                   Testing Guidelines
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className='space-y-4'>
                 <div>
-                  <h4 className="font-medium mb-2">UAT Testing Process:</h4>
-                  <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600">
+                  <h4 className='font-medium mb-2'>UAT Testing Process:</h4>
+                  <ol className='list-decimal list-inside space-y-1 text-sm text-gray-600'>
                     <li>Review test cases and understand requirements</li>
                     <li>Execute tests systematically by category</li>
                     <li>Document findings and issues thoroughly</li>
@@ -344,10 +358,10 @@ const TestingHub: React.FC = () => {
                     <li>Export results for stakeholder review</li>
                   </ol>
                 </div>
-                
+
                 <div>
-                  <h4 className="font-medium mb-2">User Testing Sessions:</h4>
-                  <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600">
+                  <h4 className='font-medium mb-2'>User Testing Sessions:</h4>
+                  <ol className='list-decimal list-inside space-y-1 text-sm text-gray-600'>
                     <li>Prepare testing scenarios and tasks</li>
                     <li>Set up recording and observation tools</li>
                     <li>Guide users through realistic scenarios</li>
@@ -363,10 +377,10 @@ const TestingHub: React.FC = () => {
               <CardHeader>
                 <CardTitle>Testing Best Practices</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className='space-y-4'>
                 <div>
-                  <h4 className="font-medium mb-2">Quality Assurance:</h4>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+                  <h4 className='font-medium mb-2'>Quality Assurance:</h4>
+                  <ul className='list-disc list-inside space-y-1 text-sm text-gray-600'>
                     <li>Test across multiple browsers and devices</li>
                     <li>Verify accessibility compliance (WCAG)</li>
                     <li>Check performance on slow connections</li>
@@ -374,10 +388,10 @@ const TestingHub: React.FC = () => {
                     <li>Test with real user data when possible</li>
                   </ul>
                 </div>
-                
+
                 <div>
-                  <h4 className="font-medium mb-2">Documentation:</h4>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+                  <h4 className='font-medium mb-2'>Documentation:</h4>
+                  <ul className='list-disc list-inside space-y-1 text-sm text-gray-600'>
                     <li>Record detailed steps to reproduce issues</li>
                     <li>Include screenshots for visual problems</li>
                     <li>Note browser/device information for bugs</li>
@@ -390,22 +404,22 @@ const TestingHub: React.FC = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="uat">
+        <TabsContent value='uat'>
           <UATChecklist />
         </TabsContent>
 
-        <TabsContent value="sessions">
+        <TabsContent value='sessions'>
           <UserTestingSession />
         </TabsContent>
 
-        <TabsContent value="reports">
+        <TabsContent value='reports'>
           <TestReportDashboard />
         </TabsContent>
       </Tabs>
 
       {/* Feedback Widget */}
       {showFeedbackWidget && (
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className='fixed bottom-4 right-4 z-50'>
           <FeedbackWidget />
         </div>
       )}

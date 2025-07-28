@@ -224,20 +224,22 @@ Review these files to understand the structure and content of test data.
 test('Should validate custom scenario', async () => {
   // Start test tracking
   await tester.startTest('Custom Scenario Test');
-  
+
   try {
     // Navigate to SFDR Navigator
     await tester.navigateToPage('/sfdr-navigator');
-    
+
     // Load custom test data
-    const customData = { /* Custom test data */ };
+    const customData = {
+      /* Custom test data */
+    };
     await tester.fillFormWithData('#sfdr-form', customData);
     await tester.clickElement('#submit-button');
-    
+
     // Validate results
     const result = await tester.getElementText('#result');
     tester.assert(result.includes('Expected Result'), 'Result should include expected text');
-    
+
     // End test with success
     tester.endTest(true);
   } catch (error) {
@@ -327,11 +329,13 @@ test('Should validate custom scenario', async () => {
 **Issue**: Fund is classified incorrectly
 
 **Possible Causes**:
+
 - Incorrect or incomplete test data
 - Classification logic error
 - Misinterpretation of SFDR requirements
 
 **Resolution**:
+
 - Verify test data against SFDR requirements
 - Review classification logic in the code
 - Consult with compliance experts
@@ -341,11 +345,13 @@ test('Should validate custom scenario', async () => {
 **Issue**: Validation fails unexpectedly
 
 **Possible Causes**:
+
 - Invalid test data
 - Validation logic error
 - Missing required fields
 
 **Resolution**:
+
 - Verify test data format and content
 - Review validation logic in the code
 - Check for missing required fields
@@ -355,11 +361,13 @@ test('Should validate custom scenario', async () => {
 **Issue**: Slow response time or timeouts
 
 **Possible Causes**:
+
 - Large test data
 - Inefficient validation logic
 - Resource constraints
 
 **Resolution**:
+
 - Optimize test data size
 - Review and optimize validation logic
 - Increase resource allocation
@@ -474,4 +482,4 @@ Taxonomy alignment refers to the percentage of a fund's investments that are ali
 
 ---
 
-*This testing guide should be reviewed and updated regularly to reflect changes in SFDR requirements and application functionality.*
+_This testing guide should be reviewed and updated regularly to reflect changes in SFDR requirements and application functionality._

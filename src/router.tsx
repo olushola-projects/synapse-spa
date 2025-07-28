@@ -1,4 +1,3 @@
-
 import { createBrowserRouter } from 'react-router-dom';
 
 // Import all components used in routes
@@ -35,166 +34,166 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Index />,
-    errorElement: <NotFound />,
+    errorElement: <NotFound />
   },
   {
     path: '/partners',
-    element: <Partners />,
+    element: <Partners />
   },
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: <Dashboard />
   },
   {
     path: '/ask-dara',
-    element: <AskDara />,
+    element: <AskDara />
   },
   {
     path: '/login',
-    element: <Login />,
+    element: <Login />
   },
   {
     path: '/register',
-    element: <Register />,
+    element: <Register />
   },
   {
     path: '/profile',
-    element: <Profile />,
+    element: <Profile />
   },
   // Legal routes
   {
     path: '/privacy-policy',
-    element: <PrivacyPolicy />,
+    element: <PrivacyPolicy />
   },
   {
     path: '/terms-of-service',
-    element: <TermsOfService />,
+    element: <TermsOfService />
   },
   {
     path: '/security-policy',
-    element: <SecurityPolicy />,
+    element: <SecurityPolicy />
   },
   {
     path: '/cookie-policy',
-    element: <CookiePolicy />,
+    element: <CookiePolicy />
   },
   {
     path: '/legal/privacy',
-    element: <PrivacyPolicy />,
+    element: <PrivacyPolicy />
   },
   {
     path: '/legal/terms',
-    element: <TermsOfService />,
+    element: <TermsOfService />
   },
   {
     path: '/legal/security',
-    element: <SecurityPolicy />,
+    element: <SecurityPolicy />
   },
   {
     path: '/legal/cookies',
-    element: <CookiePolicy />,
+    element: <CookiePolicy />
   },
   // Resources routes
   {
     path: '/blog',
-    element: <Blog />,
+    element: <Blog />
   },
   {
     path: '/blog/:articleId',
-    element: <BlogArticleDetails />,
+    element: <BlogArticleDetails />
   },
   {
     path: '/documentation',
-    element: <Documentation />,
+    element: <Documentation />
   },
   {
     path: '/faq',
-    element: <FAQ />,
+    element: <FAQ />
   },
   {
     path: '/resources/blog',
-    element: <Blog />,
+    element: <Blog />
   },
   {
     path: '/resources/documentation',
-    element: <Documentation />,
+    element: <Documentation />
   },
   {
     path: '/resources/faq',
-    element: <FAQ />,
+    element: <FAQ />
   },
   {
     path: '/resources/webinars',
-    element: <Webinars />,
+    element: <Webinars />
   },
   // Company routes
   {
     path: '/about',
-    element: <About />,
+    element: <About />
   },
   {
     path: '/contact',
-    element: <Contact />,
+    element: <Contact />
   },
   {
     path: '/careers',
-    element: <Careers />,
+    element: <Careers />
   },
   {
     path: '/company/about',
-    element: <About />,
+    element: <About />
   },
   {
     path: '/company/careers',
-    element: <Careers />,
+    element: <Careers />
   },
   {
     path: '/company/contact',
-    element: <Contact />,
+    element: <Contact />
   },
   // Platform routes
   {
     path: '/features',
-    element: <Features />,
+    element: <Features />
   },
   {
     path: '/solutions',
-    element: <Solutions />,
+    element: <Solutions />
   },
   {
     path: '/platform/features',
-    element: <Features />,
+    element: <Features />
   },
   {
     path: '/platform/solutions',
-    element: <Solutions />,
+    element: <Solutions />
   },
   // Platform routes
   {
     path: '/map',
-    element: <Map />,
+    element: <Map />
   },
   {
     path: '/use-cases',
-    element: <UseCases />,
+    element: <UseCases />
   },
   // Test routes
   {
     path: '/navbar-test',
-    element: <NavbarMenuTest />,
+    element: <NavbarMenuTest />
   },
   // SFDR Navigator routes - both routes point to the same component
   {
     path: '/nexus-agent',
-    element: <NexusAgent />,
+    element: <NexusAgent />
   },
   {
     path: '/sfdr-navigator',
-    element: <NexusAgent />,
+    element: <NexusAgent />
   },
   // SFDR Gem - Advanced AI compliance assistant
   {
     path: '/sfdr-gem',
-    element: <SFDRGem />,
+    element: <SFDRGem />
   }
 ]);

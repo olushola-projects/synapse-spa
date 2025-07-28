@@ -1,14 +1,16 @@
-import { UseCase } from "@/types/useCases";
+import type { UseCase } from '@/types/useCases';
 
 export const mockUseCases: UseCase[] = [
   {
     id: '1',
     title: 'GDPR Compliance Automation',
-    description: 'Automate GDPR compliance checks and data subject request handling across multiple systems.',
+    description:
+      'Automate GDPR compliance checks and data subject request handling across multiple systems.',
     industry: 'Technology',
     complexity: 'High',
     status: 'Completed',
-    aiSolution: 'AI-powered data mapping and automated consent management system with real-time compliance monitoring.',
+    aiSolution:
+      'AI-powered data mapping and automated consent management system with real-time compliance monitoring.',
     tags: ['GDPR', 'Data Privacy', 'Automation'],
     createdAt: '2024-01-15',
     updatedAt: '2024-01-20',
@@ -37,7 +39,8 @@ export const mockUseCases: UseCase[] = [
         id: 'cs1',
         title: 'Global Tech Company GDPR Implementation',
         organization: 'Fortune 500 Technology Firm',
-        summary: 'Implementation of automated GDPR compliance system across 15 countries and 30+ data systems.',
+        summary:
+          'Implementation of automated GDPR compliance system across 15 countries and 30+ data systems.',
         outcomes: [
           '95% reduction in manual processing time',
           'Zero compliance violations in first year post-implementation',
@@ -66,11 +69,13 @@ export const mockUseCases: UseCase[] = [
   {
     id: '2',
     title: 'AML Transaction Monitoring',
-    description: 'Implement intelligent transaction monitoring for anti-money laundering compliance.',
+    description:
+      'Implement intelligent transaction monitoring for anti-money laundering compliance.',
     industry: 'Financial Services',
     complexity: 'High',
     status: 'In Progress',
-    aiSolution: 'Machine learning model for pattern recognition and anomaly detection in financial transactions.',
+    aiSolution:
+      'Machine learning model for pattern recognition and anomaly detection in financial transactions.',
     tags: ['AML', 'Financial Crime', 'ML'],
     createdAt: '2024-01-10',
     updatedAt: '2024-01-18',
@@ -81,7 +86,11 @@ export const mockUseCases: UseCase[] = [
     technologyStack: ['Machine Learning', 'Big Data Analytics', 'Real-time Processing'],
     implementationCost: 'High',
     timeToImplement: '6-12 months',
-    regulatoryReferences: ['FATF Recommendations', 'BSA/AML Compliance Program', 'EU 5th AML Directive'],
+    regulatoryReferences: [
+      'FATF Recommendations',
+      'BSA/AML Compliance Program',
+      'EU 5th AML Directive'
+    ],
     benefits: [
       'Reduction in false positives by up to 60%',
       'Increased detection of suspicious patterns by 40%',
@@ -161,7 +170,8 @@ export const mockUseCases: UseCase[] = [
         id: 'cs3',
         title: 'Manufacturing Conglomerate ESG Reporting Transformation',
         organization: 'Global Manufacturing Company',
-        summary: 'Implementation of centralized ESG reporting system across 12 business units in 8 countries.',
+        summary:
+          'Implementation of centralized ESG reporting system across 12 business units in 8 countries.',
         outcomes: [
           '75% reduction in reporting preparation time',
           'Standardized metrics across all business units',
@@ -183,11 +193,13 @@ export const mockUseCases: UseCase[] = [
   {
     id: '4',
     title: 'Healthcare Compliance Suite',
-    description: 'Comprehensive compliance solution for healthcare providers covering HIPAA, HITECH, and state regulations.',
+    description:
+      'Comprehensive compliance solution for healthcare providers covering HIPAA, HITECH, and state regulations.',
     industry: 'Healthcare',
     complexity: 'High',
     status: 'Completed',
-    aiSolution: 'AI-driven document analysis and automated risk assessment with continuous monitoring.',
+    aiSolution:
+      'AI-driven document analysis and automated risk assessment with continuous monitoring.',
     tags: ['Healthcare', 'HIPAA', 'Compliance'],
     createdAt: '2024-02-05',
     updatedAt: '2024-02-15',
@@ -216,7 +228,8 @@ export const mockUseCases: UseCase[] = [
         id: 'cs4',
         title: 'Regional Hospital Network Compliance Transformation',
         organization: 'Multi-State Healthcare Provider',
-        summary: 'Implementation of integrated compliance suite across 8 hospitals and 30+ clinics.',
+        summary:
+          'Implementation of integrated compliance suite across 8 hospitals and 30+ clinics.',
         outcomes: [
           'Unified compliance approach across all facilities',
           '65% reduction in compliance management costs',
@@ -231,14 +244,16 @@ export const mockUseCases: UseCase[] = [
         title: 'Healthcare Compliance Technology Guide',
         type: 'Documentation',
         link: '#resource-6',
-        description: 'Comprehensive guide to implementing compliance technology in healthcare settings.'
+        description:
+          'Comprehensive guide to implementing compliance technology in healthcare settings.'
       }
     ]
   },
   {
     id: '5',
     title: 'Legal Document Analysis',
-    description: 'Automated analysis of legal documents for compliance with regulatory requirements and internal policies.',
+    description:
+      'Automated analysis of legal documents for compliance with regulatory requirements and internal policies.',
     industry: 'Legal',
     complexity: 'Medium',
     status: 'In Progress',
@@ -271,7 +286,8 @@ export const mockUseCases: UseCase[] = [
         id: 'cs5',
         title: 'Global Corporation Contract Analysis Implementation',
         organization: 'Fortune 100 Corporation',
-        summary: 'Deployment of AI-powered contract analysis system for regulatory compliance review.',
+        summary:
+          'Deployment of AI-powered contract analysis system for regulatory compliance review.',
         outcomes: [
           '80% reduction in contract review time',
           'Identification of compliance issues in 15% of legacy contracts',
@@ -293,7 +309,8 @@ export const mockUseCases: UseCase[] = [
   {
     id: '6',
     title: 'Educational Compliance Framework',
-    description: 'Compliance framework for educational institutions covering FERPA, Title IX, and accessibility requirements.',
+    description:
+      'Compliance framework for educational institutions covering FERPA, Title IX, and accessibility requirements.',
     industry: 'Education',
     complexity: 'Low',
     status: 'Draft',
@@ -388,7 +405,8 @@ export const mockUseCases: UseCase[] = [
         id: 'cs7',
         title: 'Global Retailer Supply Chain Compliance Transformation',
         organization: 'International Retail Corporation',
-        summary: 'Implementation of automated due diligence system for 5,000+ suppliers across 30 countries.',
+        summary:
+          'Implementation of automated due diligence system for 5,000+ suppliers across 30 countries.',
         outcomes: [
           '85% reduction in manual due diligence effort',
           'Identification of compliance issues in 8% of supplier base',
@@ -403,14 +421,16 @@ export const mockUseCases: UseCase[] = [
         title: 'Supply Chain Compliance Technology Guide',
         type: 'Whitepaper',
         link: '#resource-10',
-        description: 'Comprehensive guide to implementing compliance technology in supply chain management.'
+        description:
+          'Comprehensive guide to implementing compliance technology in supply chain management.'
       }
     ]
   },
   {
     id: '8',
     title: 'Regulatory Change Management',
-    description: 'Automated tracking and impact assessment of regulatory changes across multiple jurisdictions.',
+    description:
+      'Automated tracking and impact assessment of regulatory changes across multiple jurisdictions.',
     industry: 'Financial Services',
     complexity: 'Medium',
     status: 'Completed',
@@ -422,7 +442,11 @@ export const mockUseCases: UseCase[] = [
     viewCount: 45,
     supervisoryFunction: 'Regulatory Compliance',
     regulatoryDomain: 'Banking',
-    technologyStack: ['Natural Language Processing', 'Automated Alerts', 'Impact Assessment Algorithms'],
+    technologyStack: [
+      'Natural Language Processing',
+      'Automated Alerts',
+      'Impact Assessment Algorithms'
+    ],
     implementationCost: 'Medium',
     timeToImplement: '3-6 months',
     regulatoryReferences: ['Various Financial Regulations', 'Basel Framework', 'Dodd-Frank'],
@@ -443,7 +467,8 @@ export const mockUseCases: UseCase[] = [
         id: 'cs8',
         title: 'Global Bank Regulatory Change Management Transformation',
         organization: 'Multinational Banking Group',
-        summary: 'Implementation of automated regulatory change management system across 15 countries.',
+        summary:
+          'Implementation of automated regulatory change management system across 15 countries.',
         outcomes: [
           '70% reduction in regulatory change processing time',
           'Improved accuracy in identifying relevant changes',
@@ -465,7 +490,8 @@ export const mockUseCases: UseCase[] = [
         title: 'Regulatory Change Impact Assessment Template',
         type: 'Template',
         link: '#resource-12',
-        description: 'Template for assessing the impact of regulatory changes on business operations.'
+        description:
+          'Template for assessing the impact of regulatory changes on business operations.'
       }
     ]
   }

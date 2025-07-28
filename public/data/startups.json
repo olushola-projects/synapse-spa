@@ -17,7 +17,12 @@
       "Transaction Monitoring → Pattern detection → Enhanced AML compliance"
     ],
     "regulations": ["MiFID II", "GDPR", "Dodd-Frank", "Basel III", "EMIR", "CCAR"],
-    "technologies": ["Natural Language Processing", "Machine Learning", "Knowledge Graphs", "Automated Content Classification"],
+    "technologies": [
+      "Natural Language Processing",
+      "Machine Learning",
+      "Knowledge Graphs",
+      "Automated Content Classification"
+    ],
     "industry": ["Banking", "Insurance", "Asset Management", "Corporate Legal"],
     "investors": ["Public Company"],
     "funding_stage": "Public",
@@ -41,7 +46,12 @@
       "Regulatory Reporting → Automated aggregation → Accurate submissions"
     ],
     "regulations": ["BSA/AML", "OFAC", "KYC", "CFTC", "SEC", "FINRA"],
-    "technologies": ["Graph Analytics", "Machine Learning", "Data Integration", "Real-time Processing"],
+    "technologies": [
+      "Graph Analytics",
+      "Machine Learning",
+      "Data Integration",
+      "Real-time Processing"
+    ],
     "industry": ["Banking", "Government", "Insurance", "Healthcare"],
     "investors": ["Public Company"],
     "funding_stage": "Public",
@@ -65,7 +75,12 @@
       "Impact Assessment → Regulatory analysis → Strategic planning"
     ],
     "regulations": ["MiFID II", "GDPR", "Dodd-Frank", "Basel III", "EMIR", "CCAR"],
-    "technologies": ["Natural Language Processing", "Machine Learning", "Regulatory APIs", "Change Detection"],
+    "technologies": [
+      "Natural Language Processing",
+      "Machine Learning",
+      "Regulatory APIs",
+      "Change Detection"
+    ],
     "industry": ["Banking", "Insurance", "Asset Management", "Fintech"],
     "investors": ["Andreessen Horowitz", "General Catalyst", "Point72 Ventures"],
     "funding_stage": "Series B",
@@ -89,7 +104,12 @@
       "Investigation Support → Case management → Evidence correlation"
     ],
     "regulations": ["BSA/AML", "OFAC", "EU AML Directive", "PCI DSS"],
-    "technologies": ["Topological Data Analysis", "Machine Learning", "Unsupervised Learning", "Graph Theory"],
+    "technologies": [
+      "Topological Data Analysis",
+      "Machine Learning",
+      "Unsupervised Learning",
+      "Graph Theory"
+    ],
     "industry": ["Banking", "Financial Services", "Insurance"],
     "investors": ["Khosla Ventures", "GE Ventures", "Citi Ventures"],
     "funding_stage": "Acquired",
@@ -113,7 +133,12 @@
       "Fraud Investigation → Connection analysis → Evidence discovery"
     ],
     "regulations": ["EU AML Directive", "PSD2", "GDPR", "UK MLR", "US BSA"],
-    "technologies": ["Entity Resolution", "Graph Analytics", "Machine Learning", "Big Data Processing"],
+    "technologies": [
+      "Entity Resolution",
+      "Graph Analytics",
+      "Machine Learning",
+      "Big Data Processing"
+    ],
     "industry": ["Banking", "Insurance", "Government", "Telecommunications"],
     "investors": ["Dawn Capital", "AlbionVC", "Evolution Equity Partners", "Warburg Pincus"],
     "funding_stage": "Series D",
@@ -137,7 +162,12 @@
       "Continuous Monitoring → Ongoing verification → Risk assessment updates"
     ],
     "regulations": ["KYC", "AML", "GDPR", "PCI DSS", "SOC 2"],
-    "technologies": ["Biometric Authentication", "Document Verification", "API Integration", "Machine Learning"],
+    "technologies": [
+      "Biometric Authentication",
+      "Document Verification",
+      "API Integration",
+      "Machine Learning"
+    ],
     "industry": ["Fintech", "Gaming", "Cryptocurrency", "E-commerce"],
     "investors": ["TCV", "Blumberg Capital", "Santander InnoVentures"],
     "funding_stage": "Series C",
@@ -185,7 +215,12 @@
       "Risk Scoring → Adaptive learning → Dynamic assessment"
     ],
     "regulations": ["PCI DSS", "PSD2", "EU AML Directive", "GDPR"],
-    "technologies": ["Adaptive Machine Learning", "Behavioral Analytics", "Real-time Processing", "Anomaly Detection"],
+    "technologies": [
+      "Adaptive Machine Learning",
+      "Behavioral Analytics",
+      "Real-time Processing",
+      "Anomaly Detection"
+    ],
     "industry": ["Banking", "Payment Processors", "Fintech", "E-commerce"],
     "investors": ["TTV Capital", "IP Group", "Invoke Capital"],
     "funding_stage": "Series C",
@@ -209,7 +244,12 @@
       "Trade Surveillance → Pattern detection → Regulatory compliance"
     ],
     "regulations": ["BSA/AML", "OFAC", "MiFID II", "MAR", "EMIR", "Dodd-Frank"],
-    "technologies": ["Machine Learning", "Big Data Analytics", "Natural Language Processing", "Real-time Processing"],
+    "technologies": [
+      "Machine Learning",
+      "Big Data Analytics",
+      "Natural Language Processing",
+      "Real-time Processing"
+    ],
     "industry": ["Banking", "Capital Markets", "Insurance", "Fintech"],
     "investors": ["NICE Ltd (Public Company)"],
     "funding_stage": "Public Subsidiary",
@@ -257,7 +297,12 @@
       "Employee Monitoring → Sentiment analysis → Workplace compliance"
     ],
     "regulations": ["MiFID II", "MAR", "FINRA", "FCA", "CFTC"],
-    "technologies": ["Natural Language Processing", "Machine Learning", "Voice Analytics", "Data Mining"],
+    "technologies": [
+      "Natural Language Processing",
+      "Machine Learning",
+      "Voice Analytics",
+      "Data Mining"
+    ],
     "industry": ["Investment Banking", "Asset Management", "Hedge Funds", "Trading"],
     "investors": ["Index Ventures", "Hoxton Ventures", "Aster Capital"],
     "funding_stage": "Series C",
@@ -281,7 +326,12 @@
       "Compliance Monitoring → Real-time screening → Risk mitigation"
     ],
     "regulations": ["BSA/AML", "OFAC", "Travel Rule", "EU AML Directive"],
-    "technologies": ["Blockchain Analytics", "Graph Analysis", "Machine Learning", "Real-time Monitoring"],
+    "technologies": [
+      "Blockchain Analytics",
+      "Graph Analysis",
+      "Machine Learning",
+      "Real-time Monitoring"
+    ],
     "industry": ["Cryptocurrency", "Banking", "Government", "Fintech"],
     "investors": ["Paradigm", "Addition", "Ribbit Capital"],
     "funding_stage": "Series E",
@@ -305,7 +355,12 @@
       "Transaction Monitoring → Pattern detection → Suspicious activity alerts"
     ],
     "regulations": ["BSA/AML", "OFAC", "EU AML Directive", "UK MLR"],
-    "technologies": ["Blockchain Analytics", "Machine Learning", "Graph Visualization", "API Integration"],
+    "technologies": [
+      "Blockchain Analytics",
+      "Machine Learning",
+      "Graph Visualization",
+      "API Integration"
+    ],
     "industry": ["Cryptocurrency", "Banking", "Government", "Insurance"],
     "investors": ["Evolution Equity Partners", "Digital Currency Group", "SBI Holdings"],
     "funding_stage": "Series C",
@@ -329,7 +384,12 @@
       "Trust & Safety → Behavioral analysis → Platform integrity"
     ],
     "regulations": ["PCI DSS", "PSD2", "GDPR", "CCPA"],
-    "technologies": ["Machine Learning", "Identity Graph", "Real-time Processing", "Behavioral Analytics"],
+    "technologies": [
+      "Machine Learning",
+      "Identity Graph",
+      "Real-time Processing",
+      "Behavioral Analytics"
+    ],
     "industry": ["E-commerce", "Fintech", "Digital Banking", "Marketplaces"],
     "investors": ["Tiger Global", "Sequoia Capital", "March Capital"],
     "funding_stage": "Series F",
@@ -353,7 +413,12 @@
       "Revenue Optimization → Risk-based approvals → Sales growth"
     ],
     "regulations": ["PCI DSS", "GDPR", "CCPA", "SOC 2"],
-    "technologies": ["Machine Learning", "Elastic Linking", "Behavioral Analytics", "Graph Networks"],
+    "technologies": [
+      "Machine Learning",
+      "Elastic Linking",
+      "Behavioral Analytics",
+      "Graph Networks"
+    ],
     "industry": ["E-commerce", "Fashion", "Electronics", "Digital Goods"],
     "investors": ["General Atlantic", "Qumra Capital"],
     "funding_stage": "Public",
@@ -401,7 +466,12 @@
       "Risk Intelligence → Dynamic updates → Proactive monitoring"
     ],
     "regulations": ["FATF", "OFAC", "EU Sanctions", "UK Sanctions"],
-    "technologies": ["Natural Language Processing", "Machine Learning", "Data Mining", "Real-time Processing"],
+    "technologies": [
+      "Natural Language Processing",
+      "Machine Learning",
+      "Data Mining",
+      "Real-time Processing"
+    ],
     "industry": ["Banking", "Fintech", "Financial Services", "Cryptocurrency"],
     "investors": ["Index Ventures", "Balderton Capital", "DN Capital"],
     "funding_stage": "Series C",

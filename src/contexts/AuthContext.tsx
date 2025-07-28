@@ -1,7 +1,6 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from "@/components/ui/use-toast";
+import { toast } from '@/components/ui/use-toast';
 import { handleAuthError, ErrorCategory, ErrorSeverity } from '@/utils/error-handler';
 
 // Define types
@@ -55,7 +54,7 @@ const mockUsers: User[] = [
     name: 'Demo User',
     avatar: 'https://i.pravatar.cc/150?u=demo',
     jurisdiction: ['EU', 'UK']
-  },
+  }
 ];
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -80,15 +79,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       // Invalid JSON in localStorage, clear it
       localStorage.removeItem('synapseUser');
-      handleAuthError(error instanceof Error ? error : new Error('Failed to load saved user data'), {
-        component: 'AuthContext',
-        action: 'loadSavedUser'
-      });
+      handleAuthError(
+        error instanceof Error ? error : new Error('Failed to load saved user data'),
+        {
+          component: 'AuthContext',
+          action: 'loadSavedUser'
+        }
+      );
     } finally {
       setIsLoading(false);
     }
   }, []);
-  
+
   // Helper function to validate email
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -100,46 +102,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       setError(null);
-      
+
       // Validate input
       if (!credentials.email || !credentials.password) {
         throw new Error('Email and password are required');
       }
-      
+
       if (!isValidEmail(credentials.email)) {
         throw new Error('Please enter a valid email address');
       }
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      
+
       const foundUser = mockUsers.find(u => u.email === credentials.email);
       if (!foundUser) {
         throw new Error('Invalid credentials');
       }
-      
+
       // Set user in state and localStorage
       setUser(foundUser);
       localStorage.setItem('synapseUser', JSON.stringify(foundUser));
-      
+
       toast({
-        title: "Login successful",
-        description: `Welcome back, ${foundUser.name}!`,
+        title: 'Login successful',
+        description: `Welcome back, ${foundUser.name}!`
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Login failed';
       setError(errorMessage);
-      
+
       handleAuthError(error instanceof Error ? error : new Error(errorMessage), {
         component: 'AuthContext',
         action: 'login',
         metadata: { email: credentials.email }
       });
-      
+
       toast({
-        title: "Login failed",
+        title: 'Login failed',
         description: errorMessage,
-        variant: "destructive",
+        variant: 'destructive'
       });
       throw error;
     } finally {
@@ -152,63 +154,63 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       setError(null);
-      
+
       // Validate input
       if (!data.email || !data.password || !data.name) {
         throw new Error('All fields are required');
       }
-      
+
       if (!isValidEmail(data.email)) {
         throw new Error('Please enter a valid email address');
       }
-      
+
       if (data.password.length < 6) {
         throw new Error('Password must be at least 6 characters long');
       }
-      
+
       if (data.name.trim().length < 2) {
         throw new Error('Name must be at least 2 characters long');
       }
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      
+
       if (mockUsers.some(u => u.email === data.email)) {
         throw new Error('Email already in use');
       }
-      
+
       // Create new user
       const newUser: User = {
         id: (mockUsers.length + 1).toString(),
         email: data.email,
         name: data.name.trim(),
-        avatar: `https://i.pravatar.cc/150?u=${data.email}`,
+        avatar: `https://i.pravatar.cc/150?u=${data.email}`
       };
-      
+
       mockUsers.push(newUser);
-      
+
       // Set user in state and localStorage
       setUser(newUser);
       localStorage.setItem('synapseUser', JSON.stringify(newUser));
-      
+
       toast({
-        title: "Registration successful",
-        description: `Welcome to Synapse, ${data.name}!`,
+        title: 'Registration successful',
+        description: `Welcome to Synapse, ${data.name}!`
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Registration failed';
       setError(errorMessage);
-      
+
       handleAuthError(error instanceof Error ? error : new Error(errorMessage), {
         component: 'AuthContext',
         action: 'register',
         metadata: { email: data.email, name: data.name }
       });
-      
+
       toast({
-        title: "Registration failed",
+        title: 'Registration failed',
         description: errorMessage,
-        variant: "destructive",
+        variant: 'destructive'
       });
       throw error;
     } finally {
@@ -219,16 +221,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Social login methods - placeholders for now
   const loginWithGoogle = async () => {
     toast({
-      title: "Google login",
-      description: "This feature is coming soon!",
+      title: 'Google login',
+      description: 'This feature is coming soon!'
     });
     return Promise.resolve();
   };
 
   const loginWithLinkedIn = async () => {
     toast({
-      title: "LinkedIn login",
-      description: "This feature is coming soon!",
+      title: 'LinkedIn login',
+      description: 'This feature is coming soon!'
     });
     return Promise.resolve();
   };
@@ -240,8 +242,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError(null);
       localStorage.removeItem('synapseUser');
       toast({
-        title: "Logout successful",
-        description: "You have been logged out",
+        title: 'Logout successful',
+        description: 'You have been logged out'
       });
     } catch (error) {
       handleAuthError(error instanceof Error ? error : new Error('Logout failed'), {
@@ -250,7 +252,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     }
   };
-  
+
   const clearError = () => {
     setError(null);
   };
@@ -261,23 +263,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      
-      if (!user) throw new Error('Not authenticated');
-      
+
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
+
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem('synapseUser', JSON.stringify(updatedUser));
-      
+
       toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully",
+        title: 'Profile updated',
+        description: 'Your profile has been updated successfully'
       });
     } catch (error) {
       console.error('Profile update failed:', error);
       toast({
-        title: "Profile update failed",
-        description: error instanceof Error ? error.message : "An error occurred",
-        variant: "destructive",
+        title: 'Profile update failed',
+        description: error instanceof Error ? error.message : 'An error occurred',
+        variant: 'destructive'
       });
       throw error;
     } finally {
@@ -298,7 +302,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         register,
         updateProfile,
         error,
-        clearError,
+        clearError
       }}
     >
       {children}

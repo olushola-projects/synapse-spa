@@ -13,7 +13,7 @@ class SynapseQATester {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
     console.log(logMessage);
-    
+
     if (this.currentTest) {
       this.currentTest.logs.push(logMessage);
     }
@@ -32,16 +32,16 @@ class SynapseQATester {
 
   endTest(passed = true, error = null) {
     if (!this.currentTest) return;
-    
+
     this.currentTest.passed = passed;
     this.currentTest.endTime = Date.now();
     this.currentTest.duration = this.currentTest.endTime - this.currentTest.startTime;
-    
+
     if (error) {
       this.currentTest.errors.push(error);
       this.log(`Test failed: ${error}`, 'error');
     }
-    
+
     this.log(`Test completed: ${this.currentTest.name} - ${passed ? 'PASSED' : 'FAILED'}`);
     this.testResults.push(this.currentTest);
     this.currentTest = null;
@@ -74,7 +74,7 @@ class SynapseQATester {
   // Navigation Tests
   async testNavigation() {
     this.startTest('Navigation Links Test');
-    
+
     try {
       // Test main navigation links
       const navLinks = [
@@ -103,7 +103,7 @@ class SynapseQATester {
   // Homepage Elements Test
   async testHomepageElements() {
     this.startTest('Homepage Elements Test');
-    
+
     try {
       const requiredElements = [
         { selector: 'nav', name: 'Navigation' },
@@ -131,11 +131,13 @@ class SynapseQATester {
   // Form Validation Test
   async testFormValidation() {
     this.startTest('Form Validation Test');
-    
+
     try {
       // Look for email input fields
-      const emailInputs = document.querySelectorAll('input[type="email"], input[name*="email"], input[placeholder*="email"]');
-      
+      const emailInputs = document.querySelectorAll(
+        'input[type="email"], input[name*="email"], input[placeholder*="email"]'
+      );
+
       if (emailInputs.length === 0) {
         this.log('No email forms found on current page', 'warning');
         this.endTest(true);
@@ -144,14 +146,14 @@ class SynapseQATester {
 
       for (let i = 0; i < emailInputs.length; i++) {
         const input = emailInputs[i];
-        
+
         // Test invalid email
         input.value = 'invalid-email';
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.dispatchEvent(new Event('blur', { bubbles: true }));
-        
+
         await this.wait(500);
-        
+
         // Check for validation message
         const form = input.closest('form');
         if (form) {
@@ -162,7 +164,7 @@ class SynapseQATester {
             this.log(`✓ Email validation working for input ${i + 1}`);
           }
         }
-        
+
         // Reset input
         input.value = '';
       }
@@ -176,10 +178,15 @@ class SynapseQATester {
   // SFDR Navigator Chat Test
   async testNexusAgentChat() {
     this.startTest('SFDR Navigator Chat Interface Test');
-    
+
     try {
       // Check if we're on the SFDR Navigator page
-      if (!window.location.pathname.includes('nexus-agent') && !document.querySelector('[class*="nexus"], [class*="Nexus"], [class*="chat"], [class*="Chat"]')) {
+      if (
+        !window.location.pathname.includes('nexus-agent') &&
+        !document.querySelector(
+          '[class*="nexus"], [class*="Nexus"], [class*="chat"], [class*="Chat"]'
+        )
+      ) {
         this.log('Not on SFDR Navigator page, skipping chat test', 'warning');
         this.endTest(true);
         return;
@@ -189,7 +196,8 @@ class SynapseQATester {
       const chatElements = {
         input: 'input[type="text"], textarea, [contenteditable="true"]',
         sendButton: 'button[type="submit"], button[class*="send"], button[class*="Send"]',
-        messagesContainer: '[class*="message"], [class*="Message"], [class*="chat"], [class*="Chat"]'
+        messagesContainer:
+          '[class*="message"], [class*="Message"], [class*="chat"], [class*="Chat"]'
       };
 
       // Find chat input
@@ -210,25 +218,25 @@ class SynapseQATester {
       const testMessage = 'Hello, I need help with SFDR compliance';
       chatInput.value = testMessage;
       chatInput.dispatchEvent(new Event('input', { bubbles: true }));
-      
+
       this.log(`Sending test message: "${testMessage}"`);
-      
+
       // Click send button
       sendButton.click();
-      
+
       // Wait for response
       await this.wait(2000);
-      
+
       // Check if message appeared in chat
       const messages = document.querySelectorAll(chatElements.messagesContainer);
       let messageFound = false;
-      
+
       messages.forEach(msg => {
         if (msg.textContent.includes(testMessage) || msg.textContent.includes('SFDR')) {
           messageFound = true;
         }
       });
-      
+
       if (messageFound) {
         this.log('✓ Message sent and response received');
       } else {
@@ -244,7 +252,7 @@ class SynapseQATester {
   // Performance Test
   async testPerformance() {
     this.startTest('Performance Test');
-    
+
     try {
       const performanceData = {
         loadTime: 0,
@@ -255,8 +263,10 @@ class SynapseQATester {
 
       // Get navigation timing
       if (performance.timing) {
-        performanceData.loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-        performanceData.domContentLoaded = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
+        performanceData.loadTime =
+          performance.timing.loadEventEnd - performance.timing.navigationStart;
+        performanceData.domContentLoaded =
+          performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
       }
 
       // Get paint timing
@@ -300,7 +310,7 @@ class SynapseQATester {
   // Accessibility Test
   async testAccessibility() {
     this.startTest('Basic Accessibility Test');
-    
+
     try {
       const issues = [];
 
@@ -332,14 +342,16 @@ class SynapseQATester {
         const hasLabel = input.labels && input.labels.length > 0;
         const hasAriaLabel = input.getAttribute('aria-label');
         const hasAriaLabelledBy = input.getAttribute('aria-labelledby');
-        
+
         if (!hasLabel && !hasAriaLabel && !hasAriaLabelledBy) {
           issues.push(`Input ${index + 1} missing label`);
         }
       });
 
       // Check for focus indicators
-      const focusableElements = document.querySelectorAll('a, button, input, textarea, select, [tabindex]');
+      const focusableElements = document.querySelectorAll(
+        'a, button, input, textarea, select, [tabindex]'
+      );
       this.log(`Found ${focusableElements.length} focusable elements`);
 
       if (issues.length > 0) {
@@ -357,7 +369,7 @@ class SynapseQATester {
   // Console Error Test
   async testConsoleErrors() {
     this.startTest('Console Errors Test');
-    
+
     try {
       // Store original console methods
       const originalError = console.error;
@@ -441,7 +453,7 @@ class SynapseQATester {
     this.testResults.forEach(test => {
       const status = test.passed ? '✅ PASS' : '❌ FAIL';
       console.log(`${status} ${test.name} (${test.duration}ms)`);
-      
+
       if (!test.passed && test.errors.length > 0) {
         test.errors.forEach(error => {
           console.log(`   Error: ${error}`);
@@ -450,13 +462,13 @@ class SynapseQATester {
     });
 
     console.log('\n' + '='.repeat(60));
-    
+
     if (failedTests === 0) {
       console.log('🎉 ALL TESTS PASSED! Ready for beta testing.');
     } else {
       console.log(`⚠️  ${failedTests} test(s) failed. Please review and fix issues before beta.`);
     }
-    
+
     console.log('='.repeat(60));
 
     // Return results for programmatic access
@@ -473,11 +485,11 @@ class SynapseQATester {
   // Quick smoke test for critical functionality
   async runSmokeTest() {
     this.log('Running quick smoke test...');
-    
+
     await this.testNavigation();
     await this.testHomepageElements();
     await this.testConsoleErrors();
-    
+
     const report = this.generateReport(0);
     return report.failedTests === 0;
   }

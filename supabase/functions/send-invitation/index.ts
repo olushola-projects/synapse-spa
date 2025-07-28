@@ -1,13 +1,11 @@
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { Resend } from 'npm:resend@2.0.0';
 
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
-
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
 };
 
 interface InvitationRequest {
@@ -20,70 +18,65 @@ interface InvitationRequest {
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { 
-      senderName, 
-      senderEmail, 
-      inviteeEmail, 
-      adminEmail,
-      message 
-    }: InvitationRequest = await req.json();
+    const { senderName, senderEmail, inviteeEmail, adminEmail, message }: InvitationRequest =
+      await req.json();
 
     console.log(`Processing invitation from ${senderEmail} to ${inviteeEmail}`);
 
     // Send invitation to invitee
     const inviteeEmailResponse = await resend.emails.send({
-      from: "Synapses <invites@joinsynapses.com>",
+      from: 'Synapses <invites@joinsynapses.com>',
       to: [inviteeEmail],
       subject: `${senderName} invited you to join Synapses`,
-      html: getInviteeEmailHTML(senderName, message),
+      html: getInviteeEmailHTML(senderName, message)
     });
 
-    console.log("Invitation email sent:", inviteeEmailResponse);
+    console.log('Invitation email sent:', inviteeEmailResponse);
 
     // Send confirmation to sender
     const senderEmailResponse = await resend.emails.send({
-      from: "Synapses <invites@joinsynapses.com>",
+      from: 'Synapses <invites@joinsynapses.com>',
       to: [senderEmail],
       subject: "You've sent an invitation to Synapses",
-      html: getSenderConfirmationHTML(senderName, inviteeEmail),
+      html: getSenderConfirmationHTML(senderName, inviteeEmail)
     });
 
-    console.log("Sender confirmation email sent:", senderEmailResponse);
+    console.log('Sender confirmation email sent:', senderEmailResponse);
 
     // Send notification to admin
     const adminEmailResponse = await resend.emails.send({
-      from: "Synapses <invites@joinsynapses.com>",
+      from: 'Synapses <invites@joinsynapses.com>',
       to: [adminEmail],
-      subject: "New Synapses Invitation",
-      html: getAdminNotificationHTML(senderName, senderEmail, inviteeEmail, message),
+      subject: 'New Synapses Invitation',
+      html: getAdminNotificationHTML(senderName, senderEmail, inviteeEmail, message)
     });
 
-    console.log("Admin notification email sent:", adminEmailResponse);
+    console.log('Admin notification email sent:', adminEmailResponse);
 
-    return new Response(JSON.stringify({ 
-      success: true, 
-      message: "Invitation sent successfully" 
-    }), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
-    });
-  } catch (error: any) {
-    console.error("Error in send-invitation function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({
+        success: true,
+        message: 'Invitation sent successfully'
+      }),
       {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
       }
     );
+  } catch (error: any) {
+    console.error('Error in send-invitation function:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
   }
 };
 
@@ -175,9 +168,9 @@ function getSenderConfirmationHTML(senderName: string, inviteeEmail: string): st
 }
 
 function getAdminNotificationHTML(
-  senderName: string, 
-  senderEmail: string, 
-  inviteeEmail: string, 
+  senderName: string,
+  senderEmail: string,
+  inviteeEmail: string,
   message: string
 ): string {
   return `

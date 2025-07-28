@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import styled from "styled-components";
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
 // cloudyAnimation import removed - not used in this component
 
 const FeatureContainer = styled.div`
@@ -18,7 +18,7 @@ const EnhancedFeatureBox = styled(motion.div)`
   padding: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
   transition: all 0.3s ease;
-  
+
   /* Reduced size by approximately 50% */
   width: 100%;
   max-width: 400px;
@@ -26,7 +26,7 @@ const EnhancedFeatureBox = styled(motion.div)`
 
   /* Enhanced visibility */
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 40px rgba(31, 38, 135, 0.25);
@@ -56,19 +56,19 @@ const FeatureDescription = styled.p`
 // Reduced feature set (removed duplicates)
 export const features = [
   {
-    title: "AI-Powered Analysis",
-    description: "Intelligent regulatory insights and automated compliance tasks",
-    icon: "MessageSquare"
+    title: 'AI-Powered Analysis',
+    description: 'Intelligent regulatory insights and automated compliance tasks',
+    icon: 'MessageSquare'
   },
   {
-    title: "Professional Network",
-    description: "Connect with global GRC professionals and experts",
-    icon: "Users"
+    title: 'Professional Network',
+    description: 'Connect with global GRC professionals and experts',
+    icon: 'Users'
   },
   {
-    title: "Analytics Dashboard",
-    description: "Real-time compliance monitoring and reporting",
-    icon: "BarChart3"
+    title: 'Analytics Dashboard',
+    description: 'Real-time compliance monitoring and reporting',
+    icon: 'BarChart3'
   }
 ];
 

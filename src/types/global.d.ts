@@ -14,17 +14,17 @@ declare global {
         [key: string]: any;
       }
     ) => void;
-    
+
     // Hotjar integration
     hj?: (command: string, ...args: any[]) => void;
-    
+
     // Custom analytics
     analytics?: {
       track: (event: string, properties?: Record<string, any>) => void;
       [key: string]: any;
     };
   }
-  
+
   // Global gtag function
   function gtag(
     command: 'config' | 'event' | 'js' | 'set',

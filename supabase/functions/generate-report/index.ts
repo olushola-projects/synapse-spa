@@ -1,11 +1,11 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
+};
 
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -15,31 +15,30 @@ Deno.serve(async (req) => {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    )
+    );
 
     // Get user from JWT
-    const authHeader = req.headers.get('Authorization')!
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const authHeader = req.headers.get('Authorization')!;
+    const token = authHeader.replace('Bearer ', '');
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
-    const { 
-      assessmentId, 
-      reportType = 'full_compliance',
-      includeCharts = true 
-    } = await req.json()
+    const { assessmentId, reportType = 'full_compliance', includeCharts = true } = await req.json();
 
     if (!assessmentId) {
-      return new Response(
-        JSON.stringify({ error: 'Assessment ID is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Assessment ID is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
     // Get assessment data
@@ -48,21 +47,21 @@ Deno.serve(async (req) => {
       .select('*')
       .eq('id', assessmentId)
       .eq('user_id', user.id)
-      .single()
+      .single();
 
     if (assessmentError || !assessment) {
-      return new Response(
-        JSON.stringify({ error: 'Assessment not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Assessment not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
     // Generate report based on type
-    const reportData = await generateReport(assessment, reportType, includeCharts)
+    const reportData = await generateReport(assessment, reportType, includeCharts);
 
     // Save report to database
-    const expiresAt = new Date()
-    expiresAt.setDate(expiresAt.getDate() + 30) // 30 days expiry
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 30); // 30 days expiry
 
     const { data: report, error: reportError } = await supabase
       .from('compliance_reports')
@@ -74,14 +73,14 @@ Deno.serve(async (req) => {
         expires_at: expiresAt.toISOString()
       })
       .select()
-      .single()
+      .single();
 
     if (reportError) {
-      console.error('Report save error:', reportError)
-      return new Response(
-        JSON.stringify({ error: 'Failed to save report' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      console.error('Report save error:', reportError);
+      return new Response(JSON.stringify({ error: 'Failed to save report' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
     return new Response(
@@ -92,21 +91,20 @@ Deno.serve(async (req) => {
         message: 'Report generated successfully'
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
-
+    );
   } catch (error) {
-    console.error('Function error:', error)
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    console.error('Function error:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
   }
-})
+});
 
 async function generateReport(assessment: any, reportType: string, includeCharts: boolean) {
-  const validationResults = assessment.validation_results || {}
-  const assessmentData = assessment.assessment_data || {}
-  
+  const validationResults = assessment.validation_results || {};
+  const assessmentData = assessment.assessment_data || {};
+
   const report = {
     metadata: {
       reportType,
@@ -122,24 +120,24 @@ async function generateReport(assessment: any, reportType: string, includeCharts
     detailedFindings: generateDetailedFindings(validationResults, assessmentData),
     recommendations: generateRecommendations(validationResults),
     appendices: generateAppendices(assessment, includeCharts)
-  }
+  };
 
   // Add report type specific sections
   if (reportType === 'pai_summary') {
-    report.paiAnalysis = generatePAIAnalysis(assessmentData)
+    report.paiAnalysis = generatePAIAnalysis(assessmentData);
   } else if (reportType === 'taxonomy_alignment') {
-    report.taxonomyAnalysis = generateTaxonomyAnalysis(assessmentData)
+    report.taxonomyAnalysis = generateTaxonomyAnalysis(assessmentData);
   } else if (reportType === 'risk_assessment') {
-    report.riskAnalysis = generateRiskAnalysis(validationResults)
+    report.riskAnalysis = generateRiskAnalysis(validationResults);
   }
 
-  return report
+  return report;
 }
 
 function generateExecutiveSummary(assessment: any, validationResults: any) {
-  const score = assessment.compliance_score || 0
-  const status = score >= 80 ? 'Compliant' : score >= 60 ? 'Partially Compliant' : 'Non-Compliant'
-  
+  const score = assessment.compliance_score || 0;
+  const status = score >= 80 ? 'Compliant' : score >= 60 ? 'Partially Compliant' : 'Non-Compliant';
+
   return {
     overallStatus: status,
     complianceScore: score,
@@ -152,15 +150,16 @@ function generateExecutiveSummary(assessment: any, validationResults: any) {
     criticalIssues: (validationResults.issues || [])
       .filter((issue: any) => issue.severity === 'error')
       .map((issue: any) => issue.message),
-    nextSteps: score >= 80 
-      ? ['Ready for regulatory submission', 'Monitor for regulatory updates']
-      : ['Address critical compliance gaps', 'Revalidate after corrections']
-  }
+    nextSteps:
+      score >= 80
+        ? ['Ready for regulatory submission', 'Monitor for regulatory updates']
+        : ['Address critical compliance gaps', 'Revalidate after corrections']
+  };
 }
 
 function generateComplianceOverview(validationResults: any) {
-  const details = validationResults.validationDetails || {}
-  
+  const details = validationResults.validationDetails || {};
+
   return {
     articleCompliance: {
       status: details.articleCompliance ? 'Compliant' : 'Non-Compliant',
@@ -182,12 +181,12 @@ function generateComplianceOverview(validationResults: any) {
       status: details.disclosureCompleteness ? 'Complete' : 'Incomplete',
       description: 'Required disclosure statements and documentation'
     }
-  }
+  };
 }
 
 function generateDetailedFindings(validationResults: any, assessmentData: any) {
-  const checks = validationResults.checks || []
-  
+  const checks = validationResults.checks || [];
+
   return checks.map((check: any) => ({
     category: check.category,
     status: check.passed ? 'Passed' : 'Failed',
@@ -195,13 +194,13 @@ function generateDetailedFindings(validationResults: any, assessmentData: any) {
     severity: check.severity || 'info',
     evidence: getEvidence(check.category, assessmentData),
     recommendations: check.recommendations || []
-  }))
+  }));
 }
 
 function generateRecommendations(validationResults: any) {
-  const recommendations = validationResults.recommendations || []
-  const issues = validationResults.issues || []
-  
+  const recommendations = validationResults.recommendations || [];
+  const issues = validationResults.issues || [];
+
   return {
     immediate: issues
       .filter((issue: any) => issue.severity === 'error')
@@ -231,7 +230,7 @@ function generateRecommendations(validationResults: any) {
         impact: 'Maintains compliance culture'
       }
     ]
-  }
+  };
 }
 
 function generateAppendices(assessment: any, includeCharts: boolean) {
@@ -243,29 +242,30 @@ function generateAppendices(assessment: any, includeCharts: boolean) {
       'EU Taxonomy Regulation (EU) 2020/852'
     ],
     glossary: {
-      'SFDR': 'Sustainable Finance Disclosure Regulation',
-      'PAI': 'Principal Adverse Impact',
-      'DNSH': 'Do No Significant Harm',
+      SFDR: 'Sustainable Finance Disclosure Regulation',
+      PAI: 'Principal Adverse Impact',
+      DNSH: 'Do No Significant Harm',
       'Article 6': 'Financial products that do not promote environmental or social characteristics',
       'Article 8': 'Financial products that promote environmental or social characteristics',
       'Article 9': 'Financial products with sustainable investment as their objective'
     },
-    methodology: 'This report was generated using the SFDR Navigator compliance validation engine, which applies regulatory requirements from SFDR and related delegated acts.'
-  }
+    methodology:
+      'This report was generated using the SFDR Navigator compliance validation engine, which applies regulatory requirements from SFDR and related delegated acts.'
+  };
 
   if (includeCharts) {
     appendices.charts = {
       complianceScoreChart: generateComplianceChart(assessment.compliance_score || 0),
       issueDistribution: generateIssueDistributionChart(assessment.validation_results?.issues || [])
-    }
+    };
   }
 
-  return appendices
+  return appendices;
 }
 
 function generatePAIAnalysis(assessmentData: any) {
-  const paiData = assessmentData.paiIndicators || {}
-  
+  const paiData = assessmentData.paiIndicators || {};
+
   return {
     mandatoryIndicators: {
       total: 18,
@@ -281,12 +281,12 @@ function generatePAIAnalysis(assessmentData: any) {
       dataFrequency: 'Unknown',
       lastUpdated: 'Not provided'
     }
-  }
+  };
 }
 
 function generateTaxonomyAnalysis(assessmentData: any) {
-  const taxonomyData = assessmentData.taxonomyAlignment || {}
-  
+  const taxonomyData = assessmentData.taxonomyAlignment || {};
+
   return {
     alignmentPercentage: taxonomyData.alignmentPercentage || 0,
     eligibleActivities: taxonomyData.eligibleActivities || [],
@@ -296,15 +296,18 @@ function generateTaxonomyAnalysis(assessmentData: any) {
       doNoSignificantHarm: taxonomyData.doNoSignificantHarm || false,
       minimumSafeguards: taxonomyData.minimumSafeguards || false
     }
-  }
+  };
 }
 
 function generateRiskAnalysis(validationResults: any) {
-  const issues = validationResults.issues || []
-  
+  const issues = validationResults.issues || [];
+
   return {
-    riskLevel: issues.some((i: any) => i.severity === 'error') ? 'High' : 
-               issues.some((i: any) => i.severity === 'warning') ? 'Medium' : 'Low',
+    riskLevel: issues.some((i: any) => i.severity === 'error')
+      ? 'High'
+      : issues.some((i: any) => i.severity === 'warning')
+        ? 'Medium'
+        : 'Low',
     identifiedRisks: issues.map((issue: any) => ({
       category: issue.category,
       description: issue.message,
@@ -318,21 +321,21 @@ function generateRiskAnalysis(validationResults: any) {
       owner: 'Compliance Team',
       timeline: issue.severity === 'error' ? '30 days' : '90 days'
     }))
-  }
+  };
 }
 
 function getEvidence(category: string, assessmentData: any): string {
   switch (category) {
     case 'Article Classification':
-      return assessmentData.investmentObjective || 'Investment objective not provided'
+      return assessmentData.investmentObjective || 'Investment objective not provided';
     case 'PAI Indicators':
-      return `${(assessmentData.paiIndicators?.mandatoryIndicators || []).length} mandatory indicators provided`
+      return `${(assessmentData.paiIndicators?.mandatoryIndicators || []).length} mandatory indicators provided`;
     case 'EU Taxonomy Alignment':
-      return assessmentData.taxonomyAlignment ? 
-        `${assessmentData.taxonomyAlignment.alignmentPercentage}% alignment reported` : 
-        'No taxonomy alignment data provided'
+      return assessmentData.taxonomyAlignment
+        ? `${assessmentData.taxonomyAlignment.alignmentPercentage}% alignment reported`
+        : 'No taxonomy alignment data provided';
     default:
-      return 'Assessment data reviewed'
+      return 'Assessment data reviewed';
   }
 }
 
@@ -348,22 +351,21 @@ function generateComplianceChart(score: number) {
         { value: 100, color: '#44ff44', label: 'Compliant' }
       ]
     }
-  }
+  };
 }
 
 function generateIssueDistributionChart(issues: any[]) {
   const distribution = issues.reduce((acc: any, issue: any) => {
-    acc[issue.severity] = (acc[issue.severity] || 0) + 1
-    return acc
-  }, {})
-  
+    acc[issue.severity] = (acc[issue.severity] || 0) + 1;
+    return acc;
+  }, {});
+
   return {
     type: 'pie',
     data: Object.entries(distribution).map(([severity, count]) => ({
       label: severity,
       value: count,
-      color: severity === 'error' ? '#ff4444' : 
-             severity === 'warning' ? '#ffaa00' : '#4444ff'
+      color: severity === 'error' ? '#ff4444' : severity === 'warning' ? '#ffaa00' : '#4444ff'
     }))
-  }
+  };
 }

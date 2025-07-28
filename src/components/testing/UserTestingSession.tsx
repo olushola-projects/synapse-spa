@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Square, Mic, MicOff, Camera, CameraOff, Users, Clock, MessageSquare } from 'lucide-react';
+import {
+  Play,
+  Pause,
+  Square,
+  Mic,
+  MicOff,
+  Camera,
+  CameraOff,
+  Users,
+  Clock,
+  MessageSquare
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -64,7 +75,9 @@ const UserTestingSession: React.FC = () => {
   const [session, setSession] = useState<TestingSession | null>(null);
   const [currentUser, setCurrentUser] = useState<string>('Test Moderator');
   const [newNote, setNewNote] = useState<string>('');
-  const [noteType, setNoteType] = useState<'observation' | 'issue' | 'suggestion' | 'question'>('observation');
+  const [noteType, setNoteType] = useState<'observation' | 'issue' | 'suggestion' | 'question'>(
+    'observation'
+  );
   const [sessionTimer, setSessionTimer] = useState<number>(0);
   const [taskTimer, setTaskTimer] = useState<number>(0);
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -74,9 +87,10 @@ const UserTestingSession: React.FC = () => {
   // Initialize default testing session
   useEffect(() => {
     const defaultSession: TestingSession = {
-      id: 'session-' + Date.now(),
+      id: `session-${Date.now()}`,
       name: 'Synapses Landing Page UAT Session',
-      description: 'User acceptance testing for the Synapses landing page focusing on user experience, navigation, and SFDR tool functionality',
+      description:
+        'User acceptance testing for the Synapses landing page focusing on user experience, navigation, and SFDR tool functionality',
       status: 'preparing',
       currentTaskIndex: 0,
       participants: [
@@ -188,20 +202,30 @@ const UserTestingSession: React.FC = () => {
         setTaskTimer(prev => prev + 1);
       }, 1000);
     } else {
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (taskTimerRef.current) clearInterval(taskTimerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      if (taskTimerRef.current) {
+        clearInterval(taskTimerRef.current);
+      }
     }
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (taskTimerRef.current) clearInterval(taskTimerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      if (taskTimerRef.current) {
+        clearInterval(taskTimerRef.current);
+      }
     };
   }, [session?.status]);
 
   // Start session
   const startSession = () => {
-    if (!session) return;
-    
+    if (!session) {
+      return;
+    }
+
     setSession({
       ...session,
       status: 'active',
@@ -213,8 +237,10 @@ const UserTestingSession: React.FC = () => {
 
   // Pause session
   const pauseSession = () => {
-    if (!session) return;
-    
+    if (!session) {
+      return;
+    }
+
     setSession({
       ...session,
       status: 'paused'
@@ -223,8 +249,10 @@ const UserTestingSession: React.FC = () => {
 
   // End session
   const endSession = () => {
-    if (!session) return;
-    
+    if (!session) {
+      return;
+    }
+
     setSession({
       ...session,
       status: 'completed',
@@ -234,8 +262,10 @@ const UserTestingSession: React.FC = () => {
 
   // Move to next task
   const nextTask = () => {
-    if (!session || session.currentTaskIndex >= session.tasks.length - 1) return;
-    
+    if (!session || session.currentTaskIndex >= session.tasks.length - 1) {
+      return;
+    }
+
     setSession({
       ...session,
       currentTaskIndex: session.currentTaskIndex + 1
@@ -245,8 +275,10 @@ const UserTestingSession: React.FC = () => {
 
   // Move to previous task
   const previousTask = () => {
-    if (!session || session.currentTaskIndex <= 0) return;
-    
+    if (!session || session.currentTaskIndex <= 0) {
+      return;
+    }
+
     setSession({
       ...session,
       currentTaskIndex: session.currentTaskIndex - 1
@@ -256,17 +288,19 @@ const UserTestingSession: React.FC = () => {
 
   // Add note
   const addNote = () => {
-    if (!session || !newNote.trim()) return;
-    
+    if (!session || !newNote.trim()) {
+      return;
+    }
+
     const note: SessionNote = {
-      id: 'note-' + Date.now(),
+      id: `note-${Date.now()}`,
       timestamp: new Date().toISOString(),
       author: currentUser,
       content: newNote.trim(),
       type: noteType,
       taskId: session.tasks[session.currentTaskIndex]?.id
     };
-    
+
     setSession({
       ...session,
       notes: [...session.notes, note]
@@ -276,8 +310,10 @@ const UserTestingSession: React.FC = () => {
 
   // Toggle recording
   const toggleRecording = (type: 'screen' | 'audio' | 'webcam') => {
-    if (!session) return;
-    
+    if (!session) {
+      return;
+    }
+
     setSession({
       ...session,
       recordings: {
@@ -296,8 +332,10 @@ const UserTestingSession: React.FC = () => {
 
   // Export session data
   const exportSession = () => {
-    if (!session) return;
-    
+    if (!session) {
+      return;
+    }
+
     const exportData = {
       ...session,
       exportedAt: new Date().toISOString(),
@@ -306,13 +344,16 @@ const UserTestingSession: React.FC = () => {
         totalTasks: session.tasks.length,
         completedTasks: session.currentTaskIndex + (session.status === 'completed' ? 1 : 0),
         totalNotes: session.notes.length,
-        notesByType: session.notes.reduce((acc, note) => {
-          acc[note.type] = (acc[note.type] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>)
+        notesByType: session.notes.reduce(
+          (acc, note) => {
+            acc[note.type] = (acc[note.type] || 0) + 1;
+            return acc;
+          },
+          {} as Record<string, number>
+        )
       }
     };
-    
+
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
       type: 'application/json'
     });
@@ -325,49 +366,53 @@ const UserTestingSession: React.FC = () => {
   };
 
   if (!session) {
-    return <div className="flex items-center justify-center h-64">Loading session...</div>;
+    return <div className='flex items-center justify-center h-64'>Loading session...</div>;
   }
 
   const currentTask = session.tasks[session.currentTaskIndex];
   const progress = ((session.currentTaskIndex + 1) / session.tasks.length) * 100;
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className='max-w-7xl mx-auto p-6 space-y-6'>
       {/* Session Header */}
-      <div className="flex justify-between items-start">
+      <div className='flex justify-between items-start'>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{session.name}</h1>
-          <p className="text-gray-600 mt-1">{session.description}</p>
-          <div className="flex items-center gap-4 mt-2">
-            <Badge variant={session.status === 'active' ? 'default' : 
-                           session.status === 'paused' ? 'secondary' : 
-                           session.status === 'completed' ? 'outline' : 'destructive'}>
+          <h1 className='text-3xl font-bold text-gray-900'>{session.name}</h1>
+          <p className='text-gray-600 mt-1'>{session.description}</p>
+          <div className='flex items-center gap-4 mt-2'>
+            <Badge
+              variant={
+                session.status === 'active'
+                  ? 'default'
+                  : session.status === 'paused'
+                    ? 'secondary'
+                    : session.status === 'completed'
+                      ? 'outline'
+                      : 'destructive'
+              }
+            >
               {session.status.charAt(0).toUpperCase() + session.status.slice(1)}
             </Badge>
-            <span className="text-sm text-gray-500">
-              Session Time: {formatTime(sessionTimer)}
-            </span>
-            <span className="text-sm text-gray-500">
-              Task Time: {formatTime(taskTimer)}
-            </span>
+            <span className='text-sm text-gray-500'>Session Time: {formatTime(sessionTimer)}</span>
+            <span className='text-sm text-gray-500'>Task Time: {formatTime(taskTimer)}</span>
           </div>
         </div>
-        
-        <div className="flex gap-2">
+
+        <div className='flex gap-2'>
           {session.status === 'preparing' && (
             <Button onClick={startSession}>
-              <Play className="h-4 w-4 mr-2" />
+              <Play className='h-4 w-4 mr-2' />
               Start Session
             </Button>
           )}
           {session.status === 'active' && (
             <>
-              <Button onClick={pauseSession} variant="outline">
-                <Pause className="h-4 w-4 mr-2" />
+              <Button onClick={pauseSession} variant='outline'>
+                <Pause className='h-4 w-4 mr-2' />
                 Pause
               </Button>
-              <Button onClick={endSession} variant="destructive">
-                <Square className="h-4 w-4 mr-2" />
+              <Button onClick={endSession} variant='destructive'>
+                <Square className='h-4 w-4 mr-2' />
                 End Session
               </Button>
             </>
@@ -375,16 +420,16 @@ const UserTestingSession: React.FC = () => {
           {session.status === 'paused' && (
             <>
               <Button onClick={startSession}>
-                <Play className="h-4 w-4 mr-2" />
+                <Play className='h-4 w-4 mr-2' />
                 Resume
               </Button>
-              <Button onClick={endSession} variant="destructive">
-                <Square className="h-4 w-4 mr-2" />
+              <Button onClick={endSession} variant='destructive'>
+                <Square className='h-4 w-4 mr-2' />
                 End Session
               </Button>
             </>
           )}
-          <Button onClick={exportSession} variant="outline">
+          <Button onClick={exportSession} variant='outline'>
             Export Data
           </Button>
         </div>
@@ -392,13 +437,15 @@ const UserTestingSession: React.FC = () => {
 
       {/* Progress Bar */}
       <Card>
-        <CardContent className="p-4">
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
+        <CardContent className='p-4'>
+          <div className='space-y-2'>
+            <div className='flex justify-between text-sm'>
               <span>Task Progress</span>
-              <span>{session.currentTaskIndex + 1} of {session.tasks.length}</span>
+              <span>
+                {session.currentTaskIndex + 1} of {session.tasks.length}
+              </span>
             </div>
-            <Progress value={progress} className="w-full" />
+            <Progress value={progress} className='w-full' />
           </div>
         </CardContent>
       </Card>
@@ -406,91 +453,106 @@ const UserTestingSession: React.FC = () => {
       {/* Recording Controls */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Camera className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Camera className='h-5 w-5' />
             Recording Controls
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-4">
+          <div className='flex gap-4'>
             <Button
               variant={session.recordings.screen ? 'default' : 'outline'}
               onClick={() => toggleRecording('screen')}
-              size="sm"
+              size='sm'
             >
-              <Camera className="h-4 w-4 mr-2" />
+              <Camera className='h-4 w-4 mr-2' />
               Screen {session.recordings.screen ? 'ON' : 'OFF'}
             </Button>
             <Button
               variant={session.recordings.audio ? 'default' : 'outline'}
               onClick={() => toggleRecording('audio')}
-              size="sm"
+              size='sm'
             >
-              {session.recordings.audio ? <Mic className="h-4 w-4 mr-2" /> : <MicOff className="h-4 w-4 mr-2" />}
+              {session.recordings.audio ? (
+                <Mic className='h-4 w-4 mr-2' />
+              ) : (
+                <MicOff className='h-4 w-4 mr-2' />
+              )}
               Audio {session.recordings.audio ? 'ON' : 'OFF'}
             </Button>
             <Button
               variant={session.recordings.webcam ? 'default' : 'outline'}
               onClick={() => toggleRecording('webcam')}
-              size="sm"
+              size='sm'
             >
-              {session.recordings.webcam ? <Camera className="h-4 w-4 mr-2" /> : <CameraOff className="h-4 w-4 mr-2" />}
+              {session.recordings.webcam ? (
+                <Camera className='h-4 w-4 mr-2' />
+              ) : (
+                <CameraOff className='h-4 w-4 mr-2' />
+              )}
               Webcam {session.recordings.webcam ? 'ON' : 'OFF'}
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         {/* Current Task */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className='lg:col-span-2 space-y-6'>
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-start">
+              <div className='flex justify-between items-start'>
                 <div>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className='flex items-center gap-2'>
                     Task {session.currentTaskIndex + 1}: {currentTask?.title}
-                    <Badge variant={currentTask?.priority === 'high' ? 'destructive' : 
-                                   currentTask?.priority === 'medium' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        currentTask?.priority === 'high'
+                          ? 'destructive'
+                          : currentTask?.priority === 'medium'
+                            ? 'default'
+                            : 'secondary'
+                      }
+                    >
                       {currentTask?.priority}
                     </Badge>
                   </CardTitle>
-                  <p className="text-gray-600 mt-1">{currentTask?.description}</p>
+                  <p className='text-gray-600 mt-1'>{currentTask?.description}</p>
                 </div>
                 {currentTask?.timeLimit && (
-                  <div className="text-right">
-                    <div className="text-sm text-gray-500">Time Limit</div>
-                    <div className="text-lg font-bold">{currentTask.timeLimit} min</div>
+                  <div className='text-right'>
+                    <div className='text-sm text-gray-500'>Time Limit</div>
+                    <div className='text-lg font-bold'>{currentTask.timeLimit} min</div>
                   </div>
                 )}
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className='space-y-4'>
                 <div>
-                  <h4 className="font-medium mb-2">Instructions:</h4>
-                  <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600">
+                  <h4 className='font-medium mb-2'>Instructions:</h4>
+                  <ol className='list-decimal list-inside space-y-1 text-sm text-gray-600'>
                     {currentTask?.instructions.map((instruction, index) => (
                       <li key={index}>{instruction}</li>
                     ))}
                   </ol>
                 </div>
-                
+
                 <div>
-                  <h4 className="font-medium mb-1">Expected Outcome:</h4>
-                  <p className="text-sm text-gray-600">{currentTask?.expectedOutcome}</p>
+                  <h4 className='font-medium mb-1'>Expected Outcome:</h4>
+                  <p className='text-sm text-gray-600'>{currentTask?.expectedOutcome}</p>
                 </div>
-                
-                <div className="flex gap-2 pt-4">
-                  <Button 
-                    onClick={previousTask} 
+
+                <div className='flex gap-2 pt-4'>
+                  <Button
+                    onClick={previousTask}
                     disabled={session.currentTaskIndex === 0}
-                    variant="outline"
+                    variant='outline'
                   >
                     Previous Task
                   </Button>
-                  <Button 
-                    onClick={nextTask} 
+                  <Button
+                    onClick={nextTask}
                     disabled={session.currentTaskIndex >= session.tasks.length - 1}
                   >
                     Next Task
@@ -503,30 +565,30 @@ const UserTestingSession: React.FC = () => {
           {/* Add Note */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
+              <CardTitle className='flex items-center gap-2'>
+                <MessageSquare className='h-5 w-5' />
                 Add Observation
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex gap-2">
+              <div className='space-y-4'>
+                <div className='flex gap-2'>
                   <select
                     value={noteType}
-                    onChange={(e) => setNoteType(e.target.value as any)}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={e => setNoteType(e.target.value as any)}
+                    className='px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
                   >
-                    <option value="observation">Observation</option>
-                    <option value="issue">Issue</option>
-                    <option value="suggestion">Suggestion</option>
-                    <option value="question">Question</option>
+                    <option value='observation'>Observation</option>
+                    <option value='issue'>Issue</option>
+                    <option value='suggestion'>Suggestion</option>
+                    <option value='question'>Question</option>
                   </select>
                 </div>
                 <Textarea
-                  placeholder="Add your observation, note any issues, or record user feedback..."
+                  placeholder='Add your observation, note any issues, or record user feedback...'
                   value={newNote}
-                  onChange={(e) => setNewNote(e.target.value)}
-                  className="min-h-[100px]"
+                  onChange={e => setNewNote(e.target.value)}
+                  className='min-h-[100px]'
                 />
                 <Button onClick={addNote} disabled={!newNote.trim()}>
                   Add Note
@@ -537,27 +599,32 @@ const UserTestingSession: React.FC = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className='space-y-6'>
           {/* Participants */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
+              <CardTitle className='flex items-center gap-2'>
+                <Users className='h-5 w-5' />
                 Participants ({session.participants.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                {session.participants.map((participant) => (
-                  <div key={participant.id} className="flex items-center justify-between">
+              <div className='space-y-2'>
+                {session.participants.map(participant => (
+                  <div key={participant.id} className='flex items-center justify-between'>
                     <div>
-                      <div className="font-medium text-sm">{participant.name}</div>
-                      <div className="text-xs text-gray-500">{participant.role}</div>
+                      <div className='font-medium text-sm'>{participant.name}</div>
+                      <div className='text-xs text-gray-500'>{participant.role}</div>
                     </div>
-                    <Badge 
-                      variant={participant.status === 'active' ? 'default' : 
-                              participant.status === 'idle' ? 'secondary' : 'destructive'}
-                      className="text-xs"
+                    <Badge
+                      variant={
+                        participant.status === 'active'
+                          ? 'default'
+                          : participant.status === 'idle'
+                            ? 'secondary'
+                            : 'destructive'
+                      }
+                      className='text-xs'
                     >
                       {participant.status}
                     </Badge>
@@ -573,23 +640,26 @@ const UserTestingSession: React.FC = () => {
               <CardTitle>Recent Notes ({session.notes.length})</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {session.notes.slice(-10).reverse().map((note) => (
-                  <div key={note.id} className="border-l-2 border-gray-200 pl-3 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs">
-                        {note.type}
-                      </Badge>
-                      <span className="text-xs text-gray-500">
-                        {new Date(note.timestamp).toLocaleTimeString()}
-                      </span>
+              <div className='space-y-3 max-h-96 overflow-y-auto'>
+                {session.notes
+                  .slice(-10)
+                  .reverse()
+                  .map(note => (
+                    <div key={note.id} className='border-l-2 border-gray-200 pl-3 space-y-1'>
+                      <div className='flex items-center gap-2'>
+                        <Badge variant='outline' className='text-xs'>
+                          {note.type}
+                        </Badge>
+                        <span className='text-xs text-gray-500'>
+                          {new Date(note.timestamp).toLocaleTimeString()}
+                        </span>
+                      </div>
+                      <p className='text-sm'>{note.content}</p>
+                      <p className='text-xs text-gray-500'>by {note.author}</p>
                     </div>
-                    <p className="text-sm">{note.content}</p>
-                    <p className="text-xs text-gray-500">by {note.author}</p>
-                  </div>
-                ))}
+                  ))}
                 {session.notes.length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-4">
+                  <p className='text-sm text-gray-500 text-center py-4'>
                     No notes yet. Start adding observations!
                   </p>
                 )}
@@ -602,10 +672,10 @@ const UserTestingSession: React.FC = () => {
       {/* Session Status Alert */}
       {session.status === 'completed' && (
         <Alert>
-          <Clock className="h-4 w-4" />
+          <Clock className='h-4 w-4' />
           <AlertDescription>
-            Session completed! Total duration: {formatTime(sessionTimer)}. 
-            Don't forget to export your session data for analysis.
+            Session completed! Total duration: {formatTime(sessionTimer)}. Don't forget to export
+            your session data for analysis.
           </AlertDescription>
         </Alert>
       )}

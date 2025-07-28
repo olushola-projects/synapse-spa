@@ -1,10 +1,9 @@
+import type { LucideIcon } from 'lucide-react';
 
-import { LucideIcon } from "lucide-react";
-
-export type Solution = {
+export interface Solution {
   id: string;
   title: string;
   description: string;
   icon: LucideIcon;
   color: string;
-};
+}

@@ -1,5 +1,4 @@
-
-import { keyframes } from "styled-components";
+import { keyframes } from 'styled-components';
 
 export const cloudyAnimation = keyframes`
   0% { background-position: 0% 50%; }

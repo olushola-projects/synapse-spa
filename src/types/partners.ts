@@ -1,11 +1,10 @@
+import type { LucideIcon } from 'lucide-react';
 
-import { LucideIcon } from "lucide-react";
-
-export type PartnerCategory = {
+export interface PartnerCategory {
   id: string;
   title: string;
   description: string;
   benefits: string[];
   icon: LucideIcon;
   color: string;
-};
+}

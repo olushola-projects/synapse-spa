@@ -230,34 +230,34 @@ This checklist provides a comprehensive guide for testing SFDR compliance in the
 
 ## Notes and Observations
 
-*Use this section to document any issues, observations, or recommendations during testing.*
+_Use this section to document any issues, observations, or recommendations during testing._
 
 ---
 
 ## Test Execution Record
 
-| Test Section | Date | Tester | Status | Notes |
-|-------------|------|--------|--------|-------|
-| Article 6 Fund Testing | | | | |
-| Article 8 Fund Testing | | | | |
-| Article 9 Fund Testing | | | | |
-| Cross-Cutting Compliance Testing | | | | |
-| SFDR Compliance Reporting | | | | |
-| Edge Case Testing | | | | |
-| Performance Testing | | | | |
-| User Acceptance Testing | | | | |
-| Regression Testing | | | | |
-| Final Validation | | | | |
+| Test Section                     | Date | Tester | Status | Notes |
+| -------------------------------- | ---- | ------ | ------ | ----- |
+| Article 6 Fund Testing           |      |        |        |       |
+| Article 8 Fund Testing           |      |        |        |       |
+| Article 9 Fund Testing           |      |        |        |       |
+| Cross-Cutting Compliance Testing |      |        |        |       |
+| SFDR Compliance Reporting        |      |        |        |       |
+| Edge Case Testing                |      |        |        |       |
+| Performance Testing              |      |        |        |       |
+| User Acceptance Testing          |      |        |        |       |
+| Regression Testing               |      |        |        |       |
+| Final Validation                 |      |        |        |       |
 
 ## Sign-off
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| QA Lead | | | |
-| Development Lead | | | |
-| Compliance Officer | | | |
-| Project Manager | | | |
+| Role               | Name | Signature | Date |
+| ------------------ | ---- | --------- | ---- |
+| QA Lead            |      |           |      |
+| Development Lead   |      |           |      |
+| Compliance Officer |      |           |      |
+| Project Manager    |      |           |      |
 
 ---
 
-*This checklist should be reviewed and updated regularly to reflect changes in SFDR requirements and application functionality.*
+_This checklist should be reviewed and updated regularly to reflect changes in SFDR requirements and application functionality._

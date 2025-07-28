@@ -12,9 +12,15 @@ import {
 } from '../error-handler';
 
 // Mock console methods
-const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-const mockConsoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-const mockConsoleInfo = vi.spyOn(console, 'info').mockImplementation(() => {});
+const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {
+  // Mock implementation for console.error
+});
+const mockConsoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {
+  // Mock implementation for console.warn
+});
+const mockConsoleInfo = vi.spyOn(console, 'info').mockImplementation(() => {
+  // Mock implementation for console.info
+});
 
 describe('ErrorHandler', () => {
   let errorHandler: ErrorHandler;
@@ -27,12 +33,11 @@ describe('ErrorHandler', () => {
 
   describe('CustomError', () => {
     it('should create a custom error with all properties', () => {
-      const error = new CustomError(
-        'Test error',
-        ErrorCategory.AUTHENTICATION,
-        ErrorSeverity.HIGH,
-        { userId: '123' }
-      );
+      const error = new CustomError('Test error', {
+        category: ErrorCategory.AUTHENTICATION,
+        severity: ErrorSeverity.HIGH,
+        context: { userId: '123' }
+      });
 
       expect(error.message).toBe('Test error');
       expect(error.category).toBe(ErrorCategory.AUTHENTICATION);
@@ -43,18 +48,17 @@ describe('ErrorHandler', () => {
     });
 
     it('should generate unique error IDs', () => {
-      const error1 = new CustomError('Error 1', ErrorCategory.SYSTEM);
-      const error2 = new CustomError('Error 2', ErrorCategory.SYSTEM);
+      const error1 = new CustomError('Error 1', { category: ErrorCategory.SYSTEM });
+      const error2 = new CustomError('Error 2', { category: ErrorCategory.SYSTEM });
 
       expect(error1.id).not.toBe(error2.id);
     });
 
     it('should serialize to JSON correctly', () => {
-      const error = new CustomError(
-        'Test error',
-        ErrorCategory.VALIDATION,
-        ErrorSeverity.LOW
-      );
+      const error = new CustomError('Test error', {
+        category: ErrorCategory.VALIDATION,
+        severity: ErrorSeverity.LOW
+      });
 
       const json = error.toJSON();
 
@@ -69,11 +73,10 @@ describe('ErrorHandler', () => {
   describe('ErrorHandler.handleError', () => {
     it('should handle Error objects', () => {
       const originalError = new Error('Original error');
-      const result = errorHandler.handleError(
-        originalError,
-        ErrorCategory.NETWORK,
-        ErrorSeverity.MEDIUM
-      );
+      const result = errorHandler.handleError(originalError, {
+        category: ErrorCategory.NETWORK,
+        severity: ErrorSeverity.MEDIUM
+      });
 
       expect(result.message).toBe('Original error');
       expect(result.category).toBe(ErrorCategory.NETWORK);
@@ -81,11 +84,10 @@ describe('ErrorHandler', () => {
     });
 
     it('should handle string errors', () => {
-      const result = errorHandler.handleError(
-        'String error',
-        ErrorCategory.USER_INPUT,
-        ErrorSeverity.LOW
-      );
+      const result = errorHandler.handleError('String error', {
+        category: ErrorCategory.USER_INPUT,
+        severity: ErrorSeverity.LOW
+      });
 
       expect(result.message).toBe('String error');
       expect(result.category).toBe(ErrorCategory.USER_INPUT);
@@ -93,11 +95,10 @@ describe('ErrorHandler', () => {
     });
 
     it('should handle CustomError objects', () => {
-      const customError = new CustomError(
-        'Custom error',
-        ErrorCategory.AUTHENTICATION,
-        ErrorSeverity.HIGH
-      );
+      const customError = new CustomError('Custom error', {
+        category: ErrorCategory.AUTHENTICATION,
+        severity: ErrorSeverity.HIGH
+      });
 
       const result = errorHandler.handleError(customError);
 
@@ -107,22 +108,34 @@ describe('ErrorHandler', () => {
     });
 
     it('should log errors with appropriate console methods', () => {
-      errorHandler.handleError('Critical error', ErrorCategory.SYSTEM, ErrorSeverity.CRITICAL);
+      errorHandler.handleError('Critical error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.CRITICAL
+      });
       expect(mockConsoleError).toHaveBeenCalled();
 
-      errorHandler.handleError('High error', ErrorCategory.SYSTEM, ErrorSeverity.HIGH);
+      errorHandler.handleError('High error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.HIGH
+      });
       expect(mockConsoleError).toHaveBeenCalled();
 
-      errorHandler.handleError('Medium error', ErrorCategory.SYSTEM, ErrorSeverity.MEDIUM);
+      errorHandler.handleError('Medium error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.MEDIUM
+      });
       expect(mockConsoleWarn).toHaveBeenCalled();
 
-      errorHandler.handleError('Low error', ErrorCategory.SYSTEM, ErrorSeverity.LOW);
+      errorHandler.handleError('Low error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.LOW
+      });
       expect(mockConsoleInfo).toHaveBeenCalled();
     });
 
     it('should store errors in memory log', () => {
-      errorHandler.handleError('Test error 1', ErrorCategory.SYSTEM);
-      errorHandler.handleError('Test error 2', ErrorCategory.NETWORK);
+      errorHandler.handleError('Test error 1', { category: ErrorCategory.SYSTEM });
+      errorHandler.handleError('Test error 2', { category: ErrorCategory.NETWORK });
 
       const recentErrors = errorHandler.getRecentErrors();
       expect(recentErrors).toHaveLength(2);
@@ -135,7 +148,7 @@ describe('ErrorHandler', () => {
     it('should limit log size', () => {
       // Create more errors than the max log size (1000)
       for (let i = 0; i < 1005; i++) {
-        errorHandler.handleError(`Error ${i}`, ErrorCategory.SYSTEM);
+        errorHandler.handleError(`Error ${i}`, { category: ErrorCategory.SYSTEM });
       }
 
       const recentErrors = errorHandler.getRecentErrors(1005);
@@ -143,7 +156,7 @@ describe('ErrorHandler', () => {
     });
 
     it('should clear error log', () => {
-      errorHandler.handleError('Test error', ErrorCategory.SYSTEM);
+      errorHandler.handleError('Test error', { category: ErrorCategory.SYSTEM });
       expect(errorHandler.getRecentErrors()).toHaveLength(1);
 
       errorHandler.clearErrorLog();
@@ -151,9 +164,9 @@ describe('ErrorHandler', () => {
     });
 
     it('should filter errors by category', () => {
-      errorHandler.handleError('Auth error', ErrorCategory.AUTHENTICATION);
-      errorHandler.handleError('Network error', ErrorCategory.NETWORK);
-      errorHandler.handleError('Another auth error', ErrorCategory.AUTHENTICATION);
+      errorHandler.handleError('Auth error', { category: ErrorCategory.AUTHENTICATION });
+      errorHandler.handleError('Network error', { category: ErrorCategory.NETWORK });
+      errorHandler.handleError('Another auth error', { category: ErrorCategory.AUTHENTICATION });
 
       const authErrors = errorHandler.getErrorsByCategory(ErrorCategory.AUTHENTICATION);
       const networkErrors = errorHandler.getErrorsByCategory(ErrorCategory.NETWORK);
@@ -165,9 +178,18 @@ describe('ErrorHandler', () => {
     });
 
     it('should filter errors by severity', () => {
-      errorHandler.handleError('Critical error', ErrorCategory.SYSTEM, ErrorSeverity.CRITICAL);
-      errorHandler.handleError('High error', ErrorCategory.SYSTEM, ErrorSeverity.HIGH);
-      errorHandler.handleError('Another critical error', ErrorCategory.SYSTEM, ErrorSeverity.CRITICAL);
+      errorHandler.handleError('Critical error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.CRITICAL
+      });
+      errorHandler.handleError('High error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.HIGH
+      });
+      errorHandler.handleError('Another critical error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.CRITICAL
+      });
 
       const criticalErrors = errorHandler.getErrorsBySeverity(ErrorSeverity.CRITICAL);
       const highErrors = errorHandler.getErrorsBySeverity(ErrorSeverity.HIGH);
@@ -177,9 +199,18 @@ describe('ErrorHandler', () => {
     });
 
     it('should generate error statistics', () => {
-      errorHandler.handleError('Auth error', ErrorCategory.AUTHENTICATION, ErrorSeverity.HIGH);
-      errorHandler.handleError('Network error', ErrorCategory.NETWORK, ErrorSeverity.MEDIUM);
-      errorHandler.handleError('System error', ErrorCategory.SYSTEM, ErrorSeverity.CRITICAL);
+      errorHandler.handleError('Auth error', {
+        category: ErrorCategory.AUTHENTICATION,
+        severity: ErrorSeverity.HIGH
+      });
+      errorHandler.handleError('Network error', {
+        category: ErrorCategory.NETWORK,
+        severity: ErrorSeverity.MEDIUM
+      });
+      errorHandler.handleError('System error', {
+        category: ErrorCategory.SYSTEM,
+        severity: ErrorSeverity.CRITICAL
+      });
 
       const stats = errorHandler.getErrorStats();
 
@@ -246,7 +277,7 @@ describe('ErrorHandler', () => {
 
     it('should maintain state across instances', () => {
       const instance1 = ErrorHandler.getInstance();
-      instance1.handleError('Test error', ErrorCategory.SYSTEM);
+      instance1.handleError('Test error', { category: ErrorCategory.SYSTEM });
 
       const instance2 = ErrorHandler.getInstance();
       const errors = instance2.getRecentErrors();

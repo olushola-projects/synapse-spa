@@ -62,7 +62,8 @@ const UATChecklist: React.FC = () => {
               'Check active state highlighting',
               'Test mobile hamburger menu'
             ],
-            expectedResult: 'All navigation links work, pages load correctly, active states show properly',
+            expectedResult:
+              'All navigation links work, pages load correctly, active states show properly',
             priority: 'high',
             status: 'pending',
             notes: ''
@@ -348,7 +349,7 @@ const UATChecklist: React.FC = () => {
 
     setTestCategories(initialTestCategories);
     setSelectedCategory(initialTestCategories[0]?.id || '');
-    
+
     // Load saved test results
     const savedResults = localStorage.getItem('uat_test_results');
     if (savedResults) {
@@ -370,12 +371,12 @@ const UATChecklist: React.FC = () => {
       timestamp: new Date().toISOString(),
       testerName: currentTester
     };
-    
+
     const newResults = {
       ...testResults,
       [testId]: updatedCase
     };
-    
+
     setTestResults(newResults);
     localStorage.setItem('uat_test_results', JSON.stringify(newResults));
   };
@@ -424,8 +425,8 @@ const UATChecklist: React.FC = () => {
         passedTests: stats.passed,
         failedTests: stats.failed
       },
-      testResults: testResults,
-      testCategories: testCategories
+      testResults,
+      testCategories
     };
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
@@ -444,7 +445,7 @@ const UATChecklist: React.FC = () => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         try {
           const importData = JSON.parse(e.target?.result as string);
           if (importData.testResults) {
@@ -474,13 +475,13 @@ const UATChecklist: React.FC = () => {
   const selectedCategoryData = testCategories.find(cat => cat.id === selectedCategory);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className='max-w-6xl mx-auto p-6 space-y-6'>
       {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">UAT Testing Checklist</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Comprehensive User Acceptance Testing framework for the Synapses Landing Page.
-          Follow the systematic testing approach to ensure quality and compliance.
+      <div className='text-center space-y-4'>
+        <h1 className='text-3xl font-bold text-gray-900'>UAT Testing Checklist</h1>
+        <p className='text-gray-600 max-w-2xl mx-auto'>
+          Comprehensive User Acceptance Testing framework for the Synapses Landing Page. Follow the
+          systematic testing approach to ensure quality and compliance.
         </p>
       </div>
 
@@ -490,35 +491,30 @@ const UATChecklist: React.FC = () => {
           <CardTitle>Tester Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-4 items-center">
+          <div className='flex gap-4 items-center'>
             <input
-              type="text"
-              placeholder="Enter your name"
+              type='text'
+              placeholder='Enter your name'
               value={currentTester}
-              onChange={(e) => saveTesterName(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={e => saveTesterName(e.target.value)}
+              className='flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
             />
-            <div className="flex gap-2">
-              <Button onClick={exportResults} variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
+            <div className='flex gap-2'>
+              <Button onClick={exportResults} variant='outline' size='sm'>
+                <Download className='h-4 w-4 mr-2' />
                 Export Results
               </Button>
-              <label className="cursor-pointer">
-                <Button variant="outline" size="sm" asChild>
+              <label className='cursor-pointer'>
+                <Button variant='outline' size='sm' asChild>
                   <span>
-                    <Upload className="h-4 w-4 mr-2" />
+                    <Upload className='h-4 w-4 mr-2' />
                     Import Results
                   </span>
                 </Button>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={importResults}
-                  className="hidden"
-                />
+                <input type='file' accept='.json' onChange={importResults} className='hidden' />
               </label>
-              <Button onClick={resetResults} variant="outline" size="sm">
-                <RotateCcw className="h-4 w-4 mr-2" />
+              <Button onClick={resetResults} variant='outline' size='sm'>
+                <RotateCcw className='h-4 w-4 mr-2' />
                 Reset
               </Button>
             </div>
@@ -532,24 +528,26 @@ const UATChecklist: React.FC = () => {
           <CardTitle>Testing Progress</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <Progress value={stats.progress} className="w-full" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div className='space-y-4'>
+            <Progress value={stats.progress} className='w-full' />
+            <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-center'>
               <div>
-                <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
-                <div className="text-sm text-gray-600">Total Tests</div>
+                <div className='text-2xl font-bold text-blue-600'>{stats.total}</div>
+                <div className='text-sm text-gray-600'>Total Tests</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-green-600">{stats.passed}</div>
-                <div className="text-sm text-gray-600">Passed</div>
+                <div className='text-2xl font-bold text-green-600'>{stats.passed}</div>
+                <div className='text-sm text-gray-600'>Passed</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-red-600">{stats.failed}</div>
-                <div className="text-sm text-gray-600">Failed</div>
+                <div className='text-2xl font-bold text-red-600'>{stats.failed}</div>
+                <div className='text-sm text-gray-600'>Failed</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-600">{stats.total - stats.completed}</div>
-                <div className="text-sm text-gray-600">Pending</div>
+                <div className='text-2xl font-bold text-gray-600'>
+                  {stats.total - stats.completed}
+                </div>
+                <div className='text-sm text-gray-600'>Pending</div>
               </div>
             </div>
           </div>
@@ -558,19 +556,19 @@ const UATChecklist: React.FC = () => {
 
       {/* Test Categories */}
       <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
-          {testCategories.map((category) => {
+        <TabsList className='grid w-full grid-cols-3 lg:grid-cols-6'>
+          {testCategories.map(category => {
             const categoryTests = category.testCases;
             const completedInCategory = categoryTests.filter(test => {
               const result = testResults[test.id];
               return result && result.status !== 'pending';
             }).length;
-            
+
             return (
-              <TabsTrigger key={category.id} value={category.id} className="text-xs">
-                <div className="flex flex-col items-center">
+              <TabsTrigger key={category.id} value={category.id} className='text-xs'>
+                <div className='flex flex-col items-center'>
                   <span>{category.name}</span>
-                  <Badge variant="secondary" className="text-xs mt-1">
+                  <Badge variant='secondary' className='text-xs mt-1'>
                     {completedInCategory}/{categoryTests.length}
                   </Badge>
                 </div>
@@ -579,95 +577,108 @@ const UATChecklist: React.FC = () => {
           })}
         </TabsList>
 
-        {testCategories.map((category) => (
+        {testCategories.map(category => (
           <TabsContent key={category.id} value={category.id}>
             <Card>
               <CardHeader>
                 <CardTitle>{category.name}</CardTitle>
-                <p className="text-gray-600">{category.description}</p>
+                <p className='text-gray-600'>{category.description}</p>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {category.testCases.map((testCase) => {
+                <div className='space-y-6'>
+                  {category.testCases.map(testCase => {
                     const result = testResults[testCase.id] || testCase;
                     const status = result.status || 'pending';
-                    
+
                     return (
-                      <Card key={testCase.id} className="border-l-4 border-l-gray-200">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                <h4 className="font-semibold">{testCase.title}</h4>
+                      <Card key={testCase.id} className='border-l-4 border-l-gray-200'>
+                        <CardHeader className='pb-3'>
+                          <div className='flex items-start justify-between'>
+                            <div className='flex-1'>
+                              <div className='flex items-center gap-2'>
+                                <h4 className='font-semibold'>{testCase.title}</h4>
                                 <Badge
-                                  variant={testCase.priority === 'high' ? 'destructive' : 
-                                          testCase.priority === 'medium' ? 'default' : 'secondary'}
+                                  variant={
+                                    testCase.priority === 'high'
+                                      ? 'destructive'
+                                      : testCase.priority === 'medium'
+                                        ? 'default'
+                                        : 'secondary'
+                                  }
                                 >
                                   {testCase.priority}
                                 </Badge>
                               </div>
-                              <p className="text-sm text-gray-600 mt-1">{testCase.description}</p>
+                              <p className='text-sm text-gray-600 mt-1'>{testCase.description}</p>
                             </div>
-                            <div className="flex gap-2">
+                            <div className='flex gap-2'>
                               <Button
-                                size="sm"
+                                size='sm'
                                 variant={status === 'passed' ? 'default' : 'outline'}
                                 onClick={() => updateTestCase(testCase.id, { status: 'passed' })}
-                                className={status === 'passed' ? 'bg-green-600 hover:bg-green-700' : ''}
+                                className={
+                                  status === 'passed' ? 'bg-green-600 hover:bg-green-700' : ''
+                                }
                               >
-                                <Check className="h-4 w-4" />
+                                <Check className='h-4 w-4' />
                               </Button>
                               <Button
-                                size="sm"
+                                size='sm'
                                 variant={status === 'failed' ? 'default' : 'outline'}
                                 onClick={() => updateTestCase(testCase.id, { status: 'failed' })}
                                 className={status === 'failed' ? 'bg-red-600 hover:bg-red-700' : ''}
                               >
-                                <X className="h-4 w-4" />
+                                <X className='h-4 w-4' />
                               </Button>
                               <Button
-                                size="sm"
+                                size='sm'
                                 variant={status === 'blocked' ? 'default' : 'outline'}
                                 onClick={() => updateTestCase(testCase.id, { status: 'blocked' })}
-                                className={status === 'blocked' ? 'bg-yellow-600 hover:bg-yellow-700' : ''}
+                                className={
+                                  status === 'blocked' ? 'bg-yellow-600 hover:bg-yellow-700' : ''
+                                }
                               >
-                                <AlertTriangle className="h-4 w-4" />
+                                <AlertTriangle className='h-4 w-4' />
                               </Button>
                             </div>
                           </div>
                         </CardHeader>
                         <CardContent>
-                          <div className="space-y-4">
+                          <div className='space-y-4'>
                             {/* Test Steps */}
                             <div>
-                              <h5 className="font-medium text-sm mb-2">Test Steps:</h5>
-                              <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600">
+                              <h5 className='font-medium text-sm mb-2'>Test Steps:</h5>
+                              <ol className='list-decimal list-inside space-y-1 text-sm text-gray-600'>
                                 {testCase.steps.map((step, index) => (
                                   <li key={index}>{step}</li>
                                 ))}
                               </ol>
                             </div>
-                            
+
                             {/* Expected Result */}
                             <div>
-                              <h5 className="font-medium text-sm mb-1">Expected Result:</h5>
-                              <p className="text-sm text-gray-600">{testCase.expectedResult}</p>
+                              <h5 className='font-medium text-sm mb-1'>Expected Result:</h5>
+                              <p className='text-sm text-gray-600'>{testCase.expectedResult}</p>
                             </div>
-                            
+
                             {/* Notes */}
                             <div>
-                              <label className="font-medium text-sm mb-1 block">Notes & Comments:</label>
+                              <label className='font-medium text-sm mb-1 block'>
+                                Notes & Comments:
+                              </label>
                               <Textarea
-                                placeholder="Add your testing notes, observations, or issues found..."
+                                placeholder='Add your testing notes, observations, or issues found...'
                                 value={result.notes || ''}
-                                onChange={(e) => updateTestCase(testCase.id, { notes: e.target.value })}
-                                className="min-h-[80px]"
+                                onChange={e =>
+                                  updateTestCase(testCase.id, { notes: e.target.value })
+                                }
+                                className='min-h-[80px]'
                               />
                             </div>
-                            
+
                             {/* Test Metadata */}
                             {result.timestamp && (
-                              <div className="text-xs text-gray-500 pt-2 border-t">
+                              <div className='text-xs text-gray-500 pt-2 border-t'>
                                 <p>Tested by: {result.testerName || 'Unknown'}</p>
                                 <p>Last updated: {new Date(result.timestamp).toLocaleString()}</p>
                               </div>
@@ -686,11 +697,11 @@ const UATChecklist: React.FC = () => {
 
       {/* Testing Guidelines */}
       <Alert>
-        <AlertTriangle className="h-4 w-4" />
+        <AlertTriangle className='h-4 w-4' />
         <AlertDescription>
-          <strong>Testing Guidelines:</strong> Test each scenario thoroughly, document any issues found, 
-          and provide detailed notes for failed tests. Use the priority levels to focus on critical 
-          functionality first. Remember to test across different browsers and devices.
+          <strong>Testing Guidelines:</strong> Test each scenario thoroughly, document any issues
+          found, and provide detailed notes for failed tests. Use the priority levels to focus on
+          critical functionality first. Remember to test across different browsers and devices.
         </AlertDescription>
       </Alert>
     </div>

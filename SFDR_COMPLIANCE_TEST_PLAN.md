@@ -29,22 +29,22 @@ This test plan covers:
 
 ### 2.1 Testing Levels
 
-| Level | Description | Responsibility |
-|-------|-------------|---------------|
-| Unit Testing | Testing individual components and functions | Development Team |
-| Integration Testing | Testing interactions between components | Development Team |
-| System Testing | Testing the complete application | QA Team |
-| User Acceptance Testing | Testing with real users and scenarios | QA Team & Compliance Experts |
+| Level                   | Description                                 | Responsibility               |
+| ----------------------- | ------------------------------------------- | ---------------------------- |
+| Unit Testing            | Testing individual components and functions | Development Team             |
+| Integration Testing     | Testing interactions between components     | Development Team             |
+| System Testing          | Testing the complete application            | QA Team                      |
+| User Acceptance Testing | Testing with real users and scenarios       | QA Team & Compliance Experts |
 
 ### 2.2 Testing Types
 
-| Type | Description | Tools |
-|------|-------------|-------|
-| Functional Testing | Validate SFDR classification and compliance | Jest, SynapseQATester |
-| Regulatory Compliance Testing | Validate adherence to SFDR requirements | SFDRComplianceValidator |
-| Data Quality Testing | Validate data formats and integrity | Jest, Data Validators |
-| Performance Testing | Validate system performance under load | Jest, Performance Metrics |
-| Usability Testing | Validate user experience | Manual Testing |
+| Type                          | Description                                 | Tools                     |
+| ----------------------------- | ------------------------------------------- | ------------------------- |
+| Functional Testing            | Validate SFDR classification and compliance | Jest, SynapseQATester     |
+| Regulatory Compliance Testing | Validate adherence to SFDR requirements     | SFDRComplianceValidator   |
+| Data Quality Testing          | Validate data formats and integrity         | Jest, Data Validators     |
+| Performance Testing           | Validate system performance under load      | Jest, Performance Metrics |
+| Usability Testing             | Validate user experience                    | Manual Testing            |
 
 ### 2.3 Entry and Exit Criteria
 
@@ -90,61 +90,61 @@ This test plan covers:
 
 ### 4.1 Article 6 Classification Tests
 
-| ID | Test Case | Description | Expected Result |
-|----|-----------|-------------|----------------|
-| A6-01 | Basic Article 6 Classification | Test classification of a fund with minimal ESG integration | Fund classified as Article 6 |
-| A6-02 | Sustainability Risk Disclosure | Validate sustainability risk disclosure for Article 6 funds | Sustainability risk disclosure validated |
-| A6-03 | No False ESG Claims | Validate that marketing materials do not contain false ESG claims | No false ESG claims detected |
+| ID    | Test Case                      | Description                                                       | Expected Result                          |
+| ----- | ------------------------------ | ----------------------------------------------------------------- | ---------------------------------------- |
+| A6-01 | Basic Article 6 Classification | Test classification of a fund with minimal ESG integration        | Fund classified as Article 6             |
+| A6-02 | Sustainability Risk Disclosure | Validate sustainability risk disclosure for Article 6 funds       | Sustainability risk disclosure validated |
+| A6-03 | No False ESG Claims            | Validate that marketing materials do not contain false ESG claims | No false ESG claims detected             |
 
 ### 4.2 Article 8 Classification Tests
 
-| ID | Test Case | Description | Expected Result |
-|----|-----------|-------------|----------------|
+| ID    | Test Case                          | Description                                                 | Expected Result              |
+| ----- | ---------------------------------- | ----------------------------------------------------------- | ---------------------------- |
 | A8-01 | ESG Characteristics Classification | Test classification of a fund promoting ESG characteristics | Fund classified as Article 8 |
-| A8-02 | PAI Consideration | Validate PAI consideration for Article 8 funds | PAI consideration validated |
-| A8-03 | Taxonomy Alignment | Validate taxonomy alignment disclosure for Article 8 funds | Taxonomy alignment validated |
-| A8-04 | ESG Integration | Validate ESG integration in investment process | ESG integration validated |
+| A8-02 | PAI Consideration                  | Validate PAI consideration for Article 8 funds              | PAI consideration validated  |
+| A8-03 | Taxonomy Alignment                 | Validate taxonomy alignment disclosure for Article 8 funds  | Taxonomy alignment validated |
+| A8-04 | ESG Integration                    | Validate ESG integration in investment process              | ESG integration validated    |
 
 ### 4.3 Article 9 Classification Tests
 
-| ID | Test Case | Description | Expected Result |
-|----|-----------|-------------|----------------|
-| A9-01 | Sustainable Investment Classification | Test classification of a fund with sustainable investment objectives | Fund classified as Article 9 |
-| A9-02 | Sustainable Investment Objective | Validate sustainable investment objective for Article 9 funds | Sustainable investment objective validated |
-| A9-03 | Minimum Sustainable Investment Percentage | Validate minimum sustainable investment percentage (≥80%) | Sustainable investment percentage validated |
-| A9-04 | Comprehensive PAI Consideration | Validate comprehensive PAI consideration for Article 9 funds | Comprehensive PAI consideration validated |
-| A9-05 | Impact Measurement Framework | Validate impact measurement framework for Article 9 funds | Impact measurement framework validated |
+| ID    | Test Case                                 | Description                                                          | Expected Result                             |
+| ----- | ----------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------- |
+| A9-01 | Sustainable Investment Classification     | Test classification of a fund with sustainable investment objectives | Fund classified as Article 9                |
+| A9-02 | Sustainable Investment Objective          | Validate sustainable investment objective for Article 9 funds        | Sustainable investment objective validated  |
+| A9-03 | Minimum Sustainable Investment Percentage | Validate minimum sustainable investment percentage (≥80%)            | Sustainable investment percentage validated |
+| A9-04 | Comprehensive PAI Consideration           | Validate comprehensive PAI consideration for Article 9 funds         | Comprehensive PAI consideration validated   |
+| A9-05 | Impact Measurement Framework              | Validate impact measurement framework for Article 9 funds            | Impact measurement framework validated      |
 
 ### 4.4 Cross-Cutting Compliance Tests
 
-| ID | Test Case | Description | Expected Result |
-|----|-----------|-------------|----------------|
-| CC-01 | Entity Identifier Validation | Validate UUID, ISIN, and LEI formats | Entity identifiers validated |
-| CC-02 | PAI Indicator Validation | Validate PAI indicators are from valid enumeration | PAI indicators validated |
+| ID    | Test Case                     | Description                                                 | Expected Result                         |
+| ----- | ----------------------------- | ----------------------------------------------------------- | --------------------------------------- |
+| CC-01 | Entity Identifier Validation  | Validate UUID, ISIN, and LEI formats                        | Entity identifiers validated            |
+| CC-02 | PAI Indicator Validation      | Validate PAI indicators are from valid enumeration          | PAI indicators validated                |
 | CC-03 | Taxonomy Alignment Percentage | Validate taxonomy alignment percentage is realistic (≤100%) | Taxonomy alignment percentage validated |
-| CC-04 | Fund Name Validation | Validate fund name length and format | Fund name validated |
+| CC-04 | Fund Name Validation          | Validate fund name length and format                        | Fund name validated                     |
 
 ### 4.5 Business Logic Tests
 
-| ID | Test Case | Description | Expected Result |
-|----|-----------|-------------|----------------|
-| BL-01 | Article 8 PAI Consideration | Validate Article 8 funds must consider PAI indicators | Validation passes |
+| ID    | Test Case                        | Description                                                         | Expected Result   |
+| ----- | -------------------------------- | ------------------------------------------------------------------- | ----------------- |
+| BL-01 | Article 8 PAI Consideration      | Validate Article 8 funds must consider PAI indicators               | Validation passes |
 | BL-02 | Article 9 Sustainable Investment | Validate Article 9 funds must have sustainable investment objective | Validation passes |
-| BL-03 | PAI Indicator Consistency | Validate PAI indicators are consistent with fund type | Validation passes |
+| BL-03 | PAI Indicator Consistency        | Validate PAI indicators are consistent with fund type               | Validation passes |
 
 ### 4.6 Integration Tests
 
-| ID | Test Case | Description | Expected Result |
-|----|-----------|-------------|----------------|
-| INT-01 | SFDR Compliance Report Generation | Test generation of SFDR compliance report | Report generated with accurate information |
-| INT-02 | Edge Case Handling | Test handling of edge cases and appropriate warnings | Appropriate warnings generated |
+| ID     | Test Case                         | Description                                          | Expected Result                            |
+| ------ | --------------------------------- | ---------------------------------------------------- | ------------------------------------------ |
+| INT-01 | SFDR Compliance Report Generation | Test generation of SFDR compliance report            | Report generated with accurate information |
+| INT-02 | Edge Case Handling                | Test handling of edge cases and appropriate warnings | Appropriate warnings generated             |
 
 ### 4.7 Performance Tests
 
-| ID | Test Case | Description | Expected Result |
-|----|-----------|-------------|----------------|
+| ID      | Test Case              | Description                                      | Expected Result                         |
+| ------- | ---------------------- | ------------------------------------------------ | --------------------------------------- |
 | PERF-01 | Concurrent Validations | Test handling of multiple concurrent validations | 100 validations completed in <5 seconds |
-| PERF-02 | Large Fund Data | Test performance with large fund data | Validation completed in <2 seconds |
+| PERF-02 | Large Fund Data        | Test performance with large fund data            | Validation completed in <2 seconds      |
 
 ## 5. Test Execution
 
@@ -167,12 +167,12 @@ This test plan covers:
 
 ### 5.2 Test Execution Schedule
 
-| Phase | Start Date | End Date | Responsible |
-|-------|------------|----------|-------------|
-| Unit Testing | Week 1 | Week 2 | Development Team |
-| Integration Testing | Week 2 | Week 3 | Development Team |
-| System Testing | Week 3 | Week 4 | QA Team |
-| User Acceptance Testing | Week 4 | Week 5 | QA Team & Compliance Experts |
+| Phase                   | Start Date | End Date | Responsible                  |
+| ----------------------- | ---------- | -------- | ---------------------------- |
+| Unit Testing            | Week 1     | Week 2   | Development Team             |
+| Integration Testing     | Week 2     | Week 3   | Development Team             |
+| System Testing          | Week 3     | Week 4   | QA Team                      |
+| User Acceptance Testing | Week 4     | Week 5   | QA Team & Compliance Experts |
 
 ### 5.3 Test Execution Tools
 
@@ -185,12 +185,12 @@ This test plan covers:
 
 ### 6.1 Defect Classification
 
-| Priority | Description | Resolution Time |
-|----------|-------------|----------------|
-| P1 (Critical) | Blocks SFDR classification or causes incorrect classification | Immediate |
-| P2 (High) | Affects regulatory compliance validation | Within 24 hours |
-| P3 (Medium) | Affects user experience but not compliance | Within 3 days |
-| P4 (Low) | Minor issues, cosmetic defects | Before release |
+| Priority      | Description                                                   | Resolution Time |
+| ------------- | ------------------------------------------------------------- | --------------- |
+| P1 (Critical) | Blocks SFDR classification or causes incorrect classification | Immediate       |
+| P2 (High)     | Affects regulatory compliance validation                      | Within 24 hours |
+| P3 (Medium)   | Affects user experience but not compliance                    | Within 3 days   |
+| P4 (Low)      | Minor issues, cosmetic defects                                | Before release  |
 
 ### 6.2 Defect Reporting
 
@@ -221,12 +221,12 @@ Defects will be tracked in the issue tracking system with the following workflow
 
 ### 7.1 Identified Risks
 
-| Risk | Description | Probability | Impact | Mitigation |
-|------|-------------|------------|--------|------------|
-| R1 | Regulatory changes during development | Medium | High | Monitor regulatory updates, maintain flexible architecture |
-| R2 | Incomplete test data | Medium | High | Create comprehensive test data covering all scenarios |
-| R3 | Performance issues with large datasets | Medium | Medium | Implement performance testing early, optimize code |
-| R4 | Misinterpretation of regulatory requirements | Low | High | Consult with compliance experts, validate requirements |
+| Risk | Description                                  | Probability | Impact | Mitigation                                                 |
+| ---- | -------------------------------------------- | ----------- | ------ | ---------------------------------------------------------- |
+| R1   | Regulatory changes during development        | Medium      | High   | Monitor regulatory updates, maintain flexible architecture |
+| R2   | Incomplete test data                         | Medium      | High   | Create comprehensive test data covering all scenarios      |
+| R3   | Performance issues with large datasets       | Medium      | Medium | Implement performance testing early, optimize code         |
+| R4   | Misinterpretation of regulatory requirements | Low         | High   | Consult with compliance experts, validate requirements     |
 
 ### 7.2 Contingency Plan
 
@@ -270,21 +270,21 @@ The SFDR compliance report will include:
 
 ### 9.1 Test Plan Approval
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| QA Lead | | | |
-| Development Lead | | | |
-| Compliance Officer | | | |
-| Project Manager | | | |
+| Role               | Name | Signature | Date |
+| ------------------ | ---- | --------- | ---- |
+| QA Lead            |      |           |      |
+| Development Lead   |      |           |      |
+| Compliance Officer |      |           |      |
+| Project Manager    |      |           |      |
 
 ### 9.2 Test Results Approval
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| QA Lead | | | |
-| Development Lead | | | |
-| Compliance Officer | | | |
-| Project Manager | | | |
+| Role               | Name | Signature | Date |
+| ------------------ | ---- | --------- | ---- |
+| QA Lead            |      |           |      |
+| Development Lead   |      |           |      |
+| Compliance Officer |      |           |      |
+| Project Manager    |      |           |      |
 
 ## Appendix A: Test Data
 
@@ -359,10 +359,24 @@ The SFDR compliance report will include:
   },
   "esgIntegration": {
     "considersPAI": true,
-    "paiIndicators": ["GHG_EMISSIONS", "CARBON_FOOTPRINT", "ENERGY_CONSUMPTION", "BIODIVERSITY", "WATER_EMISSIONS", "HAZARDOUS_WASTE"]
+    "paiIndicators": [
+      "GHG_EMISSIONS",
+      "CARBON_FOOTPRINT",
+      "ENERGY_CONSUMPTION",
+      "BIODIVERSITY",
+      "WATER_EMISSIONS",
+      "HAZARDOUS_WASTE"
+    ]
   },
   "taxonomyAlignment": {
-    "environmentalObjectives": ["CLIMATE_CHANGE_MITIGATION", "CLIMATE_CHANGE_ADAPTATION", "SUSTAINABLE_USE_OF_WATER", "TRANSITION_TO_CIRCULAR_ECONOMY", "POLLUTION_PREVENTION", "BIODIVERSITY_PROTECTION"],
+    "environmentalObjectives": [
+      "CLIMATE_CHANGE_MITIGATION",
+      "CLIMATE_CHANGE_ADAPTATION",
+      "SUSTAINABLE_USE_OF_WATER",
+      "TRANSITION_TO_CIRCULAR_ECONOMY",
+      "POLLUTION_PREVENTION",
+      "BIODIVERSITY_PROTECTION"
+    ],
     "minimumAlignmentPercentage": 60
   }
 }
@@ -406,30 +420,30 @@ The SFDR compliance report will include:
 async function testArticle8Compliance() {
   const tester = new SynapseQATester();
   await tester.startTest('Article 8 Compliance Test');
-  
+
   try {
     // Navigate to SFDR Navigator
     await tester.navigateToPage('/sfdr-navigator');
-    
+
     // Load Article 8 test data
     const article8Data = await fetch('/test/fixtures/article8-esg.json').then(r => r.json());
-    
+
     // Submit data for classification
     await tester.fillFormWithData('#sfdr-form', article8Data);
     await tester.clickElement('#submit-button');
-    
+
     // Validate classification result
     const classification = await tester.getElementText('#classification-result');
     tester.assert(classification.includes('Article 8'), 'Fund should be classified as Article 8');
-    
+
     // Validate PAI consideration
     const paiValidation = await tester.getElementText('#pai-validation');
     tester.assert(paiValidation.includes('Valid'), 'PAI consideration should be valid');
-    
+
     // Validate taxonomy alignment
     const taxonomyValidation = await tester.getElementText('#taxonomy-validation');
     tester.assert(taxonomyValidation.includes('Valid'), 'Taxonomy alignment should be valid');
-    
+
     tester.endTest(true);
   } catch (error) {
     tester.endTest(false, error.message);
@@ -450,33 +464,33 @@ function generateSFDRComplianceReport(testResults) {
     complianceIssues: testResults.flatMap(t => t.issues || []),
     recommendations: testResults.flatMap(t => t.recommendations || [])
   };
-  
+
   console.log('SFDR Compliance Report');
   console.log('=====================');
   console.log(`Test Date: ${report.testDate}`);
   console.log(`Total Tests: ${report.totalTests}`);
   console.log(`Passed: ${report.passedTests}`);
   console.log(`Failed: ${report.failedTests}`);
-  console.log(`Compliance Rate: ${(report.passedTests / report.totalTests * 100).toFixed(1)}%`);
-  
+  console.log(`Compliance Rate: ${((report.passedTests / report.totalTests) * 100).toFixed(1)}%`);
+
   if (report.complianceIssues.length > 0) {
     console.log('\nCompliance Issues:');
     report.complianceIssues.forEach(issue => {
       console.log(`- ${issue.severity}: ${issue.description}`);
     });
   }
-  
+
   if (report.recommendations.length > 0) {
     console.log('\nRecommendations:');
     report.recommendations.forEach(rec => {
       console.log(`- ${rec}`);
     });
   }
-  
+
   return report;
 }
 ```
 
 ---
 
-*This test plan should be reviewed and updated regularly to reflect changes in SFDR requirements and application functionality.*
+_This test plan should be reviewed and updated regularly to reflect changes in SFDR requirements and application functionality._

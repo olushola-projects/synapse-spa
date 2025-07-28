@@ -1,7 +1,7 @@
-
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 // Define the widget type
 export interface WidgetType {
@@ -60,24 +60,32 @@ interface WidgetProps {
 export const Widget: React.FC<WidgetProps> = ({ title, children, onRemove, className }) => {
   return (
     <div className={cn('bg-white rounded-lg border shadow-sm h-full flex flex-col', className)}>
-      <div className="flex items-center justify-between border-b p-4">
-        <h3 className="font-medium">{title}</h3>
+      <div className='flex items-center justify-between border-b p-4'>
+        <h3 className='font-medium'>{title}</h3>
         {onRemove && (
-          <button 
-            onClick={onRemove} 
-            className="text-gray-400 hover:text-gray-600 focus:outline-none"
-            aria-label="Remove widget"
+          <button
+            onClick={onRemove}
+            className='text-gray-400 hover:text-gray-600 focus:outline-none'
+            aria-label='Remove widget'
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='16'
+              height='16'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+            >
+              <line x1='18' y1='6' x2='6' y2='18'></line>
+              <line x1='6' y1='6' x2='18' y2='18'></line>
             </svg>
           </button>
         )}
       </div>
-      <div className="flex-1 p-4 overflow-auto">
-        {children}
-      </div>
+      <div className='flex-1 p-4 overflow-auto'>{children}</div>
     </div>
   );
 };

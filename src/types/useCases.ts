@@ -1,6 +1,4 @@
-import { LucideIcon } from "lucide-react";
-
-export type UseCase = {
+export interface UseCase {
   id: string;
   title: string;
   description: string;
@@ -14,7 +12,7 @@ export type UseCase = {
   createdBy: string;
   icon?: string; // Icon identifier for the use case
   viewCount?: number; // For analytics tracking
-  
+
   // Enhanced fields based on Cambridge SupTech Lab structure
   supervisoryFunction?: string; // e.g., "Prudential Supervision", "Market Conduct", etc.
   regulatoryDomain?: string; // e.g., "Banking", "Securities", "Insurance", etc.
@@ -27,24 +25,24 @@ export type UseCase = {
   roi?: string; // Return on investment information
   caseStudies?: CaseStudy[]; // Related case studies
   resources?: Resource[]; // Related resources
-};
+}
 
-export type CaseStudy = {
+export interface CaseStudy {
   id: string;
   title: string;
   organization: string;
   summary: string;
   outcomes: string[];
   link?: string;
-};
+}
 
-export type Resource = {
+export interface Resource {
   id: string;
   title: string;
   type: 'Documentation' | 'Whitepaper' | 'Video' | 'Webinar' | 'Tool' | 'Template';
   link: string;
   description?: string;
-};
+}
 
 // Helper types for filtering and sorting
 export type ComplexityLevel = 'Low' | 'Medium' | 'High';
