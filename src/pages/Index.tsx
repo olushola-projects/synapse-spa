@@ -26,37 +26,37 @@ const Index = () => {
       id: 'openai',
       description: 'OpenAI',
       image: '/lovable-uploads/bee24c50-c3a4-4ac5-a96a-4e8a6e1d5720.png',
-      className: 'h-10 w-auto'
+      className: 'h-14 w-auto'
     },
     {
       id: 'firebase',
       description: 'Google Firebase',
       image: '/lovable-uploads/24bc5b6a-2ffe-469d-ae66-bec6fe163be5.png',
-      className: 'h-8 w-auto'
+      className: 'h-10 w-auto'
     },
     {
       id: 'airtable',
       description: 'Airtable',
       image: '/lovable-uploads/6a778cb7-3cb5-4529-9cc0-fdd90cbe4ddb.png',
-      className: 'h-10 w-auto'
+      className: 'h-14 w-auto'
     },
     {
       id: 'microsoft',
       description: 'Microsoft',
       image: '/lovable-uploads/c4144d0f-dbcd-4fac-be19-6dd1ae7ffff3.png',
-      className: 'h-10 w-auto'
+      className: 'h-14 w-auto'
     },
     {
       id: 'google',
       description: 'Google',
       image: '/lovable-uploads/0d37b216-879f-46ea-8740-e50726c3a6a3.png',
-      className: 'h-8 w-auto'
+      className: 'h-10 w-auto'
     },
     {
       id: 'anthropic',
       description: 'Anthropic',
       image: '/lovable-uploads/a363f7e4-db90-4a53-a679-ddbf92f0cebc.png',
-      className: 'h-8 w-auto'
+      className: 'h-10 w-auto'
     }
   ];
 
