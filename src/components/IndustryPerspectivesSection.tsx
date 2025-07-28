@@ -1,24 +1,24 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useInView } from 'framer-motion';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import useEmblaCarousel from 'embla-carousel-react';
 import { wrap } from '@/lib/utils';
 import { getSortedPerspectives, type IndustryPerspective } from '@/data/industryPerspectivesData';
 import ArticleDialog from '@/components/ArticleDialog';
-
 const IndustryPerspectivesSection = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: false, margin: '-100px 0px' });
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start', slidesToScroll: 1 });
+  const isInView = useInView(sectionRef, {
+    once: false,
+    margin: '-100px 0px'
+  });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'start',
+    slidesToScroll: 1
+  });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [autoplayInterval, setAutoplayInterval] = useState<NodeJS.Timeout | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -26,24 +26,19 @@ const IndustryPerspectivesSection = () => {
 
   // Get sorted perspectives
   const sortedPerspectives = getSortedPerspectives();
-
-  const scrollTo = useCallback(
-    (index: number) => {
-      if (!emblaApi) {
-        return;
-      }
-      // Use the wrap function to ensure the index stays within bounds
-      emblaApi.scrollTo(wrap(0, sortedPerspectives.length, index));
-    },
-    [emblaApi, sortedPerspectives.length]
-  );
+  const scrollTo = useCallback((index: number) => {
+    if (!emblaApi) {
+      return;
+    }
+    // Use the wrap function to ensure the index stays within bounds
+    emblaApi.scrollTo(wrap(0, sortedPerspectives.length, index));
+  }, [emblaApi, sortedPerspectives.length]);
 
   // Setup autoplay with slower speed for better readability
   const startAutoplay = useCallback(() => {
     if (autoplayInterval) {
       clearInterval(autoplayInterval);
     }
-
     const interval = setInterval(() => {
       if (emblaApi) {
         emblaApi.scrollNext();
@@ -58,14 +53,11 @@ const IndustryPerspectivesSection = () => {
     if (!emblaApi) {
       return;
     }
-
     const onSelect = () => {
       setSelectedIndex(emblaApi.selectedScrollSnap());
     };
-
     emblaApi.on('select', onSelect);
     startAutoplay();
-
     return () => {
       emblaApi.off('select', onSelect);
       if (autoplayInterval) {
@@ -81,18 +73,14 @@ const IndustryPerspectivesSection = () => {
       setAutoplayInterval(null);
     }
   };
-
   const handleMouseLeave = () => {
     startAutoplay();
   };
-
   const handleOpenArticle = (perspective: IndustryPerspective) => {
     setSelectedPerspective(perspective);
     setIsDialogOpen(true);
   };
-
-  return (
-    <div id='testimonials' className='py-24 relative overflow-hidden' ref={sectionRef}>
+  return <div id='testimonials' className='py-24 relative overflow-hidden' ref={sectionRef}>
       {/* Stripe-inspired diagonal background */}
       <div className='absolute inset-0 -z-10'>
         <div className='absolute inset-0 bg-gradient-to-br from-gray-50 to-blue-50/30'></div>
@@ -114,24 +102,12 @@ const IndustryPerspectivesSection = () => {
 
         {/* Desktop Carousel - limited to 3 perspectives at a time */}
         <div className='max-w-7xl mx-auto hidden md:block'>
-          <div
-            className='overflow-hidden'
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            ref={emblaRef}
-          >
+          <div className='overflow-hidden' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} ref={emblaRef}>
             <div className='flex -ml-4'>
-              {sortedPerspectives.map((perspective, index) => (
-                <div
-                  key={index}
-                  className='flex-[0_0_33.33%] min-w-0 pl-4 transition-all duration-500'
-                >
-                  <div
-                    className={`transition-all duration-500 ease-in-out transform ${
-                      isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                    }`}
-                    style={{ transitionDelay: `${index * 150}ms` }}
-                  >
+              {sortedPerspectives.map((perspective, index) => <div key={index} className='flex-[0_0_33.33%] min-w-0 pl-4 transition-all duration-500'>
+                  <div className={`transition-all duration-500 ease-in-out transform ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{
+                transitionDelay: `${index * 150}ms`
+              }}>
                     <Card className='h-[360px] border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden bg-white rounded-xl'>
                       <CardContent className='p-6 flex flex-col h-full'>
                         <div className='mb-4'>{perspective.icon}</div>
@@ -149,53 +125,29 @@ const IndustryPerspectivesSection = () => {
 
                         <div className='mt-6 pt-4 border-t border-gray-100 flex items-center justify-between'>
                           <span className='text-xs text-gray-400'>Industry Insight</span>
-                          <Button
-                            variant='link'
-                            className={`text-sm ${perspective.color} font-medium flex items-center gap-1 p-0`}
-                            onClick={() => handleOpenArticle(perspective)}
-                          >
+                          <Button variant='link' className={`text-sm ${perspective.color} font-medium flex items-center gap-1 p-0`} onClick={() => handleOpenArticle(perspective)}>
                             Learn More <ExternalLink size={14} />
                           </Button>
                         </div>
                       </CardContent>
                     </Card>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
 
           {/* Carousel Controls */}
           <div className='flex justify-center items-center gap-4 mt-6'>
-            <Button
-              variant='outline'
-              size='icon'
-              className='rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary'
-              onClick={() => emblaApi?.scrollPrev()}
-            >
+            <Button variant='outline' size='icon' className='rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary' onClick={() => emblaApi?.scrollPrev()}>
               <ChevronLeft size={20} />
               <span className='sr-only'>Previous</span>
             </Button>
 
             <div className='flex gap-2'>
-              {sortedPerspectives.map((_, index) => (
-                <button
-                  key={index}
-                  className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                    selectedIndex === index ? 'bg-synapse-primary' : 'bg-gray-300'
-                  }`}
-                  onClick={() => scrollTo(index)}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+              {sortedPerspectives.map((_, index) => <button key={index} className={`w-2.5 h-2.5 rounded-full transition-colors ${selectedIndex === index ? 'bg-synapse-primary' : 'bg-gray-300'}`} onClick={() => scrollTo(index)} aria-label={`Go to slide ${index + 1}`} />)}
             </div>
 
-            <Button
-              variant='outline'
-              size='icon'
-              className='rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary'
-              onClick={() => emblaApi?.scrollNext()}
-            >
+            <Button variant='outline' size='icon' className='rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary' onClick={() => emblaApi?.scrollNext()}>
               <ChevronRight size={20} />
               <span className='sr-only'>Next</span>
             </Button>
@@ -204,16 +156,13 @@ const IndustryPerspectivesSection = () => {
 
         {/* Mobile Carousel */}
         <div className='md:hidden mt-8'>
-          <Carousel className='w-full' opts={{ loop: true }}>
+          <Carousel className='w-full' opts={{
+          loop: true
+        }}>
             <CarouselContent>
-              {sortedPerspectives.map((perspective, i) => (
-                <CarouselItem key={i} className='md:basis-1/2 lg:basis-1/3'>
-                  <PerspectiveCard
-                    perspective={perspective}
-                    onLearnMore={() => handleOpenArticle(perspective)}
-                  />
-                </CarouselItem>
-              ))}
+              {sortedPerspectives.map((perspective, i) => <CarouselItem key={i} className='md:basis-1/2 lg:basis-1/3'>
+                  <PerspectiveCard perspective={perspective} onLearnMore={() => handleOpenArticle(perspective)} />
+                </CarouselItem>)}
             </CarouselContent>
             <div className='flex justify-center gap-4 mt-4'>
               <CarouselPrevious className='relative static transform-none bg-white' />
@@ -223,32 +172,21 @@ const IndustryPerspectivesSection = () => {
         </div>
 
         <div className='mt-16 text-center'>
-          <div className='inline-flex items-center justify-center gap-2 py-3 px-6 bg-white/50 backdrop-blur-sm rounded-full text-sm font-medium text-gray-600 shadow-sm border border-gray-100'>
-            <span className='text-synapse-primary'>
-              Shaping the future of regulatory compliance
-            </span>
-          </div>
+          
         </div>
       </div>
 
       {/* Article Dialog */}
-      <ArticleDialog
-        isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        perspective={selectedPerspective}
-      />
-    </div>
-  );
+      <ArticleDialog isOpen={isDialogOpen} onOpenChange={setIsDialogOpen} perspective={selectedPerspective} />
+    </div>;
 };
-
 const PerspectiveCard = ({
   perspective,
   onLearnMore
 }: {
   perspective: IndustryPerspective;
   onLearnMore: () => void;
-}) => (
-  <div className='h-full'>
+}) => <div className='h-full'>
     <div className='h-full flex flex-col p-6 rounded-xl bg-white shadow-sm border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300'>
       <div className='mb-4'>{perspective.icon}</div>
 
@@ -262,17 +200,11 @@ const PerspectiveCard = ({
         <h3 className='font-bold text-gray-800'>{perspective.name}</h3>
         <p className='text-synapse-primary/80 text-xs'>{perspective.role}</p>
         <div className='mt-2'>
-          <Button
-            variant='link'
-            className={`text-sm ${perspective.color} font-medium flex items-center gap-1 p-0`}
-            onClick={onLearnMore}
-          >
+          <Button variant='link' className={`text-sm ${perspective.color} font-medium flex items-center gap-1 p-0`} onClick={onLearnMore}>
             Learn More <ExternalLink size={14} />
           </Button>
         </div>
       </div>
     </div>
-  </div>
-);
-
+  </div>;
 export default IndustryPerspectivesSection;
