@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Brain, Globe, Users, Info } from 'lucide-react';
+import { Brain, Globe, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 interface USPItem {
@@ -61,7 +61,7 @@ export const USPFeatureSection = () => {
     setIsOpen(true);
   };
   return <div className='flex flex-col md:flex-row items-start justify-start gap-8 lg:gap-12'>
-      {uspItems.map((usp, index) => <motion.div key={index} className='flex flex-col items-center text-center group' initial={{
+      {uspItems.map((usp, index) => <motion.div key={index} className='flex flex-col items-center text-center group cursor-pointer' initial={{
       opacity: 0,
       y: 20
     }} animate={{
@@ -70,18 +70,13 @@ export const USPFeatureSection = () => {
     }} transition={{
       duration: 0.5,
       delay: index * 0.15
-    }}>
+    }} onClick={() => handleUSPClick(usp)}>
           <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-3 ${usp.color}`}>
             {usp.icon}
           </div>
-          <div className='flex items-center gap-2'>
-            <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">
-              {usp.title}
-            </h3>
-            <button onClick={() => handleUSPClick(usp)} className='text-slate-400 hover:text-blue-600 transition-colors p-1' aria-label={`More information about ${usp.title}`}>
-              <Info className='h-4 w-4' />
-            </button>
-          </div>
+          <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">
+            {usp.title}
+          </h3>
         </motion.div>)}
 
       {/* Modal Dialog */}

@@ -76,8 +76,8 @@ const Navbar = () => {
             </Link>
           </motion.div>
 
-          {/* Pill-Shaped Navigation - Left Aligned */}
-          <nav className='hidden lg:flex items-center flex-1 ml-8'>
+          {/* Pill-Shaped Navigation - Centered */}
+          <nav className='hidden lg:flex items-center justify-center flex-1'>
             <div className='flex items-center bg-white/40 backdrop-blur-sm rounded-full px-2 py-1 border border-white/20 shadow-inner'>
               {[
                 { to: '/', label: 'Home' },
