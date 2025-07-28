@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Circle } from 'lucide-react';
 import { solutions } from '@/data/solutionsData';
 import type { Solution } from '@/types/solutions';
 import SolutionNavigation from './solutions/SolutionNavigation';
@@ -12,7 +13,7 @@ const ModularSolutionsSection = () => {
       id: 'default',
       title: 'Default Solution',
       description: 'Default solution description',
-      icon: () => null,
+      icon: Circle,
       color: 'from-blue-500 to-indigo-600'
     };
 

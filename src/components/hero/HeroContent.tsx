@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Users, Zap } from 'lucide-react';
+import { ArrowRight, Shield, Users } from 'lucide-react';
 
 interface HeroContentProps {
   animate: boolean;

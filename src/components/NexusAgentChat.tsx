@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -15,26 +15,17 @@ import { EnhancedInput } from '@/components/ui/enhanced-input';
 import { TypingIndicator } from '@/components/ui/typing-indicator';
 import { ProcessingStages } from '@/components/ui/processing-stages';
 import {
-  Send,
   Bot,
-  User,
   Loader2,
   AlertCircle,
-  CheckCircle2,
-  XCircle,
-  FileText,
   Shield,
-  TrendingUp,
-  RefreshCw,
   Settings,
-  Zap,
-  Sparkles
+  Zap
 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { nexusAgent } from '@/services/nexusAgent';
 import { TIME_CONSTANTS } from '@/utils/constants';
 import {
-  QuickActionType,
   type SFDRClassificationRequest,
   type NexusValidationResponse,
   type NexusMessage
@@ -181,32 +172,32 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
         prev.map(msg => {
           if (msg.id === messageId) {
             const currentReaction = msg.reactions?.userReaction;
-            const newReactions = { ...msg.reactions };
+            const newReactions = { 
+              likes: msg.reactions?.likes || 0,
+              dislikes: msg.reactions?.dislikes || 0,
+              userReaction: msg.reactions?.userReaction
+            };
 
             // Remove previous reaction if exists
             if (currentReaction === 'like') {
-              newReactions.likes = Math.max(0, (newReactions.likes || 0) - 1);
+              newReactions.likes = Math.max(0, newReactions.likes - 1);
             }
             if (currentReaction === 'dislike') {
-              newReactions.dislikes = Math.max(0, (newReactions.dislikes || 0) - 1);
+              newReactions.dislikes = Math.max(0, newReactions.dislikes - 1);
             }
 
             // Add new reaction if different from current
             if (currentReaction !== reaction) {
               if (reaction === 'like') {
-                newReactions.likes = (newReactions.likes || 0) + 1;
+                newReactions.likes = newReactions.likes + 1;
               }
               if (reaction === 'dislike') {
-                newReactions.dislikes = (newReactions.dislikes || 0) + 1;
+                newReactions.dislikes = newReactions.dislikes + 1;
               }
               newReactions.userReaction = reaction;
             } else {
               delete newReactions.userReaction;
             }
-
-            // Ensure likes and dislikes are always numbers
-            newReactions.likes = newReactions.likes || 0;
-            newReactions.dislikes = newReactions.dislikes || 0;
 
             return { ...msg, reactions: newReactions };
           }
@@ -520,24 +511,6 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
       }
     };
 
-    /**
-     * Render validation result badge
-     */
-    const renderValidationBadge = (response: NexusValidationResponse) => {
-      const variant = response.isValid ? 'default' : 'destructive';
-      const icon = response.isValid ? (
-        <CheckCircle2 className='w-3 h-3' />
-      ) : (
-        <XCircle className='w-3 h-3' />
-      );
-
-      return (
-        <Badge variant={variant} className='mb-2'>
-          {icon}
-          <span className='ml-1'>{response.isValid ? 'Valid' : 'Invalid'}</span>
-        </Badge>
-      );
-    };
 
     return (
       <motion.div
@@ -620,14 +593,13 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
                         >
                           <EnhancedMessage
                             id={message.id}
-                            type={message.type}
+                            type={message.type as 'system' | 'user' | 'agent'}
                             content={message.content}
                             timestamp={message.timestamp}
                             isLoading={message.isLoading}
                             isStreaming={message.isStreaming}
                             confidence={message.confidence}
                             messageType={message.messageType}
-                            metadata={message.metadata}
                             onReaction={handleMessageReaction}
                             onCopy={handleCopyMessage}
                             onExport={handleExportMessage}
@@ -649,7 +621,11 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
                         </Avatar>
                         <div className='bg-white border rounded-lg p-3 shadow-sm'>
                           {processingStages.length > 0 ? (
-                            <ProcessingStages stages={processingStages} />
+                            <ProcessingStages stages={processingStages.map((stage, index) => ({
+                              id: `stage-${index}`,
+                              label: stage.name,
+                              ...stage
+                            }))} />
                           ) : (
                             <TypingIndicator
                               agentName={agentPersonality.name}

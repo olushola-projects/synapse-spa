@@ -58,7 +58,7 @@ interface EnhancedAgent {
 /**
  * Interactive demo component for agent capabilities
  */
-const AgentDemo: React.FC<{ agent: EnhancedAgent }> = ({ agent }) => {
+const AgentDemo: React.FC<{ agent: EnhancedAgent }> = ({}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   
@@ -220,17 +220,17 @@ const TestimonialsCarousel: React.FC<{ testimonials: EnhancedAgent['testimonials
                 <Star
                   key={i}
                   className={`w-4 h-4 ${
-                    i < testimonials[currentIndex].rating
+                    i < (testimonials[currentIndex]?.rating || 0)
                       ? 'text-yellow-400 fill-current'
                       : 'text-muted-foreground'
                   }`}
                 />
               ))}
             </div>
-            <p className="text-sm italic">"{testimonials[currentIndex].quote}"</p>
+            <p className="text-sm italic">"{testimonials[currentIndex]?.quote || ''}"</p>
             <div className="text-xs text-muted-foreground">
-              <div className="font-medium">{testimonials[currentIndex].name}</div>
-              <div>{testimonials[currentIndex].company}</div>
+              <div className="font-medium">{testimonials[currentIndex]?.name || ''}</div>
+              <div>{testimonials[currentIndex]?.company || ''}</div>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -255,7 +255,7 @@ const TestimonialsCarousel: React.FC<{ testimonials: EnhancedAgent['testimonials
  * Enhanced agent card with advanced interactions
  */
 const EnhancedAgentCard: React.FC<{ agent: EnhancedAgent; index: number }> = ({ agent, index }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  
   const [activeTab, setActiveTab] = useState('overview');
   const [isBookmarked, setIsBookmarked] = useState(false);
   

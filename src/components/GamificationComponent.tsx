@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Award, Trophy, Medal, Star, Gift, Flag, Target, Zap } from 'lucide-react';
 
 const GamificationComponent = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,16 +17,12 @@ import {
   Download,
   CheckCircle,
   AlertTriangle,
-  TrendingUp,
-  Shield,
   Brain,
   Zap,
   Target,
   BarChart3,
   FileCheck,
   Globe,
-  Clock,
-  Users,
   Sparkles
 } from 'lucide-react';
 
@@ -172,15 +168,17 @@ const SFDRGem: React.FC = () => {
       ];
 
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      const assistantMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: randomResponse.content,
-        timestamp: new Date(),
-        metadata: randomResponse.metadata
-      };
+      if (randomResponse) {
+        const assistantMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: randomResponse.content,
+          timestamp: new Date(),
+          metadata: randomResponse.metadata
+        };
 
-      setMessages(prev => [...prev, assistantMessage]);
+        setMessages(prev => [...prev, assistantMessage]);
+      }
       setIsLoading(false);
 
       // Update contextual memory
@@ -196,11 +194,12 @@ const SFDRGem: React.FC = () => {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const document: DocumentAnalysis = {
-        id: Date.now().toString() + i,
-        fileName: file.name,
-        fileSize: file.size,
-        uploadDate: new Date(),
+      if (file) {
+        const document: DocumentAnalysis = {
+          id: Date.now().toString() + i,
+          fileName: file.name,
+          fileSize: file.size,
+          uploadDate: new Date(),
         status: 'processing',
         sfdrRelevance: 0,
         summary: '',
@@ -208,9 +207,10 @@ const SFDRGem: React.FC = () => {
         sentiment: 'neutral',
         topics: [],
         complianceIssues: []
-      };
+        };
 
-      newDocuments.push(document);
+        newDocuments.push(document);
+      }
     }
 
     setUploadedDocuments(prev => [...prev, ...newDocuments]);
@@ -296,14 +296,16 @@ const SFDRGem: React.FC = () => {
       ];
 
       const result = classifications[Math.floor(Math.random() * classifications.length)];
-      setClassificationResult(result);
+      if (result) {
+        setClassificationResult(result);
       setIsLoading(false);
 
-      // Update contextual memory
-      setContextualMemory(prev => ({
-        ...prev,
-        recentClassifications: [...prev.recentClassifications.slice(-2), result]
-      }));
+        // Update contextual memory
+        setContextualMemory(prev => ({
+          ...prev,
+          recentClassifications: [...prev.recentClassifications.slice(-2), result]
+        }));
+      }
     }, 2000);
   }, [classificationForm]);
 

@@ -28,7 +28,7 @@ interface ProtectedRouteProps {
  * @returns The protected route component
  */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAuth = true }) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
   // Store the attempted URL for redirecting after login
