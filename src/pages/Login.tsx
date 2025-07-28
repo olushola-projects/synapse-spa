@@ -35,7 +35,7 @@ const Login = () => {
     setLoginError(null);
   }, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<any>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
@@ -54,6 +54,7 @@ const Login = () => {
       // Generate CSRF token for form submission
       const csrfToken = SecurityUtils.generateCsrfToken();
 
+      // Call login function
       await login({
         email: sanitizedEmail,
         password: values.password,

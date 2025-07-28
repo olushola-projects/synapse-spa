@@ -135,7 +135,7 @@ const BlogArticleDetails: React.FC = () => {
 
   // Handle volume change
   const handleVolumeChange = (newVolume: number[]) => {
-    const value = newVolume[0];
+    const value = newVolume[0] ?? 0;
     setVolume(value);
     if (audio) {
       audio.volume = value;

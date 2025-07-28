@@ -5,26 +5,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { 
-  Bot, 
   Brain, 
-  Zap, 
-  Shield, 
-  TrendingUp, 
-  Users, 
-  Clock, 
   Star,
   ArrowRight,
   CheckCircle,
   Sparkles,
-  Target,
   BarChart3,
-  Globe,
-  Lock,
   Play,
   Pause,
-  Volume2,
   Eye,
-  Download,
   Share2,
   Bookmark
 } from 'lucide-react';
@@ -325,7 +314,7 @@ const EnhancedAgentCard: React.FC<{ agent: EnhancedAgent; index: number }> = ({ 
             </div>
             <div className="flex flex-col items-end gap-2">
               <Badge 
-                variant={agent.status === 'launching' ? 'default' : agent.status === 'live' ? 'success' : 'secondary'}
+                variant={agent.status === 'launching' ? 'default' : agent.status === 'live' ? 'secondary' : 'secondary'}
                 className="capitalize font-medium animate-pulse"
               >
                 {agent.status === 'launching' ? (
@@ -335,7 +324,7 @@ const EnhancedAgentCard: React.FC<{ agent: EnhancedAgent; index: number }> = ({ 
                   </>
                 ) : agent.status === 'live' ? (
                   <>
-                    <Zap className="w-3 h-3 mr-1" />
+                    <Sparkles className="w-3 h-3 mr-1" />
                     Live
                   </>
                 ) : (
