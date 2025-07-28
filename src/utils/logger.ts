@@ -279,6 +279,9 @@ const defaultLogger = new Logger();
 export { Logger, ChildLogger };
 export default defaultLogger;
 
+// Named export for compatibility
+export const logger = defaultLogger;
+
 // Convenience exports for common usage
 export const log = {
   error: (message: string, data?: unknown, context?: string) =>
