@@ -23,8 +23,7 @@ import {
   TrendingUp,
   Users,
   AlertTriangle,
-  CheckCircle,
-  /* XCircle, */ Clock
+  CheckCircle
 } from 'lucide-react';
 // XCircle import removed - not used in this component
 
@@ -141,15 +140,16 @@ const TestReportDashboard: React.FC = () => {
   const getCategoryData = () => {
     const categories = testResults.reduce(
       (acc, test) => {
-        if (!acc[test.category]) {
-          acc[test.category] = { passed: 0, failed: 0, total: 0 };
+        const category = test.category || 'uncategorized';
+        if (!acc[category]) {
+          acc[category] = { passed: 0, failed: 0, total: 0 };
         }
-        acc[test.category].total++;
+        acc[category].total++;
         if (test.status === 'passed') {
-          acc[test.category].passed++;
+          acc[category].passed++;
         }
         if (test.status === 'failed') {
-          acc[test.category].failed++;
+          acc[category].failed++;
         }
         return acc;
       },
@@ -180,11 +180,12 @@ const TestReportDashboard: React.FC = () => {
     // Group by day
     const groupedByDay = filteredFeedback.reduce(
       (acc, feedback) => {
-        const day = new Date(feedback.timestamp).toISOString().split('T')[0];
+        const timestamp = feedback.timestamp || new Date().toISOString();
+        const day = new Date(timestamp).toISOString().split('T')[0] || 'unknown';
         if (!acc[day]) {
           acc[day] = { date: day, ratings: [], count: 0 };
         }
-        acc[day].ratings.push(feedback.rating);
+        acc[day].ratings.push(feedback.rating || 0);
         acc[day].count++;
         return acc;
       },

@@ -93,8 +93,6 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
     try {
       // Use html2canvas or similar library for screenshot capture
       // This is a placeholder for the actual implementation
-      const canvas = document.createElement('canvas');
-      // Implementation would go here
       console.log('Screenshot capture would be implemented here');
       return Promise.resolve();
     } catch (error) {
@@ -180,7 +178,6 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
     setIsOpen(false);
   };
 
-  // Auto-hide success message
   useEffect(() => {
     if (step === 'success') {
       const timer = setTimeout(() => {
@@ -188,6 +185,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({
       }, 3000);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [step]);
 
   return (

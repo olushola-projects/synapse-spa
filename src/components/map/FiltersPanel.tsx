@@ -230,15 +230,15 @@ export function FiltersPanel({ className, filters, onFiltersChange, startups }: 
                       className='flex items-center space-x-3 group hover:bg-gray-50 p-2 rounded-md transition-colors'
                     >
                       <Checkbox
-                        id={`${key}-${option}`}
-                        checked={activeFilters.includes(option)}
+                        id={`${key}-${option || 'unknown'}`}
+                        checked={activeFilters.includes(option || '')}
                         onCheckedChange={checked =>
-                          handleFilterChange(key, option, Boolean(checked))
+                          handleFilterChange(key, option || '', Boolean(checked))
                         }
                         className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 border-gray-300'
                       />
                       <label
-                        htmlFor={`${key}-${option}`}
+                        htmlFor={`${key}-${option || 'unknown'}`}
                         className='text-sm font-medium text-gray-700 cursor-pointer flex-1 leading-relaxed group-hover:text-gray-900 transition-colors'
                       >
                         {option}
