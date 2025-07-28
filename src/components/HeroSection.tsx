@@ -34,22 +34,6 @@ const HeroSection = () => {
       style={{ minHeight: 'calc(100vh - 64px)' }}
       className='w-full py-8 md:py-12 lg:py-16 flex flex-col items-start justify-center bg-white relative overflow-hidden'
     >
-      {/* Glass Visualization Background - Positioned to replace dashboard area */}
-      <div className='absolute inset-0 flex items-center justify-center md:justify-end pointer-events-none'>
-        <div className='relative w-full h-full max-w-4xl lg:max-w-5xl xl:max-w-6xl'>
-          <img
-            src='/lovable-uploads/f6b960c4-dad9-41ed-a356-34b2bac4663c.png'
-            alt='GRC Data Visualization'
-            className='w-full h-full object-contain object-center md:object-right opacity-80 hover:opacity-90 transition-opacity duration-1000'
-            style={{
-              filter: 'drop-shadow(0 4px 20px rgba(59, 130, 246, 0.1))',
-              maxHeight: '85vh'
-            }}
-          />
-          {/* Subtle overlay to ensure text readability */}
-          <div className='absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-transparent md:from-white/60'></div>
-        </div>
-      </div>
 
       {/* Main container with precise alignment matching navbar */}
       <div className='w-full max-w-7xl mx-auto relative z-10'>

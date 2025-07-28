@@ -271,11 +271,11 @@ const Footer = () => {
           className='py-8 border-t border-border/40'
         >
           <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
-            <div className='flex flex-col md:flex-row items-center gap-4'>
+            <div className='flex flex-col md:flex-row items-center gap-2 md:gap-4'>
               <p className='text-sm text-muted-foreground'>
                 &copy; {new Date().getFullYear()} Synapses Technologies Ltd. All rights reserved.
               </p>
-              <div className='flex items-center gap-4'>
+              <div className='flex items-center gap-2 md:gap-4'>
                 <Link
                   to='/legal/privacy'
                   className='text-sm text-muted-foreground hover:text-primary transition-colors'
