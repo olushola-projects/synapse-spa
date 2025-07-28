@@ -49,8 +49,8 @@ class Logger {
   constructor(config: Partial<LoggerConfig> = {}) {
     this.config = {
       level: this.getEnvironmentLogLevel(),
-      enableConsole: process.env.NODE_ENV !== 'production',
-      enableRemote: process.env.NODE_ENV === 'production',
+      enableConsole: import.meta.env.MODE !== 'production',
+      enableRemote: import.meta.env.MODE === 'production',
       prefix: 'Synapse',
       ...config
     };
@@ -60,7 +60,7 @@ class Logger {
    * Determine log level based on environment
    */
   private getEnvironmentLogLevel(): LogLevel {
-    const envLevel = process.env.VITE_LOG_LEVEL?.toUpperCase();
+    const envLevel = import.meta.env.VITE_LOG_LEVEL?.toUpperCase();
 
     switch (envLevel) {
       case 'ERROR':
@@ -72,7 +72,7 @@ class Logger {
       case 'DEBUG':
         return LogLevel.DEBUG;
       default:
-        return process.env.NODE_ENV === 'production' ? LogLevel.WARN : LogLevel.DEBUG;
+        return import.meta.env.MODE === 'production' ? LogLevel.WARN : LogLevel.DEBUG;
     }
   }
 
