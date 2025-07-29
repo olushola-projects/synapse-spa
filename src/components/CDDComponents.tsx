@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Shield,
   Users,
@@ -506,22 +505,22 @@ export const CustomerSuccessStories: React.FC = () => {
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
             <div className='space-y-6'>
               <div className='flex items-center gap-4'>
-                <div className='text-4xl'>{stories[activeStory].logo}</div>
+                <div className='text-4xl'>{stories[activeStory]?.logo}</div>
                 <div>
-                  <h3 className='text-2xl font-bold'>{stories[activeStory].company}</h3>
-                  <p className='text-muted-foreground'>{stories[activeStory].industry}</p>
+                  <h3 className='text-2xl font-bold'>{stories[activeStory]?.company}</h3>
+                  <p className='text-muted-foreground'>{stories[activeStory]?.industry}</p>
                 </div>
               </div>
               
               <div className='space-y-4'>
                 <div>
                   <h4 className='font-semibold text-red-600 mb-2'>Challenge</h4>
-                  <p className='text-sm'>{stories[activeStory].challenge}</p>
+                  <p className='text-sm'>{stories[activeStory]?.challenge}</p>
                 </div>
                 
                 <div>
                   <h4 className='font-semibold text-blue-600 mb-2'>Solution</h4>
-                  <p className='text-sm'>{stories[activeStory].solution}</p>
+                  <p className='text-sm'>{stories[activeStory]?.solution}</p>
                 </div>
               </div>
             </div>
@@ -530,7 +529,7 @@ export const CustomerSuccessStories: React.FC = () => {
               <div>
                 <h4 className='font-semibold text-green-600 mb-4'>Results</h4>
                 <ul className='space-y-2'>
-                  {stories[activeStory].results.map((result, idx) => (
+                  {stories[activeStory]?.results?.map((result, idx) => (
                     <li key={idx} className='flex items-center gap-3 text-sm'>
                       <CheckCircle className='w-4 h-4 text-green-600' />
                       {result}
@@ -541,10 +540,10 @@ export const CustomerSuccessStories: React.FC = () => {
               
               <div className='bg-white/50 rounded-xl p-6'>
                 <blockquote className='text-sm italic mb-4'>
-                  "{stories[activeStory].quote}"
+                  "{stories[activeStory]?.quote}"
                 </blockquote>
                 <cite className='text-xs text-muted-foreground font-medium'>
-                  — {stories[activeStory].author}
+                  — {stories[activeStory]?.author}
                 </cite>
               </div>
             </div>

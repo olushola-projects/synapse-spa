@@ -1,29 +1,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-// Lordicon animated outline icons
-const ArrowRightIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/zmkotitn.json"
-    trigger="hover"
-    style={{width: '16px', height: '16px'}}
-  ></lord-icon>
-);
+import { ArrowRight, Shield, Users } from 'lucide-react';
 
-const ShieldIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/gqdnbnwt.json"
-    trigger="hover"
-    style={{width: '16px', height: '16px'}}
-  ></lord-icon>
-);
-
-const UsersIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/dxjqoygy.json"
-    trigger="hover"
-    style={{width: '16px', height: '16px'}}
-  ></lord-icon>
-);
+// Simple icon components
+const ArrowRightIcon = () => <ArrowRight className="w-4 h-4" />;
+const ShieldIcon = () => <Shield className="w-4 h-4" />;
+const UsersIcon = () => <Users className="w-4 h-4" />;
 
 interface HeroContentProps {
   animate: boolean;

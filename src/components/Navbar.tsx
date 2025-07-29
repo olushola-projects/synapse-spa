@@ -5,24 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ExternalFormDialog from './ExternalFormDialog';
 import InviteDialog from './InviteDialog';
 
-// Enterprise-grade animated icons with accessibility support
-const MenuIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/msoeawqm.json"
-    trigger="hover"
-    style={{width: '20px', height: '20px'}}
-    aria-label="Open navigation menu"
-  ></lord-icon>
-);
+import { Menu, X } from 'lucide-react';
 
-const CloseIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/nqtddedc.json"
-    trigger="hover"
-    style={{width: '20px', height: '20px'}}
-    aria-label="Close navigation menu"
-  ></lord-icon>
-);
+// Simple menu icons
+const MenuIcon = () => <Menu className="w-5 h-5" />;
+const CloseIcon = () => <X className="w-5 h-5" />;
 
 
 const Navbar = () => {

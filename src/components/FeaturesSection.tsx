@@ -14,118 +14,37 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-// Lordicon animated outline icons components
-const DashboardIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/eszyyflr.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
+import { 
+  Monitor, 
+  Bot, 
+  Calendar, 
+  Newspaper, 
+  Briefcase, 
+  PenTool, 
+  Gamepad2, 
+  Users, 
+  Lightbulb, 
+  Rocket, 
+  Award, 
+  Globe, 
+  Cpu 
+} from 'lucide-react';
 
-const BotIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/kiynvdns.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const CalendarIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/abfverha.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const NewsIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/nocovwne.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const BriefcaseIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/egiwmiit.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const PenIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/wuvorxbv.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const GameIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/qhviklyi.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const UsersIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/dxjqoygy.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const LightbulbIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/wxnxiano.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const RocketIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/oqdmuxru.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const TeamIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/dxjqoygy.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const AwardIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/yxyampao.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const GlobeIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/tdrtiskw.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
-
-const CpuIcon = () => (
-  <lord-icon
-    src="https://cdn.lordicon.com/hwjcdycb.json"
-    trigger="hover"
-    style={{width: '24px', height: '24px'}}
-  ></lord-icon>
-);
+// Simple icon components
+const DashboardIcon = () => <Monitor className="w-6 h-6" />;
+const BotIcon = () => <Bot className="w-6 h-6" />;
+const CalendarIcon = () => <Calendar className="w-6 h-6" />;
+const NewsIcon = () => <Newspaper className="w-6 h-6" />;
+const BriefcaseIcon = () => <Briefcase className="w-6 h-6" />;
+const PenIcon = () => <PenTool className="w-6 h-6" />;
+const GameIcon = () => <Gamepad2 className="w-6 h-6" />;
+const UsersIcon = () => <Users className="w-6 h-6" />;
+const LightbulbIcon = () => <Lightbulb className="w-6 h-6" />;
+const RocketIcon = () => <Rocket className="w-6 h-6" />;
+const TeamIcon = () => <Users className="w-6 h-6" />;
+const AwardIcon = () => <Award className="w-6 h-6" />;
+const GlobeIcon = () => <Globe className="w-6 h-6" />;
+const CpuIcon = () => <Cpu className="w-6 h-6" />;
 
 // GRC professional features data with enhanced descriptions
 const features = [
