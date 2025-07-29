@@ -112,7 +112,7 @@ const Navbar = () => {
             </motion.div>
 
             {/* Pill-Shaped Navigation Container */}
-            <nav className='hidden lg:block absolute left-1/2 transform -translate-x-1/2'>
+            <nav className='hidden lg:block absolute left-8'>
               <div className={`flex items-center gap-1 px-6 py-3 rounded-full transition-all duration-300 ${
                 isScrolled
                   ? 'bg-white/60 backdrop-blur-lg border border-white/40 shadow-lg'
