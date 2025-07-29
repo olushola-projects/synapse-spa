@@ -98,8 +98,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
     // Expose methods to parent component
     useImperativeHandle(ref, () => ({
       sendMessage: (message: string) => {
-        setInputMessage(message);
-        setTimeout(() => handleSendMessage(message), 100);
+        handleSendMessage(message);
       }
     }));
 
@@ -118,8 +117,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
     useEffect(() => {
       const handleQuickAction = (event: CustomEvent) => {
         const { message } = event.detail;
-        setInputMessage(message);
-        setTimeout(() => handleSendMessage(message), 100);
+        handleSendMessage(message);
       };
 
       window.addEventListener('nexus-quick-action', handleQuickAction as EventListener);

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,8 +15,6 @@ import {
   Image,
   Sparkles,
   Loader2,
-  Command,
-  ArrowUp
 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
@@ -24,8 +22,8 @@ import { cn } from '@/lib/utils';
 // Web Speech API type declarations
 declare global {
   interface Window {
-    webkitSpeechRecognition: typeof SpeechRecognition;
-    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+    SpeechRecognition: new () => SpeechRecognition;
   }
 }
 
@@ -138,7 +136,7 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
       recognitionRef.current.lang = 'en-US';
 
       recognitionRef.current.onresult = event => {
-        const transcript = event.results[0][0].transcript;
+        const transcript = event.results?.[0]?.[0]?.transcript || '';
         onChange(value + transcript);
         onVoiceInput?.(transcript);
         setIsRecording(false);
@@ -194,7 +192,7 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
         setSelectedSuggestionIndex(prev => (prev > 0 ? prev - 1 : filteredSuggestions.length - 1));
       } else if (e.key === 'Tab' && selectedSuggestionIndex >= 0) {
         e.preventDefault();
-        onChange(filteredSuggestions[selectedSuggestionIndex]);
+        onChange(filteredSuggestions[selectedSuggestionIndex] || '');
         setShowSuggestions(false);
       }
     }
@@ -521,10 +519,3 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
   );
 };
 
-// Extend Window interface for speech recognition
-declare global {
-  interface Window {
-    webkitSpeechRecognition: any;
-    SpeechRecognition: any;
-  }
-}

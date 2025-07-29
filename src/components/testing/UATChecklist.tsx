@@ -3,7 +3,7 @@ import { Check, X, AlertTriangle, Download, Upload, /* Save, */ RotateCcw } from
 // Save import removed - not used in this component
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
+
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -372,9 +372,9 @@ const UATChecklist: React.FC = () => {
       testerName: currentTester
     };
 
-    const newResults = {
+    const newResults: Record<string, TestCase> = {
       ...testResults,
-      [testId]: updatedCase
+      [testId]: updatedCase as TestCase
     };
 
     setTestResults(newResults);
@@ -472,7 +472,6 @@ const UATChecklist: React.FC = () => {
   };
 
   const stats = getProgressStats();
-  const selectedCategoryData = testCategories.find(cat => cat.id === selectedCategory);
 
   return (
     <div className='max-w-6xl mx-auto p-6 space-y-6'>
