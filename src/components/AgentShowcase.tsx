@@ -377,11 +377,11 @@ const EnhancedAgentCard: React.FC<{
                 </Button>
               </>
             )}
-              </>}
           </div>
         </CardContent>
       </Card>
-    </motion.div>;
+    </motion.div>
+  );
 };
 export { EnhancedAgentCard, AgentDemo, MetricsVisualization, TestimonialsCarousel };
 export type { EnhancedAgent };
