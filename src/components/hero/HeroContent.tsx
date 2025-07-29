@@ -3,9 +3,9 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Shield, Users } from 'lucide-react';
 
 // Simple icon components
-const ArrowRightIcon = () => <ArrowRight className="w-4 h-4" />;
-const ShieldIcon = () => <Shield className="w-4 h-4" />;
-const UsersIcon = () => <Users className="w-4 h-4" />;
+const ArrowRightIcon = () => <ArrowRight className='w-4 h-4' />;
+const ShieldIcon = () => <Shield className='w-4 h-4' />;
+const UsersIcon = () => <Users className='w-4 h-4' />;
 
 interface HeroContentProps {
   animate: boolean;
@@ -60,8 +60,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       <div className='mt-10 flex flex-col sm:flex-row gap-4 justify-start items-start'>
         <div onClick={onGetAccess} className='cursor-pointer'>
           <Button className='bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-base rounded-xl flex items-center gap-3 hover-lift font-semibold shadow-lg hover:shadow-xl transition-all duration-300'>
-            Get Early Access{' '}
-            <ArrowRightIcon />
+            Get Early Access <ArrowRightIcon />
           </Button>
         </div>
         <div onClick={onInvite} className='cursor-pointer'>
@@ -78,12 +77,16 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       <div className='mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-start gap-6 text-sm'>
         <div className='flex items-center text-slate-500'>
           <div className='w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse'></div>
-          <div className='mr-2 text-green-600'><ShieldIcon /></div>
+          <div className='mr-2 text-green-600'>
+            <ShieldIcon />
+          </div>
           <span className='font-medium'>GRC Innovation Hub</span>
         </div>
         <div className='flex items-center text-slate-500'>
           <div className='w-2 h-2 bg-blue-500 rounded-full mr-3'></div>
-          <div className='mr-2 text-blue-600'><UsersIcon /></div>
+          <div className='mr-2 text-blue-600'>
+            <UsersIcon />
+          </div>
           <span className='font-medium'>Join early adopters in our private pilot</span>
         </div>
       </div>

@@ -1,8 +1,4 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  Play
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -14,37 +10,37 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-import { 
-  Monitor, 
-  Bot, 
-  Calendar, 
-  Newspaper, 
-  Briefcase, 
-  PenTool, 
-  Gamepad2, 
-  Users, 
-  Lightbulb, 
-  Rocket, 
-  Award, 
-  Globe, 
-  Cpu 
+import {
+  Monitor,
+  Bot,
+  Calendar,
+  Newspaper,
+  Briefcase,
+  PenTool,
+  Gamepad2,
+  Users,
+  Lightbulb,
+  Rocket,
+  Award,
+  Globe,
+  Cpu
 } from 'lucide-react';
 
 // Simple icon components
-const DashboardIcon = () => <Monitor className="w-6 h-6" />;
-const BotIcon = () => <Bot className="w-6 h-6" />;
-const CalendarIcon = () => <Calendar className="w-6 h-6" />;
-const NewsIcon = () => <Newspaper className="w-6 h-6" />;
-const BriefcaseIcon = () => <Briefcase className="w-6 h-6" />;
-const PenIcon = () => <PenTool className="w-6 h-6" />;
-const GameIcon = () => <Gamepad2 className="w-6 h-6" />;
-const UsersIcon = () => <Users className="w-6 h-6" />;
-const LightbulbIcon = () => <Lightbulb className="w-6 h-6" />;
-const RocketIcon = () => <Rocket className="w-6 h-6" />;
-const TeamIcon = () => <Users className="w-6 h-6" />;
-const AwardIcon = () => <Award className="w-6 h-6" />;
-const GlobeIcon = () => <Globe className="w-6 h-6" />;
-const CpuIcon = () => <Cpu className="w-6 h-6" />;
+const DashboardIcon = () => <Monitor className='w-6 h-6' />;
+const BotIcon = () => <Bot className='w-6 h-6' />;
+const CalendarIcon = () => <Calendar className='w-6 h-6' />;
+const NewsIcon = () => <Newspaper className='w-6 h-6' />;
+const BriefcaseIcon = () => <Briefcase className='w-6 h-6' />;
+const PenIcon = () => <PenTool className='w-6 h-6' />;
+const GameIcon = () => <Gamepad2 className='w-6 h-6' />;
+const UsersIcon = () => <Users className='w-6 h-6' />;
+const LightbulbIcon = () => <Lightbulb className='w-6 h-6' />;
+const RocketIcon = () => <Rocket className='w-6 h-6' />;
+const TeamIcon = () => <Users className='w-6 h-6' />;
+const AwardIcon = () => <Award className='w-6 h-6' />;
+const GlobeIcon = () => <Globe className='w-6 h-6' />;
+const CpuIcon = () => <Cpu className='w-6 h-6' />;
 
 // GRC professional features data with enhanced descriptions
 const features = [
@@ -309,12 +305,17 @@ const FeaturesSection = () => {
                             >
                               <feature.icon />
                             </div>
-                            <h3 className='text-xl font-bold mb-4 text-gray-900'>{feature.title}</h3>
+                            <h3 className='text-xl font-bold mb-4 text-gray-900'>
+                              {feature.title}
+                            </h3>
                             <p className='text-gray-600 text-sm'>{feature.description}</p>
                           </div>
 
                           {/* Preview button at bottom */}
-                          <Button variant='ghost' className='w-fit text-gray-600 hover:text-gray-900 gap-2 mt-4 group'>
+                          <Button
+                            variant='ghost'
+                            className='w-fit text-gray-600 hover:text-gray-900 gap-2 mt-4 group'
+                          >
                             <span>Learn about {feature.title.toLowerCase()}</span>
                             <Play className='h-4 w-4 group-hover:translate-x-1 transition-transform' />
                           </Button>

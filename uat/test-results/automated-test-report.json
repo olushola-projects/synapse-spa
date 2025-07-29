@@ -1,0 +1,121 @@
+{
+  "totalTests": 14,
+  "passed": 4,
+  "failed": 10,
+  "passRate": "28.57",
+  "averageDuration": "5612.86",
+  "results": [
+    {
+      "testId": "LP-001",
+      "testName": "Landing Page Load and Layout",
+      "passed": false,
+      "duration": 3564,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"SFDR Navigator\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+      "timestamp": "2025-07-29T08:18:37.447Z"
+    },
+    {
+      "testId": "LP-002",
+      "testName": "Navigation Menu Functionality",
+      "passed": false,
+      "duration": 271,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+      "timestamp": "2025-07-29T08:18:38.251Z"
+    },
+    {
+      "testId": "LP-008",
+      "testName": "Page Performance and Loading",
+      "passed": true,
+      "duration": 914,
+      "notes": "Load time: 913ms, Errors: 0",
+      "timestamp": "2025-07-29T08:18:39.181Z"
+    },
+    {
+      "testId": "AI-001",
+      "testName": "CDD Agent Page Load and Interface",
+      "passed": false,
+      "duration": 6450,
+      "notes": "\u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('input[type=\"text\"], textarea').first()\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"to.be.visible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('input[type=\"text\"], textarea').first()\u001b[22m\n",
+      "timestamp": "2025-07-29T08:18:46.423Z"
+    },
+    {
+      "testId": "AI-002",
+      "testName": "CDD Agent Basic Query Processing",
+      "passed": false,
+      "duration": 31176,
+      "notes": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"], textarea').first()\u001b[22m\n",
+      "timestamp": "2025-07-29T08:19:18.431Z"
+    },
+    {
+      "testId": "LP-001",
+      "testName": "Landing Page Load and Layout",
+      "passed": false,
+      "duration": 1227,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"SFDR Navigator\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+      "timestamp": "2025-07-29T08:19:40.669Z"
+    },
+    {
+      "testId": "LP-002",
+      "testName": "Navigation Menu Functionality",
+      "passed": false,
+      "duration": 383,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+      "timestamp": "2025-07-29T08:19:41.240Z"
+    },
+    {
+      "testId": "LP-001",
+      "testName": "Landing Page Load and Layout",
+      "passed": false,
+      "duration": 9539,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"SFDR Navigator\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+      "timestamp": "2025-07-29T08:20:50.540Z"
+    },
+    {
+      "testId": "LP-002",
+      "testName": "Navigation Menu Functionality",
+      "passed": false,
+      "duration": 15838,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+      "timestamp": "2025-07-29T08:21:07.827Z"
+    },
+    {
+      "testId": "LP-001",
+      "testName": "Landing Page Load and Layout",
+      "passed": false,
+      "duration": 1233,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"SFDR Navigator\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+      "timestamp": "2025-07-29T08:22:06.677Z"
+    },
+    {
+      "testId": "LP-002",
+      "testName": "Navigation Menu Functionality",
+      "passed": false,
+      "duration": 5204,
+      "notes": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+      "timestamp": "2025-07-29T08:22:12.757Z"
+    },
+    {
+      "testId": "RD-1920",
+      "testName": "Responsive Design - 1920x1080",
+      "passed": true,
+      "duration": 1102,
+      "notes": "Body width: 1920px, Viewport: 1920px",
+      "timestamp": "2025-07-29T08:22:22.932Z"
+    },
+    {
+      "testId": "RD-768",
+      "testName": "Responsive Design - 768x1024",
+      "passed": true,
+      "duration": 729,
+      "notes": "Body width: 768px, Viewport: 768px",
+      "timestamp": "2025-07-29T08:22:33.055Z"
+    },
+    {
+      "testId": "RD-375",
+      "testName": "Responsive Design - 375x667",
+      "passed": true,
+      "duration": 950,
+      "notes": "Body width: 375px, Viewport: 375px",
+      "timestamp": "2025-07-29T08:22:45.426Z"
+    }
+  ]
+}

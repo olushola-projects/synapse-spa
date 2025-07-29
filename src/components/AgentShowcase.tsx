@@ -431,9 +431,9 @@ const EnhancedAgentCard: React.FC<{ agent: EnhancedAgent; index: number }> = ({ 
           <div className='flex gap-2 pt-4 border-t'>
             {agent.id === 'cdd-agent' ? (
               <>
-                <Button 
-                  variant='outline' 
-                  size='sm' 
+                <Button
+                  variant='outline'
+                  size='sm'
                   className='flex-1'
                   onClick={() => navigate('/agents/cdd-agent')}
                 >

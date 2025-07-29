@@ -7,11 +7,6 @@ import InviteDialog from './InviteDialog';
 
 import { Menu, X } from 'lucide-react';
 
-// Simple menu icons
-const MenuIcon = () => <Menu className="w-5 h-5" />;
-const CloseIcon = () => <X className="w-5 h-5" />;
-
-
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -60,45 +55,42 @@ const Navbar = () => {
       {/* Modern Glassmorphism Floating Header with Pill Navigation */}
       <motion.header
         initial={{ y: 0, opacity: 1 }}
-        animate={{ 
+        animate={{
           y: isVisible ? 0 : -100,
           opacity: isVisible ? 1 : 0
         }}
-        transition={{ 
-          duration: 0.4, 
-          ease: [0.25, 0.46, 0.45, 0.94]
+        transition={{
+          duration: 0.4
         }}
         className={`fixed top-6 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-500 ${
-          isScrolled
-            ? 'w-[96%] max-w-6xl'
-            : 'w-[98%] max-w-7xl'
+          isScrolled ? 'w-[96%] max-w-6xl' : 'w-[98%] max-w-7xl'
         }`}
       >
         {/* Main Navigation Container with Advanced Glassmorphism */}
-        <div className={`relative overflow-hidden rounded-3xl transition-all duration-500 ${
-          isScrolled
-            ? 'bg-white/85 backdrop-blur-2xl border border-white/30 shadow-2xl shadow-black/10'
-            : 'bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl shadow-black/5'
-        }`}>
-          
+        <div
+          className={`relative overflow-hidden rounded-3xl transition-all duration-500 ${
+            isScrolled
+              ? 'bg-white/85 backdrop-blur-2xl border border-white/30 shadow-2xl shadow-black/10'
+              : 'bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl shadow-black/5'
+          }`}
+        >
           {/* Animated Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-50" />
-          
+          <div className='absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-50' />
+
           {/* Content Container */}
           <div className='relative flex items-center justify-between px-8 py-5'>
-            
             {/* Logo with Enhanced Animation - Aligned with Transform text */}
-            <motion.div 
-              whileHover={{ 
+            <motion.div
+              whileHover={{
                 scale: 1.05,
                 filter: 'brightness(1.1)'
-              }} 
-              transition={{ 
-                type: "spring",
+              }}
+              transition={{
+                type: 'spring',
                 stiffness: 400,
                 damping: 17
               }}
-              className="ml-8"
+              className='ml-8'
             >
               <Link
                 to='/'
@@ -114,11 +106,13 @@ const Navbar = () => {
 
             {/* Pill-Shaped Navigation Container */}
             <nav className='hidden lg:block absolute left-8'>
-              <div className={`flex items-center gap-1 px-6 py-3 rounded-full transition-all duration-300 ${
-                isScrolled
-                  ? 'bg-white/60 backdrop-blur-lg border border-white/40 shadow-lg'
-                  : 'bg-white/40 backdrop-blur-md border border-white/25 shadow-md'
-              }`}>
+              <div
+                className={`flex items-center gap-1 px-6 py-3 rounded-full transition-all duration-300 ${
+                  isScrolled
+                    ? 'bg-white/60 backdrop-blur-lg border border-white/40 shadow-lg'
+                    : 'bg-white/40 backdrop-blur-md border border-white/25 shadow-md'
+                }`}
+              >
                 {[
                   { to: '/', label: 'Home' },
                   { to: '/agents', label: 'Agents' },
@@ -126,20 +120,20 @@ const Navbar = () => {
                   { to: '/use-cases', label: 'Use Cases' },
                   { to: '/partners', label: 'Partners' },
                   { to: '/resources/faq', label: 'FAQ' }
-                ].map((item) => (
-                  <motion.div 
+                ].map(item => (
+                  <motion.div
                     key={item.to}
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.05,
                       backgroundColor: 'rgba(255, 255, 255, 0.8)'
                     }}
                     whileTap={{ scale: 0.95 }}
-                    transition={{ 
-                      type: "spring",
+                    transition={{
+                      type: 'spring',
                       stiffness: 400,
                       damping: 17
                     }}
-                    className="rounded-full"
+                    className='rounded-full'
                   >
                     <Link
                       to={item.to}
@@ -154,14 +148,14 @@ const Navbar = () => {
 
             {/* CTA Buttons with Micro-Interactions */}
             <div className='hidden md:flex items-center gap-3'>
-              <motion.div 
-                whileHover={{ 
+              <motion.div
+                whileHover={{
                   scale: 1.05,
                   y: -2
-                }} 
+                }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ 
-                  type: "spring",
+                transition={{
+                  type: 'spring',
                   stiffness: 400,
                   damping: 17
                 }}
@@ -175,15 +169,15 @@ const Navbar = () => {
                   Invite
                 </Button>
               </motion.div>
-              <motion.div 
-                whileHover={{ 
+              <motion.div
+                whileHover={{
                   scale: 1.05,
                   y: -2,
                   boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)'
-                }} 
+                }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ 
-                  type: "spring",
+                transition={{
+                  type: 'spring',
                   stiffness: 400,
                   damping: 17
                 }}
@@ -200,21 +194,17 @@ const Navbar = () => {
 
             {/* Enhanced Mobile Menu Button */}
             <div className='lg:hidden'>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   variant='ghost'
                   size='sm'
                   onClick={toggleMobileMenu}
                   className='text-slate-700 hover:text-blue-600 hover:bg-white/60 rounded-full p-3'
                 >
-                  {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+                  {mobileMenuOpen ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
                 </Button>
               </motion.div>
             </div>
-            
           </div>
         </div>
 
@@ -225,9 +215,8 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0, y: -20 }}
               animate={{ opacity: 1, height: 'auto', y: 0 }}
               exit={{ opacity: 0, height: 0, y: -20 }}
-              transition={{ 
-                duration: 0.3,
-                ease: [0.25, 0.46, 0.45, 0.94]
+              transition={{
+                duration: 0.3
               }}
               className='lg:hidden mt-4'
             >
@@ -256,7 +245,7 @@ const Navbar = () => {
                       </Link>
                     </motion.div>
                   ))}
-                  
+
                   <div className='flex flex-col gap-3 pt-6 mt-6 border-t border-slate-200/60'>
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}

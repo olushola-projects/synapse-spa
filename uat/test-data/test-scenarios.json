@@ -1,0 +1,332 @@
+{
+  "testScenarios": {
+    "userProfiles": [
+      {
+        "id": "compliance_officer",
+        "name": "Sarah Chen",
+        "role": "Compliance Officer",
+        "experience": "Intermediate",
+        "goals": [
+          "Understand SFDR requirements",
+          "Implement compliance procedures",
+          "Generate regulatory reports"
+        ],
+        "painPoints": [
+          "Complex regulatory language",
+          "Time-consuming manual processes",
+          "Keeping up with regulatory changes"
+        ]
+      },
+      {
+        "id": "fund_manager",
+        "name": "Michael Rodriguez",
+        "role": "Fund Manager",
+        "experience": "Expert",
+        "goals": [
+          "Classify funds correctly under SFDR",
+          "Optimize fund positioning",
+          "Meet disclosure requirements"
+        ],
+        "painPoints": [
+          "Unclear classification criteria",
+          "Balancing performance and sustainability",
+          "Investor communication challenges"
+        ]
+      },
+      {
+        "id": "risk_analyst",
+        "name": "Emma Thompson",
+        "role": "Risk Analyst",
+        "experience": "Advanced",
+        "goals": [
+          "Assess sustainability risks",
+          "Implement due diligence procedures",
+          "Monitor regulatory compliance"
+        ],
+        "painPoints": [
+          "Data quality and availability",
+          "Integration with existing systems",
+          "Standardization across processes"
+        ]
+      },
+      {
+        "id": "it_administrator",
+        "name": "David Kim",
+        "role": "IT Administrator",
+        "experience": "Novice in SFDR",
+        "goals": [
+          "Implement technical solutions",
+          "Ensure system security",
+          "Support user adoption"
+        ],
+        "painPoints": [
+          "Understanding business requirements",
+          "System integration complexity",
+          "User training and support"
+        ]
+      }
+    ],
+    "businessScenarios": [
+      {
+        "id": "fund_classification",
+        "title": "New Fund SFDR Classification",
+        "description": "A fund manager needs to classify a new ESG-focused equity fund under SFDR regulations",
+        "userProfile": "fund_manager",
+        "steps": [
+          "Access SFDR classification guidance",
+          "Input fund characteristics",
+          "Review classification recommendations",
+          "Understand disclosure requirements",
+          "Generate classification documentation"
+        ],
+        "expectedOutcome": "Accurate fund classification with clear documentation",
+        "successCriteria": [
+          "Classification completed within 30 minutes",
+          "All required disclosures identified",
+          "Documentation meets regulatory standards"
+        ]
+      },
+      {
+        "id": "due_diligence_process",
+        "title": "Customer Due Diligence Implementation",
+        "description": "A compliance officer needs to implement enhanced due diligence procedures for high-risk clients",
+        "userProfile": "compliance_officer",
+        "steps": [
+          "Access CDD guidance and requirements",
+          "Define risk assessment criteria",
+          "Create due diligence checklists",
+          "Establish monitoring procedures",
+          "Document compliance framework"
+        ],
+        "expectedOutcome": "Comprehensive CDD framework implementation",
+        "successCriteria": [
+          "Risk criteria clearly defined",
+          "Procedures are actionable",
+          "Framework meets regulatory requirements"
+        ]
+      },
+      {
+        "id": "regulatory_reporting",
+        "title": "SFDR Periodic Reporting",
+        "description": "A risk analyst needs to prepare periodic SFDR reports for multiple funds",
+        "userProfile": "risk_analyst",
+        "steps": [
+          "Gather required fund data",
+          "Access reporting templates",
+          "Calculate sustainability indicators",
+          "Generate periodic reports",
+          "Validate report accuracy"
+        ],
+        "expectedOutcome": "Accurate and timely SFDR periodic reports",
+        "successCriteria": [
+          "All required metrics included",
+          "Reports generated within deadline",
+          "Data accuracy validated"
+        ]
+      },
+      {
+        "id": "system_integration",
+        "title": "Enterprise System Integration",
+        "description": "An IT administrator needs to integrate SFDR Navigator with existing enterprise systems",
+        "userProfile": "it_administrator",
+        "steps": [
+          "Review integration requirements",
+          "Access API documentation",
+          "Configure system connections",
+          "Test data flow",
+          "Validate security measures"
+        ],
+        "expectedOutcome": "Successful system integration with secure data flow",
+        "successCriteria": [
+          "Integration completed without errors",
+          "Data synchronization works correctly",
+          "Security requirements met"
+        ]
+      }
+    ],
+    "testQueries": {
+      "cddAgent": [
+        {
+          "category": "basic",
+          "query": "What is Customer Due Diligence?",
+          "expectedResponse": "Comprehensive explanation of CDD principles and requirements"
+        },
+        {
+          "category": "procedural",
+          "query": "How do I implement enhanced due diligence for high-risk customers?",
+          "expectedResponse": "Step-by-step guidance for enhanced CDD procedures"
+        },
+        {
+          "category": "regulatory",
+          "query": "What are the AML requirements for customer identification?",
+          "expectedResponse": "Detailed AML customer identification requirements"
+        },
+        {
+          "category": "practical",
+          "query": "What documentation do I need for corporate customer onboarding?",
+          "expectedResponse": "Comprehensive list of required corporate documentation"
+        },
+        {
+          "category": "risk_assessment",
+          "query": "How do I assess the risk level of a new customer?",
+          "expectedResponse": "Risk assessment framework and criteria"
+        }
+      ],
+      "sfdrGem": [
+        {
+          "category": "classification",
+          "query": "How do I classify my fund under SFDR?",
+          "expectedResponse": "Fund classification guidance with decision tree"
+        },
+        {
+          "category": "disclosure",
+          "query": "What are the disclosure requirements for Article 8 funds?",
+          "expectedResponse": "Comprehensive Article 8 disclosure requirements"
+        },
+        {
+          "category": "reporting",
+          "query": "How do I prepare SFDR periodic reports?",
+          "expectedResponse": "Step-by-step periodic reporting guidance"
+        },
+        {
+          "category": "comparison",
+          "query": "What are the differences between Article 6, 8, and 9 funds?",
+          "expectedResponse": "Detailed comparison of SFDR fund categories"
+        },
+        {
+          "category": "implementation",
+          "query": "What systems do I need for SFDR compliance?",
+          "expectedResponse": "Technology and system requirements for SFDR compliance"
+        }
+      ]
+    },
+    "errorScenarios": [
+      {
+        "scenario": "empty_input",
+        "description": "User submits empty message",
+        "expectedBehavior": "Graceful handling with helpful prompt"
+      },
+      {
+        "scenario": "invalid_characters",
+        "description": "User inputs special characters or emojis",
+        "expectedBehavior": "System processes input without errors"
+      },
+      {
+        "scenario": "extremely_long_input",
+        "description": "User submits message over character limit",
+        "expectedBehavior": "Appropriate truncation or error message"
+      },
+      {
+        "scenario": "network_interruption",
+        "description": "Network connection is lost during interaction",
+        "expectedBehavior": "Clear error message with retry option"
+      },
+      {
+        "scenario": "rapid_submissions",
+        "description": "User submits multiple messages rapidly",
+        "expectedBehavior": "Rate limiting or queue management"
+      }
+    ],
+    "performanceScenarios": [
+      {
+        "scenario": "page_load_performance",
+        "description": "Initial page load time measurement",
+        "target": "< 3 seconds on normal connection",
+        "measurement": "Time to interactive"
+      },
+      {
+        "scenario": "agent_response_time",
+        "description": "Agent response time for various query types",
+        "target": "< 5 seconds for simple queries, < 10 seconds for complex",
+        "measurement": "Time from submission to response display"
+      },
+      {
+        "scenario": "concurrent_users",
+        "description": "System performance with multiple simultaneous users",
+        "target": "No degradation with up to 50 concurrent users",
+        "measurement": "Response time and system stability"
+      },
+      {
+        "scenario": "mobile_performance",
+        "description": "Performance on mobile devices",
+        "target": "< 5 seconds load time on 3G connection",
+        "measurement": "Mobile-specific performance metrics"
+      }
+    ],
+    "accessibilityScenarios": [
+      {
+        "scenario": "keyboard_navigation",
+        "description": "Complete application navigation using only keyboard",
+        "requirements": "All functionality accessible via keyboard shortcuts"
+      },
+      {
+        "scenario": "screen_reader_compatibility",
+        "description": "Application usage with screen reader software",
+        "requirements": "All content readable by screen readers"
+      },
+      {
+        "scenario": "high_contrast_mode",
+        "description": "Application visibility in high contrast mode",
+        "requirements": "All elements visible and functional in high contrast"
+      },
+      {
+        "scenario": "zoom_compatibility",
+        "description": "Application usability at 200% browser zoom",
+        "requirements": "All functionality remains accessible at high zoom levels"
+      }
+    ]
+  },
+  "testEnvironments": {
+    "development": {
+      "url": "http://localhost:8080",
+      "description": "Local development environment",
+      "features": "All features enabled, debug mode active"
+    },
+    "staging": {
+      "url": "https://staging.sfdr-navigator.com",
+      "description": "Pre-production staging environment",
+      "features": "Production-like configuration"
+    },
+    "production": {
+      "url": "https://sfdr-navigator.com",
+      "description": "Live production environment",
+      "features": "Full production configuration"
+    }
+  },
+  "testDataSets": {
+    "sampleFunds": [
+      {
+        "name": "Green Equity Fund",
+        "type": "Equity",
+        "focus": "Environmental",
+        "expectedClassification": "Article 8"
+      },
+      {
+        "name": "Sustainable Impact Bond Fund",
+        "type": "Fixed Income",
+        "focus": "Social Impact",
+        "expectedClassification": "Article 9"
+      },
+      {
+        "name": "Traditional Balanced Fund",
+        "type": "Mixed",
+        "focus": "Traditional",
+        "expectedClassification": "Article 6"
+      }
+    ],
+    "sampleCustomers": [
+      {
+        "type": "Individual",
+        "riskLevel": "Low",
+        "jurisdiction": "EU",
+        "requiredDocuments": ["ID", "Proof of Address", "Source of Funds"]
+      },
+      {
+        "type": "Corporate",
+        "riskLevel": "High",
+        "jurisdiction": "Non-EU",
+        "requiredDocuments": ["Certificate of Incorporation", "Board Resolution", "UBO Declaration", "Financial Statements"]
+      }
+    ]
+  }
+}

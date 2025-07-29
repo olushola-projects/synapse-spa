@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -62,7 +62,7 @@ export const CDDMetricsDashboard: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveMetric((prev) => (prev + 1) % metrics.length);
+      setActiveMetric(prev => (prev + 1) % metrics.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -81,9 +81,7 @@ export const CDDMetricsDashboard: React.FC = () => {
           onClick={() => setActiveMetric(index)}
         >
           <div className='flex items-center justify-between mb-4'>
-            <div className='p-2 bg-white/20 rounded-lg backdrop-blur-sm'>
-              {metric.icon}
-            </div>
+            <div className='p-2 bg-white/20 rounded-lg backdrop-blur-sm'>{metric.icon}</div>
             <Badge variant='secondary' className='bg-white/20 text-white border-white/30'>
               {metric.value}%
             </Badge>
@@ -131,7 +129,8 @@ export const CDDFeatureShowcase: React.FC = () => {
     },
     {
       title: 'AI-Powered Document Analysis',
-      description: 'Intelligent OCR and document authenticity validation across 200+ document types',
+      description:
+        'Intelligent OCR and document authenticity validation across 200+ document types',
       icon: <FileText className='w-8 h-8' />,
       gradient: 'from-green-500 to-emerald-500',
       details: [
@@ -144,7 +143,8 @@ export const CDDFeatureShowcase: React.FC = () => {
     },
     {
       title: 'Dynamic Risk Scoring',
-      description: 'Machine learning algorithms for real-time risk assessment and behavioral analysis',
+      description:
+        'Machine learning algorithms for real-time risk assessment and behavioral analysis',
       icon: <Brain className='w-8 h-8' />,
       gradient: 'from-purple-500 to-indigo-500',
       details: [
@@ -186,15 +186,19 @@ export const CDDFeatureShowcase: React.FC = () => {
                 : 'bg-card hover:bg-muted border border-border'
             }`}
           >
-            <div className={`p-3 rounded-xl mb-4 inline-block ${
-              activeFeature === index ? 'bg-white/20' : 'bg-primary/10'
-            }`}>
+            <div
+              className={`p-3 rounded-xl mb-4 inline-block ${
+                activeFeature === index ? 'bg-white/20' : 'bg-primary/10'
+              }`}
+            >
               {feature.icon}
             </div>
             <h3 className='font-semibold text-lg mb-2'>{feature.title}</h3>
-            <p className={`text-sm ${
-              activeFeature === index ? 'text-white/80' : 'text-muted-foreground'
-            }`}>
+            <p
+              className={`text-sm ${
+                activeFeature === index ? 'text-white/80' : 'text-muted-foreground'
+              }`}
+            >
               {feature.description}
             </p>
           </motion.button>
@@ -213,7 +217,9 @@ export const CDDFeatureShowcase: React.FC = () => {
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 items-center'>
             <div className='space-y-6'>
               <div className='flex items-center gap-4'>
-                <div className={`p-4 rounded-2xl bg-gradient-to-br ${features[activeFeature]?.gradient || 'from-blue-500 to-cyan-500'} text-white`}>
+                <div
+                  className={`p-4 rounded-2xl bg-gradient-to-br ${features[activeFeature]?.gradient || 'from-blue-500 to-cyan-500'} text-white`}
+                >
                   {features[activeFeature]?.icon}
                 </div>
                 <div>
@@ -221,7 +227,7 @@ export const CDDFeatureShowcase: React.FC = () => {
                   <p className='text-muted-foreground'>{features[activeFeature]?.description}</p>
                 </div>
               </div>
-              
+
               <div className='space-y-3'>
                 <h4 className='font-semibold text-lg'>Key Capabilities</h4>
                 <ul className='space-y-2'>
@@ -239,16 +245,18 @@ export const CDDFeatureShowcase: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              
+
               <Button className='w-full'>
                 <Play className='w-4 h-4 mr-2' />
                 Try {features[activeFeature]?.demo || 'Demo'}
               </Button>
             </div>
-            
+
             <div className='bg-muted/50 rounded-2xl p-8 flex items-center justify-center min-h-[300px]'>
               <div className='text-center space-y-4'>
-                <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${features[activeFeature]?.gradient || 'from-blue-500 to-cyan-500'} flex items-center justify-center text-white`}>
+                <div
+                  className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${features[activeFeature]?.gradient || 'from-blue-500 to-cyan-500'} flex items-center justify-center text-white`}
+                >
                   {features[activeFeature]?.icon}
                 </div>
                 <h4 className='font-semibold'>{features[activeFeature]?.demo || 'Demo'}</h4>
@@ -268,12 +276,42 @@ export const ComplianceStandards: React.FC = () => {
   const isInView = useInView(ref, { once: true });
 
   const standards = [
-    { name: 'GDPR', region: 'EU', icon: <Shield className='w-6 h-6' />, color: 'from-blue-500 to-blue-600' },
-    { name: 'KYC/AML', region: 'Global', icon: <Users className='w-6 h-6' />, color: 'from-green-500 to-green-600' },
-    { name: 'SOX', region: 'US', icon: <FileText className='w-6 h-6' />, color: 'from-purple-500 to-purple-600' },
-    { name: 'PCI DSS', region: 'Global', icon: <Lock className='w-6 h-6' />, color: 'from-orange-500 to-orange-600' },
-    { name: 'CCPA', region: 'California', icon: <Eye className='w-6 h-6' />, color: 'from-red-500 to-red-600' },
-    { name: 'MiFID II', region: 'EU', icon: <BarChart3 className='w-6 h-6' />, color: 'from-indigo-500 to-indigo-600' }
+    {
+      name: 'GDPR',
+      region: 'EU',
+      icon: <Shield className='w-6 h-6' />,
+      color: 'from-blue-500 to-blue-600'
+    },
+    {
+      name: 'KYC/AML',
+      region: 'Global',
+      icon: <Users className='w-6 h-6' />,
+      color: 'from-green-500 to-green-600'
+    },
+    {
+      name: 'SOX',
+      region: 'US',
+      icon: <FileText className='w-6 h-6' />,
+      color: 'from-purple-500 to-purple-600'
+    },
+    {
+      name: 'PCI DSS',
+      region: 'Global',
+      icon: <Lock className='w-6 h-6' />,
+      color: 'from-orange-500 to-orange-600'
+    },
+    {
+      name: 'CCPA',
+      region: 'California',
+      icon: <Eye className='w-6 h-6' />,
+      color: 'from-red-500 to-red-600'
+    },
+    {
+      name: 'MiFID II',
+      region: 'EU',
+      icon: <BarChart3 className='w-6 h-6' />,
+      color: 'from-indigo-500 to-indigo-600'
+    }
   ];
 
   return (
@@ -339,9 +377,7 @@ export const CDDArchitecture: React.FC = () => {
         >
           <div className={`p-6 rounded-2xl bg-gradient-to-r ${layer.color} text-white`}>
             <div className='flex items-center gap-4'>
-              <div className='p-3 bg-white/20 rounded-xl'>
-                {layer.icon}
-              </div>
+              <div className='p-3 bg-white/20 rounded-xl'>{layer.icon}</div>
               <div className='flex-1'>
                 <h3 className='text-xl font-semibold mb-2'>{layer.name}</h3>
                 <p className='text-white/80'>{layer.description}</p>
@@ -375,10 +411,10 @@ export const PerformanceBenchmarks: React.FC = () => {
   return (
     <div ref={ref} className='space-y-6'>
       {benchmarks.map((benchmark, index) => {
-        const isOursBetter = benchmark.inverse 
+        const isOursBetter = benchmark.inverse
           ? benchmark.ourScore < benchmark.industry
           : benchmark.ourScore > benchmark.industry;
-        
+
         return (
           <motion.div
             key={index}
@@ -396,27 +432,29 @@ export const PerformanceBenchmarks: React.FC = () => {
                 </Badge>
               )}
             </div>
-            
+
             <div className='space-y-4'>
               <div className='flex items-center justify-between'>
                 <span className='text-sm text-muted-foreground'>CDD Agent</span>
                 <span className='font-semibold text-lg'>
-                  {benchmark.ourScore}{benchmark.unit}
+                  {benchmark.ourScore}
+                  {benchmark.unit}
                 </span>
               </div>
-              <Progress 
-                value={benchmark.inverse ? 100 - benchmark.ourScore : benchmark.ourScore} 
+              <Progress
+                value={benchmark.inverse ? 100 - benchmark.ourScore : benchmark.ourScore}
                 className='h-3'
               />
-              
+
               <div className='flex items-center justify-between'>
                 <span className='text-sm text-muted-foreground'>Industry Average</span>
                 <span className='font-medium'>
-                  {benchmark.industry}{benchmark.unit}
+                  {benchmark.industry}
+                  {benchmark.unit}
                 </span>
               </div>
-              <Progress 
-                value={benchmark.inverse ? 100 - benchmark.industry : benchmark.industry} 
+              <Progress
+                value={benchmark.inverse ? 100 - benchmark.industry : benchmark.industry}
                 className='h-2 opacity-50'
               />
             </div>
@@ -443,7 +481,8 @@ export const CustomerSuccessStories: React.FC = () => {
         '60% decrease in operational costs',
         '99.2% customer satisfaction rate'
       ],
-      quote: 'CDD Agent transformed our customer onboarding from days to minutes while maintaining the highest compliance standards.',
+      quote:
+        'CDD Agent transformed our customer onboarding from days to minutes while maintaining the highest compliance standards.',
       author: 'Sarah Chen, Chief Compliance Officer',
       logo: '🏦'
     },
@@ -471,7 +510,8 @@ export const CustomerSuccessStories: React.FC = () => {
         '85% reduction in manual reviews',
         '99.8% accuracy in risk detection'
       ],
-      quote: 'CDD Agent scales effortlessly with our business growth while maintaining exceptional accuracy.',
+      quote:
+        'CDD Agent scales effortlessly with our business growth while maintaining exceptional accuracy.',
       author: 'David Kim, VP of Operations',
       logo: '💳'
     }
@@ -492,7 +532,7 @@ export const CustomerSuccessStories: React.FC = () => {
           ))}
         </div>
       </div>
-      
+
       <AnimatePresence mode='wait'>
         <motion.div
           key={activeStory}
@@ -511,20 +551,20 @@ export const CustomerSuccessStories: React.FC = () => {
                   <p className='text-muted-foreground'>{stories[activeStory]?.industry}</p>
                 </div>
               </div>
-              
+
               <div className='space-y-4'>
                 <div>
                   <h4 className='font-semibold text-red-600 mb-2'>Challenge</h4>
                   <p className='text-sm'>{stories[activeStory]?.challenge}</p>
                 </div>
-                
+
                 <div>
                   <h4 className='font-semibold text-blue-600 mb-2'>Solution</h4>
                   <p className='text-sm'>{stories[activeStory]?.solution}</p>
                 </div>
               </div>
             </div>
-            
+
             <div className='space-y-6'>
               <div>
                 <h4 className='font-semibold text-green-600 mb-4'>Results</h4>
@@ -537,7 +577,7 @@ export const CustomerSuccessStories: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              
+
               <div className='bg-white/50 rounded-xl p-6'>
                 <blockquote className='text-sm italic mb-4'>
                   "{stories[activeStory]?.quote}"
