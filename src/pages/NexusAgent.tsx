@@ -19,12 +19,10 @@ import {
   AlertTriangle,
   Bot,
   Brain,
-  Zap,
   Target,
   Search
 } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
-import { nexusAgent } from '@/services/nexusAgent';
 import type { QuickActionType } from '@/types/nexus';
 
 /**
@@ -76,14 +74,6 @@ try {
 
 const NexusAgent = () => {
   // State declarations
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiResponse, setApiResponse] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [chatHistory, setChatHistory] = useState<any[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAgentTyping, setIsAgentTyping] = useState(false);
-  const [user, setUser] = useState<any>(null);
   const [complianceData, setComplianceData] = useState<{
     status: 'pre-validated' | 'needs-review';
     esmaReference: string;
@@ -91,10 +81,8 @@ const NexusAgent = () => {
 
   useEffect(() => {
     // Authentication check
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-      }
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (_, session) => {
+      console.log('Auth state changed:', session?.user?.id);
     });
 
     // Initialize analytics
@@ -120,14 +108,6 @@ const NexusAgent = () => {
 
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
   const chatRef = useRef<any>(null);
-
-  // Quantum-resistant hashing for audit trails
-  const quantumHash = useCallback((data: any) => {
-    const timestamp = Date.now();
-    const hash = btoa(`${JSON.stringify(data)}-${timestamp}-quantum-secure`);
-    console.log(`Quantum Hash: ${hash.substring(0, 16)}...`);
-    return hash;
-  }, []);
 
   // Global industry metrics
   const industryMetrics = [
