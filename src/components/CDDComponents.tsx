@@ -11,26 +11,17 @@ import {
   Brain,
   Zap,
   CheckCircle,
-  AlertTriangle,
   TrendingUp,
-  Clock,
   Globe,
   Lock,
   Eye,
   FileText,
   BarChart3,
-  Activity,
-  Target,
-  Sparkles,
-  ArrowRight,
   Play,
   ChevronRight,
-  Star,
-  Award,
   Layers,
-  Database,
-  Cpu,
-  Network
+  Target,
+  Database
 } from 'lucide-react';
 
 // Enhanced Metrics Dashboard
@@ -223,19 +214,19 @@ export const CDDFeatureShowcase: React.FC = () => {
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 items-center'>
             <div className='space-y-6'>
               <div className='flex items-center gap-4'>
-                <div className={`p-4 rounded-2xl bg-gradient-to-br ${features[activeFeature].gradient} text-white`}>
-                  {features[activeFeature].icon}
+                <div className={`p-4 rounded-2xl bg-gradient-to-br ${features[activeFeature]?.gradient || 'from-blue-500 to-cyan-500'} text-white`}>
+                  {features[activeFeature]?.icon}
                 </div>
                 <div>
-                  <h3 className='text-2xl font-bold'>{features[activeFeature].title}</h3>
-                  <p className='text-muted-foreground'>{features[activeFeature].description}</p>
+                  <h3 className='text-2xl font-bold'>{features[activeFeature]?.title}</h3>
+                  <p className='text-muted-foreground'>{features[activeFeature]?.description}</p>
                 </div>
               </div>
               
               <div className='space-y-3'>
                 <h4 className='font-semibold text-lg'>Key Capabilities</h4>
                 <ul className='space-y-2'>
-                  {features[activeFeature].details.map((detail, idx) => (
+                  {features[activeFeature]?.details?.map((detail, idx) => (
                     <motion.li
                       key={idx}
                       initial={{ opacity: 0, x: -20 }}
@@ -252,16 +243,16 @@ export const CDDFeatureShowcase: React.FC = () => {
               
               <Button className='w-full'>
                 <Play className='w-4 h-4 mr-2' />
-                Try {features[activeFeature].demo}
+                Try {features[activeFeature]?.demo || 'Demo'}
               </Button>
             </div>
             
             <div className='bg-muted/50 rounded-2xl p-8 flex items-center justify-center min-h-[300px]'>
               <div className='text-center space-y-4'>
-                <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${features[activeFeature].gradient} flex items-center justify-center text-white`}>
-                  {features[activeFeature].icon}
+                <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${features[activeFeature]?.gradient || 'from-blue-500 to-cyan-500'} flex items-center justify-center text-white`}>
+                  {features[activeFeature]?.icon}
                 </div>
-                <h4 className='font-semibold'>{features[activeFeature].demo}</h4>
+                <h4 className='font-semibold'>{features[activeFeature]?.demo || 'Demo'}</h4>
                 <p className='text-sm text-muted-foreground'>Interactive demo coming soon</p>
               </div>
             </div>
@@ -441,7 +432,6 @@ export const PerformanceBenchmarks: React.FC = () => {
 export const CustomerSuccessStories: React.FC = () => {
   const [activeStory, setActiveStory] = useState(0);
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: true });
 
   const stories = [
     {

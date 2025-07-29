@@ -388,7 +388,7 @@ const FeaturesSection = () => {
                                 'rounded-full w-12 h-12 flex items-center justify-center mb-4'
                               )}
                             >
-                              <feature.icon size={24} />
+                              <feature.icon />
                             </div>
                             <h3 className='text-xl font-bold mb-4 text-gray-900'>{feature.title}</h3>
                             <p className='text-gray-600 text-sm'>{feature.description}</p>

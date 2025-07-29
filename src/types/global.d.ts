@@ -1,5 +1,18 @@
 // Global type declarations for external libraries and APIs
 
+// Lord Icon Web Component
+declare namespace JSX {
+  interface IntrinsicElements {
+    'lord-icon': {
+      src?: string;
+      trigger?: string;
+      style?: React.CSSProperties;
+      'aria-label'?: string;
+      children?: React.ReactNode;
+    };
+  }
+}
+
 // Google Analytics gtag function
 declare global {
   interface Window {
