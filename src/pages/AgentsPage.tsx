@@ -1,33 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useAnimation, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
 import { EnhancedAgentCard, type EnhancedAgent } from '@/components/AgentShowcase';
 import {
   Bot,
-  Brain,
   Zap,
   Shield,
   TrendingUp,
   Users,
   Clock,
   Star,
-  ArrowRight,
   CheckCircle,
   Sparkles,
-  Target,
   BarChart3,
   Globe,
-  Lock,
   Rocket,
   Award,
   Lightbulb,
-  Cpu,
-  Database,
-  Network,
   Search,
   Filter,
   Grid,
@@ -199,7 +190,7 @@ const itemVariants = {
     scale: 1,
     transition: {
       duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94]
+      ease: "easeOut"
     }
   }
 };
@@ -211,7 +202,7 @@ const heroVariants = {
     y: 0,
     transition: {
       duration: 1,
-      ease: [0.25, 0.46, 0.45, 0.94]
+      ease: "easeOut"
     }
   }
 };
