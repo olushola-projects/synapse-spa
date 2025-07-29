@@ -74,7 +74,8 @@ const AgentDemo: React.FC<{
     }
     return () => clearInterval(interval);
   }, [isPlaying, demoSteps.length]);
-  return <div className='space-y-4'>
+  return (
+    <div className='space-y-4'>
       <div className='flex items-center justify-between'>
         <h4 className='font-semibold flex items-center gap-2'>
           <Play className='w-4 h-4' />
@@ -103,7 +104,8 @@ const AgentDemo: React.FC<{
         duration: 0.5
       }} />
       </div>
-    </div>;
+    </div>
+  );
 };
 
 /**
@@ -115,7 +117,8 @@ const MetricsVisualization: React.FC<{
   metrics
 }) => {
   const [hoveredMetric, setHoveredMetric] = useState<string | null>(null);
-  return <div className='space-y-4'>
+  return (
+    <div className='space-y-4'>
       <h4 className='font-semibold flex items-center gap-2'>
         <BarChart3 className='w-4 h-4' />
         Performance Metrics
@@ -149,7 +152,8 @@ const MetricsVisualization: React.FC<{
             </AnimatePresence>
           </motion.div>)}
       </div>
-    </div>;
+    </div>
+  );
 };
 
 /**
@@ -170,7 +174,8 @@ const TestimonialsCarousel: React.FC<{
   if (!testimonials.length) {
     return null;
   }
-  return <div className='space-y-4'>
+  return (
+    <div className='space-y-4'>
       <h4 className='font-semibold flex items-center gap-2'>
         <Star className='w-4 h-4' />
         Customer Testimonials
@@ -205,7 +210,8 @@ const TestimonialsCarousel: React.FC<{
           {testimonials.map((_, index) => <button key={index} className={`w-2 h-2 rounded-full transition-all ${index === currentIndex ? 'bg-primary' : 'bg-muted-foreground/30'}`} onClick={() => setCurrentIndex(index)} />)}
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 /**
@@ -236,7 +242,8 @@ const EnhancedAgentCard: React.FC<{
     mouseX.set(0);
     mouseY.set(0);
   };
-  return <motion.div className='h-full perspective-1000' initial={{
+  return (
+    <motion.div className='h-full perspective-1000' initial={{
     opacity: 0,
     y: 50
   }} animate={{
@@ -383,5 +390,6 @@ const EnhancedAgentCard: React.FC<{
     </motion.div>
   );
 };
+
 export { EnhancedAgentCard, AgentDemo, MetricsVisualization, TestimonialsCarousel };
 export type { EnhancedAgent };
