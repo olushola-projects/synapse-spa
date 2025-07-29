@@ -87,7 +87,7 @@ const Navbar = () => {
           {/* Content Container */}
           <div className='relative flex items-center justify-between px-8 py-5'>
             
-            {/* Logo with Enhanced Animation */}
+            {/* Logo with Enhanced Animation - Aligned with Transform text */}
             <motion.div 
               whileHover={{ 
                 scale: 1.05,
@@ -98,6 +98,7 @@ const Navbar = () => {
                 stiffness: 400,
                 damping: 17
               }}
+              className="ml-8"
             >
               <Link
                 to='/'
