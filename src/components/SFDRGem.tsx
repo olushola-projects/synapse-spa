@@ -200,13 +200,13 @@ const SFDRGem: React.FC = () => {
           fileName: file.name,
           fileSize: file.size,
           uploadDate: new Date(),
-        status: 'processing',
-        sfdrRelevance: 0,
-        summary: '',
-        extractedEntities: [],
-        sentiment: 'neutral',
-        topics: [],
-        complianceIssues: []
+          status: 'processing',
+          sfdrRelevance: 0,
+          summary: '',
+          extractedEntities: [],
+          sentiment: 'neutral',
+          topics: [],
+          complianceIssues: []
         };
 
         newDocuments.push(document);
@@ -298,7 +298,7 @@ const SFDRGem: React.FC = () => {
       const result = classifications[Math.floor(Math.random() * classifications.length)];
       if (result) {
         setClassificationResult(result);
-      setIsLoading(false);
+        setIsLoading(false);
 
         // Update contextual memory
         setContextualMemory(prev => ({

@@ -17,6 +17,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import UseCases from './pages/UseCases';
 import NexusAgent from './pages/NexusAgent';
 import AgentsPage from './pages/AgentsPage';
+import CDDAgentPage from './pages/CDDAgentPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Legal pages
@@ -116,6 +117,7 @@ const App = () => (
             />
             <Route path='/use-cases' element={<UseCases />} />
             <Route path='/agents' element={<AgentsPage />} />
+            <Route path='/agents/cdd-agent' element={<CDDAgentPage />} />
             <Route
               path='/nexus-agent'
               element={

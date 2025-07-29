@@ -1,10 +1,55 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExternalFormDialog from './ExternalFormDialog';
 import InviteDialog from './InviteDialog';
+
+// Enterprise-grade animated icons with accessibility support
+const MenuIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/msoeawqm.json"
+    trigger="hover"
+    style={{width: '20px', height: '20px'}}
+    aria-label="Open navigation menu"
+  ></lord-icon>
+);
+
+const CloseIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/nqtddedc.json"
+    trigger="hover"
+    style={{width: '20px', height: '20px'}}
+    aria-label="Close navigation menu"
+  ></lord-icon>
+);
+
+// Trust indicators for enterprise credibility
+const TrustBadge = () => (
+  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+    <span className="font-medium">SOC 2 Certified</span>
+  </div>
+);
+
+// Navigation structure following enterprise information architecture
+const navigationStructure = {
+  solutions: {
+    label: 'Solutions',
+    items: [
+      { to: '/agents', label: 'AI Agents', description: 'Intelligent automation solutions' },
+      { to: '/nexus-agent', label: 'SFDR Navigator', description: 'Regulatory compliance platform' },
+      { to: '/use-cases', label: 'Use Cases', description: 'Industry applications' }
+    ]
+  },
+  company: {
+    label: 'Company',
+    items: [
+      { to: '/partners', label: 'Partners', description: 'Strategic alliances' },
+      { to: '/resources/faq', label: 'Resources', description: 'Knowledge center' }
+    ]
+  }
+};
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,14 +62,14 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Smart hide/show functionality
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setIsVisible(false); // Hide on scroll down
       } else {
         setIsVisible(true); // Show on scroll up
       }
-      
+
       setIsScrolled(currentScrollY > 50);
       setLastScrollY(currentScrollY);
     };
@@ -62,23 +107,20 @@ const Navbar = () => {
             : 'bg-white/60 backdrop-blur-md border border-white/10 shadow-lg shadow-black/3'
         }`}
       >
-        <div className='flex items-center justify-between px-6 py-4'>
+        <div className='flex items-center px-6 py-4 max-w-7xl mx-auto w-full'>
           {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-          >
+          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
             <Link
               to='/'
-              className='text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300'
+              className='text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300'
             >
               Synapses
             </Link>
           </motion.div>
 
-          {/* Pill-Shaped Navigation - Centered */}
-          <nav className='hidden lg:flex items-center justify-center flex-1'>
-            <div className='flex items-center bg-white/40 backdrop-blur-sm rounded-full px-2 py-1 border border-white/20 shadow-inner'>
+          {/* Menu Links Container */}
+          <nav className='hidden lg:flex items-center flex-1'>
+            <div className='flex items-center gap-8'>
               {[
                 { to: '/', label: 'Home' },
                 { to: '/agents', label: 'Agents' },
@@ -86,15 +128,11 @@ const Navbar = () => {
                 { to: '/use-cases', label: 'Use Cases' },
                 { to: '/partners', label: 'Partners' },
                 { to: '/resources/faq', label: 'FAQ' }
-               ].map((item) => (
-                <motion.div
-                  key={item.to}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+              ].map(item => (
+                <motion.div key={item.to} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
                     to={item.to}
-                    className='px-4 py-2 mx-1 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-white/60 rounded-full transition-all duration-200 backdrop-blur-sm'
+                    className='text-sm font-medium text-foreground/80 hover:text-foreground transition-all duration-200 py-2 line-height-1.2'
                   >
                     {item.label}
                   </Link>
@@ -103,83 +141,51 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* CTA Buttons */}
-          <div className='hidden md:flex items-center gap-3'>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={openInviteDialog}
-              className='cursor-pointer'
-            >
+          {/* CTA Buttons Container */}
+          <div className='hidden md:flex items-center gap-4 ml-auto'>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant='outline'
-                className='border border-white/30 text-foreground bg-white/20 hover:bg-white/40 backdrop-blur-sm transition-all duration-200 font-medium px-6 py-2 rounded-full shadow-sm hover:shadow-md'
+                size='sm'
+                className='border-primary/20 text-primary hover:bg-primary/10 px-4 py-2 text-sm font-medium'
               >
                 Invite
               </Button>
             </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05, boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)' }}
-              whileTap={{ scale: 0.95 }}
-              onClick={openFormDialog}
-              className='cursor-pointer'
-            >
-              <Button className='bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-medium px-6 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200'>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size='sm'
+                className='bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white px-4 py-2 text-sm font-medium'
+              >
                 Get Early Access
               </Button>
             </motion.div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
+          {/* Mobile menu button */}
+          <div className='lg:hidden ml-auto'>
             <Button
               variant='ghost'
-              size='icon'
-              className='md:hidden hover:bg-white/20 rounded-full'
+              size='sm'
               onClick={toggleMobileMenu}
+              className='text-foreground/80 hover:text-foreground'
             >
-              <AnimatePresence mode='wait'>
-                {mobileMenuOpen ? (
-                  <motion.div
-                    key='close'
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className='h-5 w-5 text-foreground' />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key='menu'
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className='h-5 w-5 text-foreground' />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <span className='sr-only'>Toggle menu</span>
+              {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
             </Button>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0, y: -20 }}
-              animate={{ opacity: 1, height: 'auto', y: 0 }}
-              exit={{ opacity: 0, height: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className='md:hidden bg-white/90 backdrop-blur-xl border-t border-white/20 rounded-b-2xl overflow-hidden'
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className='lg:hidden border-t border-border/20 bg-background/95 backdrop-blur-sm'
             >
-              <nav className='p-6 space-y-4'>
+              <div className='px-6 py-4 space-y-4'>
                 {[
                   { to: '/', label: 'Home' },
                   { to: '/agents', label: 'Agents' },
@@ -187,51 +193,34 @@ const Navbar = () => {
                   { to: '/use-cases', label: 'Use Cases' },
                   { to: '/partners', label: 'Partners' },
                   { to: '/resources/faq', label: 'FAQ' }
-                ].map((item, index) => (
-                  <motion.div
+                ].map(item => (
+                  <Link
                     key={item.to}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    to={item.to}
+                    className='block text-sm font-medium text-foreground/80 hover:text-foreground py-2'
+                    onClick={closeMobileMenu}
                   >
-                    <Link
-                      to={item.to}
-                      onClick={closeMobileMenu}
-                      className='block py-3 px-4 text-foreground hover:text-primary transition-colors font-medium rounded-xl hover:bg-white/40 backdrop-blur-sm'
-                    >
-                      {item.label}
-                    </Link>
-                  </motion.div>
+                    {item.label}
+                  </Link>
                 ))}
-                
-                <div className='pt-4 space-y-3'>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
+                <div className='flex flex-col gap-3 pt-4 border-t border-border/20'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    className='w-full border-primary/20 text-primary hover:bg-primary/10'
                     onClick={openInviteDialog}
-                    className='cursor-pointer'
                   >
-                    <Button
-                      variant='outline'
-                      className='w-full border border-white/30 text-foreground bg-white/20 hover:bg-white/40 backdrop-blur-sm transition-all duration-200 font-medium rounded-xl'
-                    >
-                      Invite
-                    </Button>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 }}
+                    Invite
+                  </Button>
+                  <Button
+                    size='sm'
+                    className='w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white'
                     onClick={openFormDialog}
-                    className='cursor-pointer'
                   >
-                    <Button className='w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-medium rounded-xl'>
-                      Get Early Access
-                    </Button>
-                  </motion.div>
+                    Get Early Access
+                  </Button>
                 </div>
-              </nav>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

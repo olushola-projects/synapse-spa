@@ -14,14 +14,7 @@ import { EnhancedMessage } from '@/components/ui/enhanced-message';
 import { EnhancedInput } from '@/components/ui/enhanced-input';
 import { TypingIndicator } from '@/components/ui/typing-indicator';
 import { ProcessingStages } from '@/components/ui/processing-stages';
-import {
-  Bot,
-  Loader2,
-  AlertCircle,
-  Shield,
-  Settings,
-  Zap
-} from 'lucide-react';
+import { Bot, Loader2, AlertCircle, Shield, Settings, Zap } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { nexusAgent } from '@/services/nexusAgent';
 import { TIME_CONSTANTS } from '@/utils/constants';
@@ -172,7 +165,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
         prev.map(msg => {
           if (msg.id === messageId) {
             const currentReaction = msg.reactions?.userReaction;
-            const newReactions = { 
+            const newReactions = {
               likes: msg.reactions?.likes || 0,
               dislikes: msg.reactions?.dislikes || 0,
               userReaction: msg.reactions?.userReaction
@@ -297,7 +290,10 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
         return await handleReportGeneration(userMessage);
       } else if (lowerMessage.includes('risk assessment') || lowerMessage.includes('risk')) {
         return await handleRiskAssessment(userMessage);
-      } else if (lowerMessage.includes('pai') || lowerMessage.includes('principal adverse impact')) {
+      } else if (
+        lowerMessage.includes('pai') ||
+        lowerMessage.includes('principal adverse impact')
+      ) {
         return await providePAIGuidance(userMessage);
       } else if (lowerMessage.includes('article 8')) {
         return await provideArticle8Guidance(userMessage);
@@ -337,7 +333,6 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
       setIsLoading(true);
       setIsTyping(true);
 
-      // eslint-disable-next-line no-magic-numbers
       const isComplexQuery = userMessage.length > 100;
 
       try {
@@ -345,7 +340,9 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
           await simulateProcessingStages();
         } else {
           setProcessingType('thinking');
-          await new Promise(resolve => setTimeout(resolve, TIME_CONSTANTS.SIMPLE_PROCESSING_DELAY_MS));
+          await new Promise(resolve =>
+            setTimeout(resolve, TIME_CONSTANTS.SIMPLE_PROCESSING_DELAY_MS)
+          );
         }
 
         const response = await routeMessageToHandler(userMessage);
@@ -511,7 +508,6 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
       }
     };
 
-
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -621,11 +617,13 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
                         </Avatar>
                         <div className='bg-white border rounded-lg p-3 shadow-sm'>
                           {processingStages.length > 0 ? (
-                            <ProcessingStages stages={processingStages.map((stage, index) => ({
-                              id: `stage-${index}`,
-                              label: stage.name,
-                              ...stage
-                            }))} />
+                            <ProcessingStages
+                              stages={processingStages.map((stage, index) => ({
+                                id: `stage-${index}`,
+                                label: stage.name,
+                                ...stage
+                              }))}
+                            />
                           ) : (
                             <TypingIndicator
                               agentName={agentPersonality.name}

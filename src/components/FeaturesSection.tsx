@@ -1,21 +1,7 @@
 import {
-  LayoutDashboard,
-  Bot,
-  Calendar,
-  Newspaper,
-  Briefcase,
-  FilePen,
-  GamepadIcon,
-  Users,
-  Lightbulb,
-  Rocket,
-  UsersRound,
-  Award,
-  Globe,
   ChevronLeft,
   ChevronRight,
-  Play,
-  Cpu
+  Play
 } from 'lucide-react';
 import {
   Carousel,
@@ -28,13 +14,126 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useState, useCallback, useEffect, useRef } from 'react';
 
+// Lordicon animated outline icons components
+const DashboardIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/eszyyflr.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const BotIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/kiynvdns.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const CalendarIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/abfverha.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const NewsIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/nocovwne.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const BriefcaseIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/egiwmiit.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const PenIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/wuvorxbv.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const GameIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/qhviklyi.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const UsersIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/dxjqoygy.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const LightbulbIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/wxnxiano.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const RocketIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/oqdmuxru.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const TeamIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/dxjqoygy.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const AwardIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/yxyampao.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const GlobeIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/tdrtiskw.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
+const CpuIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/hwjcdycb.json"
+    trigger="hover"
+    style={{width: '24px', height: '24px'}}
+  ></lord-icon>
+);
+
 // GRC professional features data with enhanced descriptions
 const features = [
   {
     title: 'Customizable Dashboards',
     description:
       'Create personalized workspaces with drag-and-drop widgets, custom notification settings, and regulatory focus areas tailored to your industry. Monitor everything from regulatory changes to compliance deadlines in one central interface.',
-    icon: LayoutDashboard,
+    icon: DashboardIcon,
     color: 'bg-blue-900/20',
     textColor: 'text-blue-400'
   },
@@ -42,7 +141,7 @@ const features = [
     title: 'Regulatory Analysis Chatbot',
     description:
       'Dara, our AI copilot, analyzes complex regulations in seconds, providing actionable insights, compliance recommendations, and potential risk alerts. Ask questions in plain language and receive expert-level guidance instantly.',
-    icon: Bot,
+    icon: BotIcon,
     color: 'bg-purple-900/20',
     textColor: 'text-purple-400'
   },
@@ -50,7 +149,7 @@ const features = [
     title: 'Regulatory Calendar',
     description:
       'Never miss critical deadlines with our intelligent regulatory calendar. Receive automatic updates on industry-specific regulations, upcoming changes, and implementation timelines with customizable alerts and integration with your work calendar.',
-    icon: Calendar,
+    icon: CalendarIcon,
     color: 'bg-emerald-900/20',
     textColor: 'text-emerald-400'
   },
@@ -58,7 +157,7 @@ const features = [
     title: 'Daily Regulatory Insights',
     description:
       'Start each day with curated, relevant regulatory news and analysis delivered in bite-sized formats. Our AI filters the noise to deliver only what matters to your role, with severity ratings and impact assessments for your organization.',
-    icon: Newspaper,
+    icon: NewsIcon,
     color: 'bg-amber-900/20',
     textColor: 'text-amber-400'
   },
@@ -66,7 +165,7 @@ const features = [
     title: 'Job Matching',
     description:
       'Our proprietary algorithm matches your GRC skills and experience with opportunities from top employers. Receive personalized job recommendations with compatibility scores, salary insights, and career growth potential analysis.',
-    icon: Briefcase,
+    icon: BriefcaseIcon,
     color: 'bg-red-900/20',
     textColor: 'text-red-400'
   },
@@ -74,7 +173,7 @@ const features = [
     title: 'CV Surgery',
     description:
       'Transform your professional profile with our expert CV analysis. Receive personalized feedback on how to highlight your GRC expertise, certification recommendations, and tailored suggestions to stand out in competitive compliance roles.',
-    icon: FilePen,
+    icon: PenIcon,
     color: 'bg-indigo-900/20',
     textColor: 'text-indigo-400'
   },
@@ -82,7 +181,7 @@ const features = [
     title: 'Games',
     description:
       'Access immersive learning experiences with personalized games for individual learning as well as group games for huddles, events, and ice breakers. Earn badges as you progress through educational challenges on topics like SFDR and other regulatory frameworks.',
-    icon: GamepadIcon,
+    icon: GameIcon,
     color: 'bg-cyan-900/20',
     textColor: 'text-cyan-400'
   },
@@ -90,7 +189,7 @@ const features = [
     title: 'Networking & Forum',
     description:
       'Connect with over 10,000 GRC professionals worldwide. Share best practices, discuss regulatory challenges, and build meaningful professional relationships through moderated forums, virtual meetups, and expert panel discussions.',
-    icon: Users,
+    icon: UsersIcon,
     color: 'bg-teal-900/20',
     textColor: 'text-teal-400'
   },
@@ -98,7 +197,7 @@ const features = [
     title: 'GRC Agent Gallery',
     description:
       'Explore a curated library of specialized AI assistants built for compliance use cases. Access pre-built agents designed to tackle specific regulatory challenges across industries, from SFDR audits to AML compliance checks.',
-    icon: Bot,
+    icon: BotIcon,
     color: 'bg-pink-900/20',
     textColor: 'text-pink-400'
   },
@@ -106,7 +205,7 @@ const features = [
     title: 'Career Insights',
     description:
       'Map your GRC career trajectory with personalized development plans. Identify skill gaps, certification opportunities, and advancement strategies based on your career goals and industry trends in compliance and risk management.',
-    icon: Lightbulb,
+    icon: LightbulbIcon,
     color: 'bg-orange-900/20',
     textColor: 'text-orange-400'
   },
@@ -114,7 +213,7 @@ const features = [
     title: 'Events & Projects',
     description:
       'Participate in live discussions, webinars, and collaborative compliance projects with industry pioneers. Stay at the forefront of regulatory developments through exclusive access to thought leadership events and networking opportunities.',
-    icon: Rocket,
+    icon: RocketIcon,
     color: 'bg-violet-900/20',
     textColor: 'text-violet-400'
   },
@@ -122,7 +221,7 @@ const features = [
     title: 'Team Huddle',
     description:
       'Enhance team collaboration with integrated compliance workflows, document sharing, and project tracking. Streamline communication across compliance, legal, and operations teams with dedicated channels and task management tools.',
-    icon: UsersRound,
+    icon: TeamIcon,
     color: 'bg-green-900/20',
     textColor: 'text-green-400'
   },
@@ -130,7 +229,7 @@ const features = [
     title: 'Gamification & Badges',
     description:
       'Make compliance engaging through achievement systems, leaderboards, and digital credentials. Track your progress, earn recognition for regulatory expertise, and showcase your professional development through shareable certification badges.',
-    icon: Award,
+    icon: AwardIcon,
     color: 'bg-yellow-900/20',
     textColor: 'text-yellow-400'
   },
@@ -138,7 +237,7 @@ const features = [
     title: 'Mentorship & Translation',
     description:
       'Access guidance from senior GRC professionals and overcome language barriers with our multilingual support. Connect with mentors who match your career aspirations and translate complex regulations into actionable insights in your preferred language.',
-    icon: Globe,
+    icon: GlobeIcon,
     color: 'bg-blue-900/20',
     textColor: 'text-blue-400'
   },
@@ -146,7 +245,7 @@ const features = [
     title: 'Customize Your Own Agent',
     description:
       'Build your personal compliance AI assistant. Choose your preferred LLM, set its tone, and define its behavior — no coding needed. Create specialized agents for specific regulatory domains or compliance tasks tailored to your organization.',
-    icon: Cpu,
+    icon: CpuIcon,
     color: 'bg-indigo-900/20',
     textColor: 'text-indigo-400'
   }
@@ -237,13 +336,13 @@ const FeaturesSection = () => {
   );
 
   return (
-    <div id='features' className='py-20 bg-gray-950'>
+    <div id='features' className='py-20 bg-white'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='text-center mb-16'>
-          <h2 className='text-3xl md:text-4xl font-display font-bold mb-4 text-white'>
+          <h2 className='text-3xl md:text-4xl font-display font-bold mb-4 text-gray-900'>
             Powerful GRC Tools for Compliance Professionals
           </h2>
-          <p className='text-lg text-gray-300 max-w-3xl mx-auto'>
+          <p className='text-lg text-gray-600 max-w-3xl mx-auto'>
             Synapses provide the tools and community to navigate regulations, shape future
             technologies, and lead the way in AI-driven compliance.
           </p>
@@ -265,9 +364,9 @@ const FeaturesSection = () => {
                 <CarouselItem key={index} className='pl-2 md:pl-4 md:basis-auto'>
                   <Card
                     className={cn(
-                      'border-0 bg-gray-900 transition-all duration-300',
+                      'border border-gray-200 bg-white shadow-lg transition-all duration-300',
                       activeFeature === index
-                        ? 'w-[280px] sm:w-[300px] md:w-[400px] h-[320px] md:h-[340px] z-20'
+                        ? 'w-[280px] sm:w-[300px] md:w-[400px] h-[320px] md:h-[340px] z-20 shadow-xl'
                         : 'w-[80px] sm:w-[100px] h-[320px] md:h-[340px] opacity-80 z-10'
                     )}
                   >
@@ -291,12 +390,12 @@ const FeaturesSection = () => {
                             >
                               <feature.icon size={24} />
                             </div>
-                            <h3 className='text-xl font-bold mb-4 text-white'>{feature.title}</h3>
-                            <p className='text-gray-300 text-sm'>{feature.description}</p>
+                            <h3 className='text-xl font-bold mb-4 text-gray-900'>{feature.title}</h3>
+                            <p className='text-gray-600 text-sm'>{feature.description}</p>
                           </div>
 
                           {/* Preview button at bottom */}
-                          <Button variant='ghost' className='w-fit text-gray-300 gap-2 mt-4 group'>
+                          <Button variant='ghost' className='w-fit text-gray-600 hover:text-gray-900 gap-2 mt-4 group'>
                             <span>Learn about {feature.title.toLowerCase()}</span>
                             <Play className='h-4 w-4 group-hover:translate-x-1 transition-transform' />
                           </Button>
@@ -304,7 +403,7 @@ const FeaturesSection = () => {
                       ) : (
                         // Collapsed card view - vertical text along the side
                         <div className='flex items-center justify-center h-full'>
-                          <div className='rotate-90 whitespace-nowrap text-gray-400 text-sm font-medium uppercase tracking-wider'>
+                          <div className='rotate-90 whitespace-nowrap text-gray-500 text-sm font-medium uppercase tracking-wider'>
                             {feature.title}
                           </div>
                         </div>

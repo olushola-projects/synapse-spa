@@ -18,13 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  Download,
-  TrendingUp,
-  Users,
-  AlertTriangle,
-  CheckCircle
-} from 'lucide-react';
+import { Download, TrendingUp, Users, AlertTriangle, CheckCircle } from 'lucide-react';
 // XCircle import removed - not used in this component
 
 interface TestResult {

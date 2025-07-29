@@ -1,6 +1,29 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Users } from 'lucide-react';
+// Lordicon animated outline icons
+const ArrowRightIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/zmkotitn.json"
+    trigger="hover"
+    style={{width: '16px', height: '16px'}}
+  ></lord-icon>
+);
+
+const ShieldIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/gqdnbnwt.json"
+    trigger="hover"
+    style={{width: '16px', height: '16px'}}
+  ></lord-icon>
+);
+
+const UsersIcon = () => (
+  <lord-icon
+    src="https://cdn.lordicon.com/dxjqoygy.json"
+    trigger="hover"
+    style={{width: '16px', height: '16px'}}
+  ></lord-icon>
+);
 
 interface HeroContentProps {
   animate: boolean;
@@ -17,9 +40,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
     <div
       className={`w-full text-left transition-all duration-700 ease-out pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 pb-10 md:pb-0 ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}
     >
-      {/* Main Headline - Optimized font sizing for better readability */}
+      {/* Main Headline - Increased font sizing to big 4 for better alignment */}
       <h1
-        className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-blue-600 mb-6'
+        className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight text-blue-600 mb-6'
         style={{
           fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
           fontWeight: 700,
@@ -56,7 +79,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
         <div onClick={onGetAccess} className='cursor-pointer'>
           <Button className='bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-base rounded-xl flex items-center gap-3 hover-lift font-semibold shadow-lg hover:shadow-xl transition-all duration-300'>
             Get Early Access{' '}
-            <ArrowRight size={20} className='transition-transform group-hover:translate-x-1' />
+            <ArrowRightIcon />
           </Button>
         </div>
         <div onClick={onInvite} className='cursor-pointer'>
@@ -73,12 +96,12 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
       <div className='mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-start gap-6 text-sm'>
         <div className='flex items-center text-slate-500'>
           <div className='w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse'></div>
-          <Shield size={16} className='mr-2 text-green-600' />
+          <div className='mr-2 text-green-600'><ShieldIcon /></div>
           <span className='font-medium'>GRC Innovation Hub</span>
         </div>
         <div className='flex items-center text-slate-500'>
           <div className='w-2 h-2 bg-blue-500 rounded-full mr-3'></div>
-          <Users size={16} className='mr-2 text-blue-600' />
+          <div className='mr-2 text-blue-600'><UsersIcon /></div>
           <span className='font-medium'>Join early adopters in our private pilot</span>
         </div>
       </div>

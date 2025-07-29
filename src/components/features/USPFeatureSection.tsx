@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { Brain, Globe, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from '@/components/ui/dialog';
 interface USPItem {
   title: string;
   description: string;
@@ -14,40 +20,55 @@ interface USPItem {
     whyItMatters: string;
   };
 }
-const uspItems: USPItem[] = [{
-  title: 'Agents Gallery',
-  description: 'Purpose-built AI agents designed to reduce manual work in compliance.',
-  icon: <Brain className='h-7 w-7 opacity-90' />,
-  color: 'text-purple-600',
-  modalContent: {
-    position: 'Modular thematic AI agents trained to support regulatory analysis, exception reviews, GRC operations and document drafting.',
-    problem: 'Manual reviews, fragmented tools, and generic AI that lacks regulatory context.',
-    solution: 'Embedded SME agents with training in KYC, ESG, TPRM e.t.c, provide traceable outputs, support key compliance workflows, and plug into real tools.',
-    whyItMatters: 'These agents are built for GRC, not just response — freeing up teams time to focus on judgment, not grunt work.'
+const uspItems: USPItem[] = [
+  {
+    title: 'Agents Gallery',
+    description: 'Purpose-built AI agents designed to reduce manual work in compliance.',
+    icon: <Brain className='h-7 w-7 opacity-90' />,
+    color: 'text-purple-600',
+    modalContent: {
+      position:
+        'Modular thematic AI agents trained to support regulatory analysis, exception reviews, GRC operations and document drafting.',
+      problem: 'Manual reviews, fragmented tools, and generic AI that lacks regulatory context.',
+      solution:
+        'Embedded SME agents with training in KYC, ESG, TPRM e.t.c, provide traceable outputs, support key compliance workflows, and plug into real tools.',
+      whyItMatters:
+        'These agents are built for GRC, not just response — freeing up teams time to focus on judgment, not grunt work.'
+    }
+  },
+  {
+    title: 'Regulatory Intelligence',
+    description: 'Agent summarized bespoke updates filtered by jurisdiction, risk area, and role.',
+    icon: <Globe className='h-7 w-7 opacity-90' />,
+    color: 'text-blue-500',
+    modalContent: {
+      position:
+        'Synapses turn fragmented change updates into instant, personalized contextualized insights.',
+      problem:
+        'GRC professionals spend hours reading PDFs, decoding alerts, and chasing updates across silos.',
+      solution:
+        'AI curates relevant personalized rules, explains them, and ties them to real-world decisions.',
+      whyItMatters:
+        "Less inbox, more insight. Updates shouldn't just be read - they should drive action."
+    }
+  },
+  {
+    title: 'Ecosystem',
+    description:
+      'A vibrant professional community built for governance, compliance, risk, and audit teams.',
+    icon: <Users className='h-7 w-7 opacity-90' />,
+    color: 'text-indigo-500',
+    modalContent: {
+      position:
+        'Not a professional social network, a real-time environment for collaboration, recognition, and learning.',
+      problem: 'Siloed teams, noisy channels, no reskilling platform and outdated training.',
+      solution:
+        'Scenario challenges, reskilling to copilot with GRC agents, badges, peer insights, co-creation, and AI-supported growth.',
+      whyItMatters:
+        'Because compliance is evolving, the future of GRC is with AI agents and that future is now. Transformation is crucial.'
+    }
   }
-}, {
-  title: 'Regulatory Intelligence',
-  description: 'Agent summarized bespoke updates filtered by jurisdiction, risk area, and role.',
-  icon: <Globe className='h-7 w-7 opacity-90' />,
-  color: 'text-blue-500',
-  modalContent: {
-    position: 'Synapses turn fragmented change updates into instant, personalized contextualized insights.',
-    problem: 'GRC professionals spend hours reading PDFs, decoding alerts, and chasing updates across silos.',
-    solution: 'AI curates relevant personalized rules, explains them, and ties them to real-world decisions.',
-    whyItMatters: "Less inbox, more insight. Updates shouldn't just be read - they should drive action."
-  }
-}, {
-  title: 'Ecosystem',
-  description: 'A vibrant professional community built for governance, compliance, risk, and audit teams.',
-  icon: <Users className='h-7 w-7 opacity-90' />,
-  color: 'text-indigo-500',
-  modalContent: {
-    position: 'Not a professional social network, a real-time environment for collaboration, recognition, and learning.',
-    problem: 'Siloed teams, noisy channels, no reskilling platform and outdated training.',
-    solution: 'Scenario challenges, reskilling to copilot with GRC agents, badges, peer insights, co-creation, and AI-supported growth.',
-    whyItMatters: 'Because compliance is evolving, the future of GRC is with AI agents and that future is now. Transformation is crucial.'
-  }
-}];
+];
 
 /**
  * USPFeatureSection component - Enhanced feature showcase with improved visual design
@@ -60,28 +81,41 @@ export const USPFeatureSection = () => {
     setSelectedUSP(usp);
     setIsOpen(true);
   };
-  return <div className='flex flex-col md:flex-row items-start justify-start gap-8 lg:gap-12'>
-      {uspItems.map((usp, index) => <motion.div key={index} className='flex flex-col items-center text-center group cursor-pointer' initial={{
-      opacity: 0,
-      y: 20
-    }} animate={{
-      opacity: 1,
-      y: 0
-    }} transition={{
-      duration: 0.5,
-      delay: index * 0.15
-    }} onClick={() => handleUSPClick(usp)}>
-          <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-3 ${usp.color}`}>
+  return (
+    <div className='flex flex-col md:flex-row items-start justify-start gap-8 lg:gap-12'>
+      {uspItems.map((usp, index) => (
+        <motion.div
+          key={index}
+          className='flex flex-col items-center text-center group cursor-pointer'
+          initial={{
+            opacity: 0,
+            y: 20
+          }}
+          animate={{
+            opacity: 1,
+            y: 0
+          }}
+          transition={{
+            duration: 0.5,
+            delay: index * 0.15
+          }}
+          onClick={() => handleUSPClick(usp)}
+        >
+          <div
+            className={`w-16 h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-3 ${usp.color}`}
+          >
             {usp.icon}
           </div>
-          <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">
+          <h3 className='font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm'>
             {usp.title}
           </h3>
-        </motion.div>)}
+        </motion.div>
+      ))}
 
       {/* Modal Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        {selectedUSP && <DialogContent className='sm:max-w-2xl'>
+        {selectedUSP && (
+          <DialogContent className='sm:max-w-2xl'>
             <DialogHeader>
               <DialogTitle className='text-2xl flex items-center gap-2'>
                 <div className={`inline-block ${selectedUSP.color}`}>{selectedUSP.icon}</div>
@@ -113,7 +147,9 @@ export const USPFeatureSection = () => {
                 <p className='mt-1 text-gray-700'>{selectedUSP.modalContent.whyItMatters}</p>
               </div>
             </div>
-          </DialogContent>}
+          </DialogContent>
+        )}
       </Dialog>
-    </div>;
+    </div>
+  );
 };

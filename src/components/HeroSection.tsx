@@ -34,7 +34,6 @@ const HeroSection = () => {
       style={{ minHeight: 'calc(100vh - 64px)' }}
       className='w-full py-8 md:py-12 lg:py-16 flex flex-col items-start justify-center bg-white relative overflow-hidden'
     >
-
       {/* Main container with precise alignment matching navbar */}
       <div className='w-full max-w-7xl mx-auto relative z-10'>
         {/* Hero Content - Precisely aligned with navbar logo */}
