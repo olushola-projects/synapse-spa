@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EnhancedAgentCard, type EnhancedAgent } from '@/components/AgentShowcase';
@@ -182,30 +182,6 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut"
-    }
-  }
-};
-
-const heroVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-      ease: "easeOut"
-    }
-  }
-};
 
 /**
  * Floating particles background component
@@ -285,7 +261,9 @@ const InteractiveStats: React.FC = () => {
       {stats.map((stat, index) => (
         <motion.div
           key={index}
-          variants={itemVariants}
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: index * 0.1 }}
           className='group text-center space-y-3 p-4 rounded-2xl hover:bg-muted/50 transition-all duration-300 cursor-pointer'
           whileHover={{ scale: 1.05, y: -5 }}
           whileTap={{ scale: 0.95 }}
@@ -329,7 +307,9 @@ const AgentFilters: React.FC<{
   return (
     <motion.div
       className='flex flex-col md:flex-row gap-4 items-center justify-between p-6 bg-muted/30 rounded-2xl backdrop-blur-sm'
-      variants={itemVariants}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
     >
       <div className='flex flex-1 items-center gap-4'>
         <div className='relative flex-1 max-w-md'>
@@ -438,9 +418,9 @@ const AgentsPage: React.FC = () => {
 
         <div className='relative max-w-6xl mx-auto space-y-8'>
           <motion.div
-            variants={heroVariants}
-            initial='hidden'
-            animate='visible'
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className='space-y-6'
           >
             <Badge className='mb-6 px-6 py-3 text-sm font-medium bg-gradient-to-r from-primary/20 to-primary/10 border-primary/20'>
@@ -494,7 +474,11 @@ const AgentsPage: React.FC = () => {
         viewport={{ once: true, margin: '-100px' }}
       >
         <div className='max-w-7xl mx-auto'>
-          <motion.div variants={itemVariants} className='text-center mb-16'>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className='text-center mb-16'>
             <h2 className='text-3xl md:text-4xl font-bold mb-4'>
               Powered by Advanced AI Technology
             </h2>
@@ -517,7 +501,11 @@ const AgentsPage: React.FC = () => {
         viewport={{ once: true, margin: '-100px' }}
       >
         <div className='max-w-7xl mx-auto space-y-12'>
-          <motion.div variants={itemVariants} className='text-center space-y-6'>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className='text-center space-y-6'>
             <h2 className='text-4xl md:text-5xl font-bold'>Our AI Agent Portfolio</h2>
             <p className='text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed'>
               Each agent is meticulously engineered with specialized capabilities to address
@@ -552,7 +540,9 @@ const AgentsPage: React.FC = () => {
               ))
             ) : (
               <motion.div
-                variants={itemVariants}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
                 className='col-span-full text-center py-16 space-y-4'
               >
                 <div className='w-24 h-24 mx-auto bg-muted/50 rounded-full flex items-center justify-center'>

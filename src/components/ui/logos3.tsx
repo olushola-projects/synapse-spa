@@ -1,69 +1,50 @@
 'use client';
 
-import AutoScroll from 'embla-carousel-auto-scroll';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+
+import { motion } from 'framer-motion';
 interface Logo {
-  id: string;
-  description: string;
-  image: string;
-  className?: string;
+  src: string;
+  alt: string;
 }
+
 interface Logos3Props {
   heading?: string;
-  logos?: Logo[];
-  className?: string;
+  logos: Logo[];
 }
-const Logos3 = ({
-  heading = 'Trusted by these companies',
-  logos = [
-    {
-      id: 'logo-1',
-      description: 'Logo 1',
-      image: 'https://shadcnblocks.com/images/block/logos/astro.svg',
-      className: 'h-7 w-auto'
-    },
-    {
-      id: 'logo-2',
-      description: 'Logo 2',
-      image: 'https://shadcnblocks.com/images/block/logos/figma.svg',
-      className: 'h-7 w-auto'
-    },
-    {
-      id: 'logo-3',
-      description: 'Logo 3',
-      image: 'https://shadcnblocks.com/images/block/logos/nextjs.svg',
-      className: 'h-7 w-auto'
-    },
-    {
-      id: 'logo-4',
-      description: 'Logo 4',
-      image: 'https://shadcnblocks.com/images/block/logos/react.png',
-      className: 'h-7 w-auto'
-    },
-    {
-      id: 'logo-5',
-      description: 'Logo 5',
-      image: 'https://shadcnblocks.com/images/block/logos/shadcn-ui.svg',
-      className: 'h-7 w-auto'
-    },
-    {
-      id: 'logo-6',
-      description: 'Logo 6',
-      image: 'https://shadcnblocks.com/images/block/logos/supabase.svg',
-      className: 'h-7 w-auto'
-    },
-    {
-      id: 'logo-7',
-      description: 'Logo 7',
-      image: 'https://shadcnblocks.com/images/block/logos/tailwind.svg',
-      className: 'h-4 w-auto'
-    },
-    {
-      id: 'logo-8',
-      description: 'Logo 8',
-      image: 'https://shadcnblocks.com/images/block/logos/vercel.svg',
-      className: 'h-7 w-auto'
-    }
-  ]
-}: Logos3Props) => {};
-export { Logos3 };
+export const Logos3 = ({ heading, logos }: Logos3Props) => {
+  return (
+    <section className="py-14">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold text-foreground mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            {heading}
+          </motion.h2>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+          {logos.map((logo, index) => (
+            <motion.div
+              key={index}
+              className="flex items-center justify-center h-20 w-full grayscale hover:grayscale-0 transition-all duration-300"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                className="max-h-full max-w-full object-contain filter brightness-0 hover:brightness-100 transition-all duration-300"
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
