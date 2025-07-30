@@ -3,11 +3,9 @@
  * Provides an overview and call-to-action to try the SFDR compliance validation tool
  */
 const NexusAgentSection = () => {
-  return (
-    <div>
+  return <div>
       {/* Component implementation would go here */}
-      <p>NexusAgentSection - Component under development</p>
-    </div>
-  );
+      
+    </div>;
 };
 export default NexusAgentSection;
