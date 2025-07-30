@@ -147,7 +147,7 @@ export default function Map() {
         case 'founded':
           return parseInt(b.founded) - parseInt(a.founded);
         case 'funding_stage':
-          const stageOrder = {
+          const stageOrder: Record<string, number> = {
             Seed: 1,
             'Series A': 2,
             'Series B': 3,
@@ -156,8 +156,8 @@ export default function Map() {
             Acquired: 6
           };
           return (
-            (stageOrder[a.funding_stage as keyof typeof stageOrder] || 0) -
-            (stageOrder[b.funding_stage as keyof typeof stageOrder] || 0)
+            (stageOrder[a.funding_stage] || 0) -
+            (stageOrder[b.funding_stage] || 0)
           );
         case 'popularity':
           return b.use_cases.length - a.use_cases.length;

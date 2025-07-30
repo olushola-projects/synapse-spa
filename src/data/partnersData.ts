@@ -1,4 +1,4 @@
-import { Code, Users, Gavel, Briefcase, UserSearch, GraduationCap /* Globe */ } from 'lucide-react';
+import { Code, Users, Gavel, Briefcase, UserSearch, GraduationCap } from 'lucide-react';
 // Globe import removed - not used in this data file
 import type { PartnerCategory } from '@/types/partners';
 
