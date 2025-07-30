@@ -167,13 +167,13 @@ const features = [
 ];
 
 const FeaturesSection = () => {
-  const [activeFeature, setActiveFeature] = useState(4); // Start with Job Matching selected
+  const [activeFeature, setActiveFeature] = useState(4);
   const [api, setApi] = useState<CarouselApi>();
   const [autoPlayEnabled, setAutoPlayEnabled] = useState(true);
   const autoPlayIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll functionality
+  // Enhanced auto-scroll with smooth interactions
   useEffect(() => {
     if (!api || !autoPlayEnabled) {
       return;
@@ -186,7 +186,7 @@ const FeaturesSection = () => {
 
       autoPlayIntervalRef.current = setInterval(() => {
         api?.scrollNext();
-      }, 5000); // Slow rhythm - 5 seconds per card
+      }, 4000); // Optimized timing
     };
 
     startAutoPlay();
@@ -198,7 +198,7 @@ const FeaturesSection = () => {
     };
   }, [api, autoPlayEnabled]);
 
-  // Setup mouse interactions for pausing autoplay
+  // Enhanced mouse interactions
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) {
@@ -215,9 +215,8 @@ const FeaturesSection = () => {
       carousel.removeEventListener('mouseenter', handleMouseEnter);
       carousel.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [carouselRef]);
+  }, []);
 
-  // Setup callback to handle carousel API change
   const onApiChange = useCallback((api: CarouselApi | null) => {
     if (!api) {
       return;
@@ -230,19 +229,16 @@ const FeaturesSection = () => {
     api.on('select', handleSelect);
     handleSelect();
 
-    // Cleanup
     return () => {
       api.off('select', handleSelect);
     };
   }, []);
 
-  // Update the API state when carousel is mounted
   const handleApiChange = useCallback(
     (newApi: CarouselApi) => {
       setApi(newApi);
       onApiChange(newApi);
 
-      // Initialize to Job Matching (index 4)
       setTimeout(() => {
         newApi?.scrollTo(4, false);
       }, 100);
@@ -251,25 +247,35 @@ const FeaturesSection = () => {
   );
 
   return (
-    <div id='features' className='py-20 bg-white'>
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='text-center mb-16'>
-          <h2 className='text-3xl md:text-4xl font-display font-bold mb-4 text-gray-900'>
-            Powerful GRC Tools for Compliance Professionals
+    <section id='features' className='relative py-24 bg-gradient-to-br from-gray-50 to-white overflow-hidden'>
+      {/* Subtle background pattern */}
+      <div className='absolute inset-0 bg-gradient-to-r from-blue-50/30 to-purple-50/30' />
+      <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.05),transparent_50%)]' />
+      
+      <div className='relative container mx-auto px-4 sm:px-6 lg:px-8'>
+        {/* Enhanced header */}
+        <div className='text-center mb-20'>
+          <div className='inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6'>
+            <Cpu className='w-4 h-4' />
+            AI-Powered GRC Platform
+          </div>
+          <h2 className='text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent'>
+            Transform Your GRC Workflow
           </h2>
-          <p className='text-lg text-gray-600 max-w-3xl mx-auto'>
-            Synapses provide the tools and community to navigate regulations, shape future
-            technologies, and lead the way in AI-driven compliance.
+          <p className='text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed'>
+            Discover AI-driven tools that revolutionize compliance management, enhance career growth, 
+            and connect you with the world's leading GRC professionals.
           </p>
         </div>
 
-        {/* Dark themed stacked cards carousel */}
-        <div className='max-w-5xl mx-auto' ref={carouselRef}>
+        {/* Redesigned carousel with better visual hierarchy */}
+        <div className='max-w-7xl mx-auto' ref={carouselRef}>
           <Carousel
             opts={{
               align: 'center',
               loop: true,
-              dragFree: true
+              dragFree: true,
+              skipSnaps: false
             }}
             className='w-full'
             setApi={handleApiChange}
@@ -279,52 +285,69 @@ const FeaturesSection = () => {
                 <CarouselItem key={index} className='pl-2 md:pl-4 md:basis-auto'>
                   <Card
                     className={cn(
-                      'border border-gray-700 bg-gray-800 shadow-lg transition-all duration-300',
+                      'relative overflow-hidden transition-all duration-500 ease-out cursor-pointer group',
+                      'border border-border/50 bg-card/80 backdrop-blur-sm shadow-lg hover:shadow-xl',
                       activeFeature === index
-                        ? 'w-[280px] sm:w-[300px] md:w-[400px] h-[320px] md:h-[340px] z-20 shadow-xl'
-                        : 'w-[80px] sm:w-[100px] h-[320px] md:h-[340px] opacity-80 z-10'
+                        ? 'w-[320px] sm:w-[360px] md:w-[440px] h-[360px] md:h-[400px] z-20 scale-105 shadow-2xl border-primary/20'
+                        : 'w-[100px] sm:w-[120px] h-[360px] md:h-[400px] opacity-70 hover:opacity-90 z-10'
                     )}
                   >
+                    {/* Gradient overlay for active card */}
+                    {activeFeature === index && (
+                      <div className='absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 pointer-events-none' />
+                    )}
+                    
                     <CardContent
                       className={cn(
-                        'flex flex-col h-full p-4',
+                        'relative flex flex-col h-full p-6',
                         activeFeature === index ? 'justify-between' : 'justify-center'
                       )}
                     >
                       {activeFeature === index ? (
-                        // Expanded card view
+                        // Enhanced expanded view
                         <div className='flex flex-col h-full justify-between'>
-                          {/* Title and Icon at the top */}
-                          <div>
+                          <div className='space-y-6'>
+                            {/* Icon with enhanced styling */}
                             <div
                               className={cn(
                                 feature.color,
                                 feature.textColor,
-                                'rounded-full w-12 h-12 flex items-center justify-center mb-4'
+                                'rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg',
+                                'group-hover:scale-110 transition-transform duration-300'
                               )}
                             >
                               <feature.icon />
                             </div>
-                            <h3 className='text-xl font-bold mb-4 text-white'>
-                              {feature.title}
-                            </h3>
-                            <p className='text-gray-300 text-sm'>{feature.description}</p>
+                            
+                            {/* Enhanced typography */}
+                            <div className='space-y-4'>
+                              <h3 className='text-2xl font-display font-bold text-foreground leading-tight'>
+                                {feature.title}
+                              </h3>
+                              <p className='text-muted-foreground leading-relaxed text-base'>
+                                {feature.description}
+                              </p>
+                            </div>
                           </div>
 
-                          {/* Preview button at bottom */}
+                          {/* Enhanced CTA */}
                           <Button
                             variant='ghost'
-                            className='w-fit text-gray-300 hover:text-white gap-2 mt-4 group'
+                            className='w-fit text-muted-foreground hover:text-foreground gap-3 mt-6 group/btn p-0 h-auto'
                           >
-                            <span>Learn about {feature.title.toLowerCase()}</span>
-                            <Play className='h-4 w-4 group-hover:translate-x-1 transition-transform' />
+                            <span className='text-sm font-medium'>Explore {feature.title}</span>
+                            <div className='w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover/btn:bg-primary group-hover/btn:text-primary-foreground transition-all duration-300'>
+                              <Play className='h-4 w-4 group-hover/btn:translate-x-0.5 transition-transform' />
+                            </div>
                           </Button>
                         </div>
                       ) : (
-                        // Collapsed card view - vertical text along the side
+                        // Enhanced collapsed view
                         <div className='flex items-center justify-center h-full'>
-                          <div className='rotate-90 whitespace-nowrap text-gray-400 text-sm font-medium uppercase tracking-wider'>
-                            {feature.title}
+                          <div className='transform rotate-90 whitespace-nowrap'>
+                            <span className='text-muted-foreground/70 text-sm font-medium uppercase tracking-[0.2em] group-hover:text-muted-foreground transition-colors'>
+                              {feature.title}
+                            </span>
                           </div>
                         </div>
                       )}
@@ -334,21 +357,39 @@ const FeaturesSection = () => {
               ))}
             </CarouselContent>
 
-            <div className='flex justify-center mt-8 gap-4'>
+            {/* Enhanced navigation */}
+            <div className='flex justify-center items-center mt-12 gap-6'>
               <Button
                 onClick={() => api?.scrollPrev()}
                 variant='outline'
                 size='icon'
-                className='bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700 hover:text-white'
+                className='h-12 w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
               >
                 <ChevronLeft className='h-5 w-5' />
                 <span className='sr-only'>Previous feature</span>
               </Button>
+              
+              {/* Progress indicator */}
+              <div className='flex items-center gap-2'>
+                {features.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => api?.scrollTo(index)}
+                    className={cn(
+                      'w-2 h-2 rounded-full transition-all duration-300',
+                      activeFeature === index
+                        ? 'bg-primary w-8'
+                        : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                    )}
+                  />
+                ))}
+              </div>
+              
               <Button
                 onClick={() => api?.scrollNext()}
                 variant='outline'
                 size='icon'
-                className='bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700 hover:text-white'
+                className='h-12 w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
               >
                 <ChevronRight className='h-5 w-5' />
                 <span className='sr-only'>Next feature</span>
@@ -357,7 +398,7 @@ const FeaturesSection = () => {
           </Carousel>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
