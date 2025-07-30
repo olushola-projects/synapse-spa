@@ -80,7 +80,7 @@ const IndustryPerspectivesSection = () => {
     setSelectedPerspective(perspective);
     setIsDialogOpen(true);
   };
-  return <div id='testimonials' ref={sectionRef} className="relative overflow-hidden py-0 bg-white">
+  return <div id='testimonials' ref={sectionRef} className="relative overflow-hidden py-0">
       {/* Stripe-inspired diagonal background */}
       <div className='absolute inset-0 -z-10'>
         <div className='absolute inset-0 bg-gradient-to-br from-gray-50 to-blue-50/30'></div>
@@ -90,18 +90,18 @@ const IndustryPerspectivesSection = () => {
       <div className='absolute inset-x-0 top-0 h-24 -z-10 transform -skew-y-6 bg-gradient-to-r from-indigo-50/80 to-blue-50/80'></div>
       <div className='absolute inset-x-0 bottom-0 h-24 -z-10 transform skew-y-6 bg-gradient-to-r from-purple-50/80 to-indigo-50/80'></div>
 
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-[15px] bg-white">
         <div className='text-center mb-16 max-w-3xl mx-auto'>
           <h2 className='text-3xl md:text-4xl font-display font-bold mb-4'>
             Perspectives Powering the Future of GRC
           </h2>
-          <p className="text-base font-medium text-black">
+          <p className='text-lg text-gray-600'>
             Leading experts and organizations shaping the future of governance, risk, and compliance
           </p>
         </div>
 
         {/* Desktop Carousel - limited to 3 perspectives at a time */}
-        <div className='max-w-7xl mx-auto hidden md:block'>
+        <div className="max-w-7xl mx-auto hidden md:block bg-white">
           <div className='overflow-hidden' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} ref={emblaRef}>
             <div className='flex -ml-4'>
               {sortedPerspectives.map((perspective, index) => <div key={index} className='flex-[0_0_33.33%] min-w-0 pl-4 transition-all duration-500'>
@@ -116,10 +116,10 @@ const IndustryPerspectivesSection = () => {
                           <h3 className='text-lg font-bold text-gray-900 mb-1'>
                             {perspective.name}
                           </h3>
-                          <p className="text-synapse-primary/80 text-sm font-medium text-indigo-800">{perspective.role}</p>
+                          <p className='text-sm text-synapse-primary/80'>{perspective.role}</p>
                         </div>
 
-                        <p className="text-sm flex-grow overflow-hidden font-light text-black">
+                        <p className='text-gray-600 text-sm flex-grow overflow-hidden'>
                           {perspective.bio}
                         </p>
 
