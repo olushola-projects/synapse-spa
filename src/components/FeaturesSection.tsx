@@ -279,7 +279,7 @@ const FeaturesSection = () => {
                 <CarouselItem key={index} className='pl-2 md:pl-4 md:basis-auto'>
                   <Card
                     className={cn(
-                      'border border-gray-200 bg-white shadow-lg transition-all duration-300',
+                      'border border-gray-700 bg-gray-800 shadow-lg transition-all duration-300',
                       activeFeature === index
                         ? 'w-[280px] sm:w-[300px] md:w-[400px] h-[320px] md:h-[340px] z-20 shadow-xl'
                         : 'w-[80px] sm:w-[100px] h-[320px] md:h-[340px] opacity-80 z-10'
@@ -305,16 +305,16 @@ const FeaturesSection = () => {
                             >
                               <feature.icon />
                             </div>
-                            <h3 className='text-xl font-bold mb-4 text-gray-900'>
+                            <h3 className='text-xl font-bold mb-4 text-white'>
                               {feature.title}
                             </h3>
-                            <p className='text-gray-600 text-sm'>{feature.description}</p>
+                            <p className='text-gray-300 text-sm'>{feature.description}</p>
                           </div>
 
                           {/* Preview button at bottom */}
                           <Button
                             variant='ghost'
-                            className='w-fit text-gray-600 hover:text-gray-900 gap-2 mt-4 group'
+                            className='w-fit text-gray-300 hover:text-white gap-2 mt-4 group'
                           >
                             <span>Learn about {feature.title.toLowerCase()}</span>
                             <Play className='h-4 w-4 group-hover:translate-x-1 transition-transform' />
@@ -323,7 +323,7 @@ const FeaturesSection = () => {
                       ) : (
                         // Collapsed card view - vertical text along the side
                         <div className='flex items-center justify-center h-full'>
-                          <div className='rotate-90 whitespace-nowrap text-gray-500 text-sm font-medium uppercase tracking-wider'>
+                          <div className='rotate-90 whitespace-nowrap text-gray-400 text-sm font-medium uppercase tracking-wider'>
                             {feature.title}
                           </div>
                         </div>
