@@ -37,7 +37,7 @@ const Register = () => {
     setRegisterError(null);
   }, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -67,7 +67,7 @@ const Register = () => {
       // Generate CSRF token for form submission
       const csrfToken = SecurityUtils.generateCsrfToken();
 
-      await register(sanitizedName, sanitizedEmail, values.password, csrfToken);
+      await register({ email: sanitizedEmail, password: values.password, name: sanitizedName });
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Registration failed:', error);
@@ -248,7 +248,7 @@ const Register = () => {
 
             <FormField
               control={form.control}
-              name='terms'
+              name='acceptTerms'
               render={({ field }) => (
                 <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
                   <FormControl>

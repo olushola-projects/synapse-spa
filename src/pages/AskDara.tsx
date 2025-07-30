@@ -32,7 +32,7 @@ import {
   Info
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 // Sample team members for the modal
 const teamMembers = [

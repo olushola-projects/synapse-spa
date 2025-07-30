@@ -38,7 +38,7 @@ import ForumPreviewWidget from '@/components/widgets/ForumPreviewWidget';
 import GamificationWidget from '@/components/widgets/GamificationWidget';
 import RecentQueriesWidget from '@/components/widgets/RecentQueriesWidget';
 import ComplianceStatusWidget from '@/components/widgets/ComplianceStatusWidget';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 // Define available widget types
 const availableWidgets: WidgetType[] = [

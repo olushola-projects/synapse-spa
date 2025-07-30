@@ -15,7 +15,7 @@ import { EnhancedInput } from '@/components/ui/enhanced-input';
 import { TypingIndicator } from '@/components/ui/typing-indicator';
 import { ProcessingStages } from '@/components/ui/processing-stages';
 import { Bot, Loader2, AlertCircle, Shield, Settings, Zap } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { nexusAgent } from '@/services/nexusAgent';
 import { TIME_CONSTANTS } from '@/utils/constants';
 import {

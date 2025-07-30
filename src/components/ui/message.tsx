@@ -18,7 +18,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 export interface MessageContent {
   type: 'text' | 'code' | 'table' | 'chart' | 'file' | 'compliance-report';
