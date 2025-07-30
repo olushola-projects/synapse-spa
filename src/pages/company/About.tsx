@@ -47,7 +47,7 @@ const About = () => {
     }
   ];
 
-  const handleOpenArticle = perspective => {
+  const handleOpenArticle = (perspective: any) => {
     setSelectedPerspective(perspective);
     setIsDialogOpen(true);
   };

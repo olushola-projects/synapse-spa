@@ -582,8 +582,8 @@ export default function Map() {
                                 {value}
                                 <button
                                   onClick={() => {
-                                    const newFilters = { ...filters };
-                                    newFilters[key] = newFilters[key].filter(v => v !== value);
+                                    const newFilters = { ...filters } as Record<string, string[]>;
+                                    newFilters[key] = newFilters[key]?.filter((v: string) => v !== value) || [];
                                     updateFilters(newFilters);
                                   }}
                                   className='ml-1 hover:text-blue-900'

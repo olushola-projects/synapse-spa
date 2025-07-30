@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import {
   Copy,
   ThumbsUp,
@@ -12,7 +11,6 @@ import {
   Bot,
   User,
   CheckCircle2,
-  AlertCircle,
   Clock,
   FileText,
   BarChart3

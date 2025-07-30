@@ -80,6 +80,8 @@ export const EnhancedMessage: React.FC<EnhancedMessageProps> = ({
     } else {
       setDisplayedContent(content);
     }
+    // Explicitly return undefined for non-streaming case
+    return undefined;
   }, [content, isStreaming]);
 
   /**

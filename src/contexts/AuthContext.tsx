@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
-import { handleAuthError, ErrorCategory, ErrorSeverity } from '@/utils/error-handler';
+import { handleAuthError } from '@/utils/error-handler';
 
 // Define types
 export interface User {

@@ -57,9 +57,7 @@ const Login = () => {
       // Call login function
       await login({
         email: sanitizedEmail,
-        password: values.password,
-        rememberMe: values.rememberMe || false,
-        csrfToken
+        password: values.password
       });
 
       // Get redirect path if available, otherwise go to dashboard
