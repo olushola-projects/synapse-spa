@@ -22,9 +22,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({ animate, onGetAccess, 
     <div
       className={`w-full text-left transition-all duration-700 ease-out pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 pb-10 md:pb-0 ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}
     >
-      {/* Main Headline - Increased font sizing to big 4 for better alignment */}
+      {/* Main Headline - Aligned with Navbar Synapses logo */}
       <h1
-        className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight text-blue-600 mb-6'
+        className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight text-blue-600 mb-6 ml-8'
         style={{
           fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
           fontWeight: 700,
