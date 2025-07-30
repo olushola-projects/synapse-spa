@@ -159,7 +159,7 @@ const EnterpriseSection = () => {
   const [emblaRef] = useEmblaCarousel({
     loop: true
   });
-  return <section className="bg-[#F9FAFB] py-16 md:py-0">
+  return <section className="py-16 md:py-0 bg-white">
       <div className='container mx-auto max-w-[1200px] px-4 md:px-6'>
         {/* Small label/tag above the main headline - matching Stripe's "Enterprise reinvention" */}
         <motion.p initial={{
@@ -172,7 +172,7 @@ const EnterpriseSection = () => {
         duration: 0.3
       }} viewport={{
         once: true
-      }} className='text-[#7A73FF] font-medium mb-4 text-lg'>
+      }} className="font-medium mb-4 text-lg text-blue-700">
           Enterprise Risk Reinvention
         </motion.p>
 
@@ -181,7 +181,7 @@ const EnterpriseSection = () => {
           <motion.div variants={containerVariants} initial='hidden' whileInView='visible' viewport={{
           once: true
         }} className='space-y-7'>
-            <motion.h2 variants={itemVariants} className='text-3xl md:text-[2.75rem] font-bold tracking-tight leading-[1.15] text-gray-900 -tracking-[0.5px]'>
+            <motion.h2 variants={itemVariants} className="text-3xl md:text-[2.75rem] tracking-tight leading-[1.15] text-gray-900 -tracking-[0.5px] font-normal">
               Empower Your Enterprise GRC with Intelligent AI Agents
             </motion.h2>
 
@@ -209,7 +209,7 @@ const EnterpriseSection = () => {
             </motion.div>
 
             <motion.div variants={itemVariants} className='pt-2'>
-              <Button size='lg' className='bg-[#7A73FF] hover:bg-[#6366F1] text-white px-8 py-6 text-base font-medium rounded-full' onClick={() => openFormDialog('Explore Synapses for enterprises')}>
+              <Button size='lg' onClick={() => openFormDialog('Explore Synapses for enterprises')} className="text-white px-8 py-6 text-base font-medium rounded-full bg-blue-700 hover:bg-blue-600">
                 Explore Synapses for enterprises <ArrowRight size={18} className='ml-2' />
               </Button>
             </motion.div>

@@ -80,7 +80,7 @@ const IndustryPerspectivesSection = () => {
     setSelectedPerspective(perspective);
     setIsDialogOpen(true);
   };
-  return <div id='testimonials' ref={sectionRef} className="relative overflow-hidden py-0">
+  return <div id='testimonials' ref={sectionRef} className="relative overflow-hidden py-0 bg-white">
       {/* Stripe-inspired diagonal background */}
       <div className='absolute inset-0 -z-10'>
         <div className='absolute inset-0 bg-gradient-to-br from-gray-50 to-blue-50/30'></div>
@@ -90,12 +90,12 @@ const IndustryPerspectivesSection = () => {
       <div className='absolute inset-x-0 top-0 h-24 -z-10 transform -skew-y-6 bg-gradient-to-r from-indigo-50/80 to-blue-50/80'></div>
       <div className='absolute inset-x-0 bottom-0 h-24 -z-10 transform skew-y-6 bg-gradient-to-r from-purple-50/80 to-indigo-50/80'></div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-[15px] bg-white">
+      <div className="container mx-auto sm:px-6 lg:px-8 relative z-10 bg-white py-0 px-[3px]">
         <div className='text-center mb-16 max-w-3xl mx-auto'>
-          <h2 className='text-3xl md:text-4xl font-display font-bold mb-4'>
+          <h2 className="text-3xl md:text-4xl font-display mb-4 font-semibold">
             Perspectives Powering the Future of GRC
           </h2>
-          <p className='text-lg text-gray-600'>
+          <p className="font-light text-base text-black">
             Leading experts and organizations shaping the future of governance, risk, and compliance
           </p>
         </div>
