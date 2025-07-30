@@ -80,7 +80,7 @@ const IndustryPerspectivesSection = () => {
     setSelectedPerspective(perspective);
     setIsDialogOpen(true);
   };
-  return <div id='testimonials' ref={sectionRef} className="relative overflow-hidden py-0">
+  return <div id='testimonials' ref={sectionRef} className="relative overflow-hidden py-0 bg-white">
       {/* Stripe-inspired diagonal background */}
       <div className='absolute inset-0 -z-10'>
         <div className='absolute inset-0 bg-gradient-to-br from-gray-50 to-blue-50/30'></div>
@@ -95,7 +95,7 @@ const IndustryPerspectivesSection = () => {
           <h2 className='text-3xl md:text-4xl font-display font-bold mb-4'>
             Perspectives Powering the Future of GRC
           </h2>
-          <p className='text-lg text-gray-600'>
+          <p className="text-base font-medium text-black">
             Leading experts and organizations shaping the future of governance, risk, and compliance
           </p>
         </div>
@@ -116,10 +116,10 @@ const IndustryPerspectivesSection = () => {
                           <h3 className='text-lg font-bold text-gray-900 mb-1'>
                             {perspective.name}
                           </h3>
-                          <p className='text-sm text-synapse-primary/80'>{perspective.role}</p>
+                          <p className="text-synapse-primary/80 text-sm font-medium text-indigo-800">{perspective.role}</p>
                         </div>
 
-                        <p className='text-gray-600 text-sm flex-grow overflow-hidden'>
+                        <p className="text-sm flex-grow overflow-hidden font-light text-black">
                           {perspective.bio}
                         </p>
 
