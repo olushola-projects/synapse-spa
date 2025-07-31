@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import posthog from 'posthog-js';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +22,7 @@ import {
   Target,
   Search
 } from 'lucide-react';
-import SFDRChatIntegration from '@/components/sfdr/SFDRChatIntegration';
+import { NexusAgentChat } from '@/components/NexusAgentChat';
 import type { QuickActionType } from '@/types/nexus';
 
 /**
@@ -107,6 +107,7 @@ const NexusAgent = () => {
   }, []);
 
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
+  const chatRef = useRef<any>(null);
 
   // Global industry metrics
   const industryMetrics = [
@@ -187,12 +188,22 @@ const NexusAgent = () => {
     // Switch to chat mode if not already active
     setActiveTab('chat');
 
-    // Update compliance data based on action
-    setComplianceData(prev => ({
-      ...prev,
-      status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
-    }));
-  }, []);
+    // Find the action details
+    const action = quickActions.find(a => a.type === actionType);
+
+    // Add a small delay to ensure tab switch completes
+    setTimeout(() => {
+      if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
+        chatRef.current.sendMessage(action?.message || 'How can you help me today?');
+      }
+
+      // Update compliance data based on action
+      setComplianceData(prev => ({
+        ...prev,
+        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
+      }));
+    }, 100);
+  }, [quickActions]);
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
@@ -236,7 +247,7 @@ const NexusAgent = () => {
             <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
               {/* Chat Interface */}
               <div className='lg:col-span-3'>
-                <SFDRChatIntegration />
+                <NexusAgentChat className='shadow-lg' ref={chatRef} />
               </div>
 
               {/* Quick Actions Sidebar */}
