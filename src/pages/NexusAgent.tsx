@@ -220,8 +220,8 @@ const NexusAgent = () => {
             <div className='flex items-center space-x-3'>
               <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="SFDR Navigator Agent" className="w-8 h-8 rounded-full object-cover" />
               <div>
-                <h1 className="text-2xl text-gray-900 font-light">SFDR Navigator</h1>
-                <p className='text-sm text-gray-500'>AI-Powered Regulatory Compliance Agent</p>
+                <h1 className="text-2xl text-gray-900 font-medium">SFDR Navigator</h1>
+                
               </div>
             </div>
             <div className='flex items-center space-x-4'>
@@ -241,7 +241,7 @@ const NexusAgent = () => {
           <TabsList className='grid w-full grid-cols-3 mb-6'>
             <TabsTrigger value='chat' className='flex items-center space-x-2'>
               <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="Sophia" className="w-4 h-4 rounded-full object-cover" />
-              <span>Sophia - AI Navigator</span>
+              <span>Chat</span>
             </TabsTrigger>
             <TabsTrigger value='overview' className='flex items-center space-x-2'>
               <BarChart3 className='w-4 h-4' />
