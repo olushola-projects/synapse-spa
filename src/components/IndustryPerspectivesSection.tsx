@@ -137,21 +137,7 @@ const IndustryPerspectivesSection = () => {
           </div>
 
           {/* Carousel Controls */}
-          <div className='flex justify-center items-center gap-4 mt-6'>
-            <Button variant='outline' size='icon' className='rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary' onClick={() => emblaApi?.scrollPrev()}>
-              <ChevronLeft size={20} />
-              <span className='sr-only'>Previous</span>
-            </Button>
-
-            <div className='flex gap-2'>
-              {sortedPerspectives.map((_, index) => <button key={index} className={`w-2.5 h-2.5 rounded-full transition-colors ${selectedIndex === index ? 'bg-synapse-primary' : 'bg-gray-300'}`} onClick={() => scrollTo(index)} aria-label={`Go to slide ${index + 1}`} />)}
-            </div>
-
-            <Button variant='outline' size='icon' className='rounded-full bg-white shadow-sm hover:bg-gray-100 hover:text-synapse-primary' onClick={() => emblaApi?.scrollNext()}>
-              <ChevronRight size={20} />
-              <span className='sr-only'>Next</span>
-            </Button>
-          </div>
+          
         </div>
 
         {/* Mobile Carousel */}

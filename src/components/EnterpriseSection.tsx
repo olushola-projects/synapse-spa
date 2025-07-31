@@ -337,13 +337,7 @@ const EnterpriseSection = () => {
                   </CarouselItem>)}
               </CarouselContent>
 
-              <div className='flex items-center justify-center mt-6'>
-                <CarouselPrevious className='relative inset-0 translate-y-0 mr-2' />
-                <div className='flex gap-2'>
-                  {agentData.map((_, index) => <div key={index} className='w-2 h-2 rounded-full bg-gray-300'></div>)}
-                </div>
-                <CarouselNext className='relative inset-0 translate-y-0 ml-2' />
-              </div>
+              
             </Carousel>
           </motion.div>
         </div>
