@@ -6,7 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
+  
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
@@ -23,8 +23,8 @@ import {
 } from '@/components/ui/dialog';
 import {
   Plus,
-  Trash2,
-  Copy,
+  
+  
   MessageSquare,
   LineChart,
   Award,

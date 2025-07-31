@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { useInView } from 'framer-motion';
 import {
   Carousel,
@@ -11,7 +11,6 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import useEmblaCarousel from 'embla-carousel-react';
-import { wrap } from '@/lib/utils';
 import { getSortedPerspectives, type IndustryPerspective } from '@/data/industryPerspectivesData';
 import ArticleDialog from '@/components/ArticleDialog';
 const IndustryPerspectivesSection = () => {
@@ -25,23 +24,21 @@ const IndustryPerspectivesSection = () => {
     align: 'start',
     slidesToScroll: 1
   });
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  
   const [autoplayInterval, setAutoplayInterval] = useState<NodeJS.Timeout | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPerspective, setSelectedPerspective] = useState<IndustryPerspective | null>(null);
 
   // Get sorted perspectives
   const sortedPerspectives = getSortedPerspectives();
-  const scrollTo = useCallback(
-    (index: number) => {
-      if (!emblaApi) {
-        return;
-      }
-      // Use the wrap function to ensure the index stays within bounds
-      emblaApi.scrollTo(wrap(0, sortedPerspectives.length, index));
-    },
-    [emblaApi, sortedPerspectives.length]
-  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const scrollTo = useCallback((index: number) => {
+    if (!emblaApi) {
+      return;
+    }
+    emblaApi.scrollTo(index);
+  }, [emblaApi, sortedPerspectives.length]);
 
   // Setup autoplay with slower speed for better readability
   const startAutoplay = useCallback(() => {
@@ -164,6 +161,23 @@ const IndustryPerspectivesSection = () => {
           </div>
 
           {/* Carousel Controls */}
+<<<<<<< HEAD
+=======
+          <div className="flex justify-center gap-4 mt-8">
+            <button 
+              onClick={() => scrollTo(selectedIndex - 1)}
+              className="p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors"
+            >
+              ←
+            </button>
+            <button 
+              onClick={() => scrollTo(selectedIndex + 1)}
+              className="p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors"
+            >
+              →
+            </button>
+          </div>
+>>>>>>> c1efc70497585ba0326a12fc12a1c790673b489f
         </div>
 
         {/* Mobile Carousel */}

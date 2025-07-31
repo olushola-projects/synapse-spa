@@ -25,7 +25,7 @@ import {
 import {
   ThumbsUp,
   ThumbsDown,
-  MessageCircle,
+  
   BookOpen,
   AlertCircle,
   Send,
@@ -108,7 +108,7 @@ const sampleResponse = {
 };
 
 const AskDara = () => {
-  const navigate = useNavigate();
+  
   // const { user } = useAuth(); // user variable removed - not used in this component
   const [query, setQuery] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);

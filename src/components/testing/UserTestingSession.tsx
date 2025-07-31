@@ -73,14 +73,14 @@ interface TestingSession {
  */
 const UserTestingSession: React.FC = () => {
   const [session, setSession] = useState<TestingSession | null>(null);
-  const [currentUser, setCurrentUser] = useState<string>('Test Moderator');
+  const [currentUser] = useState<string>('Test Moderator');
   const [newNote, setNewNote] = useState<string>('');
   const [noteType, setNoteType] = useState<'observation' | 'issue' | 'suggestion' | 'question'>(
     'observation'
   );
   const [sessionTimer, setSessionTimer] = useState<number>(0);
   const [taskTimer, setTaskTimer] = useState<number>(0);
-  const [isRecording, setIsRecording] = useState<boolean>(false);
+  
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const taskTimerRef = useRef<NodeJS.Timeout | null>(null);
 

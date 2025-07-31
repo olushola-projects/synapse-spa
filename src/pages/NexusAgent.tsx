@@ -24,6 +24,7 @@ import {
   Search
 } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
+import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
 import type { QuickActionType } from '@/types/nexus';
 
 /**
@@ -107,8 +108,8 @@ const NexusAgent = () => {
     };
   }, []);
 
-  const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
-  const chatRef = useRef<{ sendMessage: (message: string) => void } | null>(null);
+  const [activeTab, setActiveTab] = useState<'chat' | 'overview' | 'testing'>('chat');
+  const chatRef = useRef<any>(null);
 
   // Global industry metrics
   const industryMetrics = [
@@ -189,6 +190,7 @@ const NexusAgent = () => {
     []
   );
 
+<<<<<<< HEAD
   const handleQuickAction = useCallback(
     (actionType: QuickActionType) => {
       // Switch to chat mode if not already active
@@ -212,6 +214,15 @@ const NexusAgent = () => {
     },
     [quickActions]
   );
+=======
+      // Update compliance data based on action
+      setComplianceData(prev => ({
+        ...prev,
+        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
+      }));
+    }, 100);
+  }, [quickActions]);
+>>>>>>> c1efc70497585ba0326a12fc12a1c790673b489f
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
@@ -239,8 +250,8 @@ const NexusAgent = () => {
 
       {/* Main Content */}
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
-        <Tabs value={activeTab} onValueChange={value => setActiveTab(value as 'chat' | 'overview')}>
-          <TabsList className='grid w-full grid-cols-2 mb-6'>
+        <Tabs value={activeTab} onValueChange={value => setActiveTab(value as 'chat' | 'overview' | 'testing')}>
+          <TabsList className='grid w-full grid-cols-3 mb-6'>
             <TabsTrigger value='chat' className='flex items-center space-x-2'>
               <MessageSquare className='w-4 h-4' />
               <span>AI Navigator</span>
@@ -249,12 +260,16 @@ const NexusAgent = () => {
               <BarChart3 className='w-4 h-4' />
               <span>Compliance Overview</span>
             </TabsTrigger>
+            <TabsTrigger value='testing' className='flex items-center space-x-2'>
+              <Target className='w-4 h-4' />
+              <span>UAT Testing</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value='chat'>
             <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
               {/* Chat Interface */}
-              <div className='lg:col-span-3'>
+              <div className='lg:col-span-3 nexus-agent-container' data-testid="nexus-chat">
                 <NexusAgentChat className='shadow-lg' ref={chatRef} />
               </div>
 
@@ -272,6 +287,7 @@ const NexusAgent = () => {
                       variant='outline'
                       className='w-full justify-start'
                       onClick={() => handleQuickAction('upload-document')}
+                      data-testid="quick-action-button"
                     >
                       Upload Document
                     </Button>
@@ -279,6 +295,7 @@ const NexusAgent = () => {
                       variant='outline'
                       className='w-full justify-start'
                       onClick={() => handleQuickAction('check-compliance')}
+                      data-testid="quick-action-button"
                     >
                       Check Compliance
                     </Button>
@@ -286,6 +303,7 @@ const NexusAgent = () => {
                       variant='outline'
                       className='w-full justify-start'
                       onClick={() => handleQuickAction('generate-report')}
+                      data-testid="quick-action-button"
                     >
                       Generate Report
                     </Button>
@@ -293,6 +311,7 @@ const NexusAgent = () => {
                       variant='outline'
                       className='w-full justify-start'
                       onClick={() => handleQuickAction('risk-assessment')}
+                      data-testid="quick-action-button"
                     >
                       Risk Assessment
                     </Button>
@@ -396,6 +415,10 @@ const NexusAgent = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value='testing'>
+            <NexusTestExecutor />
           </TabsContent>
         </Tabs>
       </main>
