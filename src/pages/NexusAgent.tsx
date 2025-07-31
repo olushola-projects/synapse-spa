@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import posthog from 'posthog-js';
 import { logger } from '@/utils/logger';
@@ -213,15 +214,38 @@ const NexusAgent = () => {
     }, 100);
   }, [quickActions]);
   return <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
-      {/* Header */}
+      {/* Enhanced Header with Navigation */}
       <header className='bg-white shadow-sm border-b'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          {/* Navigation Bar */}
+          <div className='flex justify-between items-center py-3 border-b border-gray-100'>
+            <div className='flex items-center space-x-6'>
+              <Link to="/" className='text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300'>
+                Synapse
+              </Link>
+              <nav className='hidden md:flex items-center space-x-6'>
+                <Link to="/agents" className='text-sm text-gray-600 hover:text-primary transition-colors'>Agents</Link>
+                <Link to="/use-cases" className='text-sm text-gray-600 hover:text-primary transition-colors'>Use Cases</Link>
+                <Link to="/partners" className='text-sm text-gray-600 hover:text-primary transition-colors'>Partners</Link>
+              </nav>
+            </div>
+            <div className='flex items-center space-x-3'>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/dashboard">Dashboard</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link to="/">Home</Link>
+              </Button>
+            </div>
+          </div>
+          
+          {/* Agent Header */}
           <div className='flex justify-between items-center py-4'>
             <div className='flex items-center space-x-3'>
-              <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="SFDR Navigator Agent" className="w-8 h-8 rounded-full object-cover" />
+              <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="Sophia - SFDR Navigator Agent" className="w-8 h-8 rounded-full object-cover" />
               <div>
-                <h1 className="text-2xl text-gray-900 font-medium">SFDR Navigator</h1>
-                
+                <h1 className="text-2xl text-gray-900 font-medium">SFDR Navigator - Sophia</h1>
+                <p className="text-sm text-gray-500">Elegant female guide to sustainable finance disclosures</p>
               </div>
             </div>
             <div className='flex items-center space-x-4'>

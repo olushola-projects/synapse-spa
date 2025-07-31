@@ -534,7 +534,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
                 <ScrollArea className='flex-1 px-4 max-h-[500px]'>
                   <div className='space-y-4 py-4'>
                     <AnimatePresence>
-                      {messages.map((message, index) => <motion.div key={message.id} initial={{
+                      {messages.map((message, index) => <motion.div key={`${message.id}-${index}`} initial={{
                   opacity: 0,
                   y: 20
                 }} animate={{

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExternalFormDialog from './ExternalFormDialog';
 import InviteDialog from './InviteDialog';
-import { Menu, X, ChevronDown, Shield, FileSearch, Users, Briefcase } from 'lucide-react';
+import { Menu, X, ChevronDown, Shield, Users, Briefcase } from 'lucide-react';
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -123,12 +123,12 @@ const Navbar = () => {
                           className='flex items-start space-x-3 p-3 rounded-lg hover:bg-muted/50 transition-colors duration-200 group'
                         >
                           <div className='p-2 bg-accent/10 rounded-lg group-hover:bg-accent/20 transition-colors duration-200'>
-                            <FileSearch className='h-5 w-5 text-accent' />
+                            <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="Sophia SFDR Navigator" className="w-5 h-5 rounded-full object-cover" />
                           </div>
                           <div>
-                            <h4 className='font-semibold text-foreground'>SFDR Navigator</h4>
+                            <h4 className='font-semibold text-foreground'>SFDR Navigator - Sophia</h4>
                             <p className='text-sm text-muted-foreground'>
-                              Sustainable Finance Disclosure Regulation
+                              Elegant female guide to sustainable finance disclosures
                             </p>
                           </div>
                         </Link>
@@ -219,8 +219,8 @@ const Navbar = () => {
                     onClick={closeMobileMenu}
                     className='flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/50 transition-colors duration-200'
                   >
-                    <FileSearch className='h-5 w-5 text-accent' />
-                    <span className='font-medium text-foreground'>SFDR Navigator</span>
+                    <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="Sophia SFDR Navigator" className="w-5 h-5 rounded-full object-cover" />
+                    <span className='font-medium text-foreground'>SFDR Navigator - Sophia</span>
                   </Link>
                 </div>
 
