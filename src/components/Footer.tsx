@@ -49,7 +49,7 @@ const Footer = () => {
         duration: 0.6
       }} viewport={{
         once: true
-      }} className="py-12 border-b border-border/40 bg-slate-300">
+      }} className="border-b border-border/40 bg-slate-300 py-[60px]">
           <div className='max-w-2xl mx-auto text-center'>
             <h3 className="text-2xl text-foreground mb-4 font-thin">
               Stay Updated with GRC Insights
