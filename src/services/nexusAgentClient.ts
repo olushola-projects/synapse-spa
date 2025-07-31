@@ -2,18 +2,24 @@
 import { NEXUS_CONFIG } from '../config/nexus';
 
 export interface NexusClassificationRequest {
-  fundName: string;
-  fundType: string;
-  targetArticle: string;
+  productName: string;
+  productType: string;
   sustainabilityObjectives?: string[];
+  investmentStrategy?: string;
+  riskProfile?: string;
+  targetArticle?: string;
   paiIndicators?: Record<string, any>;
 }
 
 export interface NexusClassificationResponse {
   classification: string;
-  confidence: number;
-  reasoning: string;
-  validation: {
+  complianceScore: number;
+  riskLevel: string;
+  recommendations: string[];
+  timestamp: string;
+  confidence?: number;
+  reasoning?: string;
+  validation?: {
     isValid: boolean;
     issues: string[];
   };
