@@ -36,7 +36,7 @@ const Footer = () => {
     icon: Mail,
     label: 'Email'
   }];
-  return <footer className='relative bg-gradient-to-br from-background via-background to-muted/20 border-t border-border/60'>
+  return <footer className='relative bg-background border-t border-border/60'>
       <div className="w-full max-w-7xl mx-auto pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 bg-white">
         {/* Newsletter Section */}
         <motion.div initial={{
