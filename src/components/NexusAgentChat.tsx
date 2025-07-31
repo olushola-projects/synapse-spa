@@ -14,7 +14,7 @@ import { EnhancedMessage } from '@/components/ui/enhanced-message';
 import { EnhancedInput } from '@/components/ui/enhanced-input';
 import { TypingIndicator } from '@/components/ui/typing-indicator';
 import { ProcessingStages } from '@/components/ui/processing-stages';
-import { Bot, Loader2, AlertCircle, Shield, Settings } from 'lucide-react';
+import { Loader2, AlertCircle, Shield, Settings } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { nexusAgent } from '@/services/nexusAgent';
 import { TIME_CONSTANTS } from '@/utils/constants';
@@ -407,7 +407,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
      * Provide PAI guidance with current regulations
      */
     const providePAIGuidance = async (_message: string): Promise<string> => {
-      return `Ah, PAI indicators – a crucial part of SFDR compliance. From my work on numerous client engagements, much like Big 4 advisory projects, there are 18 mandatory indicators covering GHG emissions, biodiversity impacts, and social factors like gender pay gaps. For robust compliance, aim for at least 50% data coverage and document your sources carefully. Article 8 funds must consider these in their processes, while Article 9 requires deeper due diligence. What's your specific challenge with PAI – data collection or integration into reporting?`;
+      return `PAI indicators represent a crucial component of SFDR compliance. Drawing from extensive client engagements across major consulting firms, there are 18 mandatory indicators covering GHG emissions, biodiversity impacts, and social factors including gender pay gaps. For robust compliance, target at least 50% data coverage and maintain comprehensive documentation of your sources. Article 8 funds must consider these indicators in their investment processes, while Article 9 requires enhanced due diligence. What specific challenge are you facing with PAI implementation - data collection or integration into your reporting framework?`;
     };
 
     /**
@@ -539,9 +539,11 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
                     damping: 10
                   }}
                 >
-                  <div className='h-10 w-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center'>
-                    <Bot className='h-5 w-5 text-white' />
-                  </div>
+                  <img 
+                    src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" 
+                    alt="SFDR Navigator Agent"
+                    className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
                   <motion.div
                     animate={{
                       scale: [1, 1.2, 1]
@@ -587,7 +589,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
             {!showFormMode ? (
               // Chat Mode
               <>
-                <ScrollArea className='flex-1 px-4'>
+                <ScrollArea className='flex-1 px-4 max-h-96'>
                   <div className='space-y-4 py-4'>
                     <AnimatePresence>
                       {messages.map((message, index) => (
@@ -640,8 +642,13 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(
                         className='flex items-start space-x-3'
                       >
                         <Avatar className='h-8 w-8'>
+                          <img 
+                            src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" 
+                            alt="SFDR Navigator Agent"
+                            className="w-full h-full object-cover rounded-full"
+                          />
                           <AvatarFallback className='bg-gradient-to-br from-blue-500 to-indigo-600 text-white'>
-                            <Bot className='h-4 w-4' />
+                            SN
                           </AvatarFallback>
                         </Avatar>
                         <div className='bg-white border rounded-lg p-3 shadow-sm'>

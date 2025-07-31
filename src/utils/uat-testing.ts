@@ -18,8 +18,8 @@ export interface AccessibilityCheckResult {
 }
 
 export class UATTester {
-  private results: UATTestResult[] = [];
-  private accessibilityResults: AccessibilityCheckResult[] = [];
+  // private results: UATTestResult[] = [];
+  // private accessibilityResults: AccessibilityCheckResult[] = [];
 
   // Test responsive design breakpoints
   testResponsiveBreakpoints(): UATTestResult[] {

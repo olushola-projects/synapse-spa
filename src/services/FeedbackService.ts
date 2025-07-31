@@ -388,21 +388,21 @@ class FeedbackService {
 
     const recentFeedback = feedback.filter(f => new Date(f.timestamp) >= last30Days);
 
-    // Group by date
-    const groupedByDate = recentFeedback.reduce(
-      (acc, f) => {
-        const date = new Date(f.timestamp).toISOString().split('T')[0];
-        if (!acc[date]) {
-          acc[date] = [];
-        }
-        acc[date].push(f);
-        return acc;
-      },
-      {} as Record<string, FeedbackData[]>
-    );
+    // Group by date using Map for better TypeScript support
+    const groupedByDate = new Map<string, FeedbackData[]>();
+    
+    recentFeedback.forEach(f => {
+      const dateStr = new Date(f.timestamp).toISOString().split('T')[0];
+      if (dateStr && !groupedByDate.has(dateStr)) {
+        groupedByDate.set(dateStr, []);
+      }
+      if (dateStr) {
+        groupedByDate.get(dateStr)!.push(f);
+      }
+    });
 
     // Calculate daily metrics
-    return Object.entries(groupedByDate)
+    return Array.from(groupedByDate.entries())
       .map(([date, dayFeedback]) => ({
         date,
         count: dayFeedback.length,

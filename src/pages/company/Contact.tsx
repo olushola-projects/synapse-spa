@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Button } from '@/components/ui/button';
@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import {
-  MessageSquare,
   Mail,
   MapPin,
   Phone,

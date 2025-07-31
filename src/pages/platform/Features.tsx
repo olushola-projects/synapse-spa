@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,6 @@ import {
   Brain,
   Users,
   LineChart,
-  Globe,
   ShieldCheck,
   Layers,
   Database

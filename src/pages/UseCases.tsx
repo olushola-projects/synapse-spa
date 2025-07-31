@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
+  CardContent
 } from '@/components/ui/card';
 import {
   Dialog,
@@ -51,24 +47,16 @@ import {
   Gauge,
   ShoppingBag,
   DollarSign,
-  Send,
-  Sparkles,
-  Zap,
-  Award,
-  FileCheck,
-  BookOpen,
-  Link2,
-  ArrowUpRight
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 
 // For analytics implementation
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 
 // Import types and data
-import type { UseCase, FilterView, SortOption } from '@/types/useCases';
+import type { UseCase, SortOption } from '@/types/useCases';
 import { mockUseCases } from '@/data/useCasesData';
 
 // Interface is now imported from types/useCases.ts
@@ -118,7 +106,7 @@ const getComplexityInfo = (complexity: UseCase['complexity']) => {
 // Mock data is now imported from data/useCasesData.ts
 
 const UseCases = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [useCases, setUseCases] = useState<UseCase[]>(mockUseCases);
   const [filteredUseCases, setFilteredUseCases] = useState<UseCase[]>(mockUseCases);
   const [searchTerm, setSearchTerm] = useState('');
@@ -126,11 +114,11 @@ const UseCases = () => {
   const [filterIndustry, setFilterIndustry] = useState<string>('all');
   const [selectedUseCase, setSelectedUseCase] = useState<UseCase | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
   const [contactEmail, setContactEmail] = useState('');
   const [contactMessage, setContactMessage] = useState('');
-  const [filterView, setFilterView] = useState<FilterView>('simple');
+  // const [filterView, setFilterView] = useState<FilterView>('simple');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [complexityRange, setComplexityRange] = useState<[number, number]>([0, 2]); // 0=Low, 1=Medium, 2=High
   const [sortBy, setSortBy] = useState<SortOption>('newest');
@@ -367,13 +355,13 @@ const UseCases = () => {
           <MotionConfig transition={{ duration: 0.3 }}>
             <Tabs defaultValue='simple' className='mb-6'>
               <TabsList className='grid w-full md:w-80 grid-cols-2'>
-                <TabsTrigger value='simple' onClick={() => setFilterView('simple')}>
+                <TabsTrigger value='simple'>
                   <motion.div className='flex items-center gap-1' whileHover={{ scale: 1.05 }}>
                     <Filter className='h-4 w-4' />
                     Simple Filters
                   </motion.div>
                 </TabsTrigger>
-                <TabsTrigger value='advanced' onClick={() => setFilterView('advanced')}>
+                <TabsTrigger value='advanced'>
                   <motion.div className='flex items-center gap-1' whileHover={{ scale: 1.05 }}>
                     <Filter className='h-4 w-4' />
                     Advanced Filters
@@ -845,7 +833,7 @@ const UseCases = () => {
                               }}
                             >
                               <h4 className='text-lg font-medium flex items-center gap-2'>
-                                <Zap className='h-5 w-5 text-purple-500' />
+                                <Brain className='h-5 w-5 text-purple-500' />
                                 Technology Stack
                               </h4>
                               <div className='flex flex-wrap gap-2 mt-2'>
