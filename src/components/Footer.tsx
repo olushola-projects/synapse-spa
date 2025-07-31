@@ -84,7 +84,7 @@ const Footer = () => {
 
         {/* Main Footer Content */}
         <div className="py-px">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-[10px]">
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
             {/* Brand Section */}
             <motion.div initial={{
             opacity: 0,
