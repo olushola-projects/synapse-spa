@@ -195,7 +195,7 @@ export const EnhancedMessage: React.FC<EnhancedMessageProps> = ({
           </div>;
       default:
         return <div className='prose prose-sm max-w-none'>
-            <p className="whitespace-pre-wrap font-thin">{displayedContent}</p>
+            <p className="whitespace-pre-wrap font-thin text-base">{displayedContent}</p>
           </div>;
     }
   };

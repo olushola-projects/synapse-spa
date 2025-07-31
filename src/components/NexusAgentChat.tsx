@@ -517,7 +517,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
                   Secure
                 </Badge>
 
-                <Button variant='outline' size='sm' onClick={() => setShowFormMode(!showFormMode)} className='text-xs hover:bg-blue-50'>
+                <Button variant='outline' size='sm' onClick={() => setShowFormMode(!showFormMode)} className="text-xs bg-blue-50">
                   {showFormMode ? 'Chat Mode' : 'Form Mode'}
                 </Button>
                 <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
