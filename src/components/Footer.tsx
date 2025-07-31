@@ -4,11 +4,9 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
-
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
@@ -17,7 +15,6 @@ const Footer = () => {
       setTimeout(() => setIsSubscribed(false), 3000);
     }
   };
-
   const socialLinks = [{
     href: 'https://facebook.com/synapsesgrc',
     icon: Facebook,
@@ -39,7 +36,6 @@ const Footer = () => {
     icon: Mail,
     label: 'Email'
   }];
-
   return <footer className='relative bg-gradient-to-br from-background via-background to-muted/20 border-t border-border/60'>
       <div className="w-full max-w-7xl mx-auto pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 bg-white">
         {/* Newsletter Section */}
@@ -53,7 +49,7 @@ const Footer = () => {
         duration: 0.6
       }} viewport={{
         once: true
-      }} className='py-12 border-b border-border/40'>
+      }} className="py-12 border-b border-border/40 bg-slate-300">
           <div className='max-w-2xl mx-auto text-center'>
             <h3 className="text-2xl text-foreground mb-4 font-thin">
               Stay Updated with GRC Insights
@@ -310,5 +306,4 @@ const Footer = () => {
       </div>
     </footer>;
 };
-
 export default Footer;

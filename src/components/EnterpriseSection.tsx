@@ -271,7 +271,7 @@ const EnterpriseSection = () => {
                     <div className='p-1 h-full' onClick={() => openFormDialog(`Learn about ${agent.name} - ${agent.role}`)}>
                       <Card className='relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 h-full cursor-pointer group border border-gray-200'>
                         <div className='bg-gradient-to-r from-[rgba(60,90,180,0.03)] to-[rgba(60,90,180,0.1)] absolute inset-0 opacity-50'></div>
-                        <CardContent className='p-6 relative z-10 h-full flex flex-col'>
+                        <CardContent className="p-6 relative z-10 h-full flex flex-col bg-slate-300">
                           <div className='flex items-center gap-3 mb-3'>
                             <div className='bg-white p-2 rounded-full shadow-sm'>{agent.icon}</div>
                             <div>

@@ -95,7 +95,7 @@ const IndustryPerspectivesSection = () => {
           <h2 className="text-3xl md:text-4xl font-display mb-4 font-semibold">
             Perspectives Powering the Future of GRC
           </h2>
-          <p className="font-light text-base text-black">
+          <p className="text-base text-black font-medium">
             Leading experts and organizations shaping the future of governance, risk, and compliance
           </p>
         </div>
@@ -109,7 +109,7 @@ const IndustryPerspectivesSection = () => {
                 transitionDelay: `${index * 150}ms`
               }}>
                     <Card className='h-[360px] border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden bg-white rounded-xl'>
-                      <CardContent className='p-6 flex flex-col h-full'>
+                      <CardContent className="p-6 flex flex-col h-full bg-slate-100">
                         <div className='mb-4'>{perspective.icon}</div>
 
                         <div className='mb-5'>

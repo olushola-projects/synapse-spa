@@ -40,7 +40,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
       </h1>
 
       {/* Enhanced subtitle with reduced sizing and width */}
-      <p className="mt-6 text-sm md:text-base max-w-2xl leading-relaxed text-black lg:text-lg font-light">
+      <p className="mt-6 text-sm md:text-base max-w-2xl leading-relaxed text-black font-light lg:text-base">
         Join a global network of GRC professionals leveraging AI agents
         <br />
         for compliance excellence. Access exclusive testing of future
