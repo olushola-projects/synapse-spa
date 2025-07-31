@@ -24,11 +24,11 @@ const HowItWorksSection = () => {
     title: 'Connect & Grow',
     description: 'Network with peers, participate in discussions, attend events, and continuously expand your knowledge and skills.'
   }];
-  return <div id='how-it-works' className="bg-white">
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+  return <div id='how-it-works' className='py-20 bg-gray-50'>
+      <div className="container mx-auto sm:px-6 lg:px-8 px-[50px] py-[10px]">
         <div className='text-center mb-16'>
-          <h2 className="text-3xl md:text-4xl font-display mb-4 font-semibold">How Synapses Works</h2>
-          <p className="max-w-3xl mx-auto text-black text-base font-medium">
+          <h2 className='text-3xl md:text-4xl font-display font-bold mb-4'>How Synapses Works</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto font-medium">
             Getting started with Synapses is simple. Follow these steps to transform your GRC
             experience.
           </p>
@@ -41,7 +41,7 @@ const HowItWorksSection = () => {
             width: 'calc(100% - 2rem)'
           }}></div>}
 
-              <div className="feature-card h-full relative z-10 bg-slate-100">
+              <div className="feature-card h-full relative z-10 bg-slate-200">
                 <div className='text-3xl font-bold text-synapse-primary/20 mb-4'>{step.number}</div>
                 <h3 className='text-xl font-semibold mb-3'>{step.title}</h3>
                 <p className='text-gray-600'>{step.description}</p>

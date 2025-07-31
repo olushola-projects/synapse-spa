@@ -90,12 +90,12 @@ const IndustryPerspectivesSection = () => {
       <div className='absolute inset-x-0 top-0 h-24 -z-10 transform -skew-y-6 bg-gradient-to-r from-indigo-50/80 to-blue-50/80'></div>
       <div className='absolute inset-x-0 bottom-0 h-24 -z-10 transform skew-y-6 bg-gradient-to-r from-purple-50/80 to-indigo-50/80'></div>
 
-      <div className="container mx-auto sm:px-6 lg:px-8 relative z-10 bg-white py-0 px-[3px]">
+      <div className="container mx-auto sm:px-6 lg:px-8 relative z-10 bg-white px-0 py-[20px]">
         <div className='text-center mb-16 max-w-3xl mx-auto'>
           <h2 className="text-3xl md:text-4xl font-display mb-4 font-semibold">
             Perspectives Powering the Future of GRC
           </h2>
-          <p className="text-base text-black font-medium">
+          <p className="font-light text-base text-black">
             Leading experts and organizations shaping the future of governance, risk, and compliance
           </p>
         </div>
@@ -109,7 +109,7 @@ const IndustryPerspectivesSection = () => {
                 transitionDelay: `${index * 150}ms`
               }}>
                     <Card className='h-[360px] border border-gray-100 hover:border-synapse-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden bg-white rounded-xl'>
-                      <CardContent className="p-6 flex flex-col h-full bg-slate-100">
+                      <CardContent className="p-6 flex flex-col h-full bg-slate-200">
                         <div className='mb-4'>{perspective.icon}</div>
 
                         <div className='mb-5'>
