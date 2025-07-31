@@ -7,22 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import {
-  Activity,
-  Shield,
-  TrendingUp,
-  Users,
-  MessageSquare,
-  BarChart3,
-  FileText,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  
-  Brain,
-  Target,
-  Search
-} from 'lucide-react';
+import { Activity, Shield, TrendingUp, Users, MessageSquare, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
 import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
 import type { QuickActionType } from '@/types/nexus';
@@ -38,7 +23,6 @@ let supabase;
 try {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
   if (supabaseUrl && supabaseKey) {
     supabase = createClient(supabaseUrl, supabaseKey);
   } else {
@@ -46,14 +30,31 @@ try {
     // Create a mock or disabled client
     supabase = {
       from: () => ({
-        select: () => Promise.resolve({ data: [], error: null }),
-        insert: () => Promise.resolve({ data: null, error: null }),
-        update: () => Promise.resolve({ data: null, error: null }),
-        delete: () => Promise.resolve({ data: null, error: null })
+        select: () => Promise.resolve({
+          data: [],
+          error: null
+        }),
+        insert: () => Promise.resolve({
+          data: null,
+          error: null
+        }),
+        update: () => Promise.resolve({
+          data: null,
+          error: null
+        }),
+        delete: () => Promise.resolve({
+          data: null,
+          error: null
+        })
       }),
       auth: {
-        onAuthStateChange: () => ({ data: null, error: null }),
-        signOut: () => Promise.resolve({ error: null })
+        onAuthStateChange: () => ({
+          data: null,
+          error: null
+        }),
+        signOut: () => Promise.resolve({
+          error: null
+        })
       }
     };
   }
@@ -62,28 +63,48 @@ try {
   // Provide fallback client
   supabase = {
     from: () => ({
-      select: () => Promise.resolve({ data: [], error: null }),
-      insert: () => Promise.resolve({ data: null, error: null }),
-      update: () => Promise.resolve({ data: null, error: null }),
-      delete: () => Promise.resolve({ data: null, error: null })
+      select: () => Promise.resolve({
+        data: [],
+        error: null
+      }),
+      insert: () => Promise.resolve({
+        data: null,
+        error: null
+      }),
+      update: () => Promise.resolve({
+        data: null,
+        error: null
+      }),
+      delete: () => Promise.resolve({
+        data: null,
+        error: null
+      })
     }),
     auth: {
-      onAuthStateChange: () => ({ data: null, error: null }),
-      signOut: () => Promise.resolve({ error: null })
+      onAuthStateChange: () => ({
+        data: null,
+        error: null
+      }),
+      signOut: () => Promise.resolve({
+        error: null
+      })
     }
   };
 }
-
 const NexusAgent = () => {
   // State declarations
   const [complianceData, setComplianceData] = useState<{
     status: 'pre-validated' | 'needs-review';
     esmaReference: string;
-  }>({ status: 'pre-validated', esmaReference: '2024/1357' });
-
+  }>({
+    status: 'pre-validated',
+    esmaReference: '2024/1357'
+  });
   useEffect(() => {
     // Authentication check
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (_, session) => {
+    const {
+      data: authListener
+    } = supabase.auth.onAuthStateChange(async (_, session) => {
       logger.info('Auth state changed:', session?.user?.id);
     });
 
@@ -91,7 +112,6 @@ const NexusAgent = () => {
     try {
       const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
       const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
-
       if (posthogKey && posthogHost) {
         posthog.init(posthogKey, {
           api_host: posthogHost
@@ -102,132 +122,105 @@ const NexusAgent = () => {
     } catch (error) {
       logger.error('Failed to initialize PostHog:', error);
     }
-
     return () => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
-
   const [activeTab, setActiveTab] = useState<'chat' | 'overview' | 'testing'>('chat');
   const chatRef = useRef<any>(null);
 
   // Global industry metrics
-  const industryMetrics = [
-    {
-      label: 'Compliance Score',
-      value: '94%',
-      icon: <Shield className='w-5 h-5 text-green-600' />
-    },
-    {
-      label: 'Risk Reduction',
-      value: '67%',
-      icon: <TrendingUp className='w-5 h-5 text-blue-600' />
-    },
-    {
-      label: 'Processing Speed',
-      value: '3.2s',
-      icon: <Activity className='w-5 h-5 text-orange-600' />
-    },
-    { label: 'Active Users', value: '500+', icon: <Users className='w-5 h-5 text-purple-600' /> }
-  ];
+  const industryMetrics = [{
+    label: 'Compliance Score',
+    value: '94%',
+    icon: <Shield className='w-5 h-5 text-green-600' />
+  }, {
+    label: 'Risk Reduction',
+    value: '67%',
+    icon: <TrendingUp className='w-5 h-5 text-blue-600' />
+  }, {
+    label: 'Processing Speed',
+    value: '3.2s',
+    icon: <Activity className='w-5 h-5 text-orange-600' />
+  }, {
+    label: 'Active Users',
+    value: '500+',
+    icon: <Users className='w-5 h-5 text-purple-600' />
+  }];
 
   // Enhanced quick actions with Nexus capabilities
-  const quickActions = useMemo(
-    () => [
-      {
-        type: 'upload-document' as QuickActionType,
-        label: 'Upload Document',
-        description: 'Upload and analyze compliance documents',
-        icon: <FileText className='w-4 h-4' />,
-        message: 'I need help uploading and analyzing a compliance document for SFDR validation.'
-      },
-      {
-        type: 'check-compliance' as QuickActionType,
-        label: 'Check Compliance',
-        description: 'Validate SFDR classification',
-        icon: <Shield className='w-4 h-4' />,
-        message:
-          'Please check the compliance status of my fund classification against SFDR requirements.'
-      },
-      {
-        type: 'article-classification' as QuickActionType,
-        label: 'Article Classification',
-        description: 'Determine Article 6/8/9 classification',
-        icon: <Target className='w-4 h-4' />,
-        message:
-          'Help me determine the correct SFDR article classification for my fund (Article 6, 8, or 9).'
-      },
-      {
-        type: 'pai-analysis' as QuickActionType,
-        label: 'PAI Analysis',
-        description: 'Principal Adverse Impact validation',
-        icon: <Brain className='w-4 h-4' />,
-        message:
-          'I need help with Principal Adverse Impact (PAI) indicators analysis and validation.'
-      },
-      {
-        type: 'taxonomy-check' as QuickActionType,
-        label: 'Taxonomy Check',
-        description: 'EU Taxonomy alignment verification',
-        icon: <Search className='w-4 h-4' />,
-        message: 'Please help me verify EU Taxonomy alignment for my sustainable investment fund.'
-      },
-      {
-        type: 'generate-report' as QuickActionType,
-        label: 'Generate Report',
-        description: 'Create compliance reports',
-        icon: <BarChart3 className='w-4 h-4' />,
-        message: 'I need to generate a comprehensive SFDR compliance report.'
-      },
-      {
-        type: 'risk-assessment' as QuickActionType,
-        label: 'Risk Assessment',
-        description: 'Identify compliance risks',
-        icon: <AlertTriangle className='w-4 h-4' />,
-        message: 'Can you help me with a regulatory risk assessment for SFDR compliance?'
+  const quickActions = useMemo(() => [{
+    type: 'upload-document' as QuickActionType,
+    label: 'Upload Document',
+    description: 'Upload and analyze compliance documents',
+    icon: <FileText className='w-4 h-4' />,
+    message: 'I need help uploading and analyzing a compliance document for SFDR validation.'
+  }, {
+    type: 'check-compliance' as QuickActionType,
+    label: 'Check Compliance',
+    description: 'Validate SFDR classification',
+    icon: <Shield className='w-4 h-4' />,
+    message: 'Please check the compliance status of my fund classification against SFDR requirements.'
+  }, {
+    type: 'article-classification' as QuickActionType,
+    label: 'Article Classification',
+    description: 'Determine Article 6/8/9 classification',
+    icon: <Target className='w-4 h-4' />,
+    message: 'Help me determine the correct SFDR article classification for my fund (Article 6, 8, or 9).'
+  }, {
+    type: 'pai-analysis' as QuickActionType,
+    label: 'PAI Analysis',
+    description: 'Principal Adverse Impact validation',
+    icon: <Brain className='w-4 h-4' />,
+    message: 'I need help with Principal Adverse Impact (PAI) indicators analysis and validation.'
+  }, {
+    type: 'taxonomy-check' as QuickActionType,
+    label: 'Taxonomy Check',
+    description: 'EU Taxonomy alignment verification',
+    icon: <Search className='w-4 h-4' />,
+    message: 'Please help me verify EU Taxonomy alignment for my sustainable investment fund.'
+  }, {
+    type: 'generate-report' as QuickActionType,
+    label: 'Generate Report',
+    description: 'Create compliance reports',
+    icon: <BarChart3 className='w-4 h-4' />,
+    message: 'I need to generate a comprehensive SFDR compliance report.'
+  }, {
+    type: 'risk-assessment' as QuickActionType,
+    label: 'Risk Assessment',
+    description: 'Identify compliance risks',
+    icon: <AlertTriangle className='w-4 h-4' />,
+    message: 'Can you help me with a regulatory risk assessment for SFDR compliance?'
+  }], []);
+  const handleQuickAction = useCallback((actionType: QuickActionType) => {
+    // Switch to chat mode if not already active
+    setActiveTab('chat');
+
+    // Find the action details
+    const action = quickActions.find(a => a.type === actionType);
+
+    // Add a small delay to ensure tab switch completes
+    setTimeout(() => {
+      if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
+        chatRef.current.sendMessage(action?.message || 'How can you help me today?');
       }
-    ],
-    []
-  );
 
-  const handleQuickAction = useCallback(
-    (actionType: QuickActionType) => {
-      // Switch to chat mode if not already active
-      setActiveTab('chat');
-
-      // Find the action details
-      const action = quickActions.find(a => a.type === actionType);
-
-      // Add a small delay to ensure tab switch completes
-      setTimeout(() => {
-        if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
-          chatRef.current.sendMessage(action?.message || 'How can you help me today?');
-        }
-
-        // Update compliance data based on action
-        setComplianceData(prev => ({
-          ...prev,
-          status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
-        }));
-      }, 100);
-    },
-    [quickActions]
-  );
-
-  return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
+      // Update compliance data based on action
+      setComplianceData(prev => ({
+        ...prev,
+        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
+      }));
+    }, 100);
+  }, [quickActions]);
+  return <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
       {/* Header */}
       <header className='bg-white shadow-sm border-b'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center py-4'>
             <div className='flex items-center space-x-3'>
-              <img 
-                src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" 
-                alt="SFDR Navigator Agent"
-                className="w-8 h-8 rounded-full object-cover"
-              />
+              <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="SFDR Navigator Agent" className="w-8 h-8 rounded-full object-cover" />
               <div>
-                <h1 className='text-2xl font-bold text-gray-900'>SFDR Navigator</h1>
+                <h1 className="text-2xl text-gray-900 font-light">SFDR Navigator</h1>
                 <p className='text-sm text-gray-500'>AI-Powered Regulatory Compliance Agent</p>
               </div>
             </div>
@@ -277,36 +270,16 @@ const NexusAgent = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className='space-y-3'>
-                    <Button
-                      variant='outline'
-                      className='w-full justify-start'
-                      onClick={() => handleQuickAction('upload-document')}
-                      data-testid="quick-action-button"
-                    >
+                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('upload-document')} data-testid="quick-action-button">
                       Upload Document
                     </Button>
-                    <Button
-                      variant='outline'
-                      className='w-full justify-start'
-                      onClick={() => handleQuickAction('check-compliance')}
-                      data-testid="quick-action-button"
-                    >
+                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('check-compliance')} data-testid="quick-action-button">
                       Check Compliance
                     </Button>
-                    <Button
-                      variant='outline'
-                      className='w-full justify-start'
-                      onClick={() => handleQuickAction('generate-report')}
-                      data-testid="quick-action-button"
-                    >
+                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('generate-report')} data-testid="quick-action-button">
                       Generate Report
                     </Button>
-                    <Button
-                      variant='outline'
-                      className='w-full justify-start'
-                      onClick={() => handleQuickAction('risk-assessment')}
-                      data-testid="quick-action-button"
-                    >
+                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('risk-assessment')} data-testid="quick-action-button">
                       Risk Assessment
                     </Button>
                   </CardContent>
@@ -318,15 +291,13 @@ const NexusAgent = () => {
                     <CardTitle className='text-lg'>Industry Metrics</CardTitle>
                   </CardHeader>
                   <CardContent className='space-y-4'>
-                    {industryMetrics.map((metric, index) => (
-                      <div key={index} className='flex items-center justify-between'>
+                    {industryMetrics.map((metric, index) => <div key={index} className='flex items-center justify-between'>
                         <div className='flex items-center space-x-2'>
                           {metric.icon}
                           <span className='text-sm font-medium'>{metric.label}</span>
                         </div>
                         <span className='text-sm font-bold'>{metric.value}</span>
-                      </div>
-                    ))}
+                      </div>)}
                   </CardContent>
                 </Card>
               </div>
@@ -416,8 +387,6 @@ const NexusAgent = () => {
           </TabsContent>
         </Tabs>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default NexusAgent;
