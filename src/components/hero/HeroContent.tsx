@@ -56,7 +56,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
       {/* Enhanced CTA section with secondary action */}
       <div className='mt-10 flex flex-col sm:flex-row gap-4 justify-start items-start'>
         <div onClick={onGetAccess} className='cursor-pointer'>
-          <Button className='bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-base rounded-xl flex items-center gap-3 hover-lift font-semibold shadow-lg hover:shadow-xl transition-all duration-300'>
+          <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ">
             Get Early Access <ArrowRightIcon />
           </Button>
         </div>
