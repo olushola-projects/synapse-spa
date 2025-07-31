@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { useInView } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import useEmblaCarousel from 'embla-carousel-react';
-import { wrap } from '@/lib/utils';
 import { getSortedPerspectives, type IndustryPerspective } from '@/data/industryPerspectivesData';
 import ArticleDialog from '@/components/ArticleDialog';
 const IndustryPerspectivesSection = () => {
@@ -26,12 +25,13 @@ const IndustryPerspectivesSection = () => {
 
   // Get sorted perspectives
   const sortedPerspectives = getSortedPerspectives();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
   const scrollTo = useCallback((index: number) => {
     if (!emblaApi) {
       return;
     }
-    // Use the wrap function to ensure the index stays within bounds
-    emblaApi.scrollTo(wrap(0, sortedPerspectives.length, index));
+    emblaApi.scrollTo(index);
   }, [emblaApi, sortedPerspectives.length]);
 
   // Setup autoplay with slower speed for better readability
@@ -137,7 +137,20 @@ const IndustryPerspectivesSection = () => {
           </div>
 
           {/* Carousel Controls */}
-          
+          <div className="flex justify-center gap-4 mt-8">
+            <button 
+              onClick={() => scrollTo(selectedIndex - 1)}
+              className="p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors"
+            >
+              ←
+            </button>
+            <button 
+              onClick={() => scrollTo(selectedIndex + 1)}
+              className="p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors"
+            >
+              →
+            </button>
+          </div>
         </div>
 
         {/* Mobile Carousel */}

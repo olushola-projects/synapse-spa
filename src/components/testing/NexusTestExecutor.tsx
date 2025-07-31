@@ -98,9 +98,10 @@ export const NexusTestExecutor = () => {
   };
 
   const testFormMode = () => {
-    const formModeButton = document.querySelector('button:contains("Form Mode")');
+    const buttons = Array.from(document.querySelectorAll('button'));
+    const formModeButton = buttons.find(btn => btn.textContent?.includes('Form Mode'));
     if (formModeButton) {
-      (formModeButton as HTMLButtonElement).click();
+      formModeButton.click();
       return true;
     }
     return false;
