@@ -19,7 +19,7 @@ const IndustryPerspectivesSection = () => {
     align: 'start',
     slidesToScroll: 1
   });
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  
   const [autoplayInterval, setAutoplayInterval] = useState<NodeJS.Timeout | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPerspective, setSelectedPerspective] = useState<IndustryPerspective | null>(null);

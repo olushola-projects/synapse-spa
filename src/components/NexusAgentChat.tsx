@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,7 @@ import { EnhancedMessage } from '@/components/ui/enhanced-message';
 import { EnhancedInput } from '@/components/ui/enhanced-input';
 import { TypingIndicator } from '@/components/ui/typing-indicator';
 import { ProcessingStages } from '@/components/ui/processing-stages';
-import { Bot, Loader2, AlertCircle, Shield, Settings, Zap } from 'lucide-react';
+import { Bot, Loader2, AlertCircle, Shield, Settings } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { nexusAgent } from '@/services/nexusAgent';
 import { TIME_CONSTANTS } from '@/utils/constants';
