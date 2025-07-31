@@ -1,13 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { handleAuthError } from '@/utils/error-handler';
+import { supabase } from '@/integrations/supabase/client';
+import { Session } from '@supabase/supabase-js';
+import { SecurityUtils } from '@/utils/security';
 
 // Define types
 export interface User {
   id: string;
   email: string;
   name: string;
-  avatar?: string;
+  avatar_url?: string;
   jurisdiction?: string[];
 }
 
@@ -30,12 +33,13 @@ interface RegisterData {
 
 interface AuthContextType {
   user: User | null;
+  session: Session | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   loginWithLinkedIn: () => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
   error: string | null;
@@ -45,49 +49,76 @@ interface AuthContextType {
 // Create context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock authentication functions (to be replaced with real implementation)
-const mockUsers: User[] = [
-  {
-    id: '1',
-    email: 'demo@synapse.com',
-    name: 'Demo User',
-    avatar: 'https://i.pravatar.cc/150?u=demo',
-    jurisdiction: ['EU', 'UK']
-  }
-];
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Check for stored user on mount
+  // Set up Supabase auth state listener
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem('synapseUser');
-      if (storedUser) {
-        const userData = JSON.parse(storedUser) as User;
-        // Validate saved user data
-        if (userData && userData.id && userData.email && userData.name) {
-          setUser(userData);
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_, session) => {
+        setSession(session);
+        
+        if (session?.user) {
+          // Fetch user profile from profiles table
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
+          if (profile && !error) {
+            setUser({
+              id: profile.id,
+              email: session.user.email || '',
+              name: profile.name,
+              avatar_url: profile.avatar_url || undefined,
+              jurisdiction: profile.jurisdiction || undefined
+            });
+          } else {
+            // Create profile if it doesn't exist
+            if (session.user.email) {
+              const newProfile = {
+                id: session.user.id,
+                name: session.user.user_metadata?.name || session.user.email.split('@')[0],
+                avatar_url: null,
+                jurisdiction: []
+              };
+
+              const { error: insertError } = await supabase
+                .from('profiles')
+                .insert([newProfile]);
+
+              if (!insertError) {
+                setUser({
+                  id: session.user.id,
+                  email: session.user.email,
+                  name: newProfile.name,
+                  avatar_url: undefined,
+                  jurisdiction: newProfile.jurisdiction
+                });
+              }
+            }
+          }
         } else {
-          // Invalid saved data, clear it
-          localStorage.removeItem('synapseUser');
+          setUser(null);
         }
+        
+        setIsLoading(false);
       }
-    } catch (error) {
-      // Invalid JSON in localStorage, clear it
-      localStorage.removeItem('synapseUser');
-      handleAuthError(
-        error instanceof Error ? error : new Error('Failed to load saved user data'),
-        {
-          component: 'AuthContext',
-          action: 'loadSavedUser'
-        }
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        setIsLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Helper function to validate email
@@ -96,36 +127,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return emailRegex.test(email);
   };
 
-  // Login function - this would connect to your backend in production
+  // Login function with Supabase
   const login = async (credentials: LoginCredentials) => {
     setIsLoading(true);
     try {
       setError(null);
 
-      // Validate input
+      // Validate and sanitize input
       if (!credentials.email || !credentials.password) {
         throw new Error('Email and password are required');
       }
 
-      if (!isValidEmail(credentials.email)) {
+      const sanitizedEmail = SecurityUtils.sanitizeInput(credentials.email.trim());
+      
+      if (!isValidEmail(sanitizedEmail)) {
         throw new Error('Please enter a valid email address');
       }
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: sanitizedEmail,
+        password: credentials.password
+      });
 
-      const foundUser = mockUsers.find(u => u.email === credentials.email);
-      if (!foundUser) {
-        throw new Error('Invalid credentials');
+      if (signInError) {
+        throw new Error(signInError.message);
       }
 
-      // Set user in state and localStorage
-      setUser(foundUser);
-      localStorage.setItem('synapseUser', JSON.stringify(foundUser));
+      // Check for redirect path
+      const redirectPath = SecurityUtils.storage.get<string>('redirectPath');
+      if (redirectPath) {
+        SecurityUtils.storage.remove('redirectPath');
+      }
 
       toast({
         title: 'Login successful',
-        description: `Welcome back, ${foundUser.name}!`
+        description: 'Welcome back!'
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Login failed';
@@ -148,53 +184,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Register function - would connect to backend in production
+  // Register function with Supabase
   const register = async (data: RegisterData) => {
     setIsLoading(true);
     try {
       setError(null);
 
-      // Validate input
+      // Validate and sanitize input
       if (!data.email || !data.password || !data.name) {
         throw new Error('All fields are required');
       }
 
-      if (!isValidEmail(data.email)) {
+      const sanitizedEmail = SecurityUtils.sanitizeInput(data.email.trim());
+      const sanitizedName = SecurityUtils.sanitizeInput(data.name.trim());
+
+      if (!isValidEmail(sanitizedEmail)) {
         throw new Error('Please enter a valid email address');
       }
 
-      if (data.password.length < 6) {
-        throw new Error('Password must be at least 6 characters long');
+      // Validate password strength
+      const passwordValidation = SecurityUtils.validatePasswordStrength(data.password);
+      if (!passwordValidation.isValid) {
+        throw new Error(passwordValidation.errors[0]);
       }
 
-      if (data.name.trim().length < 2) {
+      if (sanitizedName.length < 2) {
         throw new Error('Name must be at least 2 characters long');
       }
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const redirectUrl = `${window.location.origin}/`;
 
-      if (mockUsers.some(u => u.email === data.email)) {
-        throw new Error('Email already in use');
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: sanitizedEmail,
+        password: data.password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            name: sanitizedName
+          }
+        }
+      });
+
+      if (signUpError) {
+        throw new Error(signUpError.message);
       }
-
-      // Create new user
-      const newUser: User = {
-        id: (mockUsers.length + 1).toString(),
-        email: data.email,
-        name: data.name.trim(),
-        avatar: `https://i.pravatar.cc/150?u=${data.email}`
-      };
-
-      mockUsers.push(newUser);
-
-      // Set user in state and localStorage
-      setUser(newUser);
-      localStorage.setItem('synapseUser', JSON.stringify(newUser));
 
       toast({
         title: 'Registration successful',
-        description: `Welcome to Synapse, ${data.name}!`
+        description: 'Please check your email to confirm your account!'
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Registration failed';
@@ -235,11 +272,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Logout function
-  const logout = () => {
+  const logout = async () => {
     try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        throw error;
+      }
+      
       setUser(null);
+      setSession(null);
       setError(null);
-      localStorage.removeItem('synapseUser');
+      SecurityUtils.storage.clear();
+      
       toast({
         title: 'Logout successful',
         description: 'You have been logged out'
@@ -260,16 +304,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateProfile = async (data: Partial<User>) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      if (!user) {
+      if (!user || !session) {
         throw new Error('Not authenticated');
       }
 
-      const updatedUser = { ...user, ...data };
+      // Sanitize input data
+      const sanitizedData: any = {};
+      if (data.name) {
+        sanitizedData.name = SecurityUtils.sanitizeInput(data.name.trim());
+      }
+      if (data.avatar_url) {
+        sanitizedData.avatar_url = SecurityUtils.sanitizeInput(data.avatar_url);
+      }
+      if (data.jurisdiction) {
+        sanitizedData.jurisdiction = data.jurisdiction.map(j => SecurityUtils.sanitizeInput(j));
+      }
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(sanitizedData)
+        .eq('id', user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedUser = { ...user, ...sanitizedData };
       setUser(updatedUser);
-      localStorage.setItem('synapseUser', JSON.stringify(updatedUser));
 
       toast({
         title: 'Profile updated',
@@ -292,7 +353,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!user,
+        session,
+        isAuthenticated: !!user && !!session,
         isLoading,
         login,
         loginWithGoogle,

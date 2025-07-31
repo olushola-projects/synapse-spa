@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { SecurityUtils } from '@/utils/security';
 import {
   Select,
   SelectContent,
@@ -32,18 +33,31 @@ const WaitlistForm = () => {
     setIsSubmitting(true);
 
     try {
+      // Validate required fields
+      if (!email || !name) {
+        throw new Error('Name and email are required');
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      // Sanitize all inputs
+      const sanitizedData = {
+        email: SecurityUtils.sanitizeInput(email.trim()),
+        name: SecurityUtils.sanitizeInput(name.trim()),
+        company: company ? SecurityUtils.sanitizeInput(company.trim()) : null,
+        role: title ? SecurityUtils.sanitizeInput(title.trim()) : null,
+        country: country ? SecurityUtils.sanitizeInput(country) : null,
+        missing_capability: missingCapability ? SecurityUtils.sanitizeInput(missingCapability.trim()) : null,
+        limiting_tools: limitingTools ? SecurityUtils.sanitizeInput(limitingTools.trim()) : null,
+        engagement: engagement ? SecurityUtils.sanitizeInput(engagement.trim()) : null
+      };
+
       // Store the waitlist entry in Supabase
-      const { error } = await supabase.from('waitlist').insert({
-        email,
-        name,
-        company,
-        title,
-        country,
-        missing_capability: missingCapability,
-        limiting_tools: limitingTools,
-        engagement,
-        created_at: new Date().toISOString()
-      });
+      const { error } = await supabase.from('waitlist').insert([sanitizedData]);
 
       if (error) {
         throw error;
