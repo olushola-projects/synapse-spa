@@ -14,7 +14,6 @@ import {
   Award,
   Badge,
   UserCheck,
-  
   Globe
 } from 'lucide-react';
 import type { Solution } from '@/types/solutions';

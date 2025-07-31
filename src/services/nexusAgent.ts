@@ -20,7 +20,7 @@ const NEXUS_CONFIG = {
   endpoints: {
     health: '/api/health',
     validate: '/api/analyze',
-    classify: '/api/classify', 
+    classify: '/api/classify',
     chat: '/api/chat',
     capabilities: '/api/capabilities'
   },
@@ -42,10 +42,11 @@ class NexusAgentService {
       // Get API key from environment or Supabase secrets
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
+
       if (supabaseUrl && supabaseKey) {
         // In production, this would fetch from Supabase secrets via edge function
-        this.apiKey = 'lvbl_sk_prod_e83dcad674c7978937972390e8fd40c3e286c0630323a518d7d393b6554019fd';
+        this.apiKey =
+          'lvbl_sk_prod_e83dcad674c7978937972390e8fd40c3e286c0630323a518d7d393b6554019fd';
       } else {
         this.apiKey = 'demo-key';
       }

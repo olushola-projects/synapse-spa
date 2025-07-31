@@ -16,26 +16,17 @@ import {
 } from '@/components/CDDComponents';
 import {
   Shield,
-  
   Brain,
   Zap,
   CheckCircle,
-  
   TrendingUp,
-  
   Globe,
-  
   Eye,
-  
   BarChart3,
-  
   Target,
   Sparkles,
   ArrowRight,
   Play,
-  
-  
-  
   ArrowLeft,
   Download,
   Calendar,
@@ -47,7 +38,7 @@ const CDDAgentPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [isLoading, setIsLoading] = useState(true);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  
+
   const navigate = useNavigate();
   const heroRef = React.useRef(null);
   const isHeroInView = useInView(heroRef, { once: true });

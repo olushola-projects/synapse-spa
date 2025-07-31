@@ -8,11 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
-  Play, 
+import {
+  CheckCircle,
+  XCircle,
+  Clock,
+  Play,
   RefreshCw,
   AlertTriangle,
   Target,
@@ -72,11 +72,13 @@ export const NexusTestExecutor = () => {
   };
 
   const testChatFunctionality = () => {
-    const chatInput = document.querySelector('textarea[placeholder*="Ask about SFDR"]') as HTMLTextAreaElement;
+    const chatInput = document.querySelector(
+      'textarea[placeholder*="Ask about SFDR"]'
+    ) as HTMLTextAreaElement;
     if (chatInput) {
       chatInput.value = 'What is SFDR Article 8?';
       chatInput.dispatchEvent(new Event('input', { bubbles: true }));
-      
+
       // Trigger send action
       const sendButton = chatInput.closest('div')?.querySelector('button');
       if (sendButton) {
@@ -108,84 +110,96 @@ export const NexusTestExecutor = () => {
   };
 
   const getStatusIcon = (status: boolean | undefined) => {
-    if (status === undefined) return <Clock className="w-4 h-4 text-gray-500" />;
-    return status ? 
-      <CheckCircle className="w-4 h-4 text-green-600" /> : 
-      <XCircle className="w-4 h-4 text-red-600" />;
+    if (status === undefined) {
+      return <Clock className='w-4 h-4 text-gray-500' />;
+    }
+    return status ? (
+      <CheckCircle className='w-4 h-4 text-green-600' />
+    ) : (
+      <XCircle className='w-4 h-4 text-red-600' />
+    );
   };
 
   const getStatusBadge = (status: boolean | undefined) => {
-    if (status === undefined) return <Badge variant="outline">Pending</Badge>;
-    return status ? 
-      <Badge className="bg-green-100 text-green-800">Pass</Badge> : 
-      <Badge variant="destructive">Fail</Badge>;
+    if (status === undefined) {
+      return <Badge variant='outline'>Pending</Badge>;
+    }
+    return status ? (
+      <Badge className='bg-green-100 text-green-800'>Pass</Badge>
+    ) : (
+      <Badge variant='destructive'>Fail</Badge>
+    );
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Test Overview */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="w-5 h-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Target className='w-5 h-5' />
             Nexus Agent UAT Test Suite
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-6'>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-blue-600'>
                 {Object.keys(automatedResults).length}
               </div>
-              <div className="text-sm text-gray-600">Automated Tests</div>
+              <div className='text-sm text-gray-600'>Automated Tests</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-purple-600'>
                 {testSuite.getTestsByCategory('functional').length}
               </div>
-              <div className="text-sm text-gray-600">Functional Tests</div>
+              <div className='text-sm text-gray-600'>Functional Tests</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-orange-600'>
                 {testSuite.getTestsByCategory('security').length}
               </div>
-              <div className="text-sm text-gray-600">Security Tests</div>
+              <div className='text-sm text-gray-600'>Security Tests</div>
             </div>
           </div>
 
-          <div className="flex gap-2 mb-4">
+          <div className='flex gap-2 mb-4'>
             <Button onClick={runAllTests} disabled={isRunning}>
-              {isRunning ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
+              {isRunning ? (
+                <RefreshCw className='w-4 h-4 mr-2 animate-spin' />
+              ) : (
+                <Play className='w-4 h-4 mr-2' />
+              )}
               Run All Tests
             </Button>
-            <Button variant="outline" onClick={runCriticalTests} disabled={isRunning}>
-              <AlertTriangle className="w-4 h-4 mr-2" />
+            <Button variant='outline' onClick={runCriticalTests} disabled={isRunning}>
+              <AlertTriangle className='w-4 h-4 mr-2' />
               Critical Tests Only
             </Button>
-            <Button variant="outline" onClick={runAutomatedTests}>
-              <Zap className="w-4 h-4 mr-2" />
+            <Button variant='outline' onClick={runAutomatedTests}>
+              <Zap className='w-4 h-4 mr-2' />
               Refresh Automated
             </Button>
           </div>
 
           {testResults && (
-            <div className="border rounded-lg p-4 bg-gray-50">
-              <div className="grid grid-cols-4 gap-4 text-center">
+            <div className='border rounded-lg p-4 bg-gray-50'>
+              <div className='grid grid-cols-4 gap-4 text-center'>
                 <div>
-                  <div className="text-lg font-bold">{testResults.totalTests}</div>
-                  <div className="text-sm text-gray-600">Total</div>
+                  <div className='text-lg font-bold'>{testResults.totalTests}</div>
+                  <div className='text-sm text-gray-600'>Total</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-green-600">{testResults.passed}</div>
-                  <div className="text-sm text-gray-600">Passed</div>
+                  <div className='text-lg font-bold text-green-600'>{testResults.passed}</div>
+                  <div className='text-sm text-gray-600'>Passed</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-red-600">{testResults.failed}</div>
-                  <div className="text-sm text-gray-600">Failed</div>
+                  <div className='text-lg font-bold text-red-600'>{testResults.failed}</div>
+                  <div className='text-sm text-gray-600'>Failed</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-yellow-600">{testResults.pending}</div>
-                  <div className="text-sm text-gray-600">Pending</div>
+                  <div className='text-lg font-bold text-yellow-600'>{testResults.pending}</div>
+                  <div className='text-sm text-gray-600'>Pending</div>
                 </div>
               </div>
             </div>
@@ -199,25 +213,25 @@ export const NexusTestExecutor = () => {
           <CardTitle>Automated Test Results</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 border rounded">
-              <div className="flex items-center gap-2">
+          <div className='space-y-3'>
+            <div className='flex items-center justify-between p-3 border rounded'>
+              <div className='flex items-center gap-2'>
                 {getStatusIcon(automatedResults.chatInit)}
                 <span>Chat Interface Initialization</span>
               </div>
               {getStatusBadge(automatedResults.chatInit)}
             </div>
-            
-            <div className="flex items-center justify-between p-3 border rounded">
-              <div className="flex items-center gap-2">
+
+            <div className='flex items-center justify-between p-3 border rounded'>
+              <div className='flex items-center gap-2'>
                 {getStatusIcon(automatedResults.quickActions)}
                 <span>Quick Action Buttons</span>
               </div>
               {getStatusBadge(automatedResults.quickActions)}
             </div>
-            
-            <div className="flex items-center justify-between p-3 border rounded">
-              <div className="flex items-center gap-2">
+
+            <div className='flex items-center justify-between p-3 border rounded'>
+              <div className='flex items-center gap-2'>
                 {getStatusIcon(automatedResults.responsive)}
                 <span>Responsive Design</span>
               </div>
@@ -233,25 +247,25 @@ export const NexusTestExecutor = () => {
           <CardTitle>Manual Test Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline" onClick={testChatFunctionality} className="h-auto py-4">
-              <div className="text-center">
-                <div className="font-medium">Test Chat</div>
-                <div className="text-sm text-gray-600">Send SFDR question</div>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+            <Button variant='outline' onClick={testChatFunctionality} className='h-auto py-4'>
+              <div className='text-center'>
+                <div className='font-medium'>Test Chat</div>
+                <div className='text-sm text-gray-600'>Send SFDR question</div>
               </div>
             </Button>
-            
-            <Button variant="outline" onClick={testQuickActions} className="h-auto py-4">
-              <div className="text-center">
-                <div className="font-medium">Test Quick Actions</div>
-                <div className="text-sm text-gray-600">Click upload document</div>
+
+            <Button variant='outline' onClick={testQuickActions} className='h-auto py-4'>
+              <div className='text-center'>
+                <div className='font-medium'>Test Quick Actions</div>
+                <div className='text-sm text-gray-600'>Click upload document</div>
               </div>
             </Button>
-            
-            <Button variant="outline" onClick={testFormMode} className="h-auto py-4">
-              <div className="text-center">
-                <div className="font-medium">Test Form Mode</div>
-                <div className="text-sm text-gray-600">Switch to form interface</div>
+
+            <Button variant='outline' onClick={testFormMode} className='h-auto py-4'>
+              <div className='text-center'>
+                <div className='font-medium'>Test Form Mode</div>
+                <div className='text-sm text-gray-600'>Switch to form interface</div>
               </div>
             </Button>
           </div>
@@ -260,14 +274,19 @@ export const NexusTestExecutor = () => {
 
       {/* Test Instructions */}
       <Alert>
-        <AlertTriangle className="h-4 w-4" />
+        <AlertTriangle className='h-4 w-4' />
         <AlertDescription>
           <strong>Testing Instructions:</strong>
-          <br />1. Run automated tests first to verify basic functionality
-          <br />2. Use manual test actions to verify user interactions
-          <br />3. Check the network tab for API calls and responses
-          <br />4. Verify chat responses are contextually appropriate
-          <br />5. Test form validation and submission flows
+          <br />
+          1. Run automated tests first to verify basic functionality
+          <br />
+          2. Use manual test actions to verify user interactions
+          <br />
+          3. Check the network tab for API calls and responses
+          <br />
+          4. Verify chat responses are contextually appropriate
+          <br />
+          5. Test form validation and submission flows
         </AlertDescription>
       </Alert>
     </div>

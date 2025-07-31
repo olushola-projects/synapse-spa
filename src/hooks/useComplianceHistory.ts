@@ -40,7 +40,9 @@ export const useComplianceHistory = (): ComplianceHistory => {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        throw fetchError;
+      }
 
       setAssessments(data || []);
       setError(null);

@@ -42,12 +42,14 @@ export class NexusAgentClient {
     this.timeout = config?.timeout || NEXUS_CONFIG.timeout;
   }
 
-  async classifyProduct(productData: NexusClassificationRequest): Promise<NexusClassificationResponse> {
+  async classifyProduct(
+    productData: NexusClassificationRequest
+  ): Promise<NexusClassificationResponse> {
     const response = await fetch(`${this.baseUrl}/api/classify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`
+        Authorization: `Bearer ${this.apiKey}`
       },
       body: JSON.stringify(productData),
       signal: AbortSignal.timeout(this.timeout)
@@ -73,7 +75,7 @@ export class NexusAgentClient {
 
   async getHealth(): Promise<NexusHealthResponse> {
     const response = await fetch(`${this.baseUrl}/api/health`);
-    
+
     if (!response.ok) {
       throw new Error(`Health check failed: ${response.status}`);
     }

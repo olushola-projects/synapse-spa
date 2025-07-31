@@ -22,15 +22,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import {
-  ThumbsUp,
-  ThumbsDown,
-  
-  BookOpen,
-  AlertCircle,
-  Send,
-  Info
-} from 'lucide-react';
+import { ThumbsUp, ThumbsDown, BookOpen, AlertCircle, Send, Info } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 
@@ -108,7 +100,6 @@ const sampleResponse = {
 };
 
 const AskDara = () => {
-  
   // const { user } = useAuth(); // user variable removed - not used in this component
   const [query, setQuery] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);

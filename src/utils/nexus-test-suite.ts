@@ -44,7 +44,7 @@ export class NexusTestSuite {
       expectedResult: 'Chat interface displays with welcome message and functional input'
     },
     {
-      id: 'FT002', 
+      id: 'FT002',
       name: 'Quick Action Buttons',
       description: 'Test all quick action buttons trigger correct chat responses',
       category: 'functional',
@@ -52,7 +52,7 @@ export class NexusTestSuite {
       steps: [
         'Click "Upload Document" button',
         'Verify chat message is sent with document upload intent',
-        'Click "Check Compliance" button', 
+        'Click "Check Compliance" button',
         'Verify compliance check message is sent',
         'Test all other quick action buttons'
       ],
@@ -62,7 +62,7 @@ export class NexusTestSuite {
       id: 'FT003',
       name: 'Chat Message Processing',
       description: 'Verify chat processes messages and returns responses',
-      category: 'functional', 
+      category: 'functional',
       priority: 'critical',
       steps: [
         'Type "What is SFDR?" in chat input',
@@ -232,9 +232,9 @@ export class NexusTestSuite {
 
   private async executeTest(testCase: TestCase): Promise<TestCase> {
     console.log(`Executing test: ${testCase.id} - ${testCase.name}`);
-    
+
     // Simulate test execution
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         // For now, mark as pending for manual execution
         resolve({
@@ -249,12 +249,12 @@ export class NexusTestSuite {
   async runCriticalTests(): Promise<TestCase[]> {
     const criticalTests = this.testCases.filter(test => test.priority === 'critical');
     const results = [];
-    
+
     for (const test of criticalTests) {
       const result = await this.executeTest(test);
       results.push(result);
     }
-    
+
     return results;
   }
 
@@ -274,10 +274,10 @@ export class NexusTestSuite {
     report.push(`Total Tests: ${this.testCases.length}`);
     report.push(`Critical Tests: ${this.testCases.filter(t => t.priority === 'critical').length}`);
     report.push('');
-    
+
     report.push('## Test Categories');
     const categories = ['functional', 'integration', 'usability', 'security'] as const;
-    
+
     categories.forEach(category => {
       const categoryTests = this.getTestsByCategory(category);
       report.push(`### ${category.toUpperCase()}`);
@@ -299,7 +299,7 @@ export const automatedTests = {
       const chatContainer = document.querySelector('[data-testid="nexus-chat"]');
       const welcomeMessage = document.querySelector('[data-content*="Welcome to SFDR Navigator"]');
       const inputField = document.querySelector('textarea[placeholder*="Ask about SFDR"]');
-      
+
       return !!(chatContainer && welcomeMessage && inputField);
     } catch (error) {
       console.error('Chat initialization test failed:', error);
@@ -320,8 +320,10 @@ export const automatedTests = {
   async checkResponsiveness(): Promise<boolean> {
     try {
       const container = document.querySelector('.nexus-agent-container');
-      if (!container) return false;
-      
+      if (!container) {
+        return false;
+      }
+
       // Check if container adapts to different viewport sizes
       const styles = window.getComputedStyle(container as Element);
       return styles.display !== 'none' && styles.visibility !== 'hidden';

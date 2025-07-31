@@ -80,7 +80,7 @@ const UserTestingSession: React.FC = () => {
   );
   const [sessionTimer, setSessionTimer] = useState<number>(0);
   const [taskTimer, setTaskTimer] = useState<number>(0);
-  
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const taskTimerRef = useRef<NodeJS.Timeout | null>(null);
 
