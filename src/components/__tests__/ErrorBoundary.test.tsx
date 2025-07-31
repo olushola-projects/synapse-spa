@@ -14,7 +14,7 @@ vi.mock('../../utils/error-handler', () => ({
 }));
 
 // Mock console.error to avoid noise in tests
-const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+vi.spyOn(console, 'error').mockImplementation(() => {});
 
 // Component that throws an error for testing
 const ThrowError: React.FC<{ shouldThrow?: boolean }> = ({ shouldThrow = false }) => {
