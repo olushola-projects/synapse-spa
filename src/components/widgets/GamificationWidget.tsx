@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Widget } from '../dashboard/WidgetGrid';
 import { Button } from '@/components/ui/button';
-import { Award, Trophy, Medal, Star, Flag, Target, Zap } from 'lucide-react';
+import { Award, Trophy, Medal, Star } from 'lucide-react';
 import {
   Dialog,
   DialogContent,

@@ -18,9 +18,7 @@ import ExternalFormDialog from './ExternalFormDialog';
 import {
   Carousel,
   CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
+  CarouselItem
 } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
 import useEmblaCarousel from 'embla-carousel-react';

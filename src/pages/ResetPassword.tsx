@@ -34,7 +34,7 @@ const ResetPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resetError, setResetError] = useState<string | null>(null);
   const [resetSuccess, setResetSuccess] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
+  const [, setToken] = useState<string | null>(null);
   const [tokenValid, setTokenValid] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<{ isValid: boolean; errors: string[] }>({
     isValid: false,
@@ -107,7 +107,7 @@ const ResetPassword = () => {
       }
 
       // Generate CSRF token for form submission
-      const csrfToken = SecurityUtils.generateCsrfToken();
+      SecurityUtils.generateCsrfToken();
 
       // In a real application, this would call an API endpoint with the token and new password
       // For demo purposes, we'll simulate a successful password reset

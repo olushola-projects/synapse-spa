@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -24,8 +24,7 @@ const formSchema = ValidationUtils.schemas.login;
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login, loginWithGoogle, loginWithLinkedIn, isAuthenticated } = useAuth();
+  const { login, loginWithGoogle, loginWithLinkedIn } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
@@ -52,7 +51,7 @@ const Login = () => {
       const sanitizedEmail = SecurityUtils.sanitizeInput(values.email);
 
       // Generate CSRF token for form submission
-      const csrfToken = SecurityUtils.generateCsrfToken();
+      SecurityUtils.generateCsrfToken();
 
       // Call login function
       await login({

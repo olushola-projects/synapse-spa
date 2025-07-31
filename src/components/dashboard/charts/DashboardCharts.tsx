@@ -145,7 +145,7 @@ export const ControlStatusChart: React.FC = () => {
 
       <div className='h-[80%] flex items-center'>
         <div className='w-full flex flex-wrap gap-1 justify-center'>
-          {barChartData.slice(0, 5).map((entry, index) => (
+          {barChartData.slice(0, 5).map((_, index) => (
             <div
               key={index}
               className='flex items-center gap-1 px-1 py-0.5 bg-white rounded border border-gray-100 hover:bg-gray-50 transition-colors'

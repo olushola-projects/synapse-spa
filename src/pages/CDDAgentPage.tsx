@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   CDDMetricsDashboard,
@@ -37,7 +37,7 @@ import {
 const CDDAgentPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [isLoading, setIsLoading] = useState(true);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  
 
   const navigate = useNavigate();
   const heroRef = React.useRef(null);
@@ -194,7 +194,7 @@ const CDDAgentPage: React.FC = () => {
               <Button
                 size='lg'
                 className='px-10 py-6 text-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-2xl'
-                onClick={() => setIsVideoPlaying(true)}
+                onClick={() => console.log('Play demo video')}
               >
                 <Play className='w-5 h-5 mr-2' />
                 Watch Live Demo

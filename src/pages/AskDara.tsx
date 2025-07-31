@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import {
   Card,
@@ -19,11 +18,10 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@/components/ui/dialog';
 import { ThumbsUp, ThumbsDown, BookOpen, AlertCircle, Send, Info } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+
 import { toast } from '@/hooks/use-toast';
 
 // Sample team members for the modal
