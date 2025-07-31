@@ -13,7 +13,7 @@ const CTASection = () => {
             comprehensive regulatory insights and personalized career resilience tools to upskill,
             adapt, and lead the way in shaping the future of GRC.
           </p>
-          <Button className='bg-synapse-primary hover:bg-synapse-secondary text-white px-8 py-6 text-lg rounded-lg flex items-center gap-2 hover-lift mx-auto' onClick={() => setShowFormDialog(true)}>
+          <Button onClick={() => setShowFormDialog(true)} className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
             Get Early Access <ArrowRight size={18} />
           </Button>
           <div className='mt-8 text-center'>

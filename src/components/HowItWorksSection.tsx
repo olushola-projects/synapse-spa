@@ -50,7 +50,7 @@ const HowItWorksSection = () => {
         </div>
 
         <div className='mt-16 text-center'>
-          <Button className='text-white bg-synapse-primary hover:bg-synapse-secondary px-8 py-6 text-lg rounded-lg flex mx-auto items-center gap-2' onClick={openFormDialog}>
+          <Button onClick={openFormDialog} className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
             Get Early Access <ArrowRight size={18} />
           </Button>
         </div>

@@ -209,7 +209,7 @@ const EnterpriseSection = () => {
             </motion.div>
 
             <motion.div variants={itemVariants} className='pt-2'>
-              <Button size='lg' onClick={() => openFormDialog('Explore Synapses for enterprises')} className="text-white px-8 py-6 text-base font-medium rounded-full bg-blue-700 hover:bg-blue-600">
+              <Button size='lg' onClick={() => openFormDialog('Explore Synapses for enterprises')} className="text-white py-6 text-base font-medium rounded-full bg-blue-700 hover:bg-blue-600 px-[30px]">
                 Explore Synapses for enterprises <ArrowRight size={18} className='ml-2' />
               </Button>
             </motion.div>
