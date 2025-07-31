@@ -35,7 +35,7 @@ const SFDRChatIntegration = () => {
     }
   };
 
-  const extractProductData = (userMessage: string, context?: any): NexusClassificationRequest => {
+  const extractProductData = (userMessage: string): NexusClassificationRequest => {
     // Extract product information from user message
     // This is a simplified extraction - you can enhance with NLP
     const productData: NexusClassificationRequest = {
@@ -74,13 +74,13 @@ ${classification.recommendations?.map((rec: string, index: number) => `${index +
 *Analysis completed at ${classification.timestamp}*`;
   };
 
-  const handleSFDRQuery = async (userMessage: string, context?: any) => {
+  const handleSFDRQuery = async (userMessage: string) => {
     try {
       // Extract product information from chat context
-      const productData = extractProductData(userMessage, context);
+      const productData = extractProductData(userMessage);
       
-      // Call SFDR classification API
-      const classification = await nexusClient.classifyFund(productData);
+      // Call SFDR classification API using the new method name
+      const classification = await nexusClient.classifyProduct(productData);
       
       // Format response for chat
       return formatChatResponse(classification);

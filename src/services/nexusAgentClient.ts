@@ -33,65 +33,59 @@ export interface NexusHealthResponse {
 
 export class NexusAgentClient {
   private baseUrl: string;
-  private authToken?: string;
+  private apiKey?: string;
+  private timeout: number;
 
-  constructor(authToken?: string) {
-    this.baseUrl = NEXUS_CONFIG.apiBaseUrl;
-    this.authToken = authToken;
+  constructor(config?: { baseUrl?: string; apiKey?: string; timeout?: number }) {
+    this.baseUrl = config?.baseUrl || NEXUS_CONFIG.apiBaseUrl;
+    this.apiKey = config?.apiKey;
+    this.timeout = config?.timeout || NEXUS_CONFIG.timeout;
   }
 
-  private async makeRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      ...options.headers as Record<string, string>,
-    };
-
-    if (this.authToken) {
-      headers.Authorization = `Bearer ${this.authToken}`;
-    }
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), NEXUS_CONFIG.timeout);
-    
-    try {
-      const response = await fetch(url, {
-        ...options,
-        headers,
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) {
-        throw new Error(`Nexus API error: ${response.status} ${response.statusText}`);
-      }
-
-      return response.json();
-    } catch (error) {
-      clearTimeout(timeoutId);
-      throw error;
-    }
-  }
-
-  async getHealth(): Promise<NexusHealthResponse> {
-    return this.makeRequest<NexusHealthResponse>('/api/health');
-  }
-
-  async classifyFund(request: NexusClassificationRequest): Promise<NexusClassificationResponse> {
-    return this.makeRequest<NexusClassificationResponse>('/api/classify', {
+  async classifyProduct(productData: NexusClassificationRequest): Promise<NexusClassificationResponse> {
+    const response = await fetch(`${this.baseUrl}/api/classify`, {
       method: 'POST',
-      body: JSON.stringify(request),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      },
+      body: JSON.stringify(productData),
+      signal: AbortSignal.timeout(this.timeout)
     });
-  }
 
-  async getAnalytics(): Promise<any> {
-    return this.makeRequest<any>('/api/analytics');
+    if (!response.ok) {
+      throw new Error(`SFDR API Error: ${response.status}`);
+    }
+
+    return response.json();
   }
 
   async getComplianceStatus(): Promise<any> {
-    return this.makeRequest<any>('/api/compliance/status');
+    const response = await fetch(`${this.baseUrl}/api/compliance/status`);
+    return response.json();
+  }
+
+  async getAnalytics(filters: Record<string, any> = {}): Promise<any> {
+    const params = new URLSearchParams(filters);
+    const response = await fetch(`${this.baseUrl}/api/analytics?${params}`);
+    return response.json();
+  }
+
+  async getHealth(): Promise<NexusHealthResponse> {
+    const response = await fetch(`${this.baseUrl}/api/health`);
+    
+    if (!response.ok) {
+      throw new Error(`Health check failed: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  // Legacy method for backwards compatibility
+  async classifyFund(request: NexusClassificationRequest): Promise<NexusClassificationResponse> {
+    return this.classifyProduct(request);
   }
 }
 
-// Export singleton instance
+// Export singleton instance - will be initialized with API key from Supabase secrets
 export const nexusClient = new NexusAgentClient();
