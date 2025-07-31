@@ -49,7 +49,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   const [messages, setMessages] = useState<ChatMessage[]>([{
     id: '1',
     type: 'system',
-    content: 'Welcome to SFDR Navigator! I can help you validate SFDR compliance for your fund classifications. You can ask questions or submit fund data for validation.',
+    content: "Hello, I'm Sophia, your SFDR Navigator and agentic guide to sustainable finance disclosures. Whether you're managing Article 6, 8, or 9 funds, I break down regulatory requirements into actionable steps. I help map your fund strategy to the right SFDR classification, flag gaps in your pre-contractual and periodic templates, and guide you through PAI indicator selection. I monitor regulatory updates and ensure you're disclosing what's necessary, when it's needed, and how it's evolving without overwhelming your team. Ready to simplify your next SFDR disclosure cycle?",
     timestamp: new Date()
   }]);
   const [inputMessage, setInputMessage] = useState('');
@@ -62,8 +62,8 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
     description?: string;
   }>>([]);
   const [agentPersonality, _setAgentPersonality] = useState({
-    name: 'SFDR Navigator',
-    role: 'ESG Compliance Expert',
+    name: 'Sophia',
+    role: 'SFDR Navigator & Sustainable Finance Expert',
     expertise: ['SFDR Regulations', 'ESG Reporting', 'Risk Assessment']
   });
   const [showFormMode, setShowFormMode] = useState(false);
@@ -347,63 +347,63 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
    * Handle document upload guidance
    */
   const handleDocumentUpload = async (_message: string): Promise<string> => {
-    return `Absolutely, uploading your SFDR-related documents is a great starting point. In my Big 4 advisory role, I've seen how proper documentation streamlines compliance. Let's get your pre-contractual disclosures or periodic reports uploaded – what specific document are you thinking of, and how can I assist in reviewing it against SFDR requirements?`;
+    return `Excellent choice. Document upload is a fundamental step in our compliance validation process. Based on my extensive experience in regulatory advisory services, proper documentation significantly streamlines the compliance review cycle. I can assist with analyzing your pre-contractual disclosures, periodic reports, or any SFDR-related documentation. Which specific document type are you planning to upload, and what particular aspects would you like me to focus on during the review?`;
   };
 
   /**
    * Handle compliance check with real SFDR logic
    */
   const handleComplianceCheck = async (_message: string): Promise<string> => {
-    return `Certainly! Performing a compliance check is crucial, much like our regulatory health checks at the Big 4. We'll verify your fund against SFDR criteria, including disclosures and PAI. Could you provide more details on your fund type or specific areas of concern?`;
+    return `Absolutely. Conducting a comprehensive compliance assessment is essential for robust regulatory positioning. I will systematically verify your fund against the full spectrum of SFDR criteria, including disclosure requirements, PAI considerations, and classification alignment. To provide the most targeted analysis, could you share details about your fund type, current classification status, or any specific compliance areas where you have concerns?`;
   };
 
   /**
    * Handle report generation
    */
   const handleReportGeneration = async (_message: string): Promise<string> => {
-    return `Generating reports is a key part of advisory services. Based on compliance forums and publications, effective SFDR reports include PAI statements and Taxonomy alignments. What type of report do you need – periodic, pre-contractual, or something custom? Let's tailor it to your needs.`;
+    return `Report generation is indeed a cornerstone of effective regulatory advisory services. Drawing from regulatory guidance and industry best practices, comprehensive SFDR reports should encompass PAI statements, EU Taxonomy alignment assessments, and detailed disclosure frameworks. What specific type of report are you looking to generate - periodic reporting, pre-contractual disclosures, or perhaps a custom compliance assessment? I can tailor the output to meet your precise requirements.`;
   };
 
   /**
    * Handle risk assessment
    */
   const handleRiskAssessment = async (_message: string): Promise<string> => {
-    return `Risk assessment is fundamental in GRC. Drawing from supervisor guidelines and LinkedIn discussions, we'll evaluate sustainability risks in your portfolio. Are there particular risks like climate or social factors you're worried about? Let's dive in.`;
+    return `Risk assessment forms the foundation of effective governance, risk, and compliance frameworks. Based on supervisory guidelines and regulatory developments, I will conduct a comprehensive evaluation of sustainability risks within your portfolio structure. This assessment will examine climate-related financial risks, social impact factors, and governance considerations. Are there specific risk categories such as transition risks, physical climate risks, or social impact metrics that you would like me to prioritize in the analysis?`;
   };
 
   /**
    * Provide PAI guidance with current regulations
    */
   const providePAIGuidance = async (_message: string): Promise<string> => {
-    return `PAI indicators represent a crucial component of SFDR compliance. Drawing from extensive client engagements across major consulting firms, there are 18 mandatory indicators covering GHG emissions, biodiversity impacts, and social factors including gender pay gaps. For robust compliance, target at least 50% data coverage and maintain comprehensive documentation of your sources. Article 8 funds must consider these indicators in their investment processes, while Article 9 requires enhanced due diligence. What specific challenge are you facing with PAI implementation - data collection or integration into your reporting framework?`;
+    return `Principal Adverse Impact indicators represent a cornerstone of SFDR compliance architecture. Through extensive regulatory advisory engagements, I have observed that the 18 mandatory indicators encompass greenhouse gas emissions, biodiversity considerations, and critical social factors including gender pay gap metrics. To achieve robust compliance positioning, organizations should target a minimum of 50% data coverage while maintaining comprehensive documentation of all data sources and methodologies. Article 8 funds must integrate these indicators into their investment decision-making processes, whereas Article 9 funds require enhanced due diligence frameworks. What specific aspect of PAI implementation would you like to address - data collection strategies or integration into your reporting infrastructure?`;
   };
 
   /**
    * Provide Article 8 specific guidance
    */
   const provideArticle8Guidance = async (_message: string): Promise<string> => {
-    return `Good day! Drawing from my background in Big 4 regulatory advisory, where I've assisted numerous funds with SFDR implementations, Article 8 products promote environmental or social characteristics without making them the core objective. It's essential to have measurable characteristics, proper PAI consideration, and consistent disclosures. Common pitfalls include vague definitions or insufficient evidence of promotion. How can I help refine your Article 8 approach – perhaps reviewing your fund's characteristics or disclosure strategy?`;
+    return `Good day. Drawing from my extensive regulatory advisory background, where I have guided numerous funds through successful SFDR implementations, Article 8 products are designed to promote environmental or social characteristics without establishing them as the primary investment objective. Critical success factors include establishing measurable characteristics, implementing proper PAI consideration frameworks, and maintaining consistent disclosure protocols. Common implementation challenges include insufficient definitional precision and inadequate evidence of characteristic promotion. How may I assist in optimizing your Article 8 approach - would you prefer to review your fund's characteristic definitions or enhance your disclosure strategy?`;
   };
 
   /**
    * Provide Article 9 specific guidance
    */
   const provideArticle9Guidance = async (_message: string): Promise<string> => {
-    return `Hello there. In my experience leading Article 9 validations for major clients, much like Big 4 engagements, these products must have sustainable investment as their primary objective, backed by impact measurements and DNSH analysis. It's a higher bar than Article 8, requiring robust due diligence. Let's discuss your fund's objectives – are you facing challenges with impact metrics or Taxonomy alignment?`;
+    return `Greetings. Through my experience directing Article 9 validation processes for institutional clients, these products must establish sustainable investment as their primary objective, supported by comprehensive impact measurement frameworks and Do No Significant Harm analysis. This represents a significantly elevated compliance standard compared to Article 8, requiring sophisticated due diligence methodologies and robust impact assessment capabilities. Let us explore your fund's sustainable investment objectives - are you encountering challenges with impact measurement protocols or EU Taxonomy alignment requirements?`;
   };
 
   /**
    * Provide EU Taxonomy guidance
    */
   const provideTaxonomyGuidance = async (_message: string): Promise<string> => {
-    return `Greetings! As someone who's contributed to supervisory publications on EU Taxonomy, I can tell you it's about aligning activities with six environmental objectives while ensuring DNSH and minimum safeguards compliance. From forum discussions I've engaged in, many struggle with data for substantial contribution. Shall we walk through your activity assessment or tackle a specific objective?`;
+    return `Good day. Having contributed to supervisory publications on EU Taxonomy implementation, I can confirm that the framework centers on aligning economic activities with six defined environmental objectives while ensuring comprehensive Do No Significant Harm compliance and minimum safeguards adherence. Based on regulatory dialogue and industry feedback, many organizations encounter difficulties with substantial contribution data requirements. Would you prefer to systematically review your activity assessment methodology or address specific environmental objective alignment challenges?`;
   };
 
   /**
    * Provide general SFDR guidance
    */
   const provideGeneralGuidance = async (_message: string): Promise<string> => {
-    return `Hello! As a senior regulatory consultant with extensive experience in sustainable finance, similar to those at the Big 4 firms, I'm here to guide you through the SFDR framework. The Sustainable Finance Disclosure Regulation aims to boost transparency on sustainability risks and prevent greenwashing, aligning with the EU Green Deal. Products fall into Article 6 (no sustainability focus), Article 8 (promoting E/S characteristics), or Article 9 (with sustainable objectives). We've seen ongoing updates, like Level 2 requirements since 2023. How specifically can I assist with your SFDR needs today? Perhaps checking compliance or analyzing PAI indicators?`;
+    return `Hello. As a senior regulatory consultant with comprehensive expertise in sustainable finance frameworks, I am here to guide you through the intricacies of the SFDR regulatory landscape. The Sustainable Finance Disclosure Regulation is designed to enhance transparency regarding sustainability risks and prevent greenwashing practices, directly supporting the EU Green Deal objectives. Financial products are categorized under Article 6 (no specific sustainability focus), Article 8 (promoting environmental or social characteristics), or Article 9 (sustainable investment objectives). The regulatory framework continues to evolve, with Level 2 requirements having been implemented since 2023. How may I specifically assist with your SFDR requirements today - would you prefer compliance verification or Principal Adverse Impact indicator analysis?`;
   };
 
   /**
@@ -531,10 +531,10 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
             {!showFormMode ?
         // Chat Mode
         <>
-                <ScrollArea className='flex-1 px-4 max-h-96'>
+                <ScrollArea className='flex-1 px-4 max-h-[500px]'>
                   <div className='space-y-4 py-4'>
                     <AnimatePresence>
-                      {messages.map((message, index) => <motion.div key={`${message.id}-${index}`} initial={{
+                      {messages.map((message, index) => <motion.div key={message.id} initial={{
                   opacity: 0,
                   y: 20
                 }} animate={{

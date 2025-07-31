@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { Activity, Shield, TrendingUp, Users, MessageSquare, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search } from 'lucide-react';
+import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
 import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
 import type { QuickActionType } from '@/types/nexus';
@@ -240,8 +240,8 @@ const NexusAgent = () => {
         <Tabs value={activeTab} onValueChange={value => setActiveTab(value as 'chat' | 'overview' | 'testing')}>
           <TabsList className='grid w-full grid-cols-3 mb-6'>
             <TabsTrigger value='chat' className='flex items-center space-x-2'>
-              <MessageSquare className='w-4 h-4' />
-              <span>AI Navigator</span>
+              <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="Sophia" className="w-4 h-4 rounded-full object-cover" />
+              <span>Sophia - AI Navigator</span>
             </TabsTrigger>
             <TabsTrigger value='overview' className='flex items-center space-x-2'>
               <BarChart3 className='w-4 h-4' />
