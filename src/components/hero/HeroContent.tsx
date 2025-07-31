@@ -22,25 +22,25 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   onInvite
 }) => {
   return <div className={`w-full text-left transition-all duration-700 ease-out pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 pb-10 md:pb-0 ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-      {/* Main Headline - Increased font sizing to big 4 for better alignment */}
+      {/* Main Headline - Enhanced with white text for gradient background */}
       <h1 style={{
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
       fontWeight: 700,
       letterSpacing: '-0.02em',
       lineHeight: '1.1',
-      textShadow: '0 1px 2px rgba(37, 99, 235, 0.1)'
-    }} className="text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight text-blue-600 mb-6 font-medium lg:text-7xl">
+      textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+    }} className="text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight text-white mb-6 font-medium lg:text-7xl">
         Transform
         <br />
         Your Expertise
         <br />
-        <span className='bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 bg-clip-text text-transparent'>
+        <span className='bg-gradient-to-r from-white via-blue-100 to-blue-50 bg-clip-text text-transparent'>
           With GRC Agents
         </span>
       </h1>
 
-      {/* Enhanced subtitle with reduced sizing and width */}
-      <p className="mt-6 text-sm md:text-base max-w-2xl leading-relaxed text-black lg:text-lg font-light">
+      {/* Enhanced subtitle with white text for contrast */}
+      <p className="mt-6 text-sm md:text-base max-w-2xl leading-relaxed text-white/90 lg:text-lg font-light" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>
         Join a global network of GRC professionals leveraging AI agents
         <br />
         for compliance excellence. Access exclusive testing of future
@@ -48,7 +48,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         solutions, comprehensive regulatory insights, and personalized
         <br />
         career resilience tools to{' '}
-        <span className='font-semibold text-blue-600'>upskill, adapt, and lead</span> the
+        <span className='font-semibold text-blue-100'>upskill, adapt, and lead</span> the
         <br />
         transformation of governance, risk, and compliance.
       </p>
@@ -61,24 +61,24 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           </Button>
         </div>
         <div onClick={onInvite} className='cursor-pointer'>
-          <Button variant='outline' className='border-2 border-blue-200 text-blue-600 hover:bg-blue-50 px-6 py-3 text-base rounded-xl font-semibold hover-lift transition-all duration-300'>
+          <Button variant='outline' className='border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 px-6 py-3 text-base rounded-xl font-semibold hover-lift transition-all duration-300 backdrop-blur-sm'>
             Invite Colleagues
           </Button>
         </div>
       </div>
 
-      {/* Enhanced trust indicators with better visual hierarchy */}
+      {/* Enhanced trust indicators with white colors for gradient background */}
       <div className='mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-start gap-6 text-sm'>
-        <div className='flex items-center text-slate-500'>
-          <div className='w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse'></div>
-          <div className='mr-2 text-green-600'>
+        <div className='flex items-center text-white/80'>
+          <div className='w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse'></div>
+          <div className='mr-2 text-green-400'>
             <ShieldIcon />
           </div>
           <span className='font-medium'>GRC Innovation Hub</span>
         </div>
-        <div className='flex items-center text-slate-500'>
-          <div className='w-2 h-2 bg-blue-500 rounded-full mr-3'></div>
-          <div className='mr-2 text-blue-600'>
+        <div className='flex items-center text-white/80'>
+          <div className='w-2 h-2 bg-blue-300 rounded-full mr-3'></div>
+          <div className='mr-2 text-blue-300'>
             <UsersIcon />
           </div>
           <span className='font-medium'>Join early adopters in our private pilot</span>

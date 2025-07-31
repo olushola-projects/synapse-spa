@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { USPFeatureSection } from './features/USPFeatureSection';
 import { HeroContent } from './hero/HeroContent';
+import { AnimatedGradient } from './AnimatedGradient';
 import ExternalFormDialog from './ExternalFormDialog';
 import InviteDialog from './InviteDialog';
 
@@ -28,7 +29,10 @@ const HeroSection = () => {
   };
   return <div style={{
     minHeight: 'calc(100vh - 64px)'
-  }} className="w-full py-8 md:py-12 flex flex-col items-start justify-center bg-white relative overflow-hidden lg:py-[100px]">
+  }} className="w-full py-8 md:py-12 flex flex-col items-start justify-center relative overflow-hidden lg:py-[100px]">
+      {/* Animated Gradient Background */}
+      <AnimatedGradient className="z-0" />
+      
       {/* Main container with precise alignment matching navbar */}
       <div className='w-full max-w-7xl mx-auto relative z-10'>
         {/* Hero Content - Precisely aligned with navbar logo */}
