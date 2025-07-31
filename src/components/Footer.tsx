@@ -37,7 +37,7 @@ const Footer = () => {
     label: 'Email'
   }];
   return <footer className='relative bg-gradient-to-br from-background via-background to-muted/20 border-t border-border/60'>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="w-full max-w-7xl mx-auto pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 bg-white">
         {/* Newsletter Section */}
         <motion.div initial={{
         opacity: 0,

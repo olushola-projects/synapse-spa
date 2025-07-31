@@ -61,8 +61,8 @@ const Navbar = () => {
             : 'bg-white/80 backdrop-blur-md border-b border-border/20'
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="flex items-center justify-between h-16 pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8">
             
             {/* Logo Section - Replica from Footer */}
             <motion.div
@@ -195,7 +195,7 @@ const Navbar = () => {
               transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
               className="lg:hidden border-t border-border/20 bg-white/95 backdrop-blur-xl"
             >
-              <div className="container mx-auto px-4 py-6 space-y-4">
+              <div className="w-full max-w-7xl mx-auto pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 py-6 space-y-4">
                 {/* Mobile Agents Section */}
                 <div className="space-y-3">
                   <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider">Agents</h3>
