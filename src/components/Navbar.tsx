@@ -114,7 +114,7 @@ const Navbar = () => {
                           </div>
                           <div>
                             <h4 className='font-semibold text-foreground'>SFDR Navigator</h4>
-                            <p className='text-sm text-muted-foreground'>agentic guide to sustainable finance disclosures. </p>
+                            <p className='text-sm text-muted-foreground'>I am Sophia, your agentic consultant to sustainable finance disclosures.</p>
                           </div>
                         </Link>
                       </div>
