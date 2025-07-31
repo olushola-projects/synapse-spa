@@ -88,9 +88,9 @@ export const useSFDRClassification = (): SFDRClassificationHookResult => {
     setError(null);
     
     try {
-      // Get API key from Supabase secrets (this would be set via environment or edge function)
+      // Get API key from Supabase secrets
       const client = new NexusAgentClient({
-        apiKey: process.env.NEXUS_API_KEY // Will be set via Supabase secrets
+        apiKey: process.env.LOVEABLE_API_KEY // Set via Supabase secrets
       });
       
       const classification = await client.classifyProduct(productData);

@@ -18,7 +18,7 @@ interface SFDRChatMessage {
 const SFDRChatIntegration = () => {
   const [messages, setMessages] = useState<SFDRChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const { classify, loading, result, error: hookError } = useSFDRClassification();
+  const { classify, loading, result, error } = useSFDRClassification();
   const [apiHealth, setApiHealth] = useState<'checking' | 'healthy' | 'error'>('checking');
 
   useEffect(() => {
