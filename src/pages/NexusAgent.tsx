@@ -190,7 +190,6 @@ const NexusAgent = () => {
     []
   );
 
-<<<<<<< HEAD
   const handleQuickAction = useCallback(
     (actionType: QuickActionType) => {
       // Switch to chat mode if not already active
@@ -214,15 +213,6 @@ const NexusAgent = () => {
     },
     [quickActions]
   );
-=======
-      // Update compliance data based on action
-      setComplianceData(prev => ({
-        ...prev,
-        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
-      }));
-    }, 100);
-  }, [quickActions]);
->>>>>>> c1efc70497585ba0326a12fc12a1c790673b489f
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>

@@ -161,8 +161,6 @@ const IndustryPerspectivesSection = () => {
           </div>
 
           {/* Carousel Controls */}
-<<<<<<< HEAD
-=======
           <div className="flex justify-center gap-4 mt-8">
             <button 
               onClick={() => scrollTo(selectedIndex - 1)}
@@ -177,7 +175,6 @@ const IndustryPerspectivesSection = () => {
               →
             </button>
           </div>
->>>>>>> c1efc70497585ba0326a12fc12a1c790673b489f
         </div>
 
         {/* Mobile Carousel */}
