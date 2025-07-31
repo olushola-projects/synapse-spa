@@ -1,0 +1,72 @@
+# Vercel Ignore File
+# Files and directories to exclude from deployment
+
+# Development files
+.env
+.env.local
+.env.development
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation (if not needed in production)
+README.md
+CONTRIBUTING.md
+CHANGELOG.md
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Package manager
+node_modules/
+.npm/
+.yarn/
+yarn.lock
+package-lock.json
+
+# Build tools
+.eslintcache
+.stylelintcache
+
+# Temporary files
+tmp/
+temp/
+
+# Security sensitive files
+.env.example
+*.pem
+*.key
+*.crt
+
+# Trae IDE specific
+.trae/
+
+# Husky
+.husky/

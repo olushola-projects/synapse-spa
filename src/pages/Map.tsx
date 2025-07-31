@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { logger } from '@/utils/logger';
 import {
   Search,
   Filter,
@@ -16,10 +17,8 @@ import {
   Star,
   Eye,
   Heart,
-  BookmarkPlus,
   ExternalLink,
   MapPin,
-  Calendar,
   Building2,
   Layers,
   Activity,
@@ -28,7 +27,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
@@ -104,7 +103,7 @@ export default function Map() {
         const data = await response.json();
         setStartups(data);
       } catch (error) {
-        console.error('Failed to load startup data:', error);
+        logger.error('Failed to load startup data:', error);
       } finally {
         setLoading(false);
       }
@@ -145,8 +144,8 @@ export default function Map() {
         case 'name':
           return a.name.localeCompare(b.name);
         case 'founded':
-          return parseInt(b.founded) - parseInt(a.founded);
-        case 'funding_stage':
+          return parseInt(b.founded, 10) - parseInt(a.founded, 10);
+        case 'funding_stage': {
           const stageOrder: Record<string, number> = {
             Seed: 1,
             'Series A': 2,
@@ -155,10 +154,8 @@ export default function Map() {
             IPO: 5,
             Acquired: 6
           };
-          return (
-            (stageOrder[a.funding_stage] || 0) -
-            (stageOrder[b.funding_stage] || 0)
-          );
+          return (stageOrder[a.funding_stage] || 0) - (stageOrder[b.funding_stage] || 0);
+        }
         case 'popularity':
           return b.use_cases.length - a.use_cases.length;
         default:
@@ -583,7 +580,8 @@ export default function Map() {
                                 <button
                                   onClick={() => {
                                     const newFilters = { ...filters } as Record<string, string[]>;
-                                    newFilters[key] = newFilters[key]?.filter((v: string) => v !== value) || [];
+                                    newFilters[key] =
+                                      newFilters[key]?.filter((v: string) => v !== value) || [];
                                     updateFilters(newFilters);
                                   }}
                                   className='ml-1 hover:text-blue-900'

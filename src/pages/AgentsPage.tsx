@@ -182,7 +182,6 @@ const containerVariants = {
   }
 };
 
-
 /**
  * Floating particles background component
  */
@@ -474,11 +473,12 @@ const AgentsPage: React.FC = () => {
         viewport={{ once: true, margin: '-100px' }}
       >
         <div className='max-w-7xl mx-auto'>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className='text-center mb-16'>
+            className='text-center mb-16'
+          >
             <h2 className='text-3xl md:text-4xl font-bold mb-4'>
               Powered by Advanced AI Technology
             </h2>
@@ -501,11 +501,12 @@ const AgentsPage: React.FC = () => {
         viewport={{ once: true, margin: '-100px' }}
       >
         <div className='max-w-7xl mx-auto space-y-12'>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className='text-center space-y-6'>
+            className='text-center space-y-6'
+          >
             <h2 className='text-4xl md:text-5xl font-bold'>Our AI Agent Portfolio</h2>
             <p className='text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed'>
               Each agent is meticulously engineered with specialized capabilities to address

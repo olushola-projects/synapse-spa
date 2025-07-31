@@ -185,7 +185,7 @@ export class PerformanceTester {
     });
   }
 
-  static measureComponentRender(componentName: string): number {
+  static measureComponentRender(_componentName: string): number {
     const startTime = performance.now();
     // Component render logic would go here
     const endTime = performance.now();

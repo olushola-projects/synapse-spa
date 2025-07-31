@@ -5,17 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import {
-  Send,
-  Mic,
-  MicOff,
-  Paperclip,
-  X,
-  FileText,
-  Image,
-  Sparkles,
-  Loader2,
-} from 'lucide-react';
+import { Send, Mic, MicOff, Paperclip, X, FileText, Image, Sparkles, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -518,4 +508,3 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
     </div>
   );
 };
-

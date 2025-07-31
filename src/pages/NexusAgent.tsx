@@ -1,6 +1,7 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import posthog from 'posthog-js';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -40,7 +41,7 @@ try {
   if (supabaseUrl && supabaseKey) {
     supabase = createClient(supabaseUrl, supabaseKey);
   } else {
-    console.warn('Supabase URL or key not provided. Supabase functionality will be limited.');
+    logger.warn('Supabase URL or key not provided. Supabase functionality will be limited.');
     // Create a mock or disabled client
     supabase = {
       from: () => ({
@@ -56,7 +57,7 @@ try {
     };
   }
 } catch (error) {
-  console.error('Failed to initialize Supabase client:', error);
+  logger.error('Failed to initialize Supabase client:', error);
   // Provide fallback client
   supabase = {
     from: () => ({
@@ -82,7 +83,7 @@ const NexusAgent = () => {
   useEffect(() => {
     // Authentication check
     const { data: authListener } = supabase.auth.onAuthStateChange(async (_, session) => {
-      console.log('Auth state changed:', session?.user?.id);
+      logger.info('Auth state changed:', session?.user?.id);
     });
 
     // Initialize analytics
@@ -95,10 +96,10 @@ const NexusAgent = () => {
           api_host: posthogHost
         });
       } else {
-        console.warn('PostHog key or host not provided. Analytics will be disabled.');
+        logger.warn('PostHog key or host not provided. Analytics will be disabled.');
       }
     } catch (error) {
-      console.error('Failed to initialize PostHog:', error);
+      logger.error('Failed to initialize PostHog:', error);
     }
 
     return () => {
@@ -107,7 +108,7 @@ const NexusAgent = () => {
   }, []);
 
   const [activeTab, setActiveTab] = useState<'chat' | 'overview'>('chat');
-  const chatRef = useRef<any>(null);
+  const chatRef = useRef<{ sendMessage: (message: string) => void } | null>(null);
 
   // Global industry metrics
   const industryMetrics = [
@@ -130,80 +131,87 @@ const NexusAgent = () => {
   ];
 
   // Enhanced quick actions with Nexus capabilities
-  const quickActions = [
-    {
-      type: 'upload-document' as QuickActionType,
-      label: 'Upload Document',
-      description: 'Upload and analyze compliance documents',
-      icon: <FileText className='w-4 h-4' />,
-      message: 'I need help uploading and analyzing a compliance document for SFDR validation.'
-    },
-    {
-      type: 'check-compliance' as QuickActionType,
-      label: 'Check Compliance',
-      description: 'Validate SFDR classification',
-      icon: <Shield className='w-4 h-4' />,
-      message:
-        'Please check the compliance status of my fund classification against SFDR requirements.'
-    },
-    {
-      type: 'article-classification' as QuickActionType,
-      label: 'Article Classification',
-      description: 'Determine Article 6/8/9 classification',
-      icon: <Target className='w-4 h-4' />,
-      message:
-        'Help me determine the correct SFDR article classification for my fund (Article 6, 8, or 9).'
-    },
-    {
-      type: 'pai-analysis' as QuickActionType,
-      label: 'PAI Analysis',
-      description: 'Principal Adverse Impact validation',
-      icon: <Brain className='w-4 h-4' />,
-      message: 'I need help with Principal Adverse Impact (PAI) indicators analysis and validation.'
-    },
-    {
-      type: 'taxonomy-check' as QuickActionType,
-      label: 'Taxonomy Check',
-      description: 'EU Taxonomy alignment verification',
-      icon: <Search className='w-4 h-4' />,
-      message: 'Please help me verify EU Taxonomy alignment for my sustainable investment fund.'
-    },
-    {
-      type: 'generate-report' as QuickActionType,
-      label: 'Generate Report',
-      description: 'Create compliance reports',
-      icon: <BarChart3 className='w-4 h-4' />,
-      message: 'I need to generate a comprehensive SFDR compliance report.'
-    },
-    {
-      type: 'risk-assessment' as QuickActionType,
-      label: 'Risk Assessment',
-      description: 'Identify compliance risks',
-      icon: <AlertTriangle className='w-4 h-4' />,
-      message: 'Can you help me with a regulatory risk assessment for SFDR compliance?'
-    }
-  ];
-
-  const handleQuickAction = useCallback((actionType: QuickActionType) => {
-    // Switch to chat mode if not already active
-    setActiveTab('chat');
-
-    // Find the action details
-    const action = quickActions.find(a => a.type === actionType);
-
-    // Add a small delay to ensure tab switch completes
-    setTimeout(() => {
-      if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
-        chatRef.current.sendMessage(action?.message || 'How can you help me today?');
+  const quickActions = useMemo(
+    () => [
+      {
+        type: 'upload-document' as QuickActionType,
+        label: 'Upload Document',
+        description: 'Upload and analyze compliance documents',
+        icon: <FileText className='w-4 h-4' />,
+        message: 'I need help uploading and analyzing a compliance document for SFDR validation.'
+      },
+      {
+        type: 'check-compliance' as QuickActionType,
+        label: 'Check Compliance',
+        description: 'Validate SFDR classification',
+        icon: <Shield className='w-4 h-4' />,
+        message:
+          'Please check the compliance status of my fund classification against SFDR requirements.'
+      },
+      {
+        type: 'article-classification' as QuickActionType,
+        label: 'Article Classification',
+        description: 'Determine Article 6/8/9 classification',
+        icon: <Target className='w-4 h-4' />,
+        message:
+          'Help me determine the correct SFDR article classification for my fund (Article 6, 8, or 9).'
+      },
+      {
+        type: 'pai-analysis' as QuickActionType,
+        label: 'PAI Analysis',
+        description: 'Principal Adverse Impact validation',
+        icon: <Brain className='w-4 h-4' />,
+        message:
+          'I need help with Principal Adverse Impact (PAI) indicators analysis and validation.'
+      },
+      {
+        type: 'taxonomy-check' as QuickActionType,
+        label: 'Taxonomy Check',
+        description: 'EU Taxonomy alignment verification',
+        icon: <Search className='w-4 h-4' />,
+        message: 'Please help me verify EU Taxonomy alignment for my sustainable investment fund.'
+      },
+      {
+        type: 'generate-report' as QuickActionType,
+        label: 'Generate Report',
+        description: 'Create compliance reports',
+        icon: <BarChart3 className='w-4 h-4' />,
+        message: 'I need to generate a comprehensive SFDR compliance report.'
+      },
+      {
+        type: 'risk-assessment' as QuickActionType,
+        label: 'Risk Assessment',
+        description: 'Identify compliance risks',
+        icon: <AlertTriangle className='w-4 h-4' />,
+        message: 'Can you help me with a regulatory risk assessment for SFDR compliance?'
       }
+    ],
+    []
+  );
 
-      // Update compliance data based on action
-      setComplianceData(prev => ({
-        ...prev,
-        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
-      }));
-    }, 100);
-  }, []);
+  const handleQuickAction = useCallback(
+    (actionType: QuickActionType) => {
+      // Switch to chat mode if not already active
+      setActiveTab('chat');
+
+      // Find the action details
+      const action = quickActions.find(a => a.type === actionType);
+
+      // Add a small delay to ensure tab switch completes
+      setTimeout(() => {
+        if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
+          chatRef.current.sendMessage(action?.message || 'How can you help me today?');
+        }
+
+        // Update compliance data based on action
+        setComplianceData(prev => ({
+          ...prev,
+          status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
+        }));
+      }, 100);
+    },
+    [quickActions]
+  );
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>

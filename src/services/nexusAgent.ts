@@ -4,6 +4,7 @@
  * Integrates with the external Nexus agent for real-time validation
  */
 
+import { logger } from '@/utils/logger';
 import type {
   SFDRClassificationRequest,
   NexusValidationResponse,
@@ -44,7 +45,7 @@ class NexusAgentService {
     try {
       const response = await this.makeRequest('GET', NEXUS_CONFIG.endpoints.capabilities);
       return response;
-    } catch (error) {
+    } catch (_error) {
       // Return mock capabilities for demo
       return {
         supportedRegulations: ['SFDR', 'EU_TAXONOMY', 'CSRD'],
@@ -76,7 +77,7 @@ class NexusAgentService {
       const response = await this.makeRequest('POST', NEXUS_CONFIG.endpoints.validate, request);
       return this.processValidationResponse(response);
     } catch (error) {
-      console.warn('Using enhanced mock validation due to API error:', error);
+      logger.warn('Using enhanced mock validation due to API error:', error);
       return this.generateEnhancedMockValidation(request);
     }
   }
@@ -167,7 +168,7 @@ class NexusAgentService {
     try {
       const response = await this.makeRequest('POST', NEXUS_CONFIG.endpoints.classify, request);
       return response.classification;
-    } catch (error) {
+    } catch (_error) {
       return this.generateMockClassification(request);
     }
   }

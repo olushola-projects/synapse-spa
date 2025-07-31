@@ -9,12 +9,6 @@ interface Logos3Props {
   heading?: string;
   logos: Logo[];
 }
-export const Logos3 = ({
-  heading,
-  logos
-}: Logos3Props) => {
-  return <div>
-      
-      
-    </div>;
+export const Logos3 = ({ heading, logos }: Logos3Props) => {
+  return <div></div>;
 };
