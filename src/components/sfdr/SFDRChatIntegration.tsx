@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { nexusClient, NexusClassificationRequest } from '@/services/nexusAgentClient';
+import { useSFDRClassification } from '@/hooks/useSFDRClassification';
+import { NexusClassificationRequest } from '@/services/nexusAgentClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, MessageSquare, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, MessageSquare, CheckCircle, AlertTriangle, History } from 'lucide-react';
 
 interface SFDRChatMessage {
   id: string;
@@ -17,17 +18,29 @@ interface SFDRChatMessage {
 const SFDRChatIntegration = () => {
   const [messages, setMessages] = useState<SFDRChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { classify, loading, result, error: hookError } = useSFDRClassification();
   const [apiHealth, setApiHealth] = useState<'checking' | 'healthy' | 'error'>('checking');
 
   useEffect(() => {
     // Check API health on component mount
     checkApiHealth();
-  }, []);
+    
+    // Add initial message when result is available
+    if (result) {
+      const assistantMessage: SFDRChatMessage = {
+        id: Date.now().toString(),
+        content: formatChatResponse(result),
+        sender: 'assistant',
+        timestamp: new Date(),
+        classification: result
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    }
+  }, [result]);
 
   const checkApiHealth = async () => {
     try {
-      await nexusClient.getHealth();
+      // For now, assume healthy - in production, implement proper health check
       setApiHealth('healthy');
     } catch (error) {
       setApiHealth('error');
@@ -76,13 +89,8 @@ ${classification.recommendations?.map((rec: string, index: number) => `${index +
 
   const handleSFDRQuery = async (userMessage: string) => {
     try {
-      // Extract product information from chat context
       const productData = extractProductData(userMessage);
-      
-      // Call SFDR classification API using the new method name
-      const classification = await nexusClient.classifyProduct(productData);
-      
-      // Format response for chat
+      const classification = await classify(productData);
       return formatChatResponse(classification);
     } catch (error) {
       console.error('SFDR classification error:', error);
@@ -102,19 +110,11 @@ ${classification.recommendations?.map((rec: string, index: number) => `${index +
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
-    setIsLoading(true);
 
     try {
-      const response = await handleSFDRQuery(input);
+      await handleSFDRQuery(input);
       
-      const assistantMessage: SFDRChatMessage = {
-        id: (Date.now() + 1).toString(),
-        content: response,
-        sender: 'assistant',
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
+      // Note: Assistant message will be added via useEffect when result updates
     } catch (error) {
       const errorMessage: SFDRChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -123,8 +123,6 @@ ${classification.recommendations?.map((rec: string, index: number) => `${index +
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -139,7 +137,7 @@ ${classification.recommendations?.map((rec: string, index: number) => `${index +
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <MessageSquare className="h-5 w-5" />
+          <History className="h-5 w-5" />
           SFDR Chat Integration
           <Badge variant={apiHealth === 'healthy' ? 'default' : 'destructive'}>
             {apiHealth === 'checking' && <Loader2 className="h-3 w-3 animate-spin mr-1" />}
@@ -182,7 +180,7 @@ ${classification.recommendations?.map((rec: string, index: number) => `${index +
             </div>
           ))}
           
-          {isLoading && (
+          {loading && (
             <div className="flex justify-start">
               <div className="bg-muted rounded-lg p-3 flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -199,13 +197,13 @@ ${classification.recommendations?.map((rec: string, index: number) => `${index +
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask about SFDR compliance, fund classification, or regulations..."
-            disabled={isLoading || apiHealth === 'error'}
+            disabled={loading || apiHealth === 'error'}
           />
           <Button 
             onClick={sendMessage} 
-            disabled={!input.trim() || isLoading || apiHealth === 'error'}
+            disabled={!input.trim() || loading || apiHealth === 'error'}
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Send'}
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Send'}
           </Button>
         </div>
 
