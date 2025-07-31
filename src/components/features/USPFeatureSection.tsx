@@ -82,11 +82,11 @@ export const USPFeatureSection = () => {
     setIsOpen(true);
   };
   return (
-    <div className='flex flex-col md:flex-row items-start justify-start gap-8 lg:gap-12'>
+    <div className='flex flex-row md:flex-row items-start justify-start gap-4 md:gap-8 lg:gap-12'>
       {uspItems.map((usp, index) => (
         <motion.div
           key={index}
-          className='flex flex-col items-center text-center group cursor-pointer'
+          className='flex flex-col items-center text-center group cursor-pointer flex-1'
           initial={{
             opacity: 0,
             y: 20
@@ -102,11 +102,13 @@ export const USPFeatureSection = () => {
           onClick={() => handleUSPClick(usp)}
         >
           <div
-            className={`w-16 h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-3 ${usp.color}`}
+            className={`w-10 h-10 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-2 md:mb-3 ${usp.color}`}
           >
-            {usp.icon}
+            <div className="scale-75 md:scale-100">
+              {usp.icon}
+            </div>
           </div>
-          <h3 className='font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm'>
+          <h3 className='font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-xs md:text-sm leading-tight text-center break-words hyphens-auto px-1'>
             {usp.title}
           </h3>
         </motion.div>
