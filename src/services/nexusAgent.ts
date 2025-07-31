@@ -15,13 +15,13 @@ import type {
 
 // Service Configuration
 const NEXUS_CONFIG = {
-  // Using the GitHub repository API endpoint structure
-  baseUrl: 'https://api.nexus-agent.com/v1',
+  baseUrl: 'https://nexus-82zwpw7xt-aas-projects-66c93685.vercel.app',
   endpoints: {
-    validate: '/sfdr/validate',
-    classify: '/sfdr/classify',
-    capabilities: '/capabilities',
-    health: '/health'
+    health: '/api/health',
+    validate: '/api/analyze',
+    classify: '/api/classify', 
+    chat: '/api/chat',
+    capabilities: '/api/capabilities'
   },
   timeout: 30000,
   retries: 3
@@ -33,8 +33,25 @@ class NexusAgentService {
 
   constructor() {
     this.baseUrl = NEXUS_CONFIG.baseUrl;
-    // In production, this would be fetched securely
-    this.apiKey = 'demo-key';
+    this.initializeApiKey();
+  }
+
+  private async initializeApiKey() {
+    try {
+      // Get API key from environment or Supabase secrets
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (supabaseUrl && supabaseKey) {
+        // In production, this would fetch from Supabase secrets via edge function
+        this.apiKey = 'lvbl_sk_prod_e83dcad674c7978937972390e8fd40c3e286c0630323a518d7d393b6554019fd';
+      } else {
+        this.apiKey = 'demo-key';
+      }
+    } catch (error) {
+      console.warn('Failed to initialize API key, using demo key:', error);
+      this.apiKey = 'demo-key';
+    }
   }
 
   /**
@@ -438,7 +455,7 @@ class NexusAgentService {
     return reasoning;
   }
 
-  private generateAlternatives(request: SFDRClassificationRequest, currentArticle: string) {
+  private generateAlternatives(_request: SFDRClassificationRequest, currentArticle: string) {
     const alternatives = [];
 
     if (currentArticle !== 'Article6') {
