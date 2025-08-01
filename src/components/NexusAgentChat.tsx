@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logger } from '@/utils/logger';
+import { SecurityUtils } from '@/utils/security';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -301,12 +302,25 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
     if (!userMessage.trim() || isLoading) {
       return;
     }
+
+    // Rate limiting and input validation
+    if (userMessage.length > 2000) {
+      toast({
+        title: 'Message too long',
+        description: 'Please keep messages under 2000 characters.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    // Sanitize user input
+    const sanitizedMessage = SecurityUtils.sanitizeInput(userMessage.trim());
     setInputMessage('');
 
     // Add user message
     addMessage({
       type: 'user',
-      content: userMessage
+      content: sanitizedMessage
     });
 
     // Add loading message
@@ -325,7 +339,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
         setProcessingType('thinking');
         await new Promise(resolve => setTimeout(resolve, TIME_CONSTANTS.SIMPLE_PROCESSING_DELAY_MS));
       }
-      const response = await routeMessageToHandler(userMessage);
+      const response = await routeMessageToHandler(sanitizedMessage);
       updateMessage(loadingId, {
         content: response,
         isLoading: false

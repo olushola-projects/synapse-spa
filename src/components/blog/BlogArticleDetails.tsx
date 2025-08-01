@@ -11,6 +11,7 @@ import type { BlogPost } from '@/data/blogData';
 import { blogPosts } from '@/data/blogData';
 import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
+import DOMPurify from 'dompurify';
 
 const BlogArticleDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -288,31 +289,38 @@ const BlogArticleDetails: React.FC = () => {
                     <div
                       className='article-content'
                       dangerouslySetInnerHTML={{
-                        __html: article.content
-                          .split('\n')
-                          .map(line => {
-                            // Handle Markdown-style headings
-                            if (line.startsWith('# ')) {
-                              return `<h1 class="text-3xl font-bold mt-8 mb-4">${line.slice(2)}</h1>`;
-                            } else if (line.startsWith('## ')) {
-                              return `<h2 class="text-2xl font-bold mt-8 mb-3">${line.slice(3)}</h2>`;
-                            } else if (line.startsWith('### ')) {
-                              return `<h3 class="text-xl font-bold mt-6 mb-2">${line.slice(4)}</h3>`;
-                            } else if (line.startsWith('**') && line.endsWith('**')) {
-                              // Bold text
-                              return `<p class="font-bold my-2">${line.slice(2, -2)}</p>`;
-                            } else if (line.trim() === '') {
-                              // Empty lines become breaks
-                              return '<br>';
-                            } else if (line.startsWith('- ')) {
-                              // List items
-                              return `<li class="ml-6 mb-1">${line.slice(2)}</li>`;
-                            } else {
-                              // Regular paragraphs
-                              return `<p class="mb-4">${line}</p>`;
-                            }
-                          })
-                          .join('')
+                        __html: DOMPurify.sanitize(
+                          article.content
+                            .split('\n')
+                            .map(line => {
+                              // Handle Markdown-style headings
+                              if (line.startsWith('# ')) {
+                                return `<h1 class="text-3xl font-bold mt-8 mb-4">${DOMPurify.sanitize(line.slice(2))}</h1>`;
+                              } else if (line.startsWith('## ')) {
+                                return `<h2 class="text-2xl font-bold mt-8 mb-3">${DOMPurify.sanitize(line.slice(3))}</h2>`;
+                              } else if (line.startsWith('### ')) {
+                                return `<h3 class="text-xl font-bold mt-6 mb-2">${DOMPurify.sanitize(line.slice(4))}</h3>`;
+                              } else if (line.startsWith('**') && line.endsWith('**')) {
+                                // Bold text
+                                return `<p class="font-bold my-2">${DOMPurify.sanitize(line.slice(2, -2))}</p>`;
+                              } else if (line.trim() === '') {
+                                // Empty lines become breaks
+                                return '<br>';
+                              } else if (line.startsWith('- ')) {
+                                // List items
+                                return `<li class="ml-6 mb-1">${DOMPurify.sanitize(line.slice(2))}</li>`;
+                              } else {
+                                // Regular paragraphs
+                                return `<p class="mb-4">${DOMPurify.sanitize(line)}</p>`;
+                              }
+                            })
+                            .join(''),
+                          {
+                            ALLOWED_TAGS: ['h1', 'h2', 'h3', 'p', 'br', 'li', 'ul', 'ol', 'strong', 'em', 'a'],
+                            ALLOWED_ATTR: ['class', 'href', 'target'],
+                            ALLOW_DATA_ATTR: false
+                          }
+                        )
                       }}
                     />
                   ) : (
