@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
 import posthog from 'posthog-js';
 import { logger } from '@/utils/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,79 +18,8 @@ import type { QuickActionType } from '@/types/nexus';
  * This component serves as the main interface for the SFDR (Sustainable Finance Disclosure Regulation)
  * Navigator, providing AI-powered regulatory guidance and compliance tools for GRC professionals.
  */
-// Initialize Supabase client
-let supabase;
-try {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  if (supabaseUrl && supabaseKey) {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } else {
-    logger.warn('Supabase URL or key not provided. Supabase functionality will be limited.');
-    // Create a mock or disabled client
-    supabase = {
-      from: () => ({
-        select: () => Promise.resolve({
-          data: [],
-          error: null
-        }),
-        insert: () => Promise.resolve({
-          data: null,
-          error: null
-        }),
-        update: () => Promise.resolve({
-          data: null,
-          error: null
-        }),
-        delete: () => Promise.resolve({
-          data: null,
-          error: null
-        })
-      }),
-      auth: {
-        onAuthStateChange: () => ({
-          data: null,
-          error: null
-        }),
-        signOut: () => Promise.resolve({
-          error: null
-        })
-      }
-    };
-  }
-} catch (error) {
-  logger.error('Failed to initialize Supabase client:', error);
-  // Provide fallback client
-  supabase = {
-    from: () => ({
-      select: () => Promise.resolve({
-        data: [],
-        error: null
-      }),
-      insert: () => Promise.resolve({
-        data: null,
-        error: null
-      }),
-      update: () => Promise.resolve({
-        data: null,
-        error: null
-      }),
-      delete: () => Promise.resolve({
-        data: null,
-        error: null
-      })
-    }),
-    auth: {
-      onAuthStateChange: () => ({
-        data: null,
-        error: null
-      }),
-      signOut: () => Promise.resolve({
-        error: null
-      })
-    }
-  };
-}
+// Use the shared Supabase client
+import { supabase } from '@/integrations/supabase/client';
 const NexusAgent = () => {
   // State declarations
   const [complianceData, setComplianceData] = useState<{
@@ -294,17 +222,59 @@ const NexusAgent = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className='space-y-3'>
-                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('upload-document')} data-testid="quick-action-button">
+                    <Button 
+                      variant='outline' 
+                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
+                      onClick={() => handleQuickAction('upload-document')} 
+                      data-testid="quick-action-upload"
+                    >
+                      <FileText className='w-4 h-4 mr-2' />
                       Upload Document
                     </Button>
-                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('check-compliance')} data-testid="quick-action-button">
+                    <Button 
+                      variant='outline' 
+                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
+                      onClick={() => handleQuickAction('check-compliance')} 
+                      data-testid="quick-action-compliance"
+                    >
+                      <Shield className='w-4 h-4 mr-2' />
                       Check Compliance
                     </Button>
-                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('generate-report')} data-testid="quick-action-button">
-                      Generate Report
+                    <Button 
+                      variant='outline' 
+                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
+                      onClick={() => handleQuickAction('article-classification')} 
+                      data-testid="quick-action-classification"
+                    >
+                      <Target className='w-4 h-4 mr-2' />
+                      Article Classification
                     </Button>
-                    <Button variant='outline' className='w-full justify-start' onClick={() => handleQuickAction('risk-assessment')} data-testid="quick-action-button">
-                      Risk Assessment
+                    <Button 
+                      variant='outline' 
+                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
+                      onClick={() => handleQuickAction('pai-analysis')} 
+                      data-testid="quick-action-pai"
+                    >
+                      <Brain className='w-4 h-4 mr-2' />
+                      PAI Analysis
+                    </Button>
+                    <Button 
+                      variant='outline' 
+                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
+                      onClick={() => handleQuickAction('taxonomy-check')} 
+                      data-testid="quick-action-taxonomy"
+                    >
+                      <Search className='w-4 h-4 mr-2' />
+                      Taxonomy Check
+                    </Button>
+                    <Button 
+                      variant='outline' 
+                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
+                      onClick={() => handleQuickAction('generate-report')} 
+                      data-testid="quick-action-report"
+                    >
+                      <BarChart3 className='w-4 h-4 mr-2' />
+                      Generate Report
                     </Button>
                   </CardContent>
                 </Card>
