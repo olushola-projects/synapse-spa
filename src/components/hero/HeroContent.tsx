@@ -29,12 +29,12 @@ export const HeroContent: React.FC<HeroContentProps> = ({
       letterSpacing: '-0.02em',
       lineHeight: '1.1',
       textShadow: '0 1px 2px rgba(37, 99, 235, 0.1)'
-    }} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight leading-tight text-blue-600 mb-4 md:mb-6 font-medium py-4 md:py-8">
+    }} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight leading-tight text-blue-600 mb-4 md:mb-6 font-medium md:py-8 py-[35px]">
         Transform
         <br />
         Your Expertise
         <br />
-        <span className='bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 bg-clip-text text-transparent'>
+        <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 bg-clip-text text-transparent py-[10px]">
           With GRC Agents
         </span>
       </h1>
