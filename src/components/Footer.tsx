@@ -118,8 +118,8 @@ const Footer = () => {
         </motion.div>
 
         {/* Main Footer Content */}
-        <div className='py-px'>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
+        <div className='py-8 sm:py-12'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8'>
             {/* Brand Section */}
             <motion.div
               initial={{
@@ -137,7 +137,7 @@ const Footer = () => {
               viewport={{
                 once: true
               }}
-              className='lg:col-span-1'
+              className='sm:col-span-2 lg:col-span-1'
             >
               <Link
                 to='/'
@@ -145,11 +145,11 @@ const Footer = () => {
               >
                 Synapses
               </Link>
-              <p className='mt-4 text-muted-foreground max-w-xs leading-relaxed text-sm font-normal'>
+              <p className='mt-4 text-muted-foreground max-w-xs sm:max-w-sm leading-relaxed text-sm font-normal'>
                 The global ecosystem where Governance, Risk, and Compliance professionals connect,
                 grow, and shape the future of compliance.
               </p>
-              <div className='mt-6 flex space-x-3'>
+              <div className='mt-6 flex flex-wrap gap-3'>
                 {socialLinks.map((social, index) => (
                   <motion.a
                     key={social.label}
@@ -410,24 +410,24 @@ const Footer = () => {
           viewport={{
             once: true
           }}
-          className='py-8 border-t border-border/40'
+          className='py-6 sm:py-8 border-t border-border/40'
         >
-          <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
-            <div className='flex flex-col md:flex-row items-center gap-4'>
-              <p className='text-sm text-muted-foreground'>
+          <div className='flex flex-col gap-4 sm:gap-6'>
+            <div className='flex flex-col sm:flex-row items-center gap-2 sm:gap-4'>
+              <p className='text-xs sm:text-sm text-muted-foreground text-center sm:text-left'>
                 &copy; {new Date().getFullYear()} Synapses Technologies Ltd. All rights reserved.
               </p>
-              <div className='flex items-center gap-4'>
+              <div className='flex items-center gap-2 sm:gap-4 text-xs sm:text-sm'>
                 <Link
                   to='/legal/privacy'
-                  className='text-sm text-muted-foreground hover:text-primary transition-colors'
+                  className='text-muted-foreground hover:text-primary transition-colors'
                 >
                   Privacy Policy
                 </Link>
                 <span className='text-border'>•</span>
                 <Link
                   to='/legal/terms'
-                  className='text-sm text-muted-foreground hover:text-primary transition-colors'
+                  className='text-muted-foreground hover:text-primary transition-colors'
                 >
                   Terms of Service
                 </Link>
@@ -435,11 +435,11 @@ const Footer = () => {
             </div>
             <motion.div
               whileHover={{
-                scale: 1.05
+                scale: 1.02
               }}
-              className='text-sm text-muted-foreground flex items-center gap-1'
+              className='text-xs sm:text-sm text-muted-foreground flex items-center justify-center gap-1'
             >
-              Made with <span className='text-lg'>❤️</span> for GRC professionals worldwide
+              Made with <span className='text-base sm:text-lg'>❤️</span> for GRC professionals worldwide
             </motion.div>
           </div>
         </motion.div>

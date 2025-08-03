@@ -34,33 +34,33 @@ const HowItWorksSection = () => {
     }
   ];
   return (
-    <div id='how-it-works' className='py-20 bg-gray-50'>
-      <div className='container mx-auto sm:px-6 lg:px-8 px-[50px] py-[10px]'>
-        <div className='text-center mb-16'>
-          <h2 className='text-3xl md:text-4xl font-display font-bold mb-4'>How Synapses Works</h2>
-          <p className='text-lg text-gray-600 max-w-3xl mx-auto font-medium'>
+    <div id='how-it-works' className='py-12 sm:py-16 md:py-20 bg-gray-50'>
+      <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='text-center mb-12 sm:mb-16'>
+          <h2 className='text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-4'>How Synapses Works</h2>
+          <p className='text-base sm:text-lg text-gray-600 max-w-3xl mx-auto font-medium px-4'>
             Getting started with Synapses is simple. Follow these steps to transform your GRC
             experience.
           </p>
         </div>
 
-        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8'>
           {steps.map((step, index) => (
             <div key={index} className='relative'>
-              {/* Connect lines between steps except for the last one */}
+              {/* Connect lines between steps except for the last one - hidden on mobile */}
               {index < steps.length - 1 && (
                 <div
-                  className='hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-synapse-primary to-transparent z-0'
+                  className='hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-primary to-transparent z-0'
                   style={{
                     width: 'calc(100% - 2rem)'
                   }}
                 ></div>
               )}
 
-              <div className='feature-card h-full relative z-10 bg-slate-200'>
-                <div className='text-3xl font-bold text-synapse-primary/20 mb-4'>{step.number}</div>
-                <h3 className='text-xl font-semibold mb-3'>{step.title}</h3>
-                <p className='text-gray-600'>{step.description}</p>
+              <div className='feature-card h-full relative z-10 bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300'>
+                <div className='text-2xl sm:text-3xl font-bold text-primary/30 mb-3 sm:mb-4'>{step.number}</div>
+                <h3 className='text-lg sm:text-xl font-semibold mb-2 sm:mb-3'>{step.title}</h3>
+                <p className='text-gray-600 text-sm sm:text-base leading-relaxed'>{step.description}</p>
               </div>
             </div>
           ))}

@@ -251,7 +251,7 @@ const FeaturesSection = () => {
           </p>
         </div>
 
-        {/* Redesigned carousel with better visual hierarchy */}
+        {/* Mobile-optimized carousel */}
         <div className='max-w-7xl mx-auto' ref={carouselRef}>
           <Carousel
             opts={{
@@ -263,19 +263,19 @@ const FeaturesSection = () => {
             className='w-full'
             setApi={handleApiChange}
           >
-            <CarouselContent className='-ml-2 md:-ml-4'>
+            <CarouselContent className='-ml-1 sm:-ml-2 md:-ml-4'>
               {features.map((feature, index) => (
                 <CarouselItem
                   key={index}
-                  className='pl-2 md:pl-4 md:basis-auto px-px py-0 my-[30px]'
+                  className='pl-1 sm:pl-2 md:pl-4 md:basis-auto px-px py-0 my-4 sm:my-6 md:my-[30px]'
                 >
                   <Card
                     className={cn(
                       'relative overflow-hidden transition-all duration-500 ease-out cursor-pointer group',
                       'border border-border/50 bg-card/80 backdrop-blur-sm shadow-lg hover:shadow-xl',
                       activeFeature === index
-                        ? 'w-[320px] sm:w-[360px] md:w-[440px] h-[360px] md:h-[400px] z-20 scale-105 shadow-2xl border-primary/20'
-                        : 'w-[100px] sm:w-[120px] h-[360px] md:h-[400px] opacity-70 hover:opacity-90 z-10'
+                        ? 'w-[280px] sm:w-[320px] md:w-[360px] lg:w-[440px] h-[320px] sm:h-[360px] md:h-[400px] z-20 scale-105 shadow-2xl border-primary/20'
+                        : 'w-[80px] sm:w-[100px] md:w-[120px] h-[320px] sm:h-[360px] md:h-[400px] opacity-70 hover:opacity-90 z-10'
                     )}
                   >
                     {/* Gradient overlay for active card */}
@@ -285,53 +285,53 @@ const FeaturesSection = () => {
 
                     <CardContent
                       className={cn(
-                        'relative flex flex-col h-full p-6',
+                        'relative flex flex-col h-full p-3 sm:p-4 md:p-6',
                         activeFeature === index ? 'justify-between' : 'justify-center'
                       )}
                     >
                       {activeFeature === index ? (
-                        // Enhanced expanded view
+                        // Mobile-optimized expanded view
                         <div className='flex flex-col h-full justify-between'>
-                          <div className='space-y-6'>
-                            {/* Icon with enhanced styling */}
+                          <div className='space-y-3 sm:space-y-4 md:space-y-6'>
+                            {/* Mobile-optimized icon */}
                             <div
                               className={cn(
                                 feature.color,
                                 feature.textColor,
-                                'rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg',
+                                'rounded-xl sm:rounded-2xl w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center shadow-lg',
                                 'group-hover:scale-110 transition-transform duration-300'
                               )}
                             >
                               <feature.icon />
                             </div>
 
-                            {/* Enhanced typography */}
-                            <div className='space-y-4'>
-                              <h3 className='text-2xl font-display font-bold text-foreground leading-tight'>
+                            {/* Mobile-optimized typography */}
+                            <div className='space-y-2 sm:space-y-3 md:space-y-4'>
+                              <h3 className='text-lg sm:text-xl md:text-2xl font-display font-bold text-foreground leading-tight'>
                                 {feature.title}
                               </h3>
-                              <p className='text-muted-foreground leading-relaxed text-base'>
+                              <p className='text-muted-foreground leading-relaxed text-sm sm:text-base line-clamp-4 sm:line-clamp-none'>
                                 {feature.description}
                               </p>
                             </div>
                           </div>
 
-                          {/* Enhanced CTA */}
+                          {/* Mobile-optimized CTA */}
                           <Button
                             variant='ghost'
-                            className='w-fit text-muted-foreground hover:text-foreground gap-3 mt-6 group/btn p-0 h-auto'
+                            className='w-fit text-muted-foreground hover:text-foreground gap-2 sm:gap-3 mt-4 sm:mt-6 group/btn p-0 h-auto'
                           >
-                            <span className='text-sm font-medium'>Explore {feature.title}</span>
-                            <div className='w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover/btn:bg-primary group-hover/btn:text-primary-foreground transition-all duration-300'>
-                              <Play className='h-4 w-4 group-hover/btn:translate-x-0.5 transition-transform' />
+                            <span className='text-xs sm:text-sm font-medium'>Explore {feature.title}</span>
+                            <div className='w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover/btn:bg-primary group-hover/btn:text-primary-foreground transition-all duration-300'>
+                              <Play className='h-3 w-3 sm:h-4 sm:w-4 group-hover/btn:translate-x-0.5 transition-transform' />
                             </div>
                           </Button>
                         </div>
                       ) : (
-                        // Enhanced collapsed view
+                        // Mobile-optimized collapsed view
                         <div className='flex items-center justify-center h-full bg-transparent'>
                           <div className='transform rotate-90 whitespace-nowrap'>
-                            <span className='uppercase tracking-[0.2em] transition-colors text-indigo-950 font-semibold text-sm'>
+                            <span className='uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-colors text-indigo-950 font-semibold text-xs sm:text-sm'>
                               {feature.title}
                             </span>
                           </div>
@@ -343,28 +343,28 @@ const FeaturesSection = () => {
               ))}
             </CarouselContent>
 
-            {/* Enhanced navigation */}
-            <div className='flex justify-center items-center mt-12 gap-6'>
+            {/* Mobile-optimized navigation */}
+            <div className='flex justify-center items-center mt-6 sm:mt-8 md:mt-12 gap-3 sm:gap-4 md:gap-6'>
               <Button
                 onClick={() => api?.scrollPrev()}
                 variant='outline'
                 size='icon'
-                className='h-12 w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
+                className='h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
               >
-                <ChevronLeft className='h-5 w-5' />
+                <ChevronLeft className='h-4 w-4 sm:h-5 sm:w-5' />
                 <span className='sr-only'>Previous feature</span>
               </Button>
 
-              {/* Progress indicator */}
-              <div className='flex items-center gap-2'>
+              {/* Mobile-optimized progress indicator */}
+              <div className='flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-[200px] sm:max-w-none'>
                 {features.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => api?.scrollTo(index)}
                     className={cn(
-                      'w-2 h-2 rounded-full transition-all duration-300',
+                      'w-2 h-2 rounded-full transition-all duration-300 flex-shrink-0',
                       activeFeature === index
-                        ? 'bg-primary w-8'
+                        ? 'bg-primary w-6 sm:w-8'
                         : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                     )}
                   />
@@ -375,9 +375,9 @@ const FeaturesSection = () => {
                 onClick={() => api?.scrollNext()}
                 variant='outline'
                 size='icon'
-                className='h-12 w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
+                className='h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
               >
-                <ChevronRight className='h-5 w-5' />
+                <ChevronRight className='h-4 w-4 sm:h-5 sm:w-5' />
                 <span className='sr-only'>Next feature</span>
               </Button>
             </div>

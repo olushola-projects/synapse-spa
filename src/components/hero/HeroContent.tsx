@@ -21,15 +21,15 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   onGetAccess,
   onInvite
 }) => {
-  return <div className={`w-full text-left transition-all duration-700 ease-out pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 pb-10 md:pb-0 ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
-      {/* Main Headline - Increased font sizing to big 4 for better alignment */}
+  return <div className={`w-full text-left transition-all duration-700 ease-out px-4 md:px-6 lg:px-8 pb-6 md:pb-0 ${animate ? 'opacity-100' : 'opacity-0 translate-y-6'}`}>
+      {/* Mobile-optimized headline */}
       <h1 style={{
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
       fontWeight: 700,
       letterSpacing: '-0.02em',
       lineHeight: '1.1',
       textShadow: '0 1px 2px rgba(37, 99, 235, 0.1)'
-    }} className="text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight text-blue-600 mb-6 font-medium lg:text-7xl py-[30px]">
+    }} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight leading-tight text-blue-600 mb-4 md:mb-6 font-medium py-4 md:py-8">
         Transform
         <br />
         Your Expertise
@@ -39,46 +39,42 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         </span>
       </h1>
 
-      {/* Enhanced subtitle with reduced sizing and width */}
-      <p className="mt-6 text-sm md:text-base max-w-2xl leading-relaxed text-black font-light lg:text-base text-left">
+      {/* Mobile-optimized subtitle */}
+      <p className="mt-4 md:mt-6 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed text-black font-light text-left">
         Join a global network of GRC professionals leveraging AI agents
-        <br />
-        for compliance excellence. Access exclusive testing of future
-        <br />
-        solutions, comprehensive regulatory insights, and personalized
-        <br />
-        career resilience tools to{' '}
-        <span className='font-semibold text-blue-600'>upskill, adapt, and lead</span> the
-        <br />
-        transformation of governance, risk, and compliance.
+        {' '}for compliance excellence. Access exclusive testing of future
+        {' '}solutions, comprehensive regulatory insights, and personalized
+        {' '}career resilience tools to{' '}
+        <span className='font-semibold text-blue-600'>upskill, adapt, and lead</span>{' '}
+        the transformation of governance, risk, and compliance.
       </p>
 
-      {/* Enhanced CTA section with secondary action */}
-      <div className='mt-10 flex flex-col sm:flex-row gap-4 justify-start items-start'>
-        <div onClick={onGetAccess} className='cursor-pointer'>
-          <Button className='bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 '>
+      {/* Mobile-optimized CTA buttons */}
+      <div className='mt-6 md:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-start items-stretch sm:items-start'>
+        <div onClick={onGetAccess} className='cursor-pointer w-full sm:w-auto'>
+          <Button className='bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 w-full sm:w-auto text-base'>
             Get Early Access <ArrowRightIcon />
           </Button>
         </div>
-        <div onClick={onInvite} className='cursor-pointer'>
-          <Button variant='outline' className='border-2 border-blue-200 text-blue-600 hover:bg-blue-50 px-6 py-3 text-base rounded-xl font-semibold hover-lift transition-all duration-300'>
+        <div onClick={onInvite} className='cursor-pointer w-full sm:w-auto'>
+          <Button variant='outline' className='border-2 border-blue-200 text-blue-600 hover:bg-blue-50 px-6 py-3 text-base rounded-lg font-semibold hover-lift transition-all duration-300 w-full sm:w-auto'>
             Invite Colleagues
           </Button>
         </div>
       </div>
 
-      {/* Enhanced trust indicators with better visual hierarchy */}
-      <div className='mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-start gap-6 text-sm'>
+      {/* Mobile-optimized trust indicators */}
+      <div className='mt-6 md:mt-10 flex flex-col gap-3 sm:gap-4 text-xs sm:text-sm'>
         <div className='flex items-center text-slate-500'>
-          <div className='w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse'></div>
-          <div className='mr-2 text-green-600'>
+          <div className='w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse flex-shrink-0'></div>
+          <div className='mr-2 text-green-600 flex-shrink-0'>
             <ShieldIcon />
           </div>
           <span className='font-medium'>GRC Innovation Hub</span>
         </div>
         <div className='flex items-center text-slate-500'>
-          <div className='w-2 h-2 bg-blue-500 rounded-full mr-3'></div>
-          <div className='mr-2 text-blue-600'>
+          <div className='w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0'></div>
+          <div className='mr-2 text-blue-600 flex-shrink-0'>
             <UsersIcon />
           </div>
           <span className='font-medium'>Join early adopters in our private pilot</span>

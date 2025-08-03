@@ -82,11 +82,11 @@ export const USPFeatureSection = () => {
     setIsOpen(true);
   };
   return (
-    <div className='flex flex-col md:flex-row items-start justify-start gap-8 lg:gap-12'>
+    <div className='flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start gap-6 sm:gap-8 lg:gap-12'>
       {uspItems.map((usp, index) => (
         <motion.div
           key={index}
-          className='flex flex-col items-center text-center group cursor-pointer'
+          className='flex flex-col items-center text-center group cursor-pointer min-h-[100px] p-4 rounded-xl hover:bg-slate-50/50 transition-all duration-300'
           initial={{
             opacity: 0,
             y: 20
@@ -102,13 +102,16 @@ export const USPFeatureSection = () => {
           onClick={() => handleUSPClick(usp)}
         >
           <div
-            className={`w-16 h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-3 ${usp.color}`}
+            className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-3 ${usp.color} shadow-sm`}
           >
             {usp.icon}
           </div>
-          <h3 className='font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm'>
+          <h3 className='font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm sm:text-base leading-tight'>
             {usp.title}
           </h3>
+          <p className='text-xs text-slate-600 mt-2 opacity-0 sm:opacity-100 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2'>
+            {usp.description}
+          </p>
         </motion.div>
       ))}
 
