@@ -3,66 +3,53 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { 
-  Bot, 
-  Shield, 
-  Target, 
-  Sparkles, 
-  CheckCircle, 
-  ArrowRight,
-  Brain,
-  FileCheck,
-  TrendingUp,
-  Zap
-} from 'lucide-react';
+import { Bot, Shield, Target, Sparkles, CheckCircle, ArrowRight, Brain, FileCheck, TrendingUp, Zap } from 'lucide-react';
 
 /**
  * NexusAgentSection component - Showcases the SFDR Navigator on the landing page
  * Provides an overview and call-to-action to try the SFDR compliance validation tool
  */
 const NexusAgentSection = () => {
-  const features = [
-    {
-      icon: <Target className="w-5 h-5" />,
-      title: "SFDR Classification",
-      description: "Intelligent Article 6/8/9 classification with 94% accuracy"
-    },
-    {
-      icon: <Shield className="w-5 h-5" />,
-      title: "Compliance Validation", 
-      description: "Real-time regulatory compliance checking and validation"
-    },
-    {
-      icon: <FileCheck className="w-5 h-5" />,
-      title: "Document Analysis",
-      description: "AI-powered document review and compliance gap analysis"
-    },
-    {
-      icon: <Brain className="w-5 h-5" />,
-      title: "PAI Analysis",
-      description: "Principal Adverse Impact indicators analysis and reporting"
-    }
-  ];
-
-  return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+  const features = [{
+    icon: <Target className="w-5 h-5" />,
+    title: "SFDR Classification",
+    description: "Intelligent Article 6/8/9 classification with 94% accuracy"
+  }, {
+    icon: <Shield className="w-5 h-5" />,
+    title: "Compliance Validation",
+    description: "Real-time regulatory compliance checking and validation"
+  }, {
+    icon: <FileCheck className="w-5 h-5" />,
+    title: "Document Analysis",
+    description: "AI-powered document review and compliance gap analysis"
+  }, {
+    icon: <Brain className="w-5 h-5" />,
+    title: "PAI Analysis",
+    description: "Principal Adverse Impact indicators analysis and reporting"
+  }];
+  return <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <motion.div initial={{
+        opacity: 0,
+        y: 20
+      }} whileInView={{
+        opacity: 1,
+        y: 0
+      }} viewport={{
+        once: true
+      }} transition={{
+        duration: 0.6
+      }} className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="relative">
               <Bot className="w-12 h-12 text-primary" />
-              <motion.div
-                className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-              />
+              <motion.div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full" animate={{
+              scale: [1, 1.2, 1]
+            }} transition={{
+              repeat: Infinity,
+              duration: 2
+            }} />
             </div>
             <div>
               <h2 className="text-4xl font-bold text-gray-900">
@@ -74,7 +61,7 @@ const NexusAgentSection = () => {
             </div>
           </div>
           
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-gray-600 max-w-3xl mx-auto mb-8 text-base">
             Your AI-powered guide to sustainable finance disclosures. Sophia breaks down complex 
             SFDR requirements into actionable steps, ensuring compliant and accurate reporting.
           </p>
@@ -97,14 +84,18 @@ const NexusAgentSection = () => {
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
+          {features.map((feature, index) => <motion.div key={index} initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.6,
+          delay: index * 0.1
+        }}>
               <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
@@ -118,18 +109,22 @@ const NexusAgentSection = () => {
                   <p className="text-gray-600 text-sm">{feature.description}</p>
                 </CardContent>
               </Card>
-            </motion.div>
-          ))}
+            </motion.div>)}
         </div>
 
         {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center"
-        >
+        <motion.div initial={{
+        opacity: 0,
+        y: 20
+      }} whileInView={{
+        opacity: 1,
+        y: 0
+      }} viewport={{
+        once: true
+      }} transition={{
+        duration: 0.6,
+        delay: 0.4
+      }} className="text-center">
           <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
             <CardContent className="py-12">
               <div className="flex items-center justify-center gap-2 mb-4">
@@ -169,8 +164,6 @@ const NexusAgentSection = () => {
           </Card>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default NexusAgentSection;

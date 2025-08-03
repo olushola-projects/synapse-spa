@@ -29,7 +29,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
       letterSpacing: '-0.02em',
       lineHeight: '1.1',
       textShadow: '0 1px 2px rgba(37, 99, 235, 0.1)'
-    }} className="text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight text-blue-600 mb-6 font-medium lg:text-7xl py-[30px]">
+    }} className="sm:text-5xl md:text-6xl tracking-tight leading-tight text-blue-600 mb-6 font-medium lg:text-7xl py-[41px] text-3xl">
         Transform
         <br />
         Your Expertise
@@ -40,7 +40,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
       </h1>
 
       {/* Enhanced subtitle with reduced sizing and width */}
-      <p className="mt-6 text-sm md:text-base max-w-2xl leading-relaxed text-black font-light lg:text-base text-left">
+      <p className="mt-6 text-sm md:text-base max-w-2xl leading-relaxed text-black font-light lg:text-base text-left my-0">
         Join a global network of GRC professionals leveraging AI agents
         <br />
         for compliance excellence. Access exclusive testing of future
