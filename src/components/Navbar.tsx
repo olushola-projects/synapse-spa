@@ -52,7 +52,7 @@ const Navbar = () => {
       ease: [0.23, 1, 0.32, 1]
     }} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-xl border-b border-border/30 shadow-lg' : 'bg-white/80 backdrop-blur-md border-b border-border/20'}`}>
         <div className='w-full max-w-7xl mx-auto'>
-          <div className='flex items-center justify-between h-16 pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8'>
+          <div className="flex items-center justify-between h-16 pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8 py-0">
             {/* Logo Section - Replica from Footer */}
             <motion.div initial={{
             opacity: 0,
