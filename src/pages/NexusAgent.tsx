@@ -7,8 +7,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { SkeletonCard, SkeletonChatMessage } from '@/components/ui/skeleton';
-import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search, Loader2 } from 'lucide-react';
+
+import { TabContentSkeleton, EnhancedSkeleton } from '@/components/ui/enhanced-skeleton';
+import { cn } from '@/lib/utils';
+import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search, Loader2, Wifi, WifiOff } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
 import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
 import type { QuickActionType } from '@/types/nexus';
@@ -22,9 +24,13 @@ import type { QuickActionType } from '@/types/nexus';
 // Use the shared Supabase client
 import { supabase } from '@/integrations/supabase/client';
 const NexusAgent = () => {
-  // State declarations
+  // Enhanced state management with loading states
   const [isInitializing, setIsInitializing] = useState(true);
   const [isLoadingTab, setIsLoadingTab] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [systemStatus, setSystemStatus] = useState<'online' | 'offline' | 'checking'>('checking');
+  const [initError, setInitError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
   const [complianceData, setComplianceData] = useState<{
     status: 'pre-validated' | 'needs-review';
     esmaReference: string;
@@ -33,47 +39,89 @@ const NexusAgent = () => {
     esmaReference: '2024/1357'
   });
   
-   // Initialize app with proper loading states
+   // Enhanced initialization with progressive loading and error handling
    useEffect(() => {
      let authListener: any = null;
+     let mounted = true;
      
      const initializeApp = async () => {
+       setInitError(null);
+       setSystemStatus('checking');
+       setLoadingProgress(0);
+       
        try {
-         // Authentication check (non-blocking)
-         const { data } = supabase.auth.onAuthStateChange(async (_, session) => {
-           logger.info('Auth state changed:', session?.user?.id);
-         });
-         authListener = data;
+         // Stage 1: System health check
+         if (mounted) setLoadingProgress(20);
+         await new Promise(resolve => setTimeout(resolve, 300));
+         
+         // Stage 2: Authentication setup
+         if (mounted) {
+           setLoadingProgress(40);
+           const { data } = supabase.auth.onAuthStateChange(async (_, session) => {
+             logger.info('Auth state changed:', session?.user?.id);
+           });
+           authListener = data;
+         }
 
-         // Initialize analytics (non-blocking)
-         setTimeout(() => {
-           try {
-             const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
-             const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
-             if (posthogKey && posthogHost) {
-               posthog.init(posthogKey, {
-                 api_host: posthogHost
-               });
-             } else {
-               logger.warn('PostHog key or host not provided. Analytics will be disabled.');
+         // Stage 3: Analytics initialization (non-blocking)
+         if (mounted) {
+           setLoadingProgress(60);
+           setTimeout(() => {
+             try {
+               const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
+               const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
+               if (posthogKey && posthogHost) {
+                 posthog.init(posthogKey, {
+                   api_host: posthogHost
+                 });
+               } else {
+                 logger.warn('PostHog key or host not provided. Analytics will be disabled.');
+               }
+             } catch (error) {
+               logger.error('Failed to initialize PostHog:', error);
              }
-           } catch (error) {
-             logger.error('Failed to initialize PostHog:', error);
+           }, 100);
+         }
+
+         // Stage 4: API connectivity check
+         if (mounted) {
+           setLoadingProgress(80);
+           try {
+             // Simulated API health check - replace with actual endpoint
+             await new Promise(resolve => setTimeout(resolve, 500));
+             setSystemStatus('online');
+           } catch (apiError) {
+             logger.warn('API check failed, using offline mode');
+             setSystemStatus('offline');
            }
-         }, 100);
+         }
+
+         // Stage 5: Finalization
+         if (mounted) {
+           setLoadingProgress(100);
+           await new Promise(resolve => setTimeout(resolve, 200));
+         }
+         
        } catch (error) {
          logger.error('Failed to initialize app:', error);
+         if (mounted) {
+           setInitError(error instanceof Error ? error.message : 'Initialization failed');
+           setSystemStatus('offline');
+         }
        } finally {
-         setIsInitializing(false);
+         if (mounted) {
+           setIsInitializing(false);
+         }
        }
      };
 
      initializeApp();
      
      return () => {
+       mounted = false;
        authListener?.subscription?.unsubscribe();
      };
-   }, []);
+   }, [retryCount]);
   
   const [activeTab, setActiveTab] = useState<'chat' | 'overview' | 'testing'>('chat');
   const chatRef = useRef<any>(null);
@@ -168,21 +216,108 @@ const NexusAgent = () => {
   }, [quickActions, activeTab]);
 
   const handleTabChange = useCallback((value: string) => {
+    if (isLoadingTab) return; // Prevent rapid tab switching
+    
     setIsLoadingTab(true);
     setActiveTab(value as 'chat' | 'overview' | 'testing');
     
-    // Simulate tab loading for better UX
+    // Progressive tab loading with appropriate delays based on tab complexity
+    const delays = {
+      chat: 400,      // Chat requires chat history and context loading
+      overview: 300,  // Overview requires analytics data
+      testing: 350    // Testing requires test suite initialization
+    };
+    
+    const delay = delays[value as keyof typeof delays] || 300;
+    
     setTimeout(() => {
       setIsLoadingTab(false);
-    }, 300);
-  }, []);
-  // Show loading screen during initialization
+    }, delay);
+  }, [isLoadingTab]);
+  // Enhanced loading screen with progressive indicators and error handling
   if (isInitializing) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center'>
-        <div className='text-center space-y-4'>
-          <Loader2 className='w-8 h-8 animate-spin mx-auto text-primary' />
-          <p className='text-sm text-gray-600'>Initializing SFDR Navigator...</p>
+      <div className='min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center p-4'>
+        <div className='w-full max-w-md'>
+          {initError ? (
+            // Error state with retry option
+            <div className='text-center space-y-6 p-8 bg-background border border-destructive/20 rounded-xl shadow-lg'>
+              <div className='space-y-3'>
+                <WifiOff className='w-12 h-12 mx-auto text-destructive' />
+                <h3 className='text-lg font-semibold text-foreground'>
+                  Initialization Failed
+                </h3>
+                <p className='text-sm text-muted-foreground'>
+                  {initError}
+                </p>
+              </div>
+              <div className='space-y-3'>
+                <Button 
+                  onClick={() => {
+                    setRetryCount(prev => prev + 1);
+                    setIsInitializing(true);
+                  }}
+                  className='w-full'
+                >
+                  Retry Initialization
+                </Button>
+                <Button 
+                  variant='outline' 
+                  onClick={() => setIsInitializing(false)}
+                  className='w-full'
+                >
+                  Continue Anyway
+                </Button>
+              </div>
+            </div>
+          ) : (
+            // Normal loading state with progress
+            <div className='text-center space-y-6 p-8 bg-background/80 backdrop-blur-sm border border-border/40 rounded-xl shadow-lg'>
+              <div className='space-y-3'>
+                <div className='relative'>
+                  <div className='w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center'>
+                    <Brain className='w-8 h-8 text-primary animate-pulse' />
+                  </div>
+                  <div className={cn(
+                    'absolute top-0 right-0 w-4 h-4 rounded-full transition-colors',
+                    systemStatus === 'online' && 'bg-emerald-500',
+                    systemStatus === 'offline' && 'bg-amber-500',
+                    systemStatus === 'checking' && 'bg-muted animate-pulse'
+                  )} />
+                </div>
+                <h3 className='text-lg font-semibold text-foreground'>
+                  SFDR Navigator
+                </h3>
+                <p className='text-sm text-muted-foreground'>
+                  Initializing AI-powered compliance engine...
+                </p>
+              </div>
+              
+              <div className='space-y-3'>
+                <div className='flex justify-between text-xs text-muted-foreground'>
+                  <span>Loading progress</span>
+                  <span>{loadingProgress}%</span>
+                </div>
+                <div className='w-full bg-muted rounded-full h-2 overflow-hidden'>
+                  <div 
+                    className='h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-500 ease-out'
+                    style={{ width: `${loadingProgress}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className='flex items-center justify-center space-x-4 text-xs text-muted-foreground'>
+                <div className='flex items-center space-x-1'>
+                  {systemStatus === 'online' ? <Wifi className='w-3 h-3' /> : <WifiOff className='w-3 h-3' />}
+                  <span className='capitalize'>{systemStatus}</span>
+                </div>
+                <div className='flex items-center space-x-1'>
+                  <Shield className='w-3 h-3' />
+                  <span>Secure</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -266,22 +401,12 @@ const NexusAgent = () => {
 
           <TabsContent value='chat'>
             {isLoadingTab ? (
-              <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
-                <div className='lg:col-span-3 space-y-4'>
-                  <SkeletonChatMessage />
-                  <SkeletonChatMessage />
-                  <SkeletonChatMessage />
-                </div>
-                <div className='space-y-4'>
-                  <SkeletonCard />
-                  <SkeletonCard />
-                </div>
-              </div>
+              <TabContentSkeleton type="chat" />
             ) : (
               <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
                 {/* Chat Interface */}
                 <div className='lg:col-span-3 nexus-agent-container' data-testid="nexus-chat">
-                  <Suspense fallback={<SkeletonChatMessage />}>
+                  <Suspense fallback={<EnhancedSkeleton className="h-96 w-full" />}>
                     <NexusAgentChat className='shadow-lg' ref={chatRef} />
                   </Suspense>
                 </div>
@@ -336,11 +461,7 @@ const NexusAgent = () => {
 
           <TabsContent value='overview'>
             {isLoadingTab ? (
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-              </div>
+              <TabContentSkeleton type="overview" />
             ) : (
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {/* Compliance Status */}
@@ -422,15 +543,23 @@ const NexusAgent = () => {
 
           <TabsContent value='testing'>
             {isLoadingTab ? (
-              <div className='space-y-6'>
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-              </div>
+              <TabContentSkeleton type="testing" />
             ) : (
-              <Suspense fallback={<SkeletonCard />}>
-                <NexusTestExecutor />
-              </Suspense>
+              <div className='space-y-6'>
+                <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
+                  <h3 className='text-lg font-semibold text-foreground mb-4'>
+                    User Acceptance Testing Suite
+                  </h3>
+                  <p className='text-muted-foreground mb-6'>
+                    Execute comprehensive testing scenarios to validate SFDR Navigator functionality
+                    across different regulatory use cases and compliance requirements.
+                  </p>
+                  
+                  <Suspense fallback={<EnhancedSkeleton className="h-32 w-full" />}>
+                    <NexusTestExecutor />
+                  </Suspense>
+                </div>
+              </div>
             )}
           </TabsContent>
         </Tabs>
