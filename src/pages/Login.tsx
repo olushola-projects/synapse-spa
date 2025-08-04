@@ -78,19 +78,19 @@ const Login = () => {
         <div className='relative z-10 flex flex-col justify-center px-12 xl:px-16 text-white'>
           <div className='mb-8'>
             <Link to='/' className='inline-block'>
-              <h1 className="tracking-tight mb-2 text-white font-semibold text-9xl">Synapses</h1>
+              <h1 className="tracking-tight mb-2 font-semibold text-9xl text-white">Synapses</h1>
             </Link>
-            <div className="w-32 h-1 bg-white/60 rounded-full"></div>
+            <div className="w-52 h-1.5 rounded-full bg-white"></div>
           </div>
           
-          <h2 className="leading-tight mb-6 text-shadow-md text-7xl font-normal">
+          <h2 className="leading-tight mb-6 text-shadow-md text-7xl font-normal text-white">
             Welcome to the
             <span className='block text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100'>
               Future of GRC
             </span>
           </h2>
           
-          <p className="text-white/80 leading-relaxed mb-8 max-w-md text-lg font-medium">
+          <p className="leading-relaxed mb-8 max-w-md text-lg font-medium text-white">
             Leverage AI-driven insights to transform your governance, risk, and compliance operations.
           </p>
           
