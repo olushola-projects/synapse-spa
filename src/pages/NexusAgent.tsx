@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import posthog from 'posthog-js';
 import { logger } from '@/utils/logger';
@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search } from 'lucide-react';
+import { SkeletonCard, SkeletonChatMessage } from '@/components/ui/skeleton';
+import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search, Loader2 } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
 import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
 import type { QuickActionType } from '@/types/nexus';
@@ -22,6 +23,8 @@ import type { QuickActionType } from '@/types/nexus';
 import { supabase } from '@/integrations/supabase/client';
 const NexusAgent = () => {
   // State declarations
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [isLoadingTab, setIsLoadingTab] = useState(false);
   const [complianceData, setComplianceData] = useState<{
     status: 'pre-validated' | 'needs-review';
     esmaReference: string;
@@ -29,32 +32,49 @@ const NexusAgent = () => {
     status: 'pre-validated',
     esmaReference: '2024/1357'
   });
-  useEffect(() => {
-    // Authentication check
-    const {
-      data: authListener
-    } = supabase.auth.onAuthStateChange(async (_, session) => {
-      logger.info('Auth state changed:', session?.user?.id);
-    });
+  
+   // Initialize app with proper loading states
+   useEffect(() => {
+     let authListener: any = null;
+     
+     const initializeApp = async () => {
+       try {
+         // Authentication check (non-blocking)
+         const { data } = supabase.auth.onAuthStateChange(async (_, session) => {
+           logger.info('Auth state changed:', session?.user?.id);
+         });
+         authListener = data;
 
-    // Initialize analytics
-    try {
-      const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
-      const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
-      if (posthogKey && posthogHost) {
-        posthog.init(posthogKey, {
-          api_host: posthogHost
-        });
-      } else {
-        logger.warn('PostHog key or host not provided. Analytics will be disabled.');
-      }
-    } catch (error) {
-      logger.error('Failed to initialize PostHog:', error);
-    }
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, []);
+         // Initialize analytics (non-blocking)
+         setTimeout(() => {
+           try {
+             const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
+             const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
+             if (posthogKey && posthogHost) {
+               posthog.init(posthogKey, {
+                 api_host: posthogHost
+               });
+             } else {
+               logger.warn('PostHog key or host not provided. Analytics will be disabled.');
+             }
+           } catch (error) {
+             logger.error('Failed to initialize PostHog:', error);
+           }
+         }, 100);
+       } catch (error) {
+         logger.error('Failed to initialize app:', error);
+       } finally {
+         setIsInitializing(false);
+       }
+     };
+
+     initializeApp();
+     
+     return () => {
+       authListener?.subscription?.unsubscribe();
+     };
+   }, []);
+  
   const [activeTab, setActiveTab] = useState<'chat' | 'overview' | 'testing'>('chat');
   const chatRef = useRef<any>(null);
 
@@ -123,7 +143,10 @@ const NexusAgent = () => {
   }], []);
   const handleQuickAction = useCallback((actionType: QuickActionType) => {
     // Switch to chat mode if not already active
-    setActiveTab('chat');
+    if (activeTab !== 'chat') {
+      setIsLoadingTab(true);
+      setActiveTab('chat');
+    }
 
     // Find the action details
     const action = quickActions.find(a => a.type === actionType);
@@ -139,8 +162,32 @@ const NexusAgent = () => {
         ...prev,
         status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
       }));
-    }, 100);
-  }, [quickActions]);
+      
+      setIsLoadingTab(false);
+    }, 150);
+  }, [quickActions, activeTab]);
+
+  const handleTabChange = useCallback((value: string) => {
+    setIsLoadingTab(true);
+    setActiveTab(value as 'chat' | 'overview' | 'testing');
+    
+    // Simulate tab loading for better UX
+    setTimeout(() => {
+      setIsLoadingTab(false);
+    }, 300);
+  }, []);
+  // Show loading screen during initialization
+  if (isInitializing) {
+    return (
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center'>
+        <div className='text-center space-y-4'>
+          <Loader2 className='w-8 h-8 animate-spin mx-auto text-primary' />
+          <p className='text-sm text-gray-600'>Initializing SFDR Navigator...</p>
+        </div>
+      </div>
+    );
+  }
+
   return <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
       {/* Enhanced Header with Navigation */}
       <header className='bg-white shadow-sm border-b'>
@@ -189,195 +236,202 @@ const NexusAgent = () => {
 
       {/* Main Content */}
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
-        <Tabs value={activeTab} onValueChange={value => setActiveTab(value as 'chat' | 'overview' | 'testing')}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList className='grid w-full grid-cols-3 mb-6'>
-            <TabsTrigger value='chat' className='flex items-center space-x-2'>
-              <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="Sophia" className="w-4 h-4 rounded-full object-cover" />
+            <TabsTrigger value='chat' className='flex items-center space-x-2' disabled={isLoadingTab}>
+              {isLoadingTab && activeTab === 'chat' ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <img src="/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png" alt="Sophia" className="w-4 h-4 rounded-full object-cover" />
+              )}
               <span>Chat</span>
             </TabsTrigger>
-            <TabsTrigger value='overview' className='flex items-center space-x-2'>
-              <BarChart3 className='w-4 h-4' />
+            <TabsTrigger value='overview' className='flex items-center space-x-2' disabled={isLoadingTab}>
+              {isLoadingTab && activeTab === 'overview' ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <BarChart3 className='w-4 h-4' />
+              )}
               <span>Compliance Overview</span>
             </TabsTrigger>
-            <TabsTrigger value='testing' className='flex items-center space-x-2'>
-              <Target className='w-4 h-4' />
+            <TabsTrigger value='testing' className='flex items-center space-x-2' disabled={isLoadingTab}>
+              {isLoadingTab && activeTab === 'testing' ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Target className='w-4 h-4' />
+              )}
               <span>UAT Testing</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value='chat'>
-            <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
-              {/* Chat Interface */}
-              <div className='lg:col-span-3 nexus-agent-container' data-testid="nexus-chat">
-                <NexusAgentChat className='shadow-lg' ref={chatRef} />
+            {isLoadingTab ? (
+              <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
+                <div className='lg:col-span-3 space-y-4'>
+                  <SkeletonChatMessage />
+                  <SkeletonChatMessage />
+                  <SkeletonChatMessage />
+                </div>
+                <div className='space-y-4'>
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
               </div>
+            ) : (
+              <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
+                {/* Chat Interface */}
+                <div className='lg:col-span-3 nexus-agent-container' data-testid="nexus-chat">
+                  <Suspense fallback={<SkeletonChatMessage />}>
+                    <NexusAgentChat className='shadow-lg' ref={chatRef} />
+                  </Suspense>
+                </div>
 
-              {/* Quick Actions Sidebar */}
-              <div className='space-y-4'>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className='text-lg flex items-center'>
-                      <FileText className='w-5 h-5 mr-2' />
-                      Quick Actions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className='space-y-3'>
-                    <Button 
-                      variant='outline' 
-                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
-                      onClick={() => handleQuickAction('upload-document')} 
-                      data-testid="quick-action-upload"
-                    >
-                      <FileText className='w-4 h-4 mr-2' />
-                      Upload Document
-                    </Button>
-                    <Button 
-                      variant='outline' 
-                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
-                      onClick={() => handleQuickAction('check-compliance')} 
-                      data-testid="quick-action-compliance"
-                    >
-                      <Shield className='w-4 h-4 mr-2' />
-                      Check Compliance
-                    </Button>
-                    <Button 
-                      variant='outline' 
-                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
-                      onClick={() => handleQuickAction('article-classification')} 
-                      data-testid="quick-action-classification"
-                    >
-                      <Target className='w-4 h-4 mr-2' />
-                      Article Classification
-                    </Button>
-                    <Button 
-                      variant='outline' 
-                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
-                      onClick={() => handleQuickAction('pai-analysis')} 
-                      data-testid="quick-action-pai"
-                    >
-                      <Brain className='w-4 h-4 mr-2' />
-                      PAI Analysis
-                    </Button>
-                    <Button 
-                      variant='outline' 
-                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
-                      onClick={() => handleQuickAction('taxonomy-check')} 
-                      data-testid="quick-action-taxonomy"
-                    >
-                      <Search className='w-4 h-4 mr-2' />
-                      Taxonomy Check
-                    </Button>
-                    <Button 
-                      variant='outline' 
-                      className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-colors' 
-                      onClick={() => handleQuickAction('generate-report')} 
-                      data-testid="quick-action-report"
-                    >
-                      <BarChart3 className='w-4 h-4 mr-2' />
-                      Generate Report
-                    </Button>
-                  </CardContent>
-                </Card>
+                {/* Quick Actions Sidebar */}
+                <div className='space-y-4'>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className='text-lg flex items-center'>
+                        <FileText className='w-5 h-5 mr-2' />
+                        Quick Actions
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className='space-y-3'>
+                      {quickActions.slice(0, 6).map((action) => (
+                        <Button 
+                          key={action.type}
+                          variant='outline' 
+                          className='w-full justify-start hover:bg-primary/5 hover:border-primary/20 transition-all duration-200 hover:scale-[1.02]' 
+                          onClick={() => handleQuickAction(action.type)} 
+                          data-testid={`quick-action-${action.type}`}
+                          disabled={isLoadingTab}
+                        >
+                          {action.icon}
+                          <span className='ml-2'>{action.label}</span>
+                        </Button>
+                      ))}
+                    </CardContent>
+                  </Card>
 
-                {/* Industry Metrics */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className='text-lg'>Industry Metrics</CardTitle>
-                  </CardHeader>
-                  <CardContent className='space-y-4'>
-                    {industryMetrics.map((metric, index) => <div key={index} className='flex items-center justify-between'>
-                        <div className='flex items-center space-x-2'>
-                          {metric.icon}
-                          <span className='text-sm font-medium'>{metric.label}</span>
+                  {/* Industry Metrics */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className='text-lg'>Industry Metrics</CardTitle>
+                    </CardHeader>
+                    <CardContent className='space-y-4'>
+                      {industryMetrics.map((metric, index) => (
+                        <div key={index} className='flex items-center justify-between'>
+                          <div className='flex items-center space-x-2'>
+                            {metric.icon}
+                            <span className='text-sm font-medium'>{metric.label}</span>
+                          </div>
+                          <span className='text-sm font-bold'>{metric.value}</span>
                         </div>
-                        <span className='text-sm font-bold'>{metric.value}</span>
-                      </div>)}
-                  </CardContent>
-                </Card>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
-            </div>
+            )}
           </TabsContent>
 
           <TabsContent value='overview'>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-              {/* Compliance Status */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className='flex items-center'>
-                    <Shield className='w-5 h-5 mr-2 text-green-600' />
-                    Compliance Status
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className='space-y-3'>
-                    <div className='flex justify-between items-center'>
-                      <span className='text-sm'>Overall Score</span>
-                      <span className='font-bold text-green-600'>94%</span>
+            {isLoadingTab ? (
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            ) : (
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                {/* Compliance Status */}
+                <Card className='hover:shadow-lg transition-shadow duration-200'>
+                  <CardHeader>
+                    <CardTitle className='flex items-center'>
+                      <Shield className='w-5 h-5 mr-2 text-green-600' />
+                      Compliance Status
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className='space-y-3'>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-sm'>Overall Score</span>
+                        <span className='font-bold text-green-600'>94%</span>
+                      </div>
+                      <Progress value={94} className='h-2' />
+                      <div className='text-xs text-gray-500'>
+                        Last updated: {new Date().toLocaleDateString()}
+                      </div>
                     </div>
-                    <Progress value={94} className='h-2' />
-                    <div className='text-xs text-gray-500'>
-                      Last updated: {new Date().toLocaleDateString()}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
 
-              {/* Recent Activity */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className='flex items-center'>
-                    <Clock className='w-5 h-5 mr-2 text-blue-600' />
-                    Recent Activity
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className='space-y-3'>
-                    <div className='flex items-center space-x-2'>
-                      <CheckCircle className='w-4 h-4 text-green-600' />
-                      <span className='text-sm'>Document processed</span>
+                {/* Recent Activity */}
+                <Card className='hover:shadow-lg transition-shadow duration-200'>
+                  <CardHeader>
+                    <CardTitle className='flex items-center'>
+                      <Clock className='w-5 h-5 mr-2 text-blue-600' />
+                      Recent Activity
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className='space-y-3'>
+                      <div className='flex items-center space-x-2'>
+                        <CheckCircle className='w-4 h-4 text-green-600' />
+                        <span className='text-sm'>Document processed</span>
+                      </div>
+                      <div className='flex items-center space-x-2'>
+                        <AlertTriangle className='w-4 h-4 text-yellow-600' />
+                        <span className='text-sm'>Review pending</span>
+                      </div>
+                      <div className='flex items-center space-x-2'>
+                        <CheckCircle className='w-4 h-4 text-green-600' />
+                        <span className='text-sm'>Report generated</span>
+                      </div>
                     </div>
-                    <div className='flex items-center space-x-2'>
-                      <AlertTriangle className='w-4 h-4 text-yellow-600' />
-                      <span className='text-sm'>Review pending</span>
-                    </div>
-                    <div className='flex items-center space-x-2'>
-                      <CheckCircle className='w-4 h-4 text-green-600' />
-                      <span className='text-sm'>Report generated</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
 
-              {/* System Health */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className='flex items-center'>
-                    <Activity className='w-5 h-5 mr-2 text-orange-600' />
-                    System Health
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className='space-y-3'>
-                    <div className='flex justify-between items-center'>
-                      <span className='text-sm'>API Response</span>
-                      <span className='font-bold text-green-600'>3.2s</span>
+                {/* System Health */}
+                <Card className='hover:shadow-lg transition-shadow duration-200'>
+                  <CardHeader>
+                    <CardTitle className='flex items-center'>
+                      <Activity className='w-5 h-5 mr-2 text-orange-600' />
+                      System Health
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className='space-y-3'>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-sm'>API Response</span>
+                        <span className='font-bold text-green-600'>3.2s</span>
+                      </div>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-sm'>Uptime</span>
+                        <span className='font-bold text-green-600'>99.9%</span>
+                      </div>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-sm'>Active Users</span>
+                        <span className='font-bold text-purple-600'>500+</span>
+                      </div>
                     </div>
-                    <div className='flex justify-between items-center'>
-                      <span className='text-sm'>Uptime</span>
-                      <span className='font-bold text-green-600'>99.9%</span>
-                    </div>
-                    <div className='flex justify-between items-center'>
-                      <span className='text-sm'>Active Users</span>
-                      <span className='font-bold text-purple-600'>500+</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value='testing'>
-            <NexusTestExecutor />
+            {isLoadingTab ? (
+              <div className='space-y-6'>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            ) : (
+              <Suspense fallback={<SkeletonCard />}>
+                <NexusTestExecutor />
+              </Suspense>
+            )}
           </TabsContent>
         </Tabs>
       </main>
