@@ -1,0 +1,143 @@
+# Dependabot configuration for automated dependency updates
+# See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'UTC'
+    # Security updates are applied immediately
+    open-pull-requests-limit: 10
+    reviewers:
+      - 'synapses-team'
+      - 'security-team'
+    assignees:
+      - 'tech-lead'
+    labels:
+      - 'dependencies'
+      - 'automated'
+    # Group updates by type
+    groups:
+      # Group all production dependencies
+      production-dependencies:
+        patterns:
+          - '*'
+        exclude-patterns:
+          - '@types/*'
+          - '*eslint*'
+          - '*prettier*'
+          - '*vitest*'
+          - '*jest*'
+          - '*cypress*'
+          - '*playwright*'
+          - '*testing-library*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+      # Group development dependencies
+      development-dependencies:
+        patterns:
+          - '@types/*'
+          - '*eslint*'
+          - '*prettier*'
+          - '*vitest*'
+          - '*jest*'
+          - '*cypress*'
+          - '*playwright*'
+          - '*testing-library*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+    # Commit message configuration
+    commit-message:
+      prefix: 'deps'
+      prefix-development: 'deps-dev'
+      include: 'scope'
+
+    # Ignore specific dependencies that require manual updates
+    ignore:
+      # Ignore major version updates for critical dependencies
+      - dependency-name: 'react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-dom'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@supabase/supabase-js'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'vite'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+
+    # Allow automatic merging for patch updates of trusted packages
+    allow:
+      - dependency-type: 'direct:production'
+        update-type: 'security'
+      - dependency-type: 'direct:development'
+        update-type: 'security'
+      - dependency-type: 'indirect'
+        update-type: 'security'
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '10:00'
+      timezone: 'UTC'
+    reviewers:
+      - 'devops-team'
+      - 'security-team'
+    assignees:
+      - 'tech-lead'
+    labels:
+      - 'github-actions'
+      - 'dependencies'
+      - 'automated'
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+
+    # Group GitHub Actions updates
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Enable version updates for Docker (if using)
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'UTC'
+    reviewers:
+      - 'devops-team'
+      - 'security-team'
+    assignees:
+      - 'tech-lead'
+    labels:
+      - 'docker'
+      - 'dependencies'
+      - 'automated'
+    commit-message:
+      prefix: 'docker'
+      include: 'scope'
+# Security and compliance considerations:
+# 1. All dependency updates are reviewed by security team
+# 2. Security updates are prioritized and can be auto-merged
+# 3. Major version updates require manual review
+# 4. Critical dependencies are protected from automatic major updates
+# 5. Updates are grouped to reduce PR noise
+# 6. Commit messages follow conventional commit format

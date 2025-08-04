@@ -147,7 +147,7 @@ const Index = () => {
   return (
     <div className='min-h-screen relative'>
       <SeoHead
-        title='Synapse - GRC Intelligence Platform'
+        title='SFDR Navigator - CDD Agent'
         description='Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future.'
         ogImage='/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png'
         structuredData={{

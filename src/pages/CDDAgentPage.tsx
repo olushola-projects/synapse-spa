@@ -14,6 +14,7 @@ import {
   PerformanceBenchmarks,
   CustomerSuccessStories
 } from '@/components/CDDComponents';
+import { NexusAgentChat } from '@/components/NexusAgentChat';
 import {
   Shield,
   Brain,
@@ -387,14 +388,8 @@ const CDDAgentPage: React.FC = () => {
                 </p>
 
                 <div className='relative max-w-4xl mx-auto'>
-                  <div className='aspect-video bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl border-2 border-dashed border-blue-300 flex items-center justify-center'>
-                    <div className='text-center space-y-4'>
-                      <Play className='w-16 h-16 text-blue-500 mx-auto' />
-                      <p className='text-lg font-medium'>Interactive Demo Coming Soon</p>
-                      <Button size='lg' className='bg-gradient-to-r from-blue-600 to-indigo-600'>
-                        Request Early Access
-                      </Button>
-                    </div>
+                  <div className='bg-background rounded-2xl border shadow-lg'>
+                    <NexusAgentChat apiEndpoint='/api/cdd-agent' className='h-[600px]' />
                   </div>
                 </div>
               </div>

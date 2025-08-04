@@ -1,0 +1,203 @@
+# Code Owners for Synapses GRC Platform
+# This file defines who owns and reviews different parts of the codebase
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global fallback - all files require review from core team
+* @synapses-team
+
+# ============================================================================
+# SECURITY & COMPLIANCE
+# ============================================================================
+
+# Security-related files require security team review
+/SECURITY.md @security-team @compliance-team
+/COMPLIANCE.md @compliance-team @security-team
+/.github/workflows/ @security-team @devops-team
+/scripts/security/ @security-team
+/docs/security/ @security-team @compliance-team
+
+# Environment and secrets
+.env* @security-team @devops-team
+*.key @security-team
+*.pem @security-team
+*.crt @security-team
+
+# ============================================================================
+# INFRASTRUCTURE & DEPLOYMENT
+# ============================================================================
+
+# Infrastructure as Code
+Dockerfile @devops-team @security-team
+docker-compose*.yml @devops-team
+/infrastructure/ @devops-team @security-team
+/terraform/ @devops-team @security-team
+/k8s/ @devops-team @security-team
+
+# CI/CD and automation
+/.github/workflows/ @devops-team @security-team
+/scripts/ @devops-team
+/.husky/ @devops-team
+
+# ============================================================================
+# CONFIGURATION & DEPENDENCIES
+# ============================================================================
+
+# Package management and dependencies
+package.json @tech-lead @security-team
+package-lock.json @tech-lead @security-team
+yarn.lock @tech-lead @security-team
+pnpm-lock.yaml @tech-lead @security-team
+
+# Configuration files
+*.config.js @tech-lead
+*.config.ts @tech-lead
+*.config.json @tech-lead
+tsconfig*.json @tech-lead
+vite.config.* @tech-lead
+vitest.config.* @tech-lead
+eslint.config.* @tech-lead
+prettier.config.* @tech-lead
+tailwind.config.* @tech-lead
+postcss.config.* @tech-lead
+
+# ============================================================================
+# DATABASE & DATA
+# ============================================================================
+
+# Database schemas and migrations
+/supabase/ @backend-team @security-team
+/database/ @backend-team @security-team
+/migrations/ @backend-team @security-team
+/seeds/ @backend-team
+
+# Data models and types
+/src/types/ @backend-team @frontend-team
+/src/lib/database/ @backend-team @security-team
+/src/lib/supabase/ @backend-team @security-team
+
+# ============================================================================
+# AUTHENTICATION & AUTHORIZATION
+# ============================================================================
+
+# Auth-related code
+/src/lib/auth/ @security-team @backend-team
+/src/components/auth/ @security-team @frontend-team
+/src/hooks/auth/ @security-team @frontend-team
+/src/pages/auth/ @security-team @frontend-team
+
+# ============================================================================
+# API & BACKEND
+# ============================================================================
+
+# API routes and server-side logic
+/src/api/ @backend-team @security-team
+/src/lib/api/ @backend-team
+/src/server/ @backend-team @security-team
+/src/middleware/ @backend-team @security-team
+
+# ============================================================================
+# FRONTEND & UI
+# ============================================================================
+
+# Core UI components
+/src/components/ui/ @frontend-team @design-team
+/src/components/common/ @frontend-team
+
+# Feature-specific components
+/src/components/dashboard/ @frontend-team @product-team
+/src/components/compliance/ @frontend-team @compliance-team
+/src/components/reports/ @frontend-team @product-team
+
+# Styling and themes
+/src/styles/ @frontend-team @design-team
+/src/assets/ @frontend-team @design-team
+
+# ============================================================================
+# BUSINESS LOGIC & FEATURES
+# ============================================================================
+
+# GRC and compliance logic
+/src/lib/compliance/ @compliance-team @backend-team
+/src/lib/grc/ @compliance-team @backend-team
+/src/lib/audit/ @compliance-team @backend-team
+
+# AI and automation
+/src/lib/ai/ @ai-team @security-team
+/src/lib/automation/ @ai-team @backend-team
+/src/components/ai/ @ai-team @frontend-team
+
+# Reporting and analytics
+/src/lib/reporting/ @backend-team @product-team
+/src/lib/analytics/ @backend-team @product-team
+/src/components/reports/ @frontend-team @product-team
+
+# ============================================================================
+# TESTING
+# ============================================================================
+
+# Test configuration
+/vitest.config.* @tech-lead
+/jest.config.* @tech-lead
+/cypress.config.* @tech-lead
+/playwright.config.* @tech-lead
+
+# Test files
+**/*.test.* @synapses-team
+**/*.spec.* @synapses-team
+/tests/ @synapses-team
+/e2e/ @synapses-team
+
+# ============================================================================
+# DOCUMENTATION
+# ============================================================================
+
+# Core documentation
+README.md @tech-lead @product-team
+CHANGELOG.md @tech-lead
+CONTRIBUTING.md @tech-lead
+LICENSE @legal-team
+
+# Technical documentation
+/docs/ @tech-lead @product-team
+/docs/api/ @backend-team
+/docs/security/ @security-team
+/docs/compliance/ @compliance-team
+/docs/deployment/ @devops-team
+
+# Engineering best practices
+/ENGINEERING_BEST_PRACTICES.md @tech-lead @security-team
+/IMPLEMENTATION_CHECKLIST.md @tech-lead
+/TECHNICAL_SETUP.md @tech-lead @devops-team
+
+# ============================================================================
+# SPECIAL FILES
+# ============================================================================
+
+# GitHub configuration
+/.github/ @tech-lead @devops-team
+/.github/ISSUE_TEMPLATE/ @product-team @tech-lead
+/.github/pull_request_template.md @tech-lead
+/.github/CODEOWNERS @tech-lead
+
+# Root configuration files
+/.gitignore @tech-lead
+/.gitattributes @tech-lead
+/.editorconfig @tech-lead
+/.nvmrc @tech-lead
+
+# ============================================================================
+# TEAM DEFINITIONS
+# ============================================================================
+# Note: Replace these with actual GitHub usernames/teams when setting up
+# 
+# @synapses-team - All core team members
+# @tech-lead - Technical lead(s)
+# @security-team - Security specialists
+# @compliance-team - Compliance and GRC experts
+# @devops-team - DevOps and infrastructure team
+# @backend-team - Backend developers
+# @frontend-team - Frontend developers
+# @ai-team - AI/ML specialists
+# @design-team - UI/UX designers
+# @product-team - Product managers
+# @legal-team - Legal and compliance officers

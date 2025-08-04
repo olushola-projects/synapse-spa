@@ -1,0 +1,24 @@
+{
+  "watch": ["src/**/*.ts", "src/**/*.js", ".env"],
+  "ext": "ts,js,json",
+  "ignore": [
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "node_modules/**/*",
+    "dist/**/*",
+    "logs/**/*",
+    "uploads/**/*",
+    "temp/**/*"
+  ],
+  "exec": "tsx src/server.ts",
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG": "true",
+    "VERBOSE_LOGGING": "true"
+  },
+  "delay": 1000,
+  "restartable": "rs",
+  "colours": true,
+  "legacyWatch": false,
+  "verbose": true
+}

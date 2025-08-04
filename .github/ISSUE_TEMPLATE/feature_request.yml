@@ -1,0 +1,183 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: '[FEATURE]: '
+labels: ['enhancement', 'needs-triage']
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please provide as much detail as possible to help us understand your request.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have checked the roadmap and documentation
+          required: true
+        - label: This feature aligns with the project's goals
+          required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - Critical (Blocking major functionality)
+        - High (Important for user experience)
+        - Medium (Nice to have)
+        - Low (Future consideration)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: Which area does this feature belong to?
+      options:
+        - Authentication & Authorization
+        - Dashboard & UI
+        - API & Backend
+        - Data Management
+        - Reporting & Analytics
+        - Security & Privacy
+        - Compliance & GRC
+        - AI & Automation
+        - Integration
+        - Performance
+        - Developer Experience
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: Describe the problem or pain point this feature would address...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature you'd like to see implemented
+      placeholder: Describe your proposed solution in detail...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: Describe any alternative solutions you've considered...
+
+  - type: textarea
+    id: user_stories
+    attributes:
+      label: User Stories
+      description: Provide user stories that describe how this feature would be used
+      placeholder: |
+        As a [user type], I want [functionality] so that [benefit].
+
+        Example:
+        As a compliance officer, I want to generate automated reports so that I can save time on manual reporting.
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What criteria must be met for this feature to be considered complete?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+
+  - type: checkboxes
+    id: security_considerations
+    attributes:
+      label: Security Considerations
+      description: Does this feature have security implications?
+      options:
+        - label: This feature handles sensitive data
+        - label: This feature affects authentication/authorization
+        - label: This feature requires encryption
+        - label: This feature affects audit trails
+        - label: This feature requires security review
+
+  - type: checkboxes
+    id: compliance_considerations
+    attributes:
+      label: Compliance Considerations
+      description: Does this feature affect compliance requirements?
+      options:
+        - label: This feature affects GDPR compliance
+        - label: This feature affects SOC 2 controls
+        - label: This feature affects data retention policies
+        - label: This feature affects audit requirements
+        - label: This feature requires compliance review
+
+  - type: dropdown
+    id: effort
+    attributes:
+      label: Estimated Effort
+      description: What's your estimate of the implementation effort?
+      options:
+        - Small (1-3 days)
+        - Medium (1-2 weeks)
+        - Large (2-4 weeks)
+        - Extra Large (1+ months)
+        - Unknown
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Are there any dependencies or prerequisites for this feature?
+      placeholder: List any dependencies, external services, or other features this depends on...
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups/Wireframes
+      description: If applicable, provide mockups, wireframes, or visual examples
+      placeholder: Drag and drop images here or provide links to design files...
+
+  - type: textarea
+    id: technical_notes
+    attributes:
+      label: Technical Notes
+      description: Any technical considerations or implementation notes
+      placeholder: Technical details, API considerations, database changes, etc...
+
+  - type: checkboxes
+    id: breaking_changes
+    attributes:
+      label: Breaking Changes
+      description: Could this feature introduce breaking changes?
+      options:
+        - label: This feature may introduce breaking changes
+        - label: This feature requires database migrations
+        - label: This feature affects existing APIs
+        - label: This feature requires configuration changes
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Add any other context, links, or references
+      placeholder: |
+        - Links to related documentation
+        - References to similar features in other tools
+        - Business justification
+        - User feedback or requests

@@ -47,7 +47,11 @@
   "homepage": "https://github.com/your-org/sfdr-navigator#readme",
   "config": {
     "testEnvironment": "http://localhost:8080",
-    "browsers": ["chromium", "firefox", "webkit"],
+    "browsers": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
     "timeout": 30000,
     "retries": 2
   }
