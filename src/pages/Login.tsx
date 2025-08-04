@@ -69,7 +69,7 @@ const Login = () => {
       {/* Left Side - Branding with Gradient */}
       <div className='hidden lg:flex lg:flex-1 relative overflow-hidden'>
         <div className='absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent'></div>
-        <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent'></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent px-[30px]"></div>
         
         {/* Animated background elements */}
         <div className='absolute top-1/4 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse-soft'></div>
@@ -119,17 +119,17 @@ const Login = () => {
           </div>
 
           {/* Form Card */}
-          <div className='bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-2xl p-8 space-y-8'>
+          <div className="bg-card/80 backdrop-blur-sm border border-border/50 shadow-2xl p-8 space-y-8 rounded-2xl py-[162px] px-[72px] mx-0 my-0">
             <div className='text-center space-y-2'>
-              <h3 className='text-2xl font-bold text-foreground'>Sign In</h3>
-              <p className='text-muted-foreground'>
+              <h3 className="text-foreground font-semibold text-4xl">Sign In</h3>
+              <p className="text-muted-foreground font-extralight">
                 Enter your email and password to sign in!
               </p>
             </div>
 
             {/* Social Login Buttons */}
             <div className='space-y-3'>
-              <Button variant='outline' type='button' className='w-full h-12 flex items-center justify-center gap-3 border-2 hover:bg-muted/50 transition-all duration-200 hover:scale-[1.02]' onClick={() => loginWithGoogle()}>
+              <Button variant='outline' type='button' onClick={() => loginWithGoogle()} className="w-full h-12 flex items-center justify-center gap-3 border-2 hover:bg-muted/50 transition-all duration-200 hover:scale-[1.02] text-lg font-medium text-center">
                 <svg width='20' height='20' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
                   <path d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z' fill='#4285F4' />
                   <path d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z' fill='#34A853' />
@@ -139,7 +139,7 @@ const Login = () => {
                 Sign in with Google
               </Button>
               
-              <Button variant='outline' type='button' className='w-full h-12 flex items-center justify-center gap-3 border-2 hover:bg-muted/50 transition-all duration-200 hover:scale-[1.02]' onClick={() => loginWithLinkedIn()}>
+              <Button variant='outline' type='button' onClick={() => loginWithLinkedIn()} className="w-full h-12 flex items-center justify-center gap-3 border-2 hover:bg-muted/50 transition-all duration-200 hover:scale-[1.02] text-lg font-medium text-center">
                 <Linkedin size={20} className='text-blue-600' />
                 Sign in with LinkedIn
               </Button>
@@ -214,7 +214,7 @@ const Login = () => {
 
             {/* Sign up link */}
             <div className='text-center pt-4'>
-              <p className='text-sm text-muted-foreground'>
+              <p className="text-muted-foreground text-base">
                 Not registered yet?{' '}
                 <Link to='/register' className='font-medium text-primary hover:underline'>
                   Create an account
