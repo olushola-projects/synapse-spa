@@ -206,7 +206,7 @@ const Login = () => {
                     <span className='text-sm'>{loginError}</span>
                   </div>}
 
-                <Button type='submit' className='w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 transition-all duration-200 hover:scale-[1.02]' disabled={isSubmitting}>
+                <Button type='submit' disabled={isSubmitting} className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
                   {isSubmitting ? 'Signing in...' : 'Sign In'}
                 </Button>
               </form>
