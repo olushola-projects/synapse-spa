@@ -55,10 +55,10 @@ const ForgotPassword = () => {
       setResetSuccess(false);
 
       // Sanitize inputs to prevent XSS
-      const sanitizedEmail = SecurityUtils.sanitizeInput(values.email);
+      SecurityUtils.sanitizeInput(values.email);
 
       // Generate CSRF token for form submission
-      const csrfToken = SecurityUtils.generateCsrfToken();
+      SecurityUtils.generateCsrfToken();
 
       // In a real application, this would call an API endpoint
       // For demo purposes, we'll simulate a successful request

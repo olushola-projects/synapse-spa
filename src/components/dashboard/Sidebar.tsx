@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
             <div className='flex items-center'>
               <div>
                 <Avatar>
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user.avatar_url || '/placeholder.svg'} alt={user.name} />
                   <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
               </div>

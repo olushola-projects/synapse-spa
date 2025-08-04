@@ -164,7 +164,7 @@ const IndustryPerspectivesSection = () => {
           </div>
 
           {/* Carousel Controls */}
-          <div className='flex justify-center gap-4 mt-8'>
+          <div className="flex justify-center gap-4 mt-8">
             <button
               onClick={() => scrollTo(selectedIndex - 1)}
               className='p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors'

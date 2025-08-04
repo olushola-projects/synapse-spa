@@ -24,7 +24,7 @@ const formSchema = ValidationUtils.schemas.register;
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register, loginWithGoogle, loginWithLinkedIn, isAuthenticated } = useAuth();
+  const { register, loginWithGoogle, loginWithLinkedIn } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [passwordStrength, setPasswordStrength] = useState<{ isValid: boolean; errors: string[] }>({
@@ -65,7 +65,7 @@ const Register = () => {
       const sanitizedEmail = SecurityUtils.sanitizeInput(values.email);
 
       // Generate CSRF token for form submission
-      const csrfToken = SecurityUtils.generateCsrfToken();
+      SecurityUtils.generateCsrfToken();
 
       await register({ email: sanitizedEmail, password: values.password, name: sanitizedName });
       navigate('/dashboard');

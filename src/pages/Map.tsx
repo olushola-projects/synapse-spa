@@ -7,15 +7,8 @@ import {
   Grid,
   List,
   ChevronDown,
-  Sparkles,
-  TrendingUp,
   BarChart3,
-  Users,
-  Target,
-  Zap,
-  ArrowRight,
   Star,
-  Eye,
   Heart,
   ExternalLink,
   MapPin,
@@ -383,7 +376,7 @@ export default function Map() {
               <Card className='bg-gradient-to-br from-green-50 to-green-100 border-green-200'>
                 <CardContent className='p-4 text-center'>
                   <div className='flex items-center justify-center gap-2 mb-2'>
-                    <Target className='h-5 w-5 text-green-600' />
+                    <BarChart3 className='h-5 w-5 text-green-600' />
                     <span className='text-2xl font-bold text-green-700'>
                       {analytics.topUseCases.length}
                     </span>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -39,7 +39,7 @@ const Blog = () => {
 
       return matchesCategory && matchesSearch;
     })
-    .filter(post => post.id !== featuredPost.id); // Remove featured post from regular listing
+    .filter(post => post.id !== featuredPost?.id); // Remove featured post from regular listing
 
   // Get categories for tabs
   const categories = ['all', ...Array.from(new Set(blogPosts.map(post => post.category)))];
@@ -97,7 +97,7 @@ const Blog = () => {
           <div className='max-w-6xl mx-auto'>
             <div className='flex flex-col gap-8'>
               {/* Featured Post */}
-              {!searchTerm && activeTab === 'all' && (
+              {!searchTerm && activeTab === 'all' && featuredPost && (
                 <div className='bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-gray-100 overflow-hidden transform hover:shadow-md transition-all duration-300'>
                   <div className='md:flex'>
                     <div className='md:w-1/2'>
@@ -112,41 +112,41 @@ const Blog = () => {
                         <Badge className='bg-blue-100 text-blue-800 hover:bg-blue-200'>
                           Featured
                         </Badge>
-                        <Badge variant='outline'>{featuredPost.category}</Badge>
+                        <Badge variant='outline'>{featuredPost?.category}</Badge>
                         <span className='flex items-center gap-1'>
-                          <CalendarIcon className='w-3 h-3' /> {featuredPost.date}
+                          <CalendarIcon className='w-3 h-3' /> {featuredPost?.date}
                         </span>
                         <span className='flex items-center gap-1'>
-                          <Clock className='w-3 h-3' /> {featuredPost.readTime}
+                          <Clock className='w-3 h-3' /> {featuredPost?.readTime}
                         </span>
                       </div>
 
-                      <h2 className='text-2xl font-bold mb-3'>{featuredPost.title}</h2>
-                      <p className='text-gray-600 mb-6'>{featuredPost.excerpt}</p>
+                      <h2 className='text-2xl font-bold mb-3'>{featuredPost?.title}</h2>
+                      <p className='text-gray-600 mb-6'>{featuredPost?.excerpt}</p>
 
                       <div className='flex items-center mt-auto'>
                         <Avatar className='h-10 w-10 mr-3'>
                           <AvatarImage
-                            src={featuredPost.author.avatar}
-                            alt={featuredPost.author.name}
+                            src={featuredPost?.author.avatar}
+                            alt={featuredPost?.author.name}
                           />
                           <AvatarFallback>
-                            {featuredPost.author.name
+                            {featuredPost?.author.name
                               .split(' ')
                               .map(n => n[0])
                               .join('')}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className='font-medium'>{featuredPost.author.name}</p>
-                          <p className='text-sm text-gray-500'>{featuredPost.author.role}</p>
+                          <p className='font-medium'>{featuredPost?.author.name}</p>
+                          <p className='text-sm text-gray-500'>{featuredPost?.author.role}</p>
                         </div>
 
                         <Button
                           variant='outline'
                           size='sm'
                           className='ml-auto'
-                          onClick={() => handleReadArticle(featuredPost.id)}
+                          onClick={() => featuredPost && handleReadArticle(featuredPost.id)}
                         >
                           Read More
                         </Button>

@@ -16,6 +16,16 @@ interface InvitationRequest {
   message: string;
 }
 
+// Simple HTML escaping function for email templates
+function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -26,14 +36,23 @@ const handler = async (req: Request): Promise<Response> => {
     const { senderName, senderEmail, inviteeEmail, adminEmail, message }: InvitationRequest =
       await req.json();
 
-    console.log(`Processing invitation from ${senderEmail} to ${inviteeEmail}`);
+    // Sanitize all input data
+    const sanitizedData = {
+      senderName: escapeHtml(senderName.trim()),
+      senderEmail: escapeHtml(senderEmail.trim()),
+      inviteeEmail: escapeHtml(inviteeEmail.trim()),
+      adminEmail: escapeHtml(adminEmail.trim()),
+      message: escapeHtml(message.trim())
+    };
+
+    console.log(`Processing invitation from ${sanitizedData.senderEmail} to ${sanitizedData.inviteeEmail}`);
 
     // Send invitation to invitee
     const inviteeEmailResponse = await resend.emails.send({
       from: 'Synapses <invites@joinsynapses.com>',
-      to: [inviteeEmail],
-      subject: `${senderName} invited you to join Synapses`,
-      html: getInviteeEmailHTML(senderName, message)
+      to: [sanitizedData.inviteeEmail],
+      subject: `${sanitizedData.senderName} invited you to join Synapses`,
+      html: getInviteeEmailHTML(sanitizedData.senderName, sanitizedData.message)
     });
 
     console.log('Invitation email sent:', inviteeEmailResponse);
@@ -41,9 +60,9 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation to sender
     const senderEmailResponse = await resend.emails.send({
       from: 'Synapses <invites@joinsynapses.com>',
-      to: [senderEmail],
+      to: [sanitizedData.senderEmail],
       subject: "You've sent an invitation to Synapses",
-      html: getSenderConfirmationHTML(senderName, inviteeEmail)
+      html: getSenderConfirmationHTML(sanitizedData.senderName, sanitizedData.inviteeEmail)
     });
 
     console.log('Sender confirmation email sent:', senderEmailResponse);
@@ -51,9 +70,9 @@ const handler = async (req: Request): Promise<Response> => {
     // Send notification to admin
     const adminEmailResponse = await resend.emails.send({
       from: 'Synapses <invites@joinsynapses.com>',
-      to: [adminEmail],
+      to: [sanitizedData.adminEmail],
       subject: 'New Synapses Invitation',
-      html: getAdminNotificationHTML(senderName, senderEmail, inviteeEmail, message)
+      html: getAdminNotificationHTML(sanitizedData.senderName, sanitizedData.senderEmail, sanitizedData.inviteeEmail, sanitizedData.message)
     });
 
     console.log('Admin notification email sent:', adminEmailResponse);

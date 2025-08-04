@@ -65,7 +65,10 @@ export class CustomError extends Error {
 
     if (options.originalError) {
       this.stack = options.originalError.stack;
-      this.cause = options.originalError;
+      // Note: cause property may not be available in all environments
+      if ('cause' in this) {
+        (this as any).cause = options.originalError;
+      }
     }
   }
 

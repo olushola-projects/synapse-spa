@@ -15,8 +15,8 @@ import {
   AreaChart,
   ComposedChart
 } from 'recharts';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 
 // Sample data for the charts
 const euData = [

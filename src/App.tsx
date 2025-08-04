@@ -19,6 +19,8 @@ import NexusAgent from './pages/NexusAgent';
 import AgentsPage from './pages/AgentsPage';
 import CDDAgentPage from './pages/CDDAgentPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ErrorBoundary from './components/ErrorBoundary';
+import SFDRGem from './pages/SFDRGem';
 
 // Legal pages
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
@@ -50,12 +52,13 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Routes>
             <Route path='/' element={<Index />} />
             <Route path='/partners' element={<Partners />} />
@@ -126,6 +129,22 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path='/sfdr-navigator'
+              element={
+                <ProtectedRoute>
+                  <NexusAgent />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/sfdr-gem'
+              element={
+                <ProtectedRoute>
+                  <SFDRGem />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Legal Routes */}
             <Route path='/legal/privacy' element={<PrivacyPolicy />} />
@@ -150,10 +169,11 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path='*' element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

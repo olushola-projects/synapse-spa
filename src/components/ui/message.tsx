@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
+import DOMPurify from 'dompurify';
 
 export interface MessageContent {
   type: 'text' | 'code' | 'table' | 'chart' | 'file' | 'compliance-report';
@@ -156,7 +157,13 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
               <span className='font-semibold'>Data Analysis</span>
             </div>
             <div className='overflow-x-auto'>
-              <div dangerouslySetInnerHTML={{ __html: content.content }} />
+              <div dangerouslySetInnerHTML={{ 
+                __html: DOMPurify.sanitize(content.content, {
+                  ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'div', 'span'],
+                  ALLOWED_ATTR: ['class', 'style'],
+                  ALLOW_DATA_ATTR: false
+                })
+              }} />
             </div>
           </Card>
         );

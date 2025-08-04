@@ -106,7 +106,7 @@ const Profile = () => {
             <Card>
               <CardHeader className='text-center'>
                 <Avatar className='w-24 h-24 mx-auto mb-4'>
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user.avatar_url || '/placeholder.svg'} alt={user.name} />
                   <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <CardTitle>{user.name}</CardTitle>
