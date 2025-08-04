@@ -141,7 +141,7 @@ const NexusAgentSection = () => {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" className="group">
-                  <Link to="/nexus-agent">
+                  <Link to="/nexus-agent" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
                     <Bot className="w-5 h-5 mr-2" />
                     Try SFDR Navigator
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
