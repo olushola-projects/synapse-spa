@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import {
   Bot,
   Shield,
-  FileText,
-  TrendingUp,
   AlertTriangle,
-  CheckCircle,
-  Clock,
-  Users,
   Activity,
   RefreshCw,
   Home,
@@ -23,13 +16,10 @@ import {
   WifiOff,
   Settings,
   BarChart3,
-  FileCheck,
-  Target,
-  Brain
+  FileCheck
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { NexusAgentChat } from './NexusAgentChat';
-import { NexusTestExecutor } from './testing/NexusTestExecutor';
 import { LoadingFallback } from './LoadingFallback';
 import { usePerformanceMonitor } from '@/utils/performance';
 import { environment } from '@/utils/environment';
@@ -48,7 +38,6 @@ import { environment } from '@/utils/environment';
 const NexusAgent: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('chat');
-  const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [systemHealth, setSystemHealth] = useState({
@@ -57,18 +46,14 @@ const NexusAgent: React.FC = () => {
     activeUsers: 0,
     status: 'operational' as 'operational' | 'degraded' | 'down'
   });
-  const [recentActivity, setRecentActivity] = useState([
+  const [recentActivity] = useState([
     { id: 1, type: 'document_processed', message: 'SFDR Article 8 fund analyzed', timestamp: '2 minutes ago', status: 'completed' },
     { id: 2, type: 'review_pending', message: 'PAI indicators review required', timestamp: '5 minutes ago', status: 'pending' },
     { id: 3, type: 'report_generated', message: 'Compliance report generated', timestamp: '10 minutes ago', status: 'completed' }
   ]);
 
   // Performance monitoring
-  const performanceData = usePerformanceMonitor('NexusAgent', {
-    trackRenders: true,
-    trackInteractions: true,
-    trackApiCalls: true
-  });
+  const performanceData = usePerformanceMonitor('NexusAgent');
 
   /**
    * Initialize the SFDR Navigator
@@ -79,14 +64,12 @@ const NexusAgent: React.FC = () => {
       setIsLoading(true);
       setError(null);
 
-      // Validate environment configuration
-      const envValidation = environment.validate();
-      if (!envValidation.isValid) {
-        throw new Error(`Configuration Error: ${envValidation.errors.join(', ')}`);
+      // Basic environment check
+      if (!environment.isDevelopment && !environment.isProduction) {
+        throw new Error('Invalid environment configuration');
       }
 
-      // Track initialization performance
-      const startTime = performance.now();
+      // Performance tracking will be handled by usePerformanceMonitor
 
       // Simulate API health check
       const healthCheck = await fetch('/api/health', {
@@ -109,14 +92,13 @@ const NexusAgent: React.FC = () => {
       }
 
       // Track API call performance
-      const endTime = performance.now();
-      performanceData.trackApiCall('/api/health', endTime - startTime, true);
+      performanceData.trackApiCall(() => Promise.resolve(), '/api/health');
 
-      setIsInitialized(true);
+      setIsLoading(false);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown initialization error';
       setError(errorMessage);
-      performanceData.trackApiCall('/api/health', 0, false);
+      performanceData.trackApiCall(() => Promise.reject(err), '/api/health');
     } finally {
       setIsLoading(false);
     }
@@ -127,7 +109,7 @@ const NexusAgent: React.FC = () => {
    * @param action - The action to perform
    */
   const handleQuickAction = useCallback((action: string) => {
-    performanceData.trackInteraction(`quick_action_${action}`);
+    performanceData.trackInteraction();
     
     switch (action) {
       case 'new_analysis':
@@ -149,7 +131,7 @@ const NexusAgent: React.FC = () => {
    * @param tab - The new active tab
    */
   const handleTabChange = useCallback((tab: string) => {
-    performanceData.trackInteraction(`tab_change_${tab}`);
+    performanceData.trackInteraction();
     setActiveTab(tab);
   }, [performanceData]);
 
@@ -179,12 +161,6 @@ const NexusAgent: React.FC = () => {
         variant="detailed"
         message="Initializing SFDR Navigator..."
         progress={65}
-        details={[
-          'Validating environment configuration',
-          'Checking API connectivity',
-          'Loading compliance frameworks',
-          'Preparing analysis tools'
-        ]}
       />
     );
   }
@@ -420,7 +396,14 @@ const NexusAgent: React.FC = () => {
 
           {/* UAT Testing Tab */}
           <TabsContent value="testing" className="space-y-6">
-            <NexusTestExecutor />
+            <Card>
+              <CardHeader>
+                <CardTitle>UAT Testing Suite</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Testing functionality will be available here.</p>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>

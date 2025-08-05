@@ -20,7 +20,7 @@ export const lazyLoad = <T extends ComponentType<any>>(
   const LazyComponent = lazy(importFunc);
 
   return (props: any) => (
-    <React.Suspense fallback={fallback ? <fallback /> : <div>Loading...</div>}>
+    <React.Suspense fallback={fallback ? React.createElement(fallback) : <div>Loading...</div>}>
       <LazyComponent {...props} />
     </React.Suspense>
   );
@@ -130,14 +130,17 @@ export const monitorWebVitals = () => {
     new PerformanceObserver(entryList => {
       const entries = entryList.getEntries();
       const lastEntry = entries[entries.length - 1];
-      console.log('LCP:', lastEntry.startTime);
+      if (lastEntry) {
+        console.log('LCP:', lastEntry.startTime);
+      }
     }).observe({ entryTypes: ['largest-contentful-paint'] });
 
     // Monitor First Input Delay (FID)
     new PerformanceObserver(entryList => {
       const entries = entryList.getEntries();
       entries.forEach(entry => {
-        console.log('FID:', entry.processingStart - entry.startTime);
+        const processingStart = (entry as any).processingStart || entry.startTime;
+        console.log('FID:', processingStart - entry.startTime);
       });
     }).observe({ entryTypes: ['first-input'] });
 
@@ -145,8 +148,10 @@ export const monitorWebVitals = () => {
     new PerformanceObserver(entryList => {
       let clsValue = 0;
       entryList.getEntries().forEach(entry => {
-        if (!entry.hadRecentInput) {
-          clsValue += entry.value;
+        const hadRecentInput = (entry as any).hadRecentInput || false;
+        const value = (entry as any).value || entry.duration;
+        if (!hadRecentInput) {
+          clsValue += value;
         }
       });
       console.log('CLS:', clsValue);
@@ -337,7 +342,7 @@ export const useLazyLoad = (threshold: number = 0.1) => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasLoaded) {
+        if (entry && entry.isIntersecting && !hasLoaded) {
           setIsVisible(true);
           setHasLoaded(true);
           observer.unobserve(element);

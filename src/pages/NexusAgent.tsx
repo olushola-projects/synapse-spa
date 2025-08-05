@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo, Suspense } from 'rea
 import { Link } from 'react-router-dom';
 import posthog from 'posthog-js';
 import { logger } from '@/utils/logger';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

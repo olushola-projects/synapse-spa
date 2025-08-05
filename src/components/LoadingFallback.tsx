@@ -1,5 +1,4 @@
-import React from 'react';
-import { Loader2, Brain, Shield, AlertCircle } from 'lucide-react';
+import { Loader2, Brain, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -201,10 +200,8 @@ export function LoadingFallback({
  * Page-level loading component for full-page loading states
  */
 export function PageLoadingFallback({ 
-  title = 'SFDR Navigator',
   subtitle = 'Loading compliance interface...' 
 }: { 
-  title?: string; 
   subtitle?: string; 
 }) {
   return (
