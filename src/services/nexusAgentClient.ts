@@ -1,5 +1,5 @@
-// Nexus Agent Client - Updated with user's API configuration
-import { NEXUS_CONFIG } from '../config/nexus';
+// Nexus Agent Client - Using Supabase Edge Functions
+import { supabase } from '@/integrations/supabase/client';
 
 export interface NexusClassificationRequest {
   productName: string;
@@ -32,55 +32,59 @@ export interface NexusHealthResponse {
 }
 
 export class NexusAgentClient {
-  private baseUrl: string;
-  private apiKey?: string;
-  private timeout: number;
-
-  constructor(config?: { baseUrl?: string; apiKey?: string; timeout?: number }) {
-    this.baseUrl = config?.baseUrl || NEXUS_CONFIG.apiBaseUrl;
-    this.apiKey = config?.apiKey;
-    this.timeout = config?.timeout || NEXUS_CONFIG.timeout;
-  }
-
   async classifyProduct(
     productData: NexusClassificationRequest
   ): Promise<NexusClassificationResponse> {
-    const response = await fetch(`${this.baseUrl}/api/classify`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.apiKey}`
-      },
-      body: JSON.stringify(productData),
-      signal: AbortSignal.timeout(this.timeout)
+    const { data, error } = await supabase.functions.invoke('nexus-classify', {
+      body: productData
     });
 
-    if (!response.ok) {
-      throw new Error(`SFDR API Error: ${response.status}`);
+    if (error) {
+      throw new Error(`SFDR Classification Error: ${error.message}`);
     }
 
-    return response.json();
+    return data;
   }
 
   async getComplianceStatus(): Promise<any> {
-    const response = await fetch(`${this.baseUrl}/api/compliance/status`);
-    return response.json();
+    // Get user's recent compliance assessments
+    const { data, error } = await supabase
+      .from('compliance_assessments')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    if (error) {
+      throw new Error(`Compliance status error: ${error.message}`);
+    }
+
+    return {
+      recentAssessments: data,
+      status: 'operational',
+      lastUpdated: new Date().toISOString()
+    };
   }
 
   async getAnalytics(filters: Record<string, any> = {}): Promise<any> {
-    const params = new URLSearchParams(filters);
-    const response = await fetch(`${this.baseUrl}/api/analytics?${params}`);
-    return response.json();
+    const { data, error } = await supabase.functions.invoke('nexus-analytics', {
+      body: filters
+    });
+
+    if (error) {
+      throw new Error(`Analytics error: ${error.message}`);
+    }
+
+    return data;
   }
 
   async getHealth(): Promise<NexusHealthResponse> {
-    const response = await fetch(`${this.baseUrl}/api/health`);
+    const { data, error } = await supabase.functions.invoke('nexus-health');
 
-    if (!response.ok) {
-      throw new Error(`Health check failed: ${response.status}`);
+    if (error) {
+      throw new Error(`Health check failed: ${error.message}`);
     }
 
-    return response.json();
+    return data;
   }
 
   // Legacy method for backwards compatibility

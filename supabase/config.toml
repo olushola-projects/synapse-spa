@@ -19,6 +19,15 @@ port = 54324
 port = 54325
 
 [functions]
+[functions.nexus-classify]
+verify_jwt = true
+
+[functions.nexus-analytics]
+verify_jwt = true
+
+[functions.nexus-health]
+verify_jwt = false
+
 [functions.send-invitation]
 verify_jwt = true
 

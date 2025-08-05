@@ -242,10 +242,10 @@ export const usePerformanceMonitor = (componentName: string) => {
   }, []);
 
   // Track API response times
-  const trackApiCall = useCallback(async <T>(
-    apiCall: () => Promise<T>,
-    apiName: string,
-  ): Promise<T> => {
+  const trackApiCall = useCallback(async (
+    apiCall: () => Promise<any>,
+    apiName: string
+  ): Promise<any> => {
     const startTime = performance.now();
     
     try {
