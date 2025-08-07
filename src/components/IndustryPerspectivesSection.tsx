@@ -55,7 +55,7 @@ const IndustryPerspectivesSection = () => {
     }, 20000); // Slide every 20 seconds (increased from 8s for better readability)
 
     setAutoplayInterval(interval);
-  }, [emblaApi, autoplayInterval]);
+  }, [emblaApi]); // Fixed: removed autoplayInterval from dependencies
 
   // Handle carousel initialization and cleanup
   useEffect(() => {
@@ -73,7 +73,7 @@ const IndustryPerspectivesSection = () => {
         clearInterval(autoplayInterval);
       }
     };
-  }, [emblaApi, startAutoplay, autoplayInterval]);
+  }, [emblaApi, startAutoplay]); // Fixed: removed autoplayInterval from dependencies
 
   // Pause autoplay when hovering over carousel
   const handleMouseEnter = () => {
