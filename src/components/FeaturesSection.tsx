@@ -252,19 +252,42 @@ const FeaturesSection = () => {
 
             {/* Enhanced navigation */}
             <div className='flex justify-center items-center mt-12 gap-6'>
-              <Button onClick={() => api?.scrollPrev()} variant='outline' size='icon' className='h-12 w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'>
+              <Button 
+                onClick={() => api?.scrollPrev()} 
+                variant='outline' 
+                size='icon-lg' 
+                className='border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
+                aria-label='Navigate to previous feature'
+              >
                 <ChevronLeft className='h-5 w-5' />
-                <span className='sr-only'>Previous feature</span>
               </Button>
 
               {/* Progress indicator */}
               <div className='flex items-center gap-2'>
-                {features.map((_, index) => <button key={index} onClick={() => api?.scrollTo(index)} className={cn('w-2 h-2 rounded-full transition-all duration-300', activeFeature === index ? 'bg-primary w-8' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50')} />)}
+                {features.map((_, index) => (
+                  <Button
+                    key={index}
+                    variant='ghost'
+                    size='icon-sm'
+                    onClick={() => api?.scrollTo(index)}
+                    className={cn(
+                      'w-2 h-2 rounded-full p-0 transition-all duration-300',
+                      activeFeature === index ? 'bg-primary w-8 h-2' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                    )}
+                    aria-label={`Go to feature ${index + 1}`}
+                    aria-current={activeFeature === index ? 'true' : 'false'}
+                  />
+                ))}
               </div>
 
-              <Button onClick={() => api?.scrollNext()} variant='outline' size='icon' className='h-12 w-12 rounded-full border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'>
+              <Button 
+                onClick={() => api?.scrollNext()} 
+                variant='outline' 
+                size='icon-lg' 
+                className='border-2 hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg'
+                aria-label='Navigate to next feature'
+              >
                 <ChevronRight className='h-5 w-5' />
-                <span className='sr-only'>Next feature</span>
               </Button>
             </div>
           </Carousel>

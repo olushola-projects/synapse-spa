@@ -1,4 +1,5 @@
 import { Award, Trophy, Medal, Star, Gift, Flag, Target, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const GamificationComponent = () => {
   return (
@@ -104,9 +105,14 @@ const GamificationComponent = () => {
           <div className='mt-3'>
             <div className='bg-gray-50 border border-dashed rounded-md p-3 text-center'>
               <p className='text-sm'>Create compliance challenges with our intuitive builder</p>
-              <button className='mt-2 px-3 py-1 bg-green-500 text-white rounded-md text-xs hover:bg-green-600 transition-colors'>
+              <Button 
+                variant='success' 
+                size='sm' 
+                className='mt-2 text-xs'
+                aria-label='Create new compliance challenge'
+              >
                 Create Challenge
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -126,9 +132,14 @@ const GamificationComponent = () => {
             <span className='text-sm font-medium'>Your Points:</span>
             <span className='ml-2 text-sm bg-purple-100 px-2 py-0.5 rounded-full'>425 pts</span>
           </div>
-          <button className='px-3 py-1 bg-purple-600 text-white rounded-md text-xs hover:bg-purple-700 transition-colors'>
+          <Button 
+            variant='secondary' 
+            size='sm' 
+            className='text-xs'
+            aria-label='View available rewards and redemption options'
+          >
             View Rewards
-          </button>
+          </Button>
         </div>
       </div>
     </div>

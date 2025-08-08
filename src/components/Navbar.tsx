@@ -146,9 +146,16 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <button onClick={toggleMobileMenu} className='lg:hidden p-2 rounded-lg hover:bg-muted/50 transition-colors duration-200'>
-              {mobileMenuOpen ? <X className='h-5 w-5 text-foreground' /> : <Menu className='h-5 w-5 text-foreground' />}
-            </button>
+            <Button 
+              variant='ghost' 
+              size='icon-sm' 
+              onClick={toggleMobileMenu} 
+              className='lg:hidden'
+              aria-label={mobileMenuOpen ? 'Close mobile menu' : 'Open mobile menu'}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
+            </Button>
           </div>
         </div>
 

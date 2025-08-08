@@ -30,22 +30,29 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ user, onLogout }) => {
                 <Search className='h-5 w-5 text-gray-400' />
               </div>
               <input
-                className='block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500'
+                className='block w-full pl-10 pr-3 py-2 border border-input rounded-md text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-colors'
                 placeholder='Search...'
                 type='search'
+                aria-label='Search dashboard'
               />
             </div>
           </div>
         </div>
         <div className='ml-4 flex items-center md:ml-6 space-x-3'>
-          <button
-            type='button'
-            className='p-1 rounded-full text-gray-400 hover:text-gray-500 relative'
-            aria-label='Notifications'
+          <Button
+            variant='ghost'
+            size='icon'
+            className='relative text-muted-foreground hover:text-foreground'
+            aria-label='View notifications'
+            aria-describedby='notification-count'
           >
-            <Bell className='h-6 w-6' />
-            <span className='absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white' />
-          </button>
+            <Bell className='h-5 w-5' />
+            <span 
+              className='absolute -top-1 -right-1 block h-3 w-3 rounded-full bg-destructive ring-2 ring-background'
+              aria-hidden='true'
+            />
+            <span id='notification-count' className='sr-only'>You have unread notifications</span>
+          </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
