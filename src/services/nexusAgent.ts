@@ -14,15 +14,15 @@ import type {
   ClassificationResult
 } from '@/types/nexus';
 
-// Service Configuration - Updated for Supabase Edge Functions
+// Service Configuration - Updated for External API
 const NEXUS_CONFIG = {
-  baseUrl: 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1',
+  baseUrl: 'https://api.joinsynapses.com',
   endpoints: {
-    health: 'nexus-health',
-    validate: 'nexus-classify',
-    classify: 'nexus-classify',
-    chat: 'nexus-classify',
-    capabilities: 'nexus-analytics'
+    health: 'api/health',
+    validate: 'api/classify',
+    classify: 'api/classify',
+    chat: 'api/classify',
+    capabilities: 'api/metrics'
   },
   timeout: 30000,
   retries: 3
@@ -190,13 +190,12 @@ class NexusAgentService {
    * Make HTTP request to Nexus API
    */
   private async makeRequest(method: string, endpoint: string, data?: any): Promise<any> {
-    const url = `${this.baseUrl}${endpoint}`;
+    const url = `${this.baseUrl}/${endpoint}`;
 
     const config: RequestInit = {
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.apiKey}`,
         'User-Agent': 'Synapse-SFDR-Navigator/1.0'
       },
       signal: AbortSignal.timeout(NEXUS_CONFIG.timeout)

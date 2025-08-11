@@ -1,5 +1,5 @@
-// Nexus Agent Client - Using Supabase Edge Functions
-import { supabase } from '@/integrations/supabase/client';
+// Nexus Agent Client - Using External Backend API
+import { backendApiClient } from './backendApiClient';
 
 export interface NexusClassificationRequest {
   productName: string;
@@ -35,56 +35,92 @@ export class NexusAgentClient {
   async classifyProduct(
     productData: NexusClassificationRequest
   ): Promise<NexusClassificationResponse> {
-    const { data, error } = await supabase.functions.invoke('nexus-classify', {
-      body: productData
-    });
+    const response = await backendApiClient.classifyProduct(productData);
 
-    if (error) {
-      throw new Error(`SFDR Classification Error: ${error.message}`);
+    if (response.error) {
+      throw new Error(`SFDR Classification Error: ${response.error}`);
     }
 
-    return data;
+    // Transform backend response to expected format
+    const backendData = response.data;
+    return {
+      classification: backendData?.classification || 'Article 6',
+      complianceScore: Math.round((backendData?.confidence || 0.5) * 100),
+      riskLevel: this.mapConfidenceToRiskLevel(backendData?.confidence || 0.5),
+      recommendations: this.generateRecommendations(backendData?.classification || 'Article 6'),
+      timestamp: new Date().toISOString(),
+      confidence: backendData?.confidence || 0.5,
+      reasoning: `Classified as ${backendData?.classification || 'Article 6'} based on AI analysis`,
+      validation: {
+        isValid: (backendData?.confidence || 0) > 0.7,
+        issues: (backendData?.confidence || 0) < 0.7 ? ['Low confidence classification'] : []
+      }
+    };
+  }
+
+  private mapConfidenceToRiskLevel(confidence: number): string {
+    if (confidence >= 0.8) return 'Low';
+    if (confidence >= 0.6) return 'Medium';
+    return 'High';
+  }
+
+  private generateRecommendations(classification: string): string[] {
+    const recommendations = [
+      'Review fund documentation for accuracy',
+      'Ensure all required disclosures are complete'
+    ];
+
+    switch (classification) {
+      case 'Article 8':
+        recommendations.push('Verify sustainability characteristics are clearly defined');
+        break;
+      case 'Article 9':
+        recommendations.push('Confirm sustainable investment objective is met');
+        break;
+      default:
+        recommendations.push('Consider if fund could qualify for Article 8 or 9');
+    }
+
+    return recommendations;
   }
 
   async getComplianceStatus(): Promise<any> {
-    // Get user's recent compliance assessments
-    const { data, error } = await supabase
-      .from('compliance_assessments')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(10);
+    const response = await backendApiClient.getMetrics();
 
-    if (error) {
-      throw new Error(`Compliance status error: ${error.message}`);
+    if (response.error) {
+      throw new Error(`Compliance status error: ${response.error}`);
     }
 
     return {
-      recentAssessments: data,
+      metrics: response.data,
       status: 'operational',
       lastUpdated: new Date().toISOString()
     };
   }
 
-  async getAnalytics(filters: Record<string, any> = {}): Promise<any> {
-    const { data, error } = await supabase.functions.invoke('nexus-analytics', {
-      body: filters
-    });
+  async getAnalytics(_filters: Record<string, any> = {}): Promise<any> {
+    const response = await backendApiClient.getAnalytics();
 
-    if (error) {
-      throw new Error(`Analytics error: ${error.message}`);
+    if (response.error) {
+      throw new Error(`Analytics error: ${response.error}`);
     }
 
-    return data;
+    return response.data;
   }
 
   async getHealth(): Promise<NexusHealthResponse> {
-    const { data, error } = await supabase.functions.invoke('nexus-health');
+    const response = await backendApiClient.healthCheck();
 
-    if (error) {
-      throw new Error(`Health check failed: ${error.message}`);
+    if (response.error) {
+      throw new Error(`Health check failed: ${response.error}`);
     }
 
-    return data;
+    const healthData = response.data;
+    return {
+      status: healthData?.status === 'healthy' ? 'healthy' : 'degraded',
+      version: healthData?.version || '1.0.0',
+      uptime: healthData?.uptime || 0
+    };
   }
 
   // Legacy method for backwards compatibility

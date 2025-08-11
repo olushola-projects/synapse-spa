@@ -17,7 +17,7 @@ import { TypingIndicator } from '@/components/ui/typing-indicator';
 import { ProcessingStages } from '@/components/ui/processing-stages';
 import { Loader2, AlertCircle, Shield, Settings } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { nexusAgent } from '@/services/nexusAgent';
+import { backendApiClient } from '@/services/backendApiClient';
 import { TIME_CONSTANTS } from '@/utils/constants';
 import { type SFDRClassificationRequest, type NexusValidationResponse, type NexusMessage } from '@/types/nexus';
 
@@ -139,12 +139,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
     } : msg));
   };
 
-  /**
-   * Call the Nexus Agent for SFDR validation
-   */
-  const callNexusAPI = async (request: SFDRClassificationRequest): Promise<NexusValidationResponse> => {
-    return await nexusAgent.validateClassification(request);
-  };
+  // Note: Direct API calls are now handled via backendApiClient
 
   /**
    * Handle message reactions
@@ -367,7 +362,34 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   /**
    * Handle compliance check with real SFDR logic
    */
-  const handleComplianceCheck = async (_message: string): Promise<string> => {
+  const handleComplianceCheck = async (message: string): Promise<string> => {
+    try {
+      // Try to call the real API for compliance checking
+      const response = await backendApiClient.classifyDocument({
+        text: message,
+        document_type: 'compliance_check'
+      });
+
+      if (response.data) {
+        const { classification, confidence, processing_time } = response.data;
+        return `I've analyzed your compliance query and here are the results:
+
+**Classification**: ${classification}
+**Confidence**: ${Math.round(confidence * 100)}%
+**Processing Time**: ${processing_time.toFixed(2)}ms
+
+Based on this analysis, I recommend:
+- ${confidence > 0.8 ? 'This appears to be a strong compliance match' : 'Consider reviewing the compliance requirements more carefully'}
+- Ensure all mandatory disclosures are complete
+- Review PAI indicators and sustainability characteristics
+
+Would you like me to provide more specific guidance on any particular aspect?`;
+      }
+    } catch (error) {
+      console.error('Compliance check API error:', error);
+    }
+
+    // Fallback to canned response
     return `Absolutely. Conducting a comprehensive compliance assessment is essential for robust regulatory positioning. I will systematically verify your fund against the full spectrum of SFDR criteria, including disclosure requirements, PAI considerations, and classification alignment. To provide the most targeted analysis, could you share details about your fund type, current classification status, or any specific compliance areas where you have concerns?`;
   };
 
@@ -414,9 +436,40 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   };
 
   /**
-   * Provide general SFDR guidance
+   * Provide general guidance with context-aware responses using AI
    */
-  const provideGeneralGuidance = async (_message: string): Promise<string> => {
+  const provideGeneralGuidance = async (message: string): Promise<string> => {
+    try {
+      // Try to get an AI-powered response for general questions
+      const response = await backendApiClient.classifyDocument({
+        text: `SFDR question: ${message}`,
+        document_type: 'general_inquiry'
+      });
+
+      if (response.data) {
+        const { classification, confidence } = response.data;
+        
+        // Generate contextual response based on classification
+        let contextualResponse = '';
+        if (classification.toLowerCase().includes('article 8')) {
+          contextualResponse = 'Based on your question, it seems you may be interested in Article 8 funds, which promote environmental or social characteristics. ';
+        } else if (classification.toLowerCase().includes('article 9')) {
+          contextualResponse = 'Your inquiry suggests interest in Article 9 funds, which have sustainable investment as their objective. ';
+        } else if (classification.toLowerCase().includes('article 6')) {
+          contextualResponse = 'It appears your question relates to Article 6 funds, which don\'t promote specific sustainability characteristics. ';
+        }
+
+        return `${contextualResponse}Thank you for reaching out. Drawing from my extensive regulatory advisory background and AI analysis (confidence: ${Math.round(confidence * 100)}%), I notice there are multiple pathways we might explore based on your inquiry. 
+
+SFDR implementation involves understanding both the regulatory framework and your specific business context. I recommend we start by identifying whether you're working with Article 6, 8, or 9 funds, as this fundamentally shapes your disclosure obligations. 
+
+What specific aspect of SFDR compliance would you like to address first?`;
+      }
+    } catch (error) {
+      console.error('General guidance API error:', error);
+    }
+
+    // Fallback to enhanced canned response
     return `Hello. As a senior regulatory consultant with comprehensive expertise in sustainable finance frameworks, I am here to guide you through the intricacies of the SFDR regulatory landscape. The Sustainable Finance Disclosure Regulation is designed to enhance transparency regarding sustainability risks and prevent greenwashing practices, directly supporting the EU Green Deal objectives. Financial products are categorized under Article 6 (no specific sustainability focus), Article 8 (promoting environmental or social characteristics), or Article 9 (sustainable investment objectives). The regulatory framework continues to evolve, with Level 2 requirements having been implemented since 2023. How may I specifically assist with your SFDR requirements today - would you prefer compliance verification or Principal Adverse Impact indicator analysis?`;
   };
 
@@ -449,7 +502,28 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
     });
     setIsLoading(true);
     try {
-      const response = await callNexusAPI(request);
+      // Use the backend API client instead of nexusAgent
+      const backendResponse = await backendApiClient.classifyProduct(request);
+      
+      if (backendResponse.error) {
+        throw new Error(backendResponse.error);
+      }
+      
+      // Transform backend response to expected format
+      const response = {
+        classification: {
+          recommendedArticle: backendResponse.data?.classification || 'Article 6',
+          confidence: backendResponse.data?.confidence || 0.5
+        },
+        complianceScore: Math.round((backendResponse.data?.confidence || 0.5) * 100),
+        issues: backendResponse.data?.confidence && backendResponse.data.confidence < 0.7 ? 
+          [{ message: 'Low confidence classification - please review input data', severity: 'warning' as const }] : [],
+        recommendations: [
+          'Review all required disclosures for completeness',
+          'Ensure PAI indicators are properly documented',
+          'Verify alignment with target article classification'
+        ]
+      } as NexusValidationResponse;
       let responseContent = `**Validation Complete**\n\n`;
       responseContent += `**Classification:** ${response.classification?.recommendedArticle || 'N/A'}\n`;
       responseContent += `**Confidence:** ${((response.classification?.confidence || 0) * 100).toFixed(1)}%\n\n`;
