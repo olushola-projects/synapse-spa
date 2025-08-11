@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -71,34 +72,32 @@ const NexusAgent: React.FC = () => {
 
       // Performance tracking will be handled by usePerformanceMonitor
 
-      // Simulate API health check
-      const healthCheck = await fetch('/api/health', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).catch(() => {
-        // Fallback for development
-        return { ok: true, json: () => Promise.resolve({ status: 'ok', responseTime: 150 }) };
-      });
+      // Check API health using Supabase Edge Function
+      const { data: healthData, error: healthError } = await supabase.functions.invoke('nexus-health');
 
-      if (healthCheck.ok) {
-        const healthData = await healthCheck.json();
+      if (!healthError && healthData) {
         setSystemHealth(prev => ({
           ...prev,
-          apiResponseTime: healthData.responseTime || 150,
+          apiResponseTime: healthData.latency || 150,
+          status: 'operational'
+        }));
+      } else {
+        // Fallback for development
+        setSystemHealth(prev => ({
+          ...prev,
+          apiResponseTime: 150,
           status: 'operational'
         }));
       }
 
       // Track API call performance
-      performanceData.trackApiCall(() => Promise.resolve(), '/api/health');
+      performanceData.trackApiCall(() => Promise.resolve(), 'nexus-health');
 
       setIsLoading(false);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown initialization error';
       setError(errorMessage);
-      performanceData.trackApiCall(() => Promise.reject(err), '/api/health');
+      performanceData.trackApiCall(() => Promise.reject(err), 'nexus-health');
     } finally {
       setIsLoading(false);
     }

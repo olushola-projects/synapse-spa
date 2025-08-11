@@ -280,11 +280,9 @@ const UseCases = () => {
     // In a real implementation, you would send this data to your backend
     // This is a placeholder for actual form submission
     try {
-      // Example API call
-      // await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
+      // Example API call using Supabase Edge Function
+      // await supabase.functions.invoke('contact', {
+      //   body: {
       //     useCaseId: selectedUseCase.id,
       //     email: contactEmail,
       //     message: contactMessage

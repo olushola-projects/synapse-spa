@@ -44,7 +44,7 @@ class FeedbackService {
 
   constructor(config: Partial<FeedbackConfig> = {}) {
     this.config = {
-      apiEndpoint: '/api/feedback',
+      apiEndpoint: 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/feedback',
       enableAnalytics: true,
       enableHotjar: false,
       enableGoogleAnalytics: true,

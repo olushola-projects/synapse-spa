@@ -389,7 +389,7 @@ const CDDAgentPage: React.FC = () => {
 
                 <div className='relative max-w-4xl mx-auto'>
                   <div className='bg-background rounded-2xl border shadow-lg'>
-                    <NexusAgentChat apiEndpoint='/api/cdd-agent' className='h-[600px]' />
+                    <NexusAgentChat apiEndpoint='nexus-classify' className='h-[600px]' />
                   </div>
                 </div>
               </div>

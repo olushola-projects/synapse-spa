@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSFDRClassification } from '@/hooks/useSFDRClassification';
+import { useSFDRClassify, useHealthCheck } from '@/hooks/useSupabaseApi';
 import type { NexusClassificationRequest } from '@/services/nexusAgentClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,8 @@ interface SFDRChatMessage {
 const SFDRChatIntegration = () => {
   const [messages, setMessages] = useState<SFDRChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const { classify, loading, result } = useSFDRClassification();
+  const { classify, loading, data: result } = useSFDRClassify();
+  const { checkHealth } = useHealthCheck();
   const [apiHealth, setApiHealth] = useState<'checking' | 'healthy' | 'error'>('checking');
 
   useEffect(() => {
@@ -40,8 +41,8 @@ const SFDRChatIntegration = () => {
 
   const checkApiHealth = async () => {
     try {
-      // For now, assume healthy - in production, implement proper health check
-      setApiHealth('healthy');
+      const healthStatus = await checkHealth();
+      setApiHealth(healthStatus ? 'healthy' : 'error');
     } catch (error) {
       setApiHealth('error');
       console.error('SFDR API health check failed:', error);

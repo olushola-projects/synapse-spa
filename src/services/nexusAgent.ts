@@ -14,15 +14,15 @@ import type {
   ClassificationResult
 } from '@/types/nexus';
 
-// Service Configuration
+// Service Configuration - Updated for Supabase Edge Functions
 const NEXUS_CONFIG = {
-  baseUrl: 'https://nexus-82zwpw7xt-aas-projects-66c93685.vercel.app',
+  baseUrl: 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1',
   endpoints: {
-    health: '/api/health',
-    validate: '/api/analyze',
-    classify: '/api/classify',
-    chat: '/api/chat',
-    capabilities: '/api/capabilities'
+    health: 'nexus-health',
+    validate: 'nexus-classify',
+    classify: 'nexus-classify',
+    chat: 'nexus-classify',
+    capabilities: 'nexus-analytics'
   },
   timeout: 30000,
   retries: 3

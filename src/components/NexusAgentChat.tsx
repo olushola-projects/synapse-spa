@@ -44,7 +44,7 @@ interface NexusAgentChatProps {
  * Integrates with the SFDR Navigator API for real-time regulatory compliance checking
  */
 export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
-  apiEndpoint: _apiEndpoint = 'https://api.nexus-agent.com/v1/sfdr/validate',
+  apiEndpoint: _apiEndpoint = 'nexus-classify',
   className = ''
 }, ref) => {
   const [messages, setMessages] = useState<ChatMessage[]>([{

@@ -118,9 +118,9 @@ export function getEnvironmentConfig(): EnvironmentConfig {
     ENABLE_ERROR_REPORTING: parseBoolean(env.VITE_ENABLE_ERROR_REPORTING, true),
     ENABLE_DEBUG_MODE: parseBoolean(env.VITE_ENABLE_DEBUG_MODE, env.NODE_ENV === 'development'),
     
-    // API Endpoints
-    API_BASE_URL: env.VITE_API_BASE_URL || '/api',
-    SFDR_API_URL: env.VITE_SFDR_API_URL || '/api/sfdr',
+    // API Endpoints - Using Supabase Edge Functions
+    API_BASE_URL: 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1',
+    SFDR_API_URL: 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/nexus-classify',
     
     // Security
     ENABLE_HTTPS: parseBoolean(env.VITE_ENABLE_HTTPS, env.NODE_ENV === 'production'),
