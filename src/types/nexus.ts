@@ -82,6 +82,8 @@ export interface SFDRClassificationRequest {
   taxonomyAlignment?: TaxonomyAlignment;
   regulatoryFramework?: RegulatoryFramework;
   additionalDisclosures?: Record<string, unknown>;
+  // AI routing strategy (two LLMs)
+  aiStrategy?: 'primary' | 'secondary' | 'hybrid';
 }
 
 // Validation Response Structure

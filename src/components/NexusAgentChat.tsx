@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -81,6 +82,7 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
       targetArticleClassification: 'Article8'
     }
   });
+  const [aiStrategy, setAiStrategy] = useState<'hybrid' | 'primary' | 'secondary'>('hybrid');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Expose methods to parent component
@@ -367,7 +369,8 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
       // Try to call the real API for compliance checking
       const response = await backendApiClient.classifyDocument({
         text: message,
-        document_type: 'compliance_check'
+        document_type: 'compliance_check',
+        strategy: aiStrategy
       });
 
       if (response.data) {
@@ -503,7 +506,7 @@ What specific aspect of SFDR compliance would you like to address first?`;
     setIsLoading(true);
     try {
       // Use the backend API client instead of nexusAgent
-      const backendResponse = await backendApiClient.classifyProduct(request);
+      const backendResponse = await backendApiClient.classifyProduct({ ...request, aiStrategy });
       
       if (backendResponse.error) {
         throw new Error(backendResponse.error);
@@ -608,6 +611,21 @@ What specific aspect of SFDR compliance would you like to address first?`;
                 <Button variant='outline' size='sm' onClick={() => setShowFormMode(!showFormMode)} className="text-xs bg-blue-50">
                   {showFormMode ? 'Chat Mode' : 'Form Mode'}
                 </Button>
+
+                <div className='flex items-center gap-2'>
+                  <Label className='text-xs'>AI Strategy</Label>
+                  <Select value={aiStrategy} onValueChange={(v) => setAiStrategy(v as any)}>
+                    <SelectTrigger className='h-8 w-[160px]'>
+                      <SelectValue placeholder='Select strategy' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='hybrid'>Hybrid (recommended)</SelectItem>
+                      <SelectItem value='primary'>Primary LLM</SelectItem>
+                      <SelectItem value='secondary'>Secondary LLM</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
                   <Settings className='h-4 w-4' />
                 </Button>

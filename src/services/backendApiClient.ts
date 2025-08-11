@@ -14,6 +14,9 @@ export interface ApiResponse<T = any> {
 export interface ClassificationRequest {
   text: string;
   document_type?: string;
+  // AI routing
+  strategy?: 'primary' | 'secondary' | 'hybrid';
+  model?: string;
 }
 
 export interface ClassificationResponse {
@@ -135,11 +138,19 @@ export class BackendApiClient {
   async classifyProduct(productData: any): Promise<ApiResponse<ClassificationResponse>> {
     // Convert the SFDR product data to the expected format
     const text = this.formatProductDataAsText(productData);
-    
-    return this.classifyDocument({
+
+    // Support strategy from either aiStrategy or modelStrategy fields
+    const strategy =
+      (productData?.aiStrategy as 'primary' | 'secondary' | 'hybrid' | undefined) ||
+      (productData?.modelStrategy as 'primary' | 'secondary' | 'hybrid' | undefined);
+
+    const request: ClassificationRequest = {
       text,
-      document_type: 'SFDR_Fund_Profile'
-    });
+      document_type: 'SFDR_Fund_Profile',
+      ...(strategy ? { strategy } as Partial<ClassificationRequest> : {})
+    };
+
+    return this.classifyDocument(request);
   }
 
   /**

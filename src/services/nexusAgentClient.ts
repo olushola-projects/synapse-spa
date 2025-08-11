@@ -9,6 +9,8 @@ export interface NexusClassificationRequest {
   riskProfile?: string;
   targetArticle?: string;
   paiIndicators?: Record<string, any>;
+  // AI routing strategy from backend (two LLMs)
+  modelStrategy?: 'primary' | 'secondary' | 'hybrid';
 }
 
 export interface NexusClassificationResponse {
