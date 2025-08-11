@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search, Loader2, Wifi, WifiOff, RefreshCw, Home } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
 import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
-import { ApiConnectivityTest } from '@/components/testing/ApiConnectivityTest';
+import { EnhancedApiConnectivityTest } from '@/components/testing/EnhancedApiConnectivityTest';
 import type { QuickActionType } from '@/types/nexus';
 
 /**
@@ -617,7 +617,7 @@ const NexusAgent = () => {
                   </p>
                   
                   <Suspense fallback={<EnhancedSkeleton className="h-32 w-full" />}>
-                    <ApiConnectivityTest />
+                    <EnhancedApiConnectivityTest />
                   </Suspense>
                 </div>
 

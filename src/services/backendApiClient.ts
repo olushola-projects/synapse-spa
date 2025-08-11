@@ -54,7 +54,7 @@ export class BackendApiClient {
   }
 
   /**
-   * Make HTTP request to the backend API
+   * Make HTTP request to the backend API with enhanced error handling and authentication
    */
   private async makeRequest<T = any>(
     endpoint: string,
@@ -63,33 +63,83 @@ export class BackendApiClient {
     try {
       const url = `${this.baseUrl}/${endpoint}`;
       
-      const response = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Synapse-SFDR-Navigator/1.0',
-          ...options.headers
-        },
-        ...options
-      });
+      // Enhanced headers with proper authentication
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Synapse-SFDR-Navigator/1.0',
+        ...options.headers as Record<string, string>
+      };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        return {
-          error: data.detail || data.message || `HTTP ${response.status}`,
-          status: response.status
-        };
+      // Add API key authentication if available
+      const apiKey = config.NEXUS_API_KEY;
+      if (apiKey && apiKey !== 'demo-key-placeholder') {
+        headers['Authorization'] = `Bearer ${apiKey}`;
+        headers['X-API-Key'] = apiKey;
+      } else {
+        console.warn('⚠️ NEXUS_API_KEY not configured - API calls may fail');
       }
 
+      console.log(`🔌 Backend API Request: ${options.method || 'GET'} ${url}`);
+      
+      // Add timeout for requests
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
+      const response = await fetch(url, {
+        ...options,
+        headers,
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      let data;
+      try {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          data = await response.text();
+        }
+      } catch (parseError) {
+        console.error('Failed to parse response:', parseError);
+        data = null;
+      }
+
+      if (!response.ok) {
+        const errorMsg = data?.detail || data?.message || data || `HTTP ${response.status}`;
+        console.error(`❌ Backend API Error [${response.status}]:`, errorMsg);
+        
+        // Enhanced error context
+        const enhancedError = {
+          error: errorMsg,
+          status: response.status,
+          endpoint,
+          timestamp: new Date().toISOString(),
+          headers: Object.fromEntries(response.headers.entries())
+        };
+        
+        return enhancedError;
+      }
+
+      console.log(`✅ Backend API Success [${response.status}]:`, endpoint);
       return {
         data,
         status: response.status
       };
     } catch (error) {
-      console.error(`Backend API request failed:`, error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.error(`⏱️ Backend API Timeout: ${endpoint}`);
+        return {
+          error: 'Request timeout - API may be unavailable',
+          status: 408
+        };
+      }
+      
+      console.error(`💥 Backend API Network Error:`, error);
       return {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        status: 500
+        error: error instanceof Error ? error.message : 'Network connection failed',
+        status: 0 // Network error
       };
     }
   }
@@ -109,13 +159,33 @@ export class BackendApiClient {
   }
 
   /**
-   * SFDR Classification
+   * SFDR Classification with strategy support
    */
   async classifyDocument(request: ClassificationRequest): Promise<ApiResponse<ClassificationResponse>> {
-    return this.makeRequest<ClassificationResponse>('api/classify', {
+    console.log('🤖 Classifying document with strategy:', request.strategy || 'default');
+    
+    const response = await this.makeRequest<ClassificationResponse>('api/classify', {
       method: 'POST',
-      body: JSON.stringify(request)
+      body: JSON.stringify({
+        ...request,
+        // Ensure strategy is included for LLM routing
+        strategy: request.strategy || 'primary',
+        timestamp: new Date().toISOString()
+      })
     });
+
+    // Enhanced logging for LLM integration debugging
+    if (response.data) {
+      console.log('✅ LLM Classification Success:', {
+        confidence: response.data.confidence,
+        processing_time: response.data.processing_time,
+        strategy: request.strategy
+      });
+    } else if (response.error) {
+      console.error('❌ LLM Classification Failed:', response.error);
+    }
+
+    return response;
   }
 
   /**
