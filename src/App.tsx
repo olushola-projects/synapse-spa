@@ -121,22 +121,8 @@ const App = () => (
             <Route path='/use-cases' element={<UseCases />} />
             <Route path='/agents' element={<AgentsPage />} />
             <Route path='/agents/cdd-agent' element={<CDDAgentPage />} />
-            <Route
-              path='/nexus-agent'
-              element={
-                <ProtectedRoute>
-                  <NexusAgent />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/sfdr-navigator'
-              element={
-                <ProtectedRoute>
-                  <NexusAgent />
-                </ProtectedRoute>
-              }
-            />
+            <Route path='/nexus-agent' element={<NexusAgent />} />
+            <Route path='/sfdr-navigator' element={<NexusAgent />} />
             <Route
               path='/sfdr-gem'
               element={
