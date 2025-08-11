@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckCircle, AlertTriangle, Brain, Target, Search, Loader2, Wifi, WifiOff, RefreshCw, Home } from 'lucide-react';
 import { NexusAgentChat } from '@/components/NexusAgentChat';
 import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
+import { ApiConnectivityTest } from '@/components/testing/ApiConnectivityTest';
 import type { QuickActionType } from '@/types/nexus';
 
 /**
@@ -606,6 +607,21 @@ const NexusAgent = () => {
               <TabContentSkeleton type="testing" />
             ) : (
               <div className='space-y-6'>
+                {/* API Connectivity Test */}
+                <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
+                  <h3 className='text-lg font-semibold text-foreground mb-4'>
+                    Backend API Connectivity Test
+                  </h3>
+                  <p className='text-muted-foreground mb-6'>
+                    Verify connection to api.joinsynapses.com and test LLM integration (Primary, Secondary, Hybrid strategies).
+                  </p>
+                  
+                  <Suspense fallback={<EnhancedSkeleton className="h-32 w-full" />}>
+                    <ApiConnectivityTest />
+                  </Suspense>
+                </div>
+
+                {/* UAT Testing Suite */}
                 <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
                   <h3 className='text-lg font-semibold text-foreground mb-4'>
                     User Acceptance Testing Suite

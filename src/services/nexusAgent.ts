@@ -29,26 +29,10 @@ const NEXUS_CONFIG = {
 };
 
 class NexusAgentService {
-  private apiKey: string | null = null;
   private baseUrl: string;
 
   constructor() {
     this.baseUrl = NEXUS_CONFIG.baseUrl;
-    this.initializeApiKey();
-  }
-
-  private async initializeApiKey() {
-    try {
-      // In production, API keys should be fetched from secure backend endpoints
-      // For demo purposes, we'll use a placeholder key
-      this.apiKey = 'demo-key-placeholder';
-      
-      // TODO: Implement secure API key retrieval from backend
-      // Example: const apiKey = await this.fetchAPIKeyFromBackend();
-    } catch (error) {
-      console.warn('Failed to initialize API key, using demo key:', error);
-      this.apiKey = 'demo-key';
-    }
   }
 
   /**
@@ -98,80 +82,37 @@ class NexusAgentService {
   /**
    * Upload document for analysis
    */
-  async uploadDocument(file: File, documentType: string): Promise<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('documentType', documentType);
-
-    const response = await fetch(
-      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/upload-document',
-      {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`
-        }
-      }
-    );
-
-    return await response.json();
+  async uploadDocument(file: File): Promise<any> {
+    // Use backendApiClient for consistency
+    const { backendApiClient } = await import('./backendApiClient');
+    return await backendApiClient.uploadDocument(file);
   }
 
   /**
    * Check compliance
    */
   async checkCompliance(data: any): Promise<any> {
-    const response = await fetch(
-      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/check-compliance',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify(data)
-      }
-    );
-
-    return await response.json();
+    // Use backendApiClient for consistency
+    const { backendApiClient } = await import('./backendApiClient');
+    return await backendApiClient.checkCompliance(data);
   }
 
   /**
    * Generate compliance report
    */
   async generateReport(assessmentId: string, reportType = 'full_compliance'): Promise<any> {
-    const response = await fetch(
-      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/generate-report',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify({ assessmentId, reportType })
-      }
-    );
-
-    return await response.json();
+    // Use backendApiClient for consistency
+    const { backendApiClient } = await import('./backendApiClient');
+    return await backendApiClient.generateReport({ assessmentId, reportType });
   }
 
   /**
    * Perform risk assessment
    */
   async performRiskAssessment(assessmentId: string): Promise<any> {
-    const response = await fetch(
-      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/risk-assessment',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify({ assessmentId })
-      }
-    );
-
-    return await response.json();
+    // Use backendApiClient for consistency
+    const { backendApiClient } = await import('./backendApiClient');
+    return await backendApiClient.riskAssessment({ assessmentId });
   }
 
   /**
@@ -179,8 +120,25 @@ class NexusAgentService {
    */
   async classifyFund(request: SFDRClassificationRequest): Promise<ClassificationResult> {
     try {
-      const response = await this.makeRequest('POST', NEXUS_CONFIG.endpoints.classify, request);
-      return response.classification;
+      // Use backendApiClient for consistency
+      const { backendApiClient } = await import('./backendApiClient');
+      const response = await backendApiClient.classifyProduct(request);
+      
+      if (response.error) {
+        throw new Error(response.error);
+      }
+      
+      const classificationResult = response.data?.classification || 'Article6';
+      const validClassification = ['Article6', 'Article8', 'Article9'].includes(classificationResult) 
+        ? classificationResult as 'Article6' | 'Article8' | 'Article9'
+        : this.determineRecommendedArticle(request);
+      
+      return {
+        recommendedArticle: validClassification,
+        confidence: response.data?.confidence || 0.85,
+        reasoning: this.generateReasoning(request, request.fundProfile.targetArticleClassification),
+        alternativeClassifications: this.generateAlternatives(request, request.fundProfile.targetArticleClassification)
+      };
     } catch (_error) {
       return this.generateMockClassification(request);
     }
