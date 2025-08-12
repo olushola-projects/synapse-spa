@@ -3,8 +3,6 @@
  * Centralized client for calling https://api.joinsynapses.com with proper error handling
  */
 
-import { backendConfig } from '@/config/environment.backend';
-
 export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
@@ -60,13 +58,8 @@ export class BackendApiClient {
   }
   
   private getApiKey(): string | null {
-    // Try to get from various sources in priority order
-    const configKey = backendConfig.NEXUS_API_KEY;
-    
-    // Check for real API key from environment
-    const envKey = process.env.NEXUS_API_KEY;
-    
-    const apiKey = envKey || configKey;
+    // Get API key from Vite environment variables
+    const apiKey = import.meta.env.VITE_NEXUS_API_KEY;
     
     // Validate it's not a placeholder
     if (!apiKey || apiKey === 'your_nexus_api_key' || apiKey === 'demo_key_placeholder') {
