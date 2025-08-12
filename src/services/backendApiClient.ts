@@ -60,11 +60,22 @@ export class BackendApiClient {
   }
   
   private getApiKey(): string | null {
-    // Try to get from various sources
+    // Try to get from various sources in priority order
     const envKey = import.meta.env?.VITE_NEXUS_API_KEY;
     const configKey = config.NEXUS_API_KEY;
     
-    return envKey || configKey || 'your_nexus_api_key';
+    // Check for real API key from Supabase secrets
+    const supabaseKey = import.meta.env?.VITE_SUPABASE_NEXUS_API_KEY;
+    
+    const apiKey = supabaseKey || envKey || configKey;
+    
+    // Validate it's not a placeholder
+    if (!apiKey || apiKey === 'your_nexus_api_key' || apiKey === 'demo_key_placeholder') {
+      console.error('🚨 CRITICAL: Real NEXUS_API_KEY not found! Configure in Supabase Secrets');
+      return null;
+    }
+    
+    return apiKey;
   }
   
   static getInstance(): BackendApiClient {
@@ -95,12 +106,15 @@ export class BackendApiClient {
       };
 
       // Add API key authentication if available
-      const apiKey = config.NEXUS_API_KEY;
-      if (apiKey && apiKey !== 'demo-key-placeholder') {
+      const apiKey = this.getApiKey();
+      if (apiKey && this.isAuthenticated) {
         headers['Authorization'] = `Bearer ${apiKey}`;
         headers['X-API-Key'] = apiKey;
+        console.log('🔑 Using authenticated API key for request');
       } else {
-        console.warn('⚠️ NEXUS_API_KEY not configured - API calls may fail');
+        console.error('🚨 CRITICAL: No valid API key - configure NEXUS_API_KEY in Supabase Secrets');
+        // Still attempt the call but warn user
+        headers['X-API-Key'] = 'placeholder';
       }
 
       console.log(`🔌 Backend API Request: ${options.method || 'GET'} ${url}`);

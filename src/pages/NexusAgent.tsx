@@ -16,6 +16,7 @@ import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
 import { EnhancedApiConnectivityTest } from '@/components/testing/EnhancedApiConnectivityTest';
 import { BackendHealthDashboard } from '@/components/testing/BackendHealthDashboard';
 import { SecretForm } from '@/components/ui/secret-form';
+import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { QuickActionType } from '@/types/nexus';
 
@@ -606,11 +607,29 @@ const NexusAgent = () => {
             )}
           </TabsContent>
 
-          <TabsContent value='testing'>
+           <TabsContent value='testing'>
             {isLoadingTab ? (
               <TabContentSkeleton type="testing" />
             ) : (
               <div className='space-y-6'>
+                {/* Critical API Key Configuration Alert */}
+                <CriticalErrorAlert
+                  errors={[{
+                    id: 'api-key-missing',
+                    type: 'authentication',
+                    title: 'API Configuration Required',
+                    message: 'NEXUS_API_KEY must be configured in Supabase Secrets for LLM integration to work.',
+                    severity: 'critical',
+                    timestamp: new Date().toISOString(),
+                    actionable: true,
+                    recommendedActions: [
+                      'Configure NEXUS_API_KEY in Supabase Secrets',
+                      'Ensure API key is valid and not a placeholder',
+                      'Test API connectivity after configuration'
+                    ]
+                  }]}
+                  onConfigureApi={() => setShowApiKeyDialog(true)}
+                />
                 {/* Backend Health Dashboard */}
                 <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
                   <h3 className='text-lg font-semibold text-foreground mb-4'>
