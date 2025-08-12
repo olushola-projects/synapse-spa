@@ -41,9 +41,30 @@ export interface MetricsResponse {
 export class BackendApiClient {
   private static instance: BackendApiClient;
   private baseUrl: string;
+  private apiKey: string | null = null;
+  private isAuthenticated: boolean = false;
   
   constructor() {
     this.baseUrl = config.API_BASE_URL;
+    this.validateAuthentication();
+  }
+  
+  private validateAuthentication(): void {
+    // Check if we have a valid API key
+    this.apiKey = this.getApiKey();
+    this.isAuthenticated = !!(this.apiKey && this.apiKey !== 'your_nexus_api_key' && this.apiKey !== 'demo_key_placeholder');
+    
+    if (!this.isAuthenticated) {
+      console.warn('🔐 CRITICAL: BackendApiClient not properly authenticated - using placeholder API key');
+    }
+  }
+  
+  private getApiKey(): string | null {
+    // Try to get from various sources
+    const envKey = import.meta.env?.VITE_NEXUS_API_KEY;
+    const configKey = config.NEXUS_API_KEY;
+    
+    return envKey || configKey || 'your_nexus_api_key';
   }
   
   static getInstance(): BackendApiClient {
