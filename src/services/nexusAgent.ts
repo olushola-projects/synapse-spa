@@ -29,10 +29,8 @@ const NEXUS_CONFIG = {
 };
 
 class NexusAgentService {
-  private baseUrl: string;
-
   constructor() {
-    this.baseUrl = NEXUS_CONFIG.baseUrl;
+    // Configuration handled by NEXUS_CONFIG constant
   }
 
   /**
