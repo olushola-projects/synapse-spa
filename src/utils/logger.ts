@@ -69,7 +69,7 @@ class Logger {
 
     if (typeof process !== 'undefined' && process.env) {
       envLevel = process.env.LOG_LEVEL || process.env.VITE_LOG_LEVEL;
-    } else if (typeof window !== 'undefined' && (globalThis as any).import?.meta?.env) {
+    } else if (typeof (globalThis as any).window !== 'undefined' && (globalThis as any).process?.env) {
       envLevel = (globalThis as any).import.meta.env.VITE_LOG_LEVEL;
     }
 

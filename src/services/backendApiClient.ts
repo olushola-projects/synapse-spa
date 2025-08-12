@@ -3,7 +3,7 @@
  * Centralized client for calling https://api.joinsynapses.com with proper error handling
  */
 
-import { config } from '@/config/environment';
+import { backendConfig } from '@/config/environment.backend';
 
 export interface ApiResponse<T = any> {
   data?: T;
@@ -45,7 +45,7 @@ export class BackendApiClient {
   private isAuthenticated: boolean = false;
   
   constructor() {
-    this.baseUrl = config.API_BASE_URL;
+    this.baseUrl = 'https://api.joinsynapses.com';
     this.validateAuthentication();
   }
   
@@ -61,17 +61,16 @@ export class BackendApiClient {
   
   private getApiKey(): string | null {
     // Try to get from various sources in priority order
-    const envKey = import.meta.env?.VITE_NEXUS_API_KEY;
-    const configKey = config.NEXUS_API_KEY;
+    const configKey = backendConfig.NEXUS_API_KEY;
     
-    // Check for real API key from Supabase secrets
-    const supabaseKey = import.meta.env?.VITE_SUPABASE_NEXUS_API_KEY;
+    // Check for real API key from environment
+    const envKey = process.env.NEXUS_API_KEY;
     
-    const apiKey = supabaseKey || envKey || configKey;
+    const apiKey = envKey || configKey;
     
     // Validate it's not a placeholder
     if (!apiKey || apiKey === 'your_nexus_api_key' || apiKey === 'demo_key_placeholder') {
-      console.error('🚨 CRITICAL: Real NEXUS_API_KEY not found! Configure in Supabase Secrets');
+      console.error('🚨 CRITICAL: Real NEXUS_API_KEY not found! Configure in environment variables');
       return null;
     }
     
@@ -145,7 +144,7 @@ export class BackendApiClient {
       }
 
       if (!response.ok) {
-        const errorMsg = data?.detail || data?.message || data || `HTTP ${response.status}`;
+        const errorMsg = (data as any)?.detail || (data as any)?.message || data || `HTTP ${response.status}`;
         console.error(`❌ Backend API Error [${response.status}]:`, errorMsg);
         
         // Enhanced error context
@@ -162,7 +161,7 @@ export class BackendApiClient {
 
       console.log(`✅ Backend API Success [${response.status}]:`, endpoint);
       return {
-        data,
+        data: data as T,
         status: response.status
       };
     } catch (error) {

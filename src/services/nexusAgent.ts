@@ -151,7 +151,7 @@ class NexusAgentService {
     const url = `${this.baseUrl}/${endpoint}`;
 
     // Get API key from environment or Supabase secrets
-    const apiKey = import.meta.env.VITE_NEXUS_API_KEY || 'demo_key_placeholder';
+    const apiKey = process.env.NEXUS_API_KEY || 'demo_key_placeholder';
     
     if (apiKey === 'demo_key_placeholder' || apiKey === 'your_nexus_api_key') {
       throw new Error('NEXUS_API_KEY not configured. Please configure the API key in Supabase secrets.');

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "CommonJS",
+    "module": "ESNext",
     "lib": ["ES2022"],
     "outDir": "./dist",
     "rootDir": "./src",
@@ -20,7 +20,10 @@
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "noEmit": false,
+    "isolatedModules": true,
+    "moduleDetection": "force",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
@@ -30,7 +33,12 @@
     "emitDecoratorMetadata": true,
     "types": ["node", "jest"]
   },
-  "include": ["src/**/*.ts", "src/**/*.js"],
+  "include": [
+    "src/config/environment.backend.ts",
+    "src/services/backendApiClient.ts",
+    "src/services/nexusAgent.ts",
+    "src/utils/logger.ts"
+  ],
   "exclude": [
     "node_modules",
     "dist",
@@ -41,6 +49,15 @@
     "src/components/**/*",
     "src/pages/**/*",
     "src/hooks/**/*",
-    "src/utils/frontend/**/*"
+    "src/contexts/**/*",
+    "src/data/**/*",
+    "src/integrations/**/*",
+    "src/test/**/*",
+    "src/utils/uat-testing.ts",
+    "src/utils/nexus-test-suite.ts",
+    "src/services/FeedbackService.ts",
+    "src/services/enterpriseMonitoring.ts",
+    "src/services/apiHealthMonitor.ts",
+    "src/config/environment.ts"
   ]
 }
