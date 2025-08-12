@@ -109,9 +109,10 @@ export function getEnvironmentConfig(): EnvironmentConfig {
     POSTHOG_KEY: env.VITE_POSTHOG_KEY,
     POSTHOG_HOST: env.VITE_POSTHOG_HOST || 'https://app.posthog.com',
     
-    // AI Services
-    OPENAI_API_KEY: env.VITE_OPENAI_API_KEY,
-    NEXUS_API_KEY: env.VITE_NEXUS_API_KEY,
+    // AI Services - SECURITY FIX: Remove client-side API keys
+    // All API calls go through Supabase Edge Functions
+    OPENAI_API_KEY: '', // Removed for security
+    NEXUS_API_KEY: '', // Removed for security
     
     // Feature Flags
     ENABLE_ANALYTICS: parseBoolean(env.VITE_ENABLE_ANALYTICS, false),

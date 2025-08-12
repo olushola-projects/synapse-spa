@@ -37,7 +37,8 @@
     "src/config/environment.backend.ts",
     "src/services/backendApiClient.ts",
     "src/services/nexusAgent.ts",
-    "src/utils/logger.ts"
+    "src/utils/logger.ts",
+    "src/types/backend-env.d.ts"
   ],
   "exclude": [
     "node_modules",

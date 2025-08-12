@@ -43,7 +43,8 @@ export class BackendApiClient {
   private isAuthenticated: boolean = false;
   
   constructor() {
-    this.baseUrl = 'https://api.joinsynapses.com';
+    // SECURITY FIX: Use Supabase Edge Function proxy instead of direct API calls
+    this.baseUrl = 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/nexus-proxy';
     this.validateAuthentication();
   }
   
@@ -58,16 +59,10 @@ export class BackendApiClient {
   }
   
   private getApiKey(): string | null {
-    // Get API key from Vite environment variables
-    const apiKey = import.meta.env.VITE_NEXUS_API_KEY;
-    
-    // Validate it's not a placeholder
-    if (!apiKey || apiKey === 'your_nexus_api_key' || apiKey === 'demo_key_placeholder') {
-      console.error('🚨 CRITICAL: Real NEXUS_API_KEY not found! Configure in environment variables');
-      return null;
-    }
-    
-    return apiKey;
+    // SECURITY FIX: Remove client-side API key access
+    // All API calls should go through Supabase Edge Functions
+    console.warn('🔐 SECURITY: Direct API key access removed - use edge function proxy');
+    return null;
   }
   
   static getInstance(): BackendApiClient {
@@ -88,26 +83,18 @@ export class BackendApiClient {
     errorCategory?: string;
   }> {
     try {
-      const url = `${this.baseUrl}/${endpoint}`;
+      // SECURITY FIX: Use edge function proxy with proper authentication
+      const url = this.baseUrl;
       
-      // Enhanced headers with proper authentication
+      // Enhanced headers for edge function proxy
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'User-Agent': 'Synapse-SFDR-Navigator/1.0',
         ...options.headers as Record<string, string>
       };
 
-      // Add API key authentication if available
-      const apiKey = this.getApiKey();
-      if (apiKey && this.isAuthenticated) {
-        headers['Authorization'] = `Bearer ${apiKey}`;
-        headers['X-API-Key'] = apiKey;
-        console.log('🔑 Using authenticated API key for request');
-      } else {
-        console.error('🚨 CRITICAL: No valid API key - configure NEXUS_API_KEY in Supabase Secrets');
-        // Still attempt the call but warn user
-        headers['X-API-Key'] = 'placeholder';
-      }
+      // SECURITY FIX: Remove direct API key usage - edge function handles authentication
+      console.log('🔐 Using secure edge function proxy for API calls');
 
       console.log(`🔌 Backend API Request: ${options.method || 'GET'} ${url}`);
       
@@ -115,9 +102,18 @@ export class BackendApiClient {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
       
+      // SECURITY FIX: Send request through edge function proxy with proper payload
+      const proxyPayload = {
+        method: options.method || 'GET',
+        endpoint: endpoint,
+        data: options.body ? JSON.parse(options.body as string) : undefined,
+        userId: 'client-request' // Add user context for audit trail
+      };
+
       const response = await fetch(url, {
-        ...options,
+        method: 'POST', // Edge function expects POST with payload
         headers,
+        body: JSON.stringify(proxyPayload),
         signal: controller.signal
       });
 

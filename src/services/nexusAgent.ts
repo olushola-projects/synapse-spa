@@ -145,34 +145,34 @@ class NexusAgentService {
   }
 
   /**
-   * Make HTTP request to Nexus API with proper authentication
+   * Make HTTP request to Nexus API with secure edge function proxy
    */
   private async makeRequest(method: string, endpoint: string, data?: any): Promise<any> {
-    const url = `${this.baseUrl}/${endpoint}`;
+    // SECURITY FIX: Use edge function proxy instead of direct API calls
+    const url = 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/nexus-proxy';
 
-    // Get API key from environment or Supabase secrets
-    const apiKey = process.env.NEXUS_API_KEY || 'demo_key_placeholder';
-    
-    if (apiKey === 'demo_key_placeholder' || apiKey === 'your_nexus_api_key') {
-      throw new Error('NEXUS_API_KEY not configured. Please configure the API key in Supabase secrets.');
-    }
-
+    // SECURITY FIX: Remove direct API key usage - edge function handles authentication
     const config: RequestInit = {
-      method,
+      method: 'POST', // Edge function expects POST with payload
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
         'User-Agent': 'Synapse-SFDR-Navigator/1.0',
         'X-Client-Version': '1.0.0'
       },
       signal: AbortSignal.timeout(NEXUS_CONFIG.timeout)
     };
 
-    if (data) {
-      config.body = JSON.stringify(data);
-    }
+    // SECURITY FIX: Send request through edge function proxy
+    const proxyPayload = {
+      method: method,
+      endpoint: endpoint,
+      data: data,
+      userId: 'nexus-agent-request'
+    };
 
-    logger.info(`Making request to ${url}`, { method, endpoint });
+    config.body = JSON.stringify(proxyPayload);
+
+    logger.info(`Making secure request through edge function proxy`, { method, endpoint });
 
     try {
       const response = await fetch(url, config);

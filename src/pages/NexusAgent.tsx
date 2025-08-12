@@ -17,6 +17,7 @@ import { EnhancedApiConnectivityTest } from '@/components/testing/EnhancedApiCon
 import { BackendHealthDashboard } from '@/components/testing/BackendHealthDashboard';
 import { SecretForm } from '@/components/ui/secret-form';
 import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
+import { CriticalAuthAlert } from '@/components/CriticalAuthAlert';
 import { RealTimeMonitoringDashboard } from '@/components/monitoring/RealTimeMonitoringDashboard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { QuickActionType } from '@/types/nexus';
@@ -438,6 +439,16 @@ const NexusAgent = () => {
 
       {/* Main Content */}
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
+        {/* CRITICAL AUTHENTICATION ALERT */}
+        <div className="mb-6">
+          <CriticalAuthAlert 
+            onConfigure={() => setShowApiKeyDialog(true)}
+            onDismiss={() => {
+              // Could implement dismiss logic here
+              console.log('Critical auth alert dismissed');
+            }}
+          />
+        </div>
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList className='grid w-full grid-cols-3 mb-6'>
             <TabsTrigger value='chat' className='flex items-center space-x-2' disabled={isLoadingTab}>
