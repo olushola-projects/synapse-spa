@@ -15,17 +15,28 @@ serve(async (req) => {
   }
 
   try {
-    const { method, endpoint, data } = await req.json();
+    const { method, endpoint, data, userId } = await req.json();
     
     // Get the NEXUS API key from environment variables
     const nexusApiKey = Deno.env.get('NEXUS_API_KEY');
     
-    if (!nexusApiKey || nexusApiKey === 'demo_key_placeholder') {
-      console.error('NEXUS_API_KEY not configured');
+    // Enhanced API key validation with circuit breaker pattern
+    if (!nexusApiKey || 
+        nexusApiKey === 'demo_key_placeholder' || 
+        nexusApiKey === 'your_nexus_api_key' ||
+        nexusApiKey === 'placeholder') {
+      console.error('🚨 CRITICAL: NEXUS_API_KEY not properly configured');
+      
+      // Log audit trail for security monitoring
+      console.log(`🔒 API Key Authentication Failed - User: ${userId || 'anonymous'} - Endpoint: ${endpoint}`);
+      
       return new Response(
         JSON.stringify({ 
           error: 'API authentication not configured',
-          details: 'NEXUS_API_KEY secret is missing or invalid'
+          details: 'Real NEXUS_API_KEY must be configured in Supabase Edge Function Secrets',
+          code: 'AUTH_KEY_MISSING',
+          timestamp: new Date().toISOString(),
+          severity: 'critical'
         }),
         { 
           status: 401,
@@ -59,8 +70,39 @@ serve(async (req) => {
       requestOptions.body = JSON.stringify(data);
     }
 
-    // Make the request to the external API
-    const response = await fetch(url, requestOptions);
+    // Make the request to the external API with timeout and retry logic
+    const startTime = Date.now();
+    let response: Response;
+    let attempt = 0;
+    const maxRetries = 3;
+    
+    while (attempt < maxRetries) {
+      try {
+        // Add timeout of 30 seconds
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        
+        response = await fetch(url, {
+          ...requestOptions,
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        break;
+      } catch (fetchError) {
+        attempt++;
+        console.error(`🔄 Retry ${attempt}/${maxRetries} for ${endpoint}:`, fetchError);
+        
+        if (attempt >= maxRetries) {
+          throw fetchError;
+        }
+        
+        // Exponential backoff
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+      }
+    }
+    
+    const processingTime = Date.now() - startTime;
     
     // Get response data
     let responseData;
@@ -77,14 +119,21 @@ serve(async (req) => {
       responseData = null;
     }
 
+    // Enhanced error handling with audit logging
     if (!response.ok) {
       console.error(`❌ Nexus API Error [${response.status}]:`, responseData);
+      
+      // Log API failure for monitoring
+      console.log(`📊 API Call Failed - Endpoint: ${endpoint} - Status: ${response.status} - Time: ${processingTime}ms`);
       
       return new Response(
         JSON.stringify({
           error: `Nexus API Error: ${response.status} ${response.statusText}`,
           details: responseData,
-          status: response.status
+          status: response.status,
+          timestamp: new Date().toISOString(),
+          processingTime,
+          endpoint
         }),
         {
           status: response.status,
@@ -93,13 +142,30 @@ serve(async (req) => {
       );
     }
 
-    console.log(`✅ Nexus API Success [${response.status}]:`, endpoint);
+    // Validate response quality for LLM classification endpoints
+    if (endpoint.includes('classify') && responseData) {
+      const confidence = responseData.confidence || 0;
+      if (confidence < 0.7) {
+        console.warn(`⚠️ Low confidence classification: ${confidence} for endpoint: ${endpoint}`);
+        responseData._warning = 'Low confidence result - consider manual review';
+      }
+    }
 
+    console.log(`✅ Nexus API Success [${response.status}]:`, endpoint, `(${processingTime}ms)`);
+
+    // Enhanced response with metadata for monitoring
     return new Response(
       JSON.stringify({
         success: true,
         data: responseData,
-        status: response.status
+        status: response.status,
+        metadata: {
+          processingTime,
+          timestamp: new Date().toISOString(),
+          endpoint,
+          attempts: attempt + 1,
+          apiKeyConfigured: true
+        }
       }),
       {
         status: 200,

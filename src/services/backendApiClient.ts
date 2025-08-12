@@ -183,10 +183,49 @@ export class BackendApiClient {
   }
 
   /**
-   * Health check for the system
+   * Health check for the system - Updated to use Supabase Edge Functions
    */
   async healthCheck(): Promise<ApiResponse<HealthResponse>> {
-    return this.makeRequest<HealthResponse>('api/health');
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      // Use Supabase Edge Function for secure API calls
+      const { data, error } = await supabase.functions.invoke('nexus-proxy', {
+        body: {
+          method: 'GET',
+          endpoint: 'api/health',
+          userId: (await supabase.auth.getUser()).data.user?.id
+        }
+      });
+
+      if (error) {
+        console.error('💔 Edge Function error:', error);
+        return {
+          error: error.message || 'Health check failed',
+          status: 500
+        };
+      }
+
+      if (!data.success) {
+        console.error('💔 Health check API error:', data);
+        return {
+          error: data.error || 'Health check failed',
+          status: data.status || 500
+        };
+      }
+      
+      console.log('💚 Health check response:', data);
+      return {
+        data: data.data,
+        status: data.status || 200
+      };
+    } catch (error) {
+      console.error('💔 Health check failed:', error);
+      return {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        status: 500
+      };
+    }
   }
 
   /**
@@ -197,33 +236,64 @@ export class BackendApiClient {
   }
 
   /**
-   * SFDR Classification with strategy support
+   * SFDR Classification with strategy support - Updated to use Supabase Edge Functions
    */
   async classifyDocument(request: ClassificationRequest): Promise<ApiResponse<ClassificationResponse>> {
-    console.log('🤖 Classifying document with strategy:', request.strategy || 'default');
-    
-    const response = await this.makeRequest<ClassificationResponse>('api/classify', {
-      method: 'POST',
-      body: JSON.stringify({
-        ...request,
-        // Ensure strategy is included for LLM routing
-        strategy: request.strategy || 'primary',
-        timestamp: new Date().toISOString()
-      })
-    });
-
-    // Enhanced logging for LLM integration debugging
-    if (response.data) {
-      console.log('✅ LLM Classification Success:', {
-        confidence: response.data.confidence,
-        processing_time: response.data.processing_time,
-        strategy: request.strategy
+    try {
+      console.log('🤖 Classifying document with strategy:', request.strategy || 'primary');
+      
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      // Use Supabase Edge Function for secure API calls
+      const { data, error } = await supabase.functions.invoke('nexus-proxy', {
+        body: {
+          method: 'POST',
+          endpoint: 'api/classify',
+          data: {
+            ...request,
+            strategy: request.strategy || 'primary',
+            timestamp: new Date().toISOString()
+          },
+          userId: (await supabase.auth.getUser()).data.user?.id
+        }
       });
-    } else if (response.error) {
-      console.error('❌ LLM Classification Failed:', response.error);
-    }
 
-    return response;
+      if (error) {
+        console.error('💥 Edge Function error:', error);
+        return {
+          error: error.message || 'Classification failed',
+          status: 500
+        };
+      }
+
+      if (!data.success) {
+        console.error('💥 Classification API error:', data);
+        return {
+          error: data.error || 'Classification failed',
+          status: data.status || 500
+        };
+      }
+
+      // Enhanced logging for LLM integration debugging
+      if (data.data) {
+        console.log('✅ LLM Classification Success:', {
+          confidence: data.data.confidence,
+          processing_time: data.data.processing_time,
+          strategy: request.strategy
+        });
+      }
+      
+      return {
+        data: data.data,
+        status: data.status || 200
+      };
+    } catch (error) {
+      console.error('💥 Classification failed:', error);
+      return {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        status: 500
+      };
+    }
   }
 
   /**

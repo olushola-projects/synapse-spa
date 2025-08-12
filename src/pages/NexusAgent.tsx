@@ -17,6 +17,7 @@ import { EnhancedApiConnectivityTest } from '@/components/testing/EnhancedApiCon
 import { BackendHealthDashboard } from '@/components/testing/BackendHealthDashboard';
 import { SecretForm } from '@/components/ui/secret-form';
 import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
+import { RealTimeMonitoringDashboard } from '@/components/monitoring/RealTimeMonitoringDashboard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { QuickActionType } from '@/types/nexus';
 
@@ -629,7 +630,16 @@ const NexusAgent = () => {
                     ]
                   }]}
                   onConfigureApi={() => setShowApiKeyDialog(true)}
-                />
+                 />
+
+                {/* Enterprise Monitoring Dashboard */}
+                <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
+                  <h3 className='text-lg font-semibold text-foreground mb-4'>
+                    Enterprise Monitoring Dashboard
+                  </h3>
+                  <RealTimeMonitoringDashboard />
+                </div>
+
                 {/* Backend Health Dashboard */}
                 <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
                   <h3 className='text-lg font-semibold text-foreground mb-4'>
