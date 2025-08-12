@@ -53,13 +53,16 @@ export class BackendApiClient {
     return BackendApiClient.instance;
   }
 
+
   /**
-   * Make HTTP request to the backend API with enhanced error handling and authentication
+   * Make HTTP request with proper error handling and authentication
    */
-  private async makeRequest<T = any>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  private async makeRequest<T = any>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T> & { 
+    success?: boolean;
+    requestId?: string;
+    authError?: boolean;
+    errorCategory?: string;
+  }> {
     try {
       const url = `${this.baseUrl}/${endpoint}`;
       

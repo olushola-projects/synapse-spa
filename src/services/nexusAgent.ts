@@ -145,16 +145,25 @@ class NexusAgentService {
   }
 
   /**
-   * Make HTTP request to Nexus API
+   * Make HTTP request to Nexus API with proper authentication
    */
   private async makeRequest(method: string, endpoint: string, data?: any): Promise<any> {
     const url = `${this.baseUrl}/${endpoint}`;
+
+    // Get API key from environment or Supabase secrets
+    const apiKey = import.meta.env.VITE_NEXUS_API_KEY || 'demo_key_placeholder';
+    
+    if (apiKey === 'demo_key_placeholder' || apiKey === 'your_nexus_api_key') {
+      throw new Error('NEXUS_API_KEY not configured. Please configure the API key in Supabase secrets.');
+    }
 
     const config: RequestInit = {
       method,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'Synapse-SFDR-Navigator/1.0'
+        'Authorization': `Bearer ${apiKey}`,
+        'User-Agent': 'Synapse-SFDR-Navigator/1.0',
+        'X-Client-Version': '1.0.0'
       },
       signal: AbortSignal.timeout(NEXUS_CONFIG.timeout)
     };
@@ -163,13 +172,28 @@ class NexusAgentService {
       config.body = JSON.stringify(data);
     }
 
-    const response = await fetch(url, config);
+    logger.info(`Making request to ${url}`, { method, endpoint });
 
-    if (!response.ok) {
-      throw new Error(`Nexus API Error: ${response.status} ${response.statusText}`);
+    try {
+      const response = await fetch(url, config);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        logger.error(`Nexus API Error: ${response.status} ${response.statusText}`, { 
+          url, 
+          status: response.status, 
+          error: errorText 
+        });
+        throw new Error(`Nexus API Error: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+
+      const result = await response.json();
+      logger.info(`Nexus API Success`, { endpoint, responseSize: JSON.stringify(result).length });
+      return result;
+    } catch (error) {
+      logger.error(`Nexus API Request Failed`, { url, error: error instanceof Error ? error.message : 'Unknown error' });
+      throw error;
     }
-
-    return await response.json();
   }
 
   /**

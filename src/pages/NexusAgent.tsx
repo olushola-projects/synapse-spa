@@ -14,6 +14,9 @@ import { Activity, Shield, TrendingUp, Users, BarChart3, FileText, Clock, CheckC
 import { NexusAgentChat } from '@/components/NexusAgentChat';
 import { NexusTestExecutor } from '@/components/testing/NexusTestExecutor';
 import { EnhancedApiConnectivityTest } from '@/components/testing/EnhancedApiConnectivityTest';
+import { BackendHealthDashboard } from '@/components/testing/BackendHealthDashboard';
+import { SecretForm } from '@/components/ui/secret-form';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { QuickActionType } from '@/types/nexus';
 
 /**
@@ -33,6 +36,7 @@ const NexusAgent = () => {
   const [initError, setInitError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const [complianceData, setComplianceData] = useState<{
     status: 'pre-validated' | 'needs-review';
     esmaReference: string;
@@ -607,6 +611,20 @@ const NexusAgent = () => {
               <TabContentSkeleton type="testing" />
             ) : (
               <div className='space-y-6'>
+                {/* Backend Health Dashboard */}
+                <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
+                  <h3 className='text-lg font-semibold text-foreground mb-4'>
+                    Backend Health Monitoring
+                  </h3>
+                  <p className='text-muted-foreground mb-6'>
+                    Real-time monitoring of backend services, API health, and system performance.
+                  </p>
+                  
+                  <Suspense fallback={<EnhancedSkeleton className="h-32 w-full" />}>
+                    <BackendHealthDashboard onAuthIssue={() => setShowApiKeyDialog(true)} />
+                  </Suspense>
+                </div>
+
                 {/* API Connectivity Test */}
                 <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
                   <h3 className='text-lg font-semibold text-foreground mb-4'>
@@ -640,6 +658,24 @@ const NexusAgent = () => {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* API Key Configuration Dialog */}
+      <Dialog open={showApiKeyDialog} onOpenChange={setShowApiKeyDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>API Authentication Required</DialogTitle>
+          </DialogHeader>
+          <SecretForm
+            secretName="NEXUS_API_KEY"
+            onSubmit={() => {
+              setShowApiKeyDialog(false);
+              // Trigger a refresh of the health monitor
+              window.location.reload();
+            }}
+            onCancel={() => setShowApiKeyDialog(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>;
 };
 export default NexusAgent;
