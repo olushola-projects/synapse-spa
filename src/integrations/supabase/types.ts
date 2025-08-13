@@ -16,13 +16,58 @@ export type Database = {
     Tables: {
       admin_users: {
         Row: {
+          role: string | null
           user_id: string
         }
         Insert: {
+          role?: string | null
           user_id: string
         }
         Update: {
+          role?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          id: string
+          ip_address: unknown | null
+          new_values: Json | null
+          old_values: Json | null
+          record_id: string | null
+          session_id: string | null
+          table_name: string | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          session_id?: string | null
+          table_name?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          session_id?: string | null
+          table_name?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -55,6 +100,75 @@ export type Database = {
           name?: string
           points?: number
           updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      business_metrics: {
+        Row: {
+          created_at: string | null
+          id: string
+          measurement_period: string | null
+          metric_name: string
+          metric_unit: string | null
+          metric_value: number
+          tags: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          measurement_period?: string | null
+          metric_name: string
+          metric_unit?: string | null
+          metric_value: number
+          tags?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          measurement_period?: string | null
+          metric_name?: string
+          metric_unit?: string | null
+          metric_value?: number
+          tags?: Json | null
+        }
+        Relationships: []
+      }
+      classification_explanations: {
+        Row: {
+          classification_id: string
+          confidence_factors: Json | null
+          created_at: string | null
+          explanation_data: Json
+          explanation_type: string
+          human_readable_explanation: string | null
+          id: string
+          regulatory_references: Json | null
+          technical_explanation: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          classification_id: string
+          confidence_factors?: Json | null
+          created_at?: string | null
+          explanation_data: Json
+          explanation_type: string
+          human_readable_explanation?: string | null
+          id?: string
+          regulatory_references?: Json | null
+          technical_explanation?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          classification_id?: string
+          confidence_factors?: Json | null
+          created_at?: string | null
+          explanation_data?: Json
+          explanation_type?: string
+          human_readable_explanation?: string | null
+          id?: string
+          regulatory_references?: Json | null
+          technical_explanation?: Json | null
           user_id?: string | null
         }
         Relationships: []
@@ -145,6 +259,39 @@ export type Database = {
           },
         ]
       }
+      data_lineage: {
+        Row: {
+          classification_id: string | null
+          created_at: string | null
+          data_sources: Json
+          id: string
+          processing_pipeline: string
+          source_document_id: string | null
+          transformation_steps: Json
+          version_info: Json | null
+        }
+        Insert: {
+          classification_id?: string | null
+          created_at?: string | null
+          data_sources: Json
+          id?: string
+          processing_pipeline: string
+          source_document_id?: string | null
+          transformation_steps: Json
+          version_info?: Json | null
+        }
+        Update: {
+          classification_id?: string | null
+          created_at?: string | null
+          data_sources?: Json
+          id?: string
+          processing_pipeline?: string
+          source_document_id?: string | null
+          transformation_steps?: Json
+          version_info?: Json | null
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           analysis_results: Json | null
@@ -217,6 +364,54 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      llm_classification_audit: {
+        Row: {
+          api_key_hash: string | null
+          classification_result: string
+          confidence_score: number | null
+          document_type: string
+          explainability_data: Json | null
+          id: string
+          input_text: string
+          llm_strategy: string
+          model_version: string | null
+          processing_time_ms: number | null
+          regulatory_flags: Json | null
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          api_key_hash?: string | null
+          classification_result: string
+          confidence_score?: number | null
+          document_type: string
+          explainability_data?: Json | null
+          id?: string
+          input_text: string
+          llm_strategy: string
+          model_version?: string | null
+          processing_time_ms?: number | null
+          regulatory_flags?: Json | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          api_key_hash?: string | null
+          classification_result?: string
+          confidence_score?: number | null
+          document_type?: string
+          explainability_data?: Json | null
+          id?: string
+          input_text?: string
+          llm_strategy?: string
+          model_version?: string | null
+          processing_time_ms?: number | null
+          regulatory_flags?: Json | null
+          timestamp?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -336,6 +531,123 @@ export type Database = {
         }
         Relationships: []
       }
+      sfdr_audit_trail: {
+        Row: {
+          action_type: string
+          classification_id: string | null
+          confidence_score: number | null
+          created_at: string | null
+          data_lineage: Json | null
+          decision_data: Json
+          explainability_data: Json | null
+          id: string
+          input_hash: string | null
+          output_hash: string | null
+          processing_time_ms: number | null
+          regulatory_basis: string | null
+          retention_until: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          classification_id?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          data_lineage?: Json | null
+          decision_data: Json
+          explainability_data?: Json | null
+          id?: string
+          input_hash?: string | null
+          output_hash?: string | null
+          processing_time_ms?: number | null
+          regulatory_basis?: string | null
+          retention_until?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          classification_id?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          data_lineage?: Json | null
+          decision_data?: Json
+          explainability_data?: Json | null
+          id?: string
+          input_hash?: string | null
+          output_hash?: string | null
+          processing_time_ms?: number | null
+          regulatory_basis?: string | null
+          retention_until?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      sla_metrics: {
+        Row: {
+          additional_data: Json | null
+          id: string
+          is_breached: boolean | null
+          measurement_timestamp: string | null
+          metric_type: string
+          metric_value: number
+          service_name: string
+          threshold_value: number
+        }
+        Insert: {
+          additional_data?: Json | null
+          id?: string
+          is_breached?: boolean | null
+          measurement_timestamp?: string | null
+          metric_type: string
+          metric_value: number
+          service_name: string
+          threshold_value: number
+        }
+        Update: {
+          additional_data?: Json | null
+          id?: string
+          is_breached?: boolean | null
+          measurement_timestamp?: string | null
+          metric_type?: string
+          metric_value?: number
+          service_name?: string
+          threshold_value?: number
+        }
+        Relationships: []
+      }
+      system_health_metrics: {
+        Row: {
+          alert_threshold_breached: boolean | null
+          details: Json | null
+          error_rate: number | null
+          id: string
+          response_time_ms: number | null
+          service_name: string
+          status: string
+          timestamp: string | null
+        }
+        Insert: {
+          alert_threshold_breached?: boolean | null
+          details?: Json | null
+          error_rate?: number | null
+          id?: string
+          response_time_ms?: number | null
+          service_name: string
+          status: string
+          timestamp?: string | null
+        }
+        Update: {
+          alert_threshold_breached?: boolean | null
+          details?: Json | null
+          error_rate?: number | null
+          id?: string
+          response_time_ms?: number | null
+          service_name?: string
+          status?: string
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
       user_badges: {
         Row: {
           awarded_at: string
@@ -397,7 +709,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
