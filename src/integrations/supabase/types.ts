@@ -29,6 +29,42 @@ export type Database = {
         }
         Relationships: []
       }
+      api_performance_metrics: {
+        Row: {
+          endpoint_name: string
+          error_details: Json | null
+          id: string
+          load_level: string | null
+          response_time_ms: number
+          status_code: number
+          success_rate: number | null
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          endpoint_name: string
+          error_details?: Json | null
+          id?: string
+          load_level?: string | null
+          response_time_ms: number
+          status_code: number
+          success_rate?: number | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          endpoint_name?: string
+          error_details?: Json | null
+          id?: string
+          load_level?: string | null
+          response_time_ms?: number
+          status_code?: number
+          success_rate?: number | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -581,6 +617,50 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      sfdr_regulatory_compliance: {
+        Row: {
+          assessment_id: string | null
+          compliance_status: string
+          created_at: string | null
+          id: string
+          last_validated_at: string | null
+          regulatory_framework: string
+          risk_score: number | null
+          updated_at: string | null
+          validation_method: string
+        }
+        Insert: {
+          assessment_id?: string | null
+          compliance_status: string
+          created_at?: string | null
+          id?: string
+          last_validated_at?: string | null
+          regulatory_framework?: string
+          risk_score?: number | null
+          updated_at?: string | null
+          validation_method: string
+        }
+        Update: {
+          assessment_id?: string | null
+          compliance_status?: string
+          created_at?: string | null
+          id?: string
+          last_validated_at?: string | null
+          regulatory_framework?: string
+          risk_score?: number | null
+          updated_at?: string | null
+          validation_method?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sfdr_regulatory_compliance_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sla_metrics: {
         Row: {
