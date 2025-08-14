@@ -431,3 +431,5 @@ This document outlines the comprehensive User Acceptance Testing (UAT) execution
 ---
 
 *This UAT execution plan follows industry best practices and ensures comprehensive testing coverage for the SFDR Navigator application. Regular updates and modifications may be required based on testing progress and findings.*
+
+
