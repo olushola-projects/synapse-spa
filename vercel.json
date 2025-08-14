@@ -3,6 +3,12 @@
   "buildCommand": "npm run build:prod",
   "outputDirectory": "dist",
   "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    }
+  ],
   "routes": [
     {
       "src": "/[^.]+",
@@ -54,8 +60,8 @@
     }
   ],
   "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
+    "api/index.py": {
+      "runtime": "python3.9"
     }
   },
   "regions": ["iad1"],
