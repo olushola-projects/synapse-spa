@@ -9,13 +9,6 @@
       "destination": "/api/index.py"
     }
   ],
-  "routes": [
-    {
-      "src": "/[^.]+",
-      "dest": "/",
-      "status": 200
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
