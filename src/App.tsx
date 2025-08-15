@@ -20,12 +20,9 @@ import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import UseCases from './pages/UseCases';
-import NexusAgent from './pages/NexusAgent';
+import SFDRNavigator from './pages/SFDRNavigator';
 import AgentsPage from './pages/AgentsPage';
 import CDDAgentPage from './pages/CDDAgentPage';
-
-// Lazy-loaded components
-const SFDRGem = lazy(() => import('./pages/SFDRGem'));
 
 // Legal pages
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
@@ -126,18 +123,11 @@ const App = () => (
             <Route path='/use-cases' element={<UseCases />} />
             <Route path='/agents' element={<AgentsPage />} />
             <Route path='/agents/cdd-agent' element={<CDDAgentPage />} />
-            <Route path='/nexus-agent' element={<NexusAgent />} />
-            <Route path='/sfdr-navigator' element={<NexusAgent />} />
-            <Route
-              path="/sfdr-gem"
-              element={
-                <ProtectedRoute>
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <SFDRGem />
-                  </Suspense>
-                </ProtectedRoute>
-              }
-            />
+            {/* Unified SFDR Navigator - All regulatory compliance features */}
+            <Route path='/sfdr-navigator' element={<SFDRNavigator />} />
+            {/* Legacy route redirects */}
+            <Route path='/nexus-agent' element={<SFDRNavigator />} />
+            <Route path='/sfdr-gem' element={<SFDRNavigator />} />
 
             {/* Legal Routes */}
             <Route path='/legal/privacy' element={<PrivacyPolicy />} />

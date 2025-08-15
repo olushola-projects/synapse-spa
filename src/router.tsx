@@ -26,8 +26,7 @@ import Solutions from './pages/platform/Solutions';
 import NavbarMenuTest from './pages/NavbarMenuTest';
 import Map from './pages/Map';
 import UseCases from './pages/UseCases';
-import NexusAgent from './pages/NexusAgent';
-import SFDRGem from './pages/SFDRGem';
+import SFDRNavigator from './pages/SFDRNavigator';
 
 // Create and export the router
 export const router = createBrowserRouter([
@@ -182,18 +181,18 @@ export const router = createBrowserRouter([
     path: '/navbar-test',
     element: <NavbarMenuTest />
   },
-  // SFDR Navigator routes - both routes point to the same component
-  {
-    path: '/nexus-agent',
-    element: <NexusAgent />
-  },
+  // Unified SFDR Navigator - Consolidates all regulatory compliance features
   {
     path: '/sfdr-navigator',
-    element: <NexusAgent />
+    element: <SFDRNavigator />
   },
-  // SFDR Gem - Advanced AI compliance assistant
+  // Legacy route redirects to unified navigator
+  {
+    path: '/nexus-agent',
+    element: <SFDRNavigator />
+  },
   {
     path: '/sfdr-gem',
-    element: <SFDRGem />
+    element: <SFDRNavigator />
   }
 ]);

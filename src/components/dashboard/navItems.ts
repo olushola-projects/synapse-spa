@@ -3,13 +3,12 @@ import { LayoutDashboard, MessageSquare, Settings, Users, Target, Bot } from 'lu
 // Navigation items shared between sidebar and mobile navigation
 export const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: Bot, label: 'SFDR Agent', href: '/nexus-agent' },
   {
-    icon: MessageSquare,
+    icon: Bot,
     label: 'SFDR Navigator',
-    href: '/nexus-agent',
-    badge: 'Beta',
-    accessModes: ['chat', 'forms', 'uploads']
+    href: '/sfdr-navigator',
+    badge: 'Unified Platform',
+    accessModes: ['chat', 'classify', 'documents', 'analytics', 'export']
   },
   { icon: Target, label: 'Use Cases', href: '/use-cases' },
   { icon: Users, label: 'Partners', href: '/partners' },
