@@ -15,8 +15,6 @@ import {
   Clock,
   Shield,
   AlertTriangle,
-  Lock,
-  Users,
   Activity,
   Zap,
   Eye,

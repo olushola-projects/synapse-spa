@@ -35,7 +35,7 @@ export function RealTimeMonitoringDashboard() {
       </TabsList>
 
       <TabsContent value='alerts' className='space-y-4'>
-        <AlertsTab alerts={activeAlerts} onResolve={(id: string) => { resolveAlertFn?.(id); }} />
+        <AlertsTab alerts={activeAlerts} onResolve={(id: string) => { resolveAlertFn(id); }} />
       </TabsContent>
 
       <TabsContent value='metrics' className='space-y-4'>

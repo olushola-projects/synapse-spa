@@ -27,8 +27,6 @@ import {
 } from 'lucide-react';
 
 // Import existing components
-import { NexusAgentChat } from '@/components/NexusAgentChat';
-import { LoadingFallback } from '@/components/LoadingFallback';
 import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
 
 /**

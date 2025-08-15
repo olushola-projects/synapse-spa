@@ -58,10 +58,13 @@ export function useSystemOverview() {
     };
   }, []);
 
-  const resolveAlert = withErrorHandling(async (alertId: string) => {
-    await enterpriseMonitoring.resolveAlert(alertId);
-    setActiveAlerts(prev => prev.filter(alert => alert.id !== alertId));
-  }, 'resolving alert');
+  const resolveAlert = async (alertId: string) => {
+    const result = await withErrorHandling(async () => {
+      await enterpriseMonitoring.resolveAlert(alertId);
+      setActiveAlerts(prev => prev.filter(alert => alert.id !== alertId));
+    }, 'resolving alert');
+    return result;
+  };
 
   return {
     overview,
