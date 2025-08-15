@@ -11,16 +11,16 @@ import { Separator } from '@/components/ui/separator';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { 
-  ChevronDownIcon, 
-  CheckCircleIcon, 
-  AlertTriangleIcon,
-  InfoIcon,
-  ClockIcon,
-  TrendingUpIcon,
-  ShieldCheckIcon,
-  DocumentTextIcon,
-  EyeIcon
-} from '@heroicons/react/24/outline';
+  ChevronDown, 
+  CheckCircle, 
+  AlertTriangle,
+  Info,
+  Clock,
+  TrendingUp,
+  Shield,
+  FileText,
+  Eye
+} from 'lucide-react';
 import { SFDRClassificationResponse } from '@/types/enhanced-classification';
 
 interface EnhancedClassificationResultProps {
@@ -81,7 +81,7 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-3">
-              <ShieldCheckIcon className="h-6 w-6 text-blue-600" />
+              <Shield className="h-6 w-6 text-blue-600" />
               SFDR Classification Result
             </CardTitle>
             {result.audit_trail && onExportAuditTrail && (
@@ -91,7 +91,7 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
                 onClick={onExportAuditTrail}
                 className="flex items-center gap-2"
               >
-                <DocumentTextIcon className="h-4 w-4" />
+                <FileText className="h-4 w-4" />
                 Export Audit Trail
               </Button>
             )}
@@ -112,7 +112,7 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
             </div>
             {result.processing_time && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <ClockIcon className="h-4 w-4" />
+                <Clock className="h-4 w-4" />
                 {formatProcessingTime(result.processing_time)}
               </div>
             )}
@@ -143,7 +143,7 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="flex items-center gap-2">
-                  <EyeIcon className="h-4 w-4" />
+                  <Eye className="h-4 w-4" />
                   Explainability Score
                 </span>
                 <span>{(result.explainability_score * 100).toFixed(1)}%</span>
@@ -161,10 +161,10 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
             <CardHeader className="cursor-pointer hover:bg-gray-50">
               <CardTitle className="flex items-center justify-between">
                 <span className="flex items-center gap-2">
-                  <InfoIcon className="h-5 w-5" />
+                  <Info className="h-5 w-5" />
                   Classification Reasoning
                 </span>
-                <ChevronDownIcon className={`h-5 w-5 transition-transform ${expandedSections.reasoning ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-5 w-5 transition-transform ${expandedSections.reasoning ? 'rotate-180' : ''}`} />
               </CardTitle>
             </CardHeader>
           </CollapsibleTrigger>
@@ -186,12 +186,12 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
                   <CardHeader className="cursor-pointer hover:bg-gray-50">
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
-                        <CheckCircleIcon className="h-5 w-5" />
+                        <CheckCircle className="h-5 w-5" />
                         Key Indicators Found
                       </span>
-                      <ChevronDownIcon className={`h-5 w-5 transition-transform ${expandedSections.indicators ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-5 w-5 transition-transform ${expandedSections.indicators ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                  </CollapsibleTrigger>
+                  </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent>
@@ -216,12 +216,12 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
                   <CardHeader className="cursor-pointer hover:bg-gray-50">
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
-                        <DocumentTextIcon className="h-5 w-5" />
+                        <FileText className="h-5 w-5" />
                         Regulatory Basis & Citations
                       </span>
-                      <ChevronDownIcon className={`h-5 w-5 transition-transform ${expandedSections.regulatory ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-5 w-5 transition-transform ${expandedSections.regulatory ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                  </CollapsibleTrigger>
+                  </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent>
@@ -247,12 +247,12 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
                   <CardHeader className="cursor-pointer hover:bg-gray-50">
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
-                        <TrendingUpIcon className="h-5 w-5" />
+                        <TrendingUp className="h-5 w-5" />
                         Benchmark Comparison
                       </span>
-                      <ChevronDownIcon className={`h-5 w-5 transition-transform ${expandedSections.benchmark ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-5 w-5 transition-transform ${expandedSections.benchmark ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                  </CollapsibleTrigger>
+                  </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent className="space-y-4">
@@ -297,19 +297,19 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
                   <CardHeader className="cursor-pointer hover:bg-gray-50">
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
-                        <AlertTriangleIcon className="h-5 w-5" />
+                        <AlertTriangle className="h-5 w-5" />
                         Risk Assessment
                       </span>
-                      <ChevronDownIcon className={`h-5 w-5 transition-transform ${expandedSections.risk ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-5 w-5 transition-transform ${expandedSections.risk ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                  </CollapsibleTrigger>
+                  </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent>
                     <ul className="space-y-2">
                       {result.risk_factors.map((risk, index) => (
                         <li key={index} className="flex items-start gap-3">
-                          <AlertTriangleIcon className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                          <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
                           <span className="text-gray-700">{risk}</span>
                         </li>
                       ))}
@@ -328,12 +328,12 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
                   <CardHeader className="cursor-pointer hover:bg-gray-50">
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
-                        <DocumentTextIcon className="h-5 w-5" />
+                        <FileText className="h-5 w-5" />
                         Audit Trail
                       </span>
-                      <ChevronDownIcon className={`h-5 w-5 transition-transform ${expandedSections.audit ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-5 w-5 transition-transform ${expandedSections.audit ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                  </CollapsibleTrigger>
+                  </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent className="space-y-3">
@@ -398,7 +398,7 @@ export const EnhancedClassificationResult: React.FC<EnhancedClassificationResult
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CheckCircleIcon className="h-5 w-5" />
+              <CheckCircle className="h-5 w-5" />
               Recommendations
             </CardTitle>
           </CardHeader>
