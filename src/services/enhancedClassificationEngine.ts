@@ -22,7 +22,11 @@ export interface EnhancedFundData {
     targetArticleClassification?: 'Article6' | 'Article8' | 'Article9';
     sustainabilityCharacteristics?: string[];
     fundStrategy: string;
-    assetAllocation?: AssetAllocation[];
+    assetAllocation?: Array<{
+      assetClass: string;
+      percentage: number;
+      sustainabilityRating?: string;
+    }>;
   };
   paiIndicators?: {
     considerationStatement: string;

@@ -15,9 +15,7 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  FileText,
   TestTube,
-  BarChart,
   Download
 } from 'lucide-react';
 import type {
@@ -40,14 +38,6 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
   const [currentTestIndex, setCurrentTestIndex] = useState(0);
   const [isRunningTest, setIsRunningTest] = useState(false);
   const [testResults, setTestResults] = useState<Record<string, SFDRClassificationResponse>>({});
-  const [manualTestData, setManualTestData] = useState({
-    title: '',
-    description: '',
-    text: '',
-    expectedClassification: '',
-    confidenceMin: 0.7,
-    confidenceMax: 0.95
-  });
 
   const defaultTestCases: UATTestCase[] = [
     {
@@ -343,45 +333,6 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
     URL.revokeObjectURL(url);
   };
 
-  const addManualTestCase = () => {
-    if (!session) {
-      return;
-    }
-
-    const newTestCase: UATTestCase = {
-      id: `manual-${Date.now()}`,
-      title: manualTestData.title,
-      description: manualTestData.description,
-      test_data: {
-        text: manualTestData.text,
-        document_type: 'manual_test',
-        include_audit_trail: true,
-        include_benchmark_comparison: true
-      },
-      expected_classification: manualTestData.expectedClassification,
-      expected_confidence_range: [manualTestData.confidenceMin, manualTestData.confidenceMax],
-      validation_criteria: [
-        `Classification matches ${manualTestData.expectedClassification}`,
-        'Confidence score within expected range',
-        'Enhanced features present'
-      ],
-      status: 'pending'
-    };
-
-    setSession({
-      ...session,
-      test_cases: [...session.test_cases, newTestCase]
-    });
-
-    setManualTestData({
-      title: '',
-      description: '',
-      text: '',
-      expectedClassification: '',
-      confidenceMin: 0.7,
-      confidenceMax: 0.95
-    });
-  };
 
   return (
     <div className='space-y-6'>
@@ -589,10 +540,16 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
             <CardTitle>Test Results</CardTitle>
           </CardHeader>
           <CardContent>
-            <EnhancedClassificationResult
-              result={testResults[session.test_cases[currentTestIndex].id]}
-              showAdvancedFeatures={true}
-            />
+            {(() => {
+              const currentTest = session.test_cases[currentTestIndex];
+              const result = testResults[currentTest.id];
+              return result ? (
+                <EnhancedClassificationResult
+                  result={result}
+                  showAdvancedFeatures={true}
+                />
+              ) : null;
+            })()}
           </CardContent>
         </Card>
       )}
