@@ -15,12 +15,36 @@ export interface ClassificationRequest {
   // AI routing
   strategy?: 'primary' | 'secondary' | 'hybrid';
   model?: string;
+  // Enhanced request options
+  include_audit_trail?: boolean;
+  include_benchmark_comparison?: boolean;
+  confidence_threshold?: number;
+  require_citations?: boolean;
 }
 
 export interface ClassificationResponse {
   classification: string;
   confidence: number;
   processing_time: number;
+  reasoning: string;
+  // Enhanced fields from new backend
+  sustainability_score?: number;
+  key_indicators?: string[];
+  risk_factors?: string[];
+  regulatory_basis?: string[];
+  benchmark_comparison?: {
+    industry_baseline: number;
+    current_confidence: number;
+    performance_vs_baseline: number;
+    percentile_rank: number;
+  };
+  audit_trail?: {
+    classification_id: string;
+    timestamp: string;
+    engine_version: string;
+    processing_time: number;
+  };
+  explainability_score?: number;
 }
 
 export interface HealthResponse {
@@ -313,6 +337,9 @@ export class BackendApiClient {
     const request: ClassificationRequest = {
       text,
       document_type: 'SFDR_Fund_Profile',
+      include_audit_trail: true,
+      include_benchmark_comparison: true,
+      require_citations: true, // Critical for regulatory compliance
       ...(strategy ? { strategy } as Partial<ClassificationRequest> : {})
     };
 

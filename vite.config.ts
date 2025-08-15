@@ -25,22 +25,58 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === 'development',
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          ui: [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-toast',
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-avatar',
-            '@radix-ui/react-checkbox'
-          ],
-          router: ['react-router-dom'],
-          utils: ['clsx', 'tailwind-merge', 'date-fns'],
-          charts: ['recharts'],
-          forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
-          motion: ['framer-motion'],
-          icons: ['lucide-react']
+        manualChunks: (id) => {
+          // Core vendor libraries
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'vendor-ui';
+            }
+            if (id.includes('recharts') || id.includes('d3')) {
+              return 'vendor-charts';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-motion';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+            if (id.includes('react-router')) {
+              return 'vendor-router';
+            }
+            // Group smaller utilities
+            if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('date-fns')) {
+              return 'vendor-utils';
+            }
+            // Group form libraries
+            if (id.includes('react-hook-form') || id.includes('zod') || id.includes('@hookform')) {
+              return 'vendor-forms';
+            }
+            // Default vendor chunk for other dependencies
+            return 'vendor-misc';
+          }
+          
+          // App-specific chunks based on features
+          if (id.includes('src/components/dashboard')) {
+            return 'feature-dashboard';
+          }
+          if (id.includes('src/components/monitoring')) {
+            return 'feature-monitoring';
+          }
+          if (id.includes('src/components/sfdr')) {
+            return 'feature-sfdr';
+          }
+          if (id.includes('src/components/charts') || id.includes('Chart')) {
+            return 'feature-charts';
+          }
+          if (id.includes('src/pages')) {
+            return 'feature-pages';
+          }
+          if (id.includes('src/services')) {
+            return 'feature-services';
+          }
         }
       }
     },
