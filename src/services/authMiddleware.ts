@@ -227,7 +227,7 @@ export class AuthMiddleware {
   private createAuditLog(
     request: AuthRequest,
     success: boolean,
-    error?: string,
+    error: string | undefined,
     startTime: number
   ): AuthAuditLog {
     const auditLog: AuthAuditLog = {

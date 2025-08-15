@@ -3,25 +3,23 @@
  * Validates enhanced features with stakeholders
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import {
-  PlayIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  ClockIcon,
-  DocumentTextIcon,
-  BeakerIcon,
-  ChartBarIcon,
-  ArrowDownTrayIcon
-} from '@heroicons/react/24/outline';
+  Play,
+  CheckCircle,
+  XCircle,
+  Clock,
+  FileText,
+  TestTube,
+  BarChart,
+  Download
+} from 'lucide-react';
 import type {
   UATTestCase,
   UATSession,
@@ -163,6 +161,8 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
     }
 
     const currentTest = session.test_cases[currentTestIndex];
+    if (!currentTest) return;
+    
     setIsRunningTest(true);
 
     try {
@@ -208,7 +208,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
       const updatedTest: UATTestCase = {
         ...currentTest,
         status:
-          validationResults.passed.length === currentTest.validation_criteria.length
+          validationResults.passed.length === (currentTest.validation_criteria?.length || 0)
             ? 'passed'
             : 'failed',
         results: {
@@ -240,12 +240,12 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
     const passed: string[] = [];
     const failed: string[] = [];
 
-    testCase.validation_criteria.forEach(criterion => {
+    testCase.validation_criteria?.forEach(criterion => {
       let isValid = false;
 
       switch (true) {
         case criterion.includes('Classification matches'):
-          isValid = response.classification.includes(testCase.expected_classification);
+          isValid = response.classification?.includes(testCase.expected_classification) || false;
           break;
         case criterion.includes('Confidence score'):
           isValid =
@@ -256,7 +256,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
           isValid = !!response.audit_trail;
           break;
         case criterion.includes('Regulatory citations'):
-          isValid = response.regulatory_basis && response.regulatory_basis.length > 0;
+          isValid = !!(response.regulatory_basis && response.regulatory_basis.length > 0);
           break;
         case criterion.includes('Benchmark comparison'):
           isValid = !!response.benchmark_comparison;
@@ -265,14 +265,15 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
           isValid = response.sustainability_score !== undefined;
           break;
         case criterion.includes('Key indicators'):
-          isValid = response.key_indicators && response.key_indicators.length > 0;
+          isValid = !!(response.key_indicators && response.key_indicators.length > 0);
           break;
         case criterion.includes('Processing time'):
-          isValid = response.processing_time !== undefined && response.processing_time < 0.5;
+          isValid = !!(response.processing_time !== undefined && response.processing_time < 0.5);
           break;
         case criterion.includes('Explainability score'):
-          isValid =
-            response.explainability_score !== undefined && response.explainability_score > 0.8;
+          isValid = !!(
+            response.explainability_score !== undefined && response.explainability_score > 0.8
+          );
           break;
         case criterion.includes('enhanced fields'):
           isValid = !!(
@@ -388,7 +389,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
       <div className='flex items-center justify-between'>
         <div>
           <h2 className='text-2xl font-bold text-gray-900 flex items-center gap-2'>
-            <BeakerIcon className='h-8 w-8' />
+            <TestTube className='h-8 w-8' />
             UAT Testing Framework
           </h2>
           <p className='text-gray-600'>Enhanced SFDR Classification Validation</p>
@@ -396,7 +397,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
         <div className='flex items-center gap-3'>
           {session && (
             <Button onClick={exportSessionReport} variant='outline' size='sm'>
-              <ArrowDownTrayIcon className='h-4 w-4 mr-2' />
+              <Download className='h-4 w-4 mr-2' />
               Export Report
             </Button>
           )}
@@ -487,13 +488,13 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
                     <h4 className='font-medium'>{testCase.title}</h4>
                     <div className='flex items-center gap-2'>
                       {testCase.status === 'passed' && (
-                        <CheckCircleIcon className='h-5 w-5 text-green-500' />
+                        <CheckCircle className='h-5 w-5 text-green-500' />
                       )}
                       {testCase.status === 'failed' && (
-                        <XCircleIcon className='h-5 w-5 text-red-500' />
+                        <XCircle className='h-5 w-5 text-red-500' />
                       )}
                       {testCase.status === 'pending' && (
-                        <ClockIcon className='h-5 w-5 text-gray-400' />
+                        <Clock className='h-5 w-5 text-gray-400' />
                       )}
                       <Badge variant='outline'>{testCase.expected_classification}</Badge>
                     </div>
@@ -555,7 +556,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
                       }
                       className='flex items-center gap-2'
                     >
-                      <PlayIcon className='h-4 w-4' />
+                      <Play className='h-4 w-4' />
                       {isRunningTest ? 'Running...' : 'Run Test'}
                     </Button>
                   </div>
@@ -582,7 +583,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
       )}
 
       {/* Test Results Display */}
-      {session && testResults[session.test_cases[currentTestIndex]?.id] && (
+      {session && session.test_cases[currentTestIndex] && testResults[session.test_cases[currentTestIndex].id] && (
         <Card>
           <CardHeader>
             <CardTitle>Test Results</CardTitle>
@@ -602,7 +603,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
         session.overall_status === 'in_progress' && (
           <Card>
             <CardContent className='p-6 text-center'>
-              <CheckCircleIcon className='h-12 w-12 text-green-500 mx-auto mb-4' />
+              <CheckCircle className='h-12 w-12 text-green-500 mx-auto mb-4' />
               <h3 className='text-lg font-semibold mb-2'>All Tests Completed</h3>
               <p className='text-gray-600 mb-4'>
                 Session ready for completion and report generation
