@@ -1,8 +1,14 @@
+import { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
+
+// Pages
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import Partners from './pages/Partners';
@@ -13,14 +19,13 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import { AuthProvider } from './contexts/AuthContext';
 import UseCases from './pages/UseCases';
 import NexusAgent from './pages/NexusAgent';
 import AgentsPage from './pages/AgentsPage';
 import CDDAgentPage from './pages/CDDAgentPage';
-import ProtectedRoute from './components/ProtectedRoute';
-import ErrorBoundary from './components/ErrorBoundary';
-import SFDRGem from './pages/SFDRGem';
+
+// Lazy-loaded components
+const SFDRGem = lazy(() => import('./pages/SFDRGem'));
 
 // Legal pages
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
@@ -124,10 +129,12 @@ const App = () => (
             <Route path='/nexus-agent' element={<NexusAgent />} />
             <Route path='/sfdr-navigator' element={<NexusAgent />} />
             <Route
-              path='/sfdr-gem'
+              path="/sfdr-gem"
               element={
                 <ProtectedRoute>
-                  <SFDRGem />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <SFDRGem />
+                  </Suspense>
                 </ProtectedRoute>
               }
             />

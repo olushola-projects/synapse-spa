@@ -230,3 +230,5 @@ The current SFDR Fund Classification system has a solid foundation but requires 
 **Competitive Advantage**: 2-3 years ahead of current market offerings
 
 The implementation of these recommendations will create a world-class SFDR compliance solution capable of competing with Big 4 offerings while maintaining cost-effectiveness and superior user experience.
+
+

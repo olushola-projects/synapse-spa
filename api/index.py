@@ -289,15 +289,35 @@ class EnhancedSFDRClassifier:
 if AI_ENGINE_AVAILABLE:
     # Configure AI engine with environment variables
     ai_config = {
+        'openrouter': {
+            'api_key': os.getenv('QWEN_API_KEY', ''),  # Primary OpenRouter API key
+            'base_url': 'https://openrouter.ai/api/v1',
+            'primary_model': 'Qwen3_235B_A22B',
+            'fallback_models': [
+                'Qwen3_235B_A22B (free)',
+                'OpenAI: gpt-oss-20b (free)'
+            ],
+            'max_tokens': 4096
+        },
+        'openrouter_fallback': {
+            'api_key': os.getenv('OPENAI_API_KEY', ''),  # Secondary OpenRouter API key
+            'base_url': 'https://openrouter.ai/api/v1',
+            'primary_model': 'OpenAI: gpt-oss-20b',
+            'fallback_models': [
+                'OpenAI: gpt-oss-20b (free)',
+                'Qwen3_235B_A22B (free)'
+            ],
+            'max_tokens': 4096
+        },
         'qwen': {
             'api_key': os.getenv('QWEN_API_KEY', ''),
-            'model_name': 'qwen-plus',
-            'max_tokens': 2048
+            'model_name': 'Qwen3_235B_A22B',
+            'max_tokens': 4096
         },
         'openai': {
             'api_key': os.getenv('OPENAI_API_KEY', ''),
-            'model_name': 'gpt-4',
-            'max_tokens': 2048
+            'model_name': 'gpt-oss-20b',
+            'max_tokens': 4096
         }
     }
     classifier = EnhancedQwenClassificationEngine(ai_config)
@@ -321,9 +341,9 @@ async def health_check():
         qwen_key = os.getenv('QWEN_API_KEY', '')
         openai_key = os.getenv('OPENAI_API_KEY', '')
         if qwen_key and openai_key:
-            engine_status = "ai_fully_configured"
+            engine_status = "ai_fully_configured_openrouter"
         elif qwen_key or openai_key:
-            engine_status = "ai_partially_configured"
+            engine_status = "ai_partially_configured_openrouter"
         else:
             engine_status = "ai_no_keys"
     
@@ -381,6 +401,7 @@ async def get_metrics():
             "AI-powered classification",
             "Qwen model integration",
             "OpenAI model fallback",
+            "OpenRouter fallback models",
             "Multi-strategy processing"
         ])
     
@@ -392,7 +413,8 @@ async def get_metrics():
         "features": features,
         "api_keys_configured": {
             "qwen": bool(os.getenv('QWEN_API_KEY')),
-            "openai": bool(os.getenv('OPENAI_API_KEY'))
+            "openai": bool(os.getenv('OPENAI_API_KEY')),
+            "openrouter": bool(os.getenv('OPENROUTER_API_KEY'))
         }
     }
 

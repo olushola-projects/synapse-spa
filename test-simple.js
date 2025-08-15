@@ -21,3 +21,4 @@ fetch(`${API_URL}/api/health`)
     }
   })
   .catch(err => console.error('Request failed:', err));
+

@@ -67,3 +67,4 @@ async function testBothDomains() {
 }
 
 testBothDomains().catch(console.error);
+

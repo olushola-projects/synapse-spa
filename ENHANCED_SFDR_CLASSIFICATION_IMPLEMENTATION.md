@@ -787,3 +787,5 @@ const msciService = {
 - Revenue growth: >200% YoY
 
 This enhanced implementation will position your SFDR classification system as a market-leading solution, capable of competing with Big 4 offerings while providing superior user experience and advanced AI capabilities.
+
+
