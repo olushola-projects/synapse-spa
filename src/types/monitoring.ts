@@ -21,6 +21,7 @@ export interface SystemAlert {
   timestamp: string;
   resolved: boolean;
   category: 'system' | 'api' | 'security' | 'compliance';
+  type: 'security' | 'compliance' | 'authentication' | 'performance';
 }
 
 export interface Alert extends SystemAlert {}
@@ -58,6 +59,10 @@ export interface SystemOverview {
   apiStatus: 'operational' | 'degraded' | 'outage';
   activeAlerts: Alert[];
   metrics: SystemMetrics;
+  overallHealth: 'healthy' | 'degraded' | 'critical';
+  avgResponseTime: number;
+  apiSuccessRate: number;
+  complianceScore: number;
 }
 
 export interface MonitoringOverview extends SystemOverview {}

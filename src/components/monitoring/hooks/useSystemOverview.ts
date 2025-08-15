@@ -23,8 +23,21 @@ export function useSystemOverview() {
       }, 'fetching monitoring data');
 
       if (data) {
-        setOverview(data.overview);
-        setActiveAlerts(data.alerts);
+        setOverview({
+          ...data.overview,
+          systemHealth: data.overview.overallHealth,
+          apiStatus: 'operational',
+          metrics: {
+            cpu: 0,
+            memory: 0,
+            load: 0,
+            apiLatency: data.overview.avgResponseTime,
+            apiSuccessRate: data.overview.apiSuccessRate,
+            activeAlerts: data.overview.activeAlerts,
+            timestamp: new Date().toISOString()
+          }
+        } as any);
+        setActiveAlerts(data.alerts.map(alert => ({ ...alert, category: 'system' as const, type: 'performance' as const })));
         setLastUpdate(new Date());
       }
       setIsLoading(false);
@@ -33,8 +46,8 @@ export function useSystemOverview() {
     fetchData();
     const overviewInterval = setInterval(fetchData, POLLING_INTERVALS.SYSTEM_OVERVIEW);
 
-    const handleNewAlert = (alert: SystemAlert) => {
-      setActiveAlerts(prevAlerts => [alert, ...prevAlerts]);
+    const handleNewAlert = (alert: any) => {
+      setActiveAlerts(prevAlerts => [{ ...alert, category: 'system' as const, type: 'performance' as const }, ...prevAlerts]);
     };
 
     enterpriseMonitoring.addAlertListener(handleNewAlert);
@@ -48,7 +61,7 @@ export function useSystemOverview() {
   const resolveAlert = withErrorHandling(async (alertId: string) => {
     await enterpriseMonitoring.resolveAlert(alertId);
     setActiveAlerts(prev => prev.filter(alert => alert.id !== alertId));
-  });
+  }, 'resolving alert');
 
   return {
     overview,

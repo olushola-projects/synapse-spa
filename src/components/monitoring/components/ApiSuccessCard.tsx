@@ -23,7 +23,6 @@ function SuccessRateDisplay({ rate, color }: { rate: number; color: string }) {
       <Progress
         value={rate}
         className='w-full h-2 bg-gray-200 rounded-full'
-        indicatorClassName={color.replace('text-', 'bg-')}
       />
     </div>
   );
