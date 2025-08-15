@@ -264,7 +264,7 @@ export const withErrorBoundary = <P extends object>(
 
 // Hook for triggering error boundaries programmatically
 export const useErrorHandler = () => {
-  return (error: Error, errorInfo?: ErrorInfo) => {
+  return (error: Error, _errorInfo?: ErrorInfo) => {
     // This will trigger the nearest error boundary
     throw error;
   };

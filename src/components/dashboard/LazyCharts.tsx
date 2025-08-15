@@ -2,9 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Lazy load chart components to reduce bundle size
-const DashboardCharts = lazy(() => import('./charts/DashboardCharts'));
-const RegulatoryFocusChart = lazy(() => import('./charts/RegulatoryFocusChart'));
+// Simple lazy loading without complex module resolution
 const MobileCharts = lazy(() => import('./MobileCharts'));
 
 // Loading fallback component
@@ -27,28 +25,14 @@ const ChartSkeleton = ({ title }: { title: string }) => (
   </Card>
 );
 
-// Lazy wrapped components with loading states
-export const LazyDashboardCharts = () => (
-  <Suspense fallback={<ChartSkeleton title="Performance Analytics" />}>
-    <DashboardCharts />
-  </Suspense>
-);
-
-export const LazyRegulatoryFocusChart = () => (
-  <Suspense fallback={<ChartSkeleton title="Regulatory Focus" />}>
-    <RegulatoryFocusChart />
-  </Suspense>
-);
+// Simple non-lazy exports for now to fix build issues
+export { RegulatoryFocusChart, ComplianceRiskChart, ControlStatusChart } from './charts/DashboardCharts';
 
 export const LazyMobileCharts = () => (
   <Suspense fallback={<ChartSkeleton title="Mobile Analytics" />}>
     <MobileCharts />
   </Suspense>
 );
-
-// Export lazy-loaded monitoring components
-export const LazyPerformanceMonitoring = lazy(() => import('../monitoring/PerformanceMonitoringDashboard'));
-export const LazyRealTimeMonitoring = lazy(() => import('../monitoring/RealTimeMonitoringDashboard'));
 
 // Monitoring skeleton
 const MonitoringSkeleton = ({ title }: { title: string }) => (
@@ -72,14 +56,6 @@ const MonitoringSkeleton = ({ title }: { title: string }) => (
   </Card>
 );
 
-export const LazyPerformanceMonitoringWrapper = () => (
-  <Suspense fallback={<MonitoringSkeleton title="Performance Monitoring" />}>
-    <LazyPerformanceMonitoring />
-  </Suspense>
-);
-
-export const LazyRealTimeMonitoringWrapper = () => (
-  <Suspense fallback={<MonitoringSkeleton title="Real-time Monitoring" />}>
-    <LazyRealTimeMonitoring />
-  </Suspense>
-);
+// Simple imports for monitoring components
+export { default as PerformanceMonitoringDashboard } from '../monitoring/PerformanceMonitoringDashboard';
+export { default as RealTimeMonitoringDashboard } from '../monitoring/RealTimeMonitoringDashboard';

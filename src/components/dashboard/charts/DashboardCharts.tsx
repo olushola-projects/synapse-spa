@@ -166,3 +166,6 @@ export const ControlStatusChart: React.FC = () => {
     </div>
   );
 };
+
+const DashboardCharts = { RegulatoryFocusChart, ComplianceRiskChart, ControlStatusChart };
+export default DashboardCharts;

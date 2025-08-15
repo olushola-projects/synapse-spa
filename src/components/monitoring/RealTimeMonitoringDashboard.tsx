@@ -388,3 +388,5 @@ export function RealTimeMonitoringDashboard() {
     </div>
   );
 }
+
+export default RealTimeMonitoringDashboard;

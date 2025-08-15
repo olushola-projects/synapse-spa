@@ -14,7 +14,7 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
+  
   CpuChipIcon,
   SignalIcon
 } from '@heroicons/react/24/outline';
@@ -88,11 +88,6 @@ export const PerformanceMonitoringDashboard: React.FC<PerformanceMonitoringDashb
     return () => clearInterval(interval);
   }, [refreshInterval]);
 
-  const getStatusColor = (value: number, thresholds: { good: number; warning: number }) => {
-    if (value >= thresholds.good) return 'text-green-600';
-    if (value >= thresholds.warning) return 'text-yellow-600';
-    return 'text-red-600';
-  };
 
   const getStatusBadge = (value: number, thresholds: { good: number; warning: number }) => {
     if (value >= thresholds.good) return <Badge className="bg-green-100 text-green-800">Excellent</Badge>;
@@ -355,3 +350,5 @@ export const PerformanceMonitoringDashboard: React.FC<PerformanceMonitoringDashb
     </div>
   );
 };
+
+export default PerformanceMonitoringDashboard;
