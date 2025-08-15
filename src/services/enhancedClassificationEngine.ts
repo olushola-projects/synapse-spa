@@ -1,7 +1,7 @@
 /**
  * Enhanced SFDR Classification Engine
  * Implements advanced AI/ML capabilities for accurate fund classification
- * 
+ *
  * Features:
  * - BERT-based text classification
  * - Ensemble learning with multiple models
@@ -241,17 +241,20 @@ export class EnhancedClassificationEngine {
           regulatoryRules: this.getRegulatoryRules()
         }
       };
-
     } catch (error) {
       logger.error('Enhanced classification failed:', error);
-      throw new Error(`Classification failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Classification failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   /**
    * Ensemble classification with multiple models
    */
-  private async performEnsembleClassification(data: EnhancedFundData): Promise<EnhancedClassificationResult['classification']> {
+  private async performEnsembleClassification(
+    data: EnhancedFundData
+  ): Promise<EnhancedClassificationResult['classification']> {
     const modelResults = await Promise.all([
       this.bertClassification(data),
       this.transformerClassification(data),
@@ -261,13 +264,13 @@ export class EnhancedClassificationEngine {
 
     // Calculate model weights based on historical accuracy
     const weights = this.calculateModelWeights(modelResults);
-    
+
     // Weighted ensemble voting
     const ensembleResult = this.weightedVoting(modelResults, weights);
-    
+
     // Calculate uncertainty
     const uncertainty = this.calculateUncertainty(modelResults, weights);
-    
+
     // Generate alternative classifications
     const alternatives = this.generateAlternatives(modelResults, weights);
 
@@ -289,7 +292,7 @@ export class EnhancedClassificationEngine {
     try {
       // Preprocess data for BERT
       const text = this.preprocessForBERT(data);
-      
+
       // Call BERT model (implemented via backend API)
       const response = await backendApiClient.classifyDocument({
         text,
@@ -308,7 +311,6 @@ export class EnhancedClassificationEngine {
         prediction: this.mapClassification(response.data?.classification),
         confidence: response.data?.confidence || 0.8
       };
-
     } catch (error) {
       logger.error('BERT classification failed:', error);
       return {
@@ -326,7 +328,7 @@ export class EnhancedClassificationEngine {
   private async transformerClassification(data: EnhancedFundData): Promise<ModelContribution> {
     try {
       const text = this.preprocessForTransformer(data);
-      
+
       const response = await backendApiClient.classifyDocument({
         text,
         document_type: 'SFDR_Fund_Classification',
@@ -340,7 +342,6 @@ export class EnhancedClassificationEngine {
         prediction: this.mapClassification(response.data?.classification),
         confidence: response.data?.confidence || 0.75
       };
-
     } catch (error) {
       logger.error('Transformer classification failed:', error);
       return {
@@ -359,14 +360,13 @@ export class EnhancedClassificationEngine {
     try {
       const rules = this.getClassificationRules();
       const result = this.applyRules(data, rules);
-      
+
       return {
         model: 'Rule-Based',
         weight: 0.25,
         prediction: result.classification,
         confidence: result.confidence
       };
-
     } catch (error) {
       logger.error('Rule-based classification failed:', error);
       return {
@@ -384,7 +384,7 @@ export class EnhancedClassificationEngine {
   private async lstmClassification(data: EnhancedFundData): Promise<ModelContribution> {
     try {
       const text = this.preprocessForLSTM(data);
-      
+
       const response = await backendApiClient.classifyDocument({
         text,
         document_type: 'SFDR_Fund_Classification',
@@ -398,7 +398,6 @@ export class EnhancedClassificationEngine {
         prediction: this.mapClassification(response.data?.classification),
         confidence: response.data?.confidence || 0.7
       };
-
     } catch (error) {
       logger.error('LSTM classification failed:', error);
       return {
@@ -413,12 +412,18 @@ export class EnhancedClassificationEngine {
   /**
    * Comprehensive compliance validation
    */
-  private async validateCompliance(data: EnhancedFundData, classification: any): Promise<EnhancedClassificationResult['compliance']> {
+  private async validateCompliance(
+    data: EnhancedFundData,
+    classification: any
+  ): Promise<EnhancedClassificationResult['compliance']> {
     const issues: ComplianceIssue[] = [];
     const recommendations: string[] = [];
 
     // PAI validation
-    const paiScore = this.validatePAIIndicators(data.paiIndicators, classification.recommendedArticle);
+    const paiScore = this.validatePAIIndicators(
+      data.paiIndicators,
+      classification.recommendedArticle
+    );
     if (paiScore < 0.8) {
       issues.push({
         id: 'PAI_001',
@@ -430,7 +435,10 @@ export class EnhancedClassificationEngine {
     }
 
     // Taxonomy validation
-    const taxonomyScore = this.validateTaxonomyAlignment(data.taxonomyAlignment, classification.recommendedArticle);
+    const taxonomyScore = this.validateTaxonomyAlignment(
+      data.taxonomyAlignment,
+      classification.recommendedArticle
+    );
     if (taxonomyScore < 0.7) {
       issues.push({
         id: 'TAX_001',
@@ -489,14 +497,22 @@ export class EnhancedClassificationEngine {
   /**
    * Comprehensive data quality assessment
    */
-  private async assessDataQuality(data: EnhancedFundData): Promise<EnhancedClassificationResult['dataQuality']> {
+  private async assessDataQuality(
+    data: EnhancedFundData
+  ): Promise<EnhancedClassificationResult['dataQuality']> {
     const completeness = this.assessCompleteness(data);
     const accuracy = await this.assessAccuracy(data);
     const consistency = this.assessConsistency(data);
     const timeliness = this.assessTimeliness(data);
     const validity = this.assessValidity(data);
 
-    const overallScore = (completeness.score + accuracy.score + consistency.score + timeliness.score + validity.score) / 5;
+    const overallScore =
+      (completeness.score +
+        accuracy.score +
+        consistency.score +
+        timeliness.score +
+        validity.score) /
+      5;
 
     return {
       overallScore,
@@ -519,15 +535,19 @@ export class EnhancedClassificationEngine {
   /**
    * Risk assessment
    */
-  private async assessRisk(data: EnhancedFundData, classification: any, compliance: any): Promise<EnhancedClassificationResult['riskAssessment']> {
+  private async assessRisk(
+    data: EnhancedFundData,
+    classification: any,
+    compliance: any
+  ): Promise<EnhancedClassificationResult['riskAssessment']> {
     const complianceRisk = this.calculateComplianceRisk(compliance.overallScore);
     const regulatoryRisk = this.calculateRegulatoryRisk(data, classification);
     const dataQualityRisk = this.calculateDataQualityRisk(data);
-    
+
     const overallRisk = this.calculateOverallRisk(complianceRisk, regulatoryRisk, dataQualityRisk);
 
     const riskFactors: RiskFactor[] = [];
-    
+
     if (compliance.overallScore < 0.8) {
       riskFactors.push({
         category: 'Compliance',
@@ -577,7 +597,9 @@ export class EnhancedClassificationEngine {
 
     // Validate against OpenCorporates
     if (data.entityIdentifiers.entityId) {
-      const corporateValidation = await this.validateWithOpenCorporates(data.entityIdentifiers.entityId);
+      const corporateValidation = await this.validateWithOpenCorporates(
+        data.entityIdentifiers.entityId
+      );
       validations.push(corporateValidation);
     }
 
@@ -621,8 +643,12 @@ export class EnhancedClassificationEngine {
   }
 
   private mapClassification(classification: string): 'Article 6' | 'Article 8' | 'Article 9' {
-    if (classification.includes('Article 8')) return 'Article 8';
-    if (classification.includes('Article 9')) return 'Article 9';
+    if (classification.includes('Article 8')) {
+      return 'Article 8';
+    }
+    if (classification.includes('Article 9')) {
+      return 'Article 9';
+    }
     return 'Article 6';
   }
 
@@ -630,18 +656,30 @@ export class EnhancedClassificationEngine {
     // Calculate weights based on historical accuracy and current confidence
     return results.map(result => {
       const modelAccuracy = this.models.get(result.model.toLowerCase())?.accuracy || 0.8;
-      return (modelAccuracy * result.confidence) / results.reduce((sum, r) => sum + (this.models.get(r.model.toLowerCase())?.accuracy || 0.8) * r.confidence, 0);
+      return (
+        (modelAccuracy * result.confidence) /
+        results.reduce(
+          (sum, r) =>
+            sum + (this.models.get(r.model.toLowerCase())?.accuracy || 0.8) * r.confidence,
+          0
+        )
+      );
     });
   }
 
-  private weightedVoting(results: ModelContribution[], weights: number[]): { classification: string; confidence: number } {
+  private weightedVoting(
+    results: ModelContribution[],
+    weights: number[]
+  ): { classification: string; confidence: number } {
     const votes = { 'Article 6': 0, 'Article 8': 0, 'Article 9': 0 };
-    
+
     results.forEach((result, index) => {
       votes[result.prediction as keyof typeof votes] += weights[index] * result.confidence;
     });
 
-    const classification = Object.entries(votes).reduce((a, b) => votes[a[0] as keyof typeof votes] > votes[b[0] as keyof typeof votes] ? a : b)[0];
+    const classification = Object.entries(votes).reduce((a, b) =>
+      votes[a[0] as keyof typeof votes] > votes[b[0] as keyof typeof votes] ? a : b
+    )[0];
     const confidence = votes[classification as keyof typeof votes];
 
     return { classification, confidence };
@@ -651,13 +689,20 @@ export class EnhancedClassificationEngine {
     // Calculate uncertainty based on model disagreement
     const predictions = results.map(r => r.prediction);
     const uniquePredictions = new Set(predictions);
-    
-    if (uniquePredictions.size === 1) return 0.1; // High agreement
-    if (uniquePredictions.size === 2) return 0.3; // Medium agreement
+
+    if (uniquePredictions.size === 1) {
+      return 0.1;
+    } // High agreement
+    if (uniquePredictions.size === 2) {
+      return 0.3;
+    } // Medium agreement
     return 0.5; // Low agreement
   }
 
-  private generateAlternatives(results: ModelContribution[], weights: number[]): AlternativeClassification[] {
+  private generateAlternatives(
+    results: ModelContribution[],
+    weights: number[]
+  ): AlternativeClassification[] {
     const alternatives = results
       .filter(r => r.confidence > 0.6)
       .map(r => ({
@@ -671,7 +716,10 @@ export class EnhancedClassificationEngine {
     return alternatives;
   }
 
-  private getModelContributions(results: ModelContribution[], weights: number[]): ModelContribution[] {
+  private getModelContributions(
+    results: ModelContribution[],
+    weights: number[]
+  ): ModelContribution[] {
     return results.map((result, index) => ({
       ...result,
       weight: weights[index]
@@ -685,8 +733,8 @@ export class EnhancedClassificationEngine {
   }
 
   private generateDetailedReasoning(results: ModelContribution[], ensembleResult: any): string {
-    const topModel = results.reduce((a, b) => a.confidence > b.confidence ? a : b);
-    
+    const topModel = results.reduce((a, b) => (a.confidence > b.confidence ? a : b));
+
     return `Classification determined by ensemble of ${results.length} models with ${(ensembleResult.confidence * 100).toFixed(1)}% confidence. 
     Primary contribution from ${topModel.model} model (${(topModel.weight * 100).toFixed(1)}% weight). 
     Model agreement: ${(this.calculateModelAgreement(results) * 100).toFixed(1)}%.`;
@@ -702,11 +750,13 @@ export class EnhancedClassificationEngine {
         })
       },
       {
-        condition: (data: EnhancedFundData) => data.fundProfile.sustainabilityCharacteristics?.length > 0,
+        condition: (data: EnhancedFundData) =>
+          data.fundProfile.sustainabilityCharacteristics?.length > 0,
         action: () => ({ classification: 'Article 8', confidence: 0.85 })
       },
       {
-        condition: (data: EnhancedFundData) => data.fundProfile.investmentObjective.toLowerCase().includes('sustainable'),
+        condition: (data: EnhancedFundData) =>
+          data.fundProfile.investmentObjective.toLowerCase().includes('sustainable'),
         action: () => ({ classification: 'Article 9', confidence: 0.8 })
       },
       {
@@ -716,7 +766,10 @@ export class EnhancedClassificationEngine {
     ];
   }
 
-  private applyRules(data: EnhancedFundData, rules: any[]): { classification: string; confidence: number } {
+  private applyRules(
+    data: EnhancedFundData,
+    rules: any[]
+  ): { classification: string; confidence: number } {
     for (const rule of rules) {
       if (rule.condition(data)) {
         return rule.action(data);
@@ -726,53 +779,89 @@ export class EnhancedClassificationEngine {
   }
 
   private validatePAIIndicators(paiIndicators: any, recommendedArticle: string): number {
-    if (!paiIndicators) return 0.5;
-    
+    if (!paiIndicators) {
+      return 0.5;
+    }
+
     let score = 0.8;
-    
-    if (paiIndicators.mandatoryIndicators?.length >= 18) score += 0.1;
-    if (paiIndicators.considerationStatement) score += 0.05;
-    if (paiIndicators.dataQuality === 'high') score += 0.05;
-    
+
+    if (paiIndicators.mandatoryIndicators?.length >= 18) {
+      score += 0.1;
+    }
+    if (paiIndicators.considerationStatement) {
+      score += 0.05;
+    }
+    if (paiIndicators.dataQuality === 'high') {
+      score += 0.05;
+    }
+
     return Math.min(score, 1.0);
   }
 
   private validateTaxonomyAlignment(taxonomyAlignment: any, recommendedArticle: string): number {
-    if (!taxonomyAlignment) return 0.5;
-    
+    if (!taxonomyAlignment) {
+      return 0.5;
+    }
+
     let score = 0.7;
-    
-    if (taxonomyAlignment.alignmentPercentage >= 0) score += 0.1;
-    if (taxonomyAlignment.environmentalObjectives?.length > 0) score += 0.1;
-    if (taxonomyAlignment.substantialContribution) score += 0.05;
-    if (taxonomyAlignment.doNoSignificantHarm) score += 0.05;
-    
+
+    if (taxonomyAlignment.alignmentPercentage >= 0) {
+      score += 0.1;
+    }
+    if (taxonomyAlignment.environmentalObjectives?.length > 0) {
+      score += 0.1;
+    }
+    if (taxonomyAlignment.substantialContribution) {
+      score += 0.05;
+    }
+    if (taxonomyAlignment.doNoSignificantHarm) {
+      score += 0.05;
+    }
+
     return Math.min(score, 1.0);
   }
 
   private validateDisclosureQuality(data: EnhancedFundData): number {
     let score = 0.7;
-    
-    if (data.fundProfile.fundName) score += 0.1;
-    if (data.fundProfile.investmentObjective) score += 0.1;
-    if (data.fundProfile.fundStrategy) score += 0.1;
-    
+
+    if (data.fundProfile.fundName) {
+      score += 0.1;
+    }
+    if (data.fundProfile.investmentObjective) {
+      score += 0.1;
+    }
+    if (data.fundProfile.fundStrategy) {
+      score += 0.1;
+    }
+
     return Math.min(score, 1.0);
   }
 
   private validateRiskIntegration(sustainabilityRisks: any): number {
-    if (!sustainabilityRisks) return 0.5;
-    
+    if (!sustainabilityRisks) {
+      return 0.5;
+    }
+
     let score = 0.7;
-    
-    if (sustainabilityRisks.integrationApproach) score += 0.1;
-    if (sustainabilityRisks.assessmentMethodology) score += 0.1;
-    if (sustainabilityRisks.riskFactors?.length > 0) score += 0.1;
-    
+
+    if (sustainabilityRisks.integrationApproach) {
+      score += 0.1;
+    }
+    if (sustainabilityRisks.assessmentMethodology) {
+      score += 0.1;
+    }
+    if (sustainabilityRisks.riskFactors?.length > 0) {
+      score += 0.1;
+    }
+
     return Math.min(score, 1.0);
   }
 
-  private assessCompleteness(data: EnhancedFundData): { score: number; missingFields: string[]; issues: DataQualityIssue[] } {
+  private assessCompleteness(data: EnhancedFundData): {
+    score: number;
+    missingFields: string[];
+    issues: DataQualityIssue[];
+  } {
     const requiredFields = [
       'fundProfile.fundName',
       'fundProfile.investmentObjective',
@@ -780,10 +869,10 @@ export class EnhancedClassificationEngine {
       'entityIdentifiers.entityId',
       'metadata.reportingPeriod'
     ];
-    
+
     const missingFields: string[] = [];
     const issues: DataQualityIssue[] = [];
-    
+
     requiredFields.forEach(field => {
       const value = this.getNestedValue(data, field);
       if (!value) {
@@ -796,16 +885,18 @@ export class EnhancedClassificationEngine {
         });
       }
     });
-    
+
     const score = (requiredFields.length - missingFields.length) / requiredFields.length;
-    
+
     return { score, missingFields, issues };
   }
 
-  private async assessAccuracy(data: EnhancedFundData): Promise<{ score: number; issues: DataQualityIssue[] }> {
+  private async assessAccuracy(
+    data: EnhancedFundData
+  ): Promise<{ score: number; issues: DataQualityIssue[] }> {
     const issues: DataQualityIssue[] = [];
     let score = 0.8;
-    
+
     // Basic accuracy checks
     if (data.taxonomyAlignment?.alignmentPercentage > 100) {
       issues.push({
@@ -816,17 +907,19 @@ export class EnhancedClassificationEngine {
       });
       score -= 0.2;
     }
-    
+
     return { score: Math.max(score, 0), issues };
   }
 
   private assessConsistency(data: EnhancedFundData): { score: number; issues: DataQualityIssue[] } {
     const issues: DataQualityIssue[] = [];
     let score = 0.8;
-    
+
     // Check for consistency between target article and characteristics
-    if (data.fundProfile.targetArticleClassification === 'Article9' && 
-        !data.fundProfile.investmentObjective.toLowerCase().includes('sustainable')) {
+    if (
+      data.fundProfile.targetArticleClassification === 'Article9' &&
+      !data.fundProfile.investmentObjective.toLowerCase().includes('sustainable')
+    ) {
       issues.push({
         field: 'fundProfile.investmentObjective',
         issue: 'Article 9 funds must have sustainable investment objectives',
@@ -835,18 +928,18 @@ export class EnhancedClassificationEngine {
       });
       score -= 0.1;
     }
-    
+
     return { score: Math.max(score, 0), issues };
   }
 
   private assessTimeliness(data: EnhancedFundData): { score: number; issues: DataQualityIssue[] } {
     const issues: DataQualityIssue[] = [];
     let score = 0.9;
-    
+
     // Check if reporting period is current
     const currentYear = new Date().getFullYear();
     const reportingYear = parseInt(data.metadata.reportingPeriod);
-    
+
     if (reportingYear < currentYear - 1) {
       issues.push({
         field: 'metadata.reportingPeriod',
@@ -856,14 +949,14 @@ export class EnhancedClassificationEngine {
       });
       score -= 0.1;
     }
-    
+
     return { score: Math.max(score, 0), issues };
   }
 
   private assessValidity(data: EnhancedFundData): { score: number; issues: DataQualityIssue[] } {
     const issues: DataQualityIssue[] = [];
     let score = 0.8;
-    
+
     // Validate fund type
     const validFundTypes = ['UCITS', 'AIF', 'ELTIF', 'MMF'];
     if (!validFundTypes.includes(data.fundProfile.fundType)) {
@@ -875,19 +968,30 @@ export class EnhancedClassificationEngine {
       });
       score -= 0.2;
     }
-    
+
     return { score: Math.max(score, 0), issues };
   }
 
   private calculateComplianceRisk(complianceScore: number): 'low' | 'medium' | 'high' {
-    if (complianceScore >= 0.8) return 'low';
-    if (complianceScore >= 0.6) return 'medium';
+    if (complianceScore >= 0.8) {
+      return 'low';
+    }
+    if (complianceScore >= 0.6) {
+      return 'medium';
+    }
     return 'high';
   }
 
-  private calculateRegulatoryRisk(data: EnhancedFundData, classification: any): 'low' | 'medium' | 'high' {
-    if (classification.confidence >= 0.8) return 'low';
-    if (classification.confidence >= 0.6) return 'medium';
+  private calculateRegulatoryRisk(
+    data: EnhancedFundData,
+    classification: any
+  ): 'low' | 'medium' | 'high' {
+    if (classification.confidence >= 0.8) {
+      return 'low';
+    }
+    if (classification.confidence >= 0.6) {
+      return 'medium';
+    }
     return 'high';
   }
 
@@ -896,14 +1000,24 @@ export class EnhancedClassificationEngine {
     return 'medium';
   }
 
-  private calculateOverallRisk(complianceRisk: string, regulatoryRisk: string, dataQualityRisk: string): 'low' | 'medium' | 'high' {
+  private calculateOverallRisk(
+    complianceRisk: string,
+    regulatoryRisk: string,
+    dataQualityRisk: string
+  ): 'low' | 'medium' | 'high' {
     const riskScores = { low: 1, medium: 2, high: 3 };
-    const avgScore = (riskScores[complianceRisk as keyof typeof riskScores] + 
-                     riskScores[regulatoryRisk as keyof typeof riskScores] + 
-                     riskScores[dataQualityRisk as keyof typeof riskScores]) / 3;
-    
-    if (avgScore <= 1.5) return 'low';
-    if (avgScore <= 2.5) return 'medium';
+    const avgScore =
+      (riskScores[complianceRisk as keyof typeof riskScores] +
+        riskScores[regulatoryRisk as keyof typeof riskScores] +
+        riskScores[dataQualityRisk as keyof typeof riskScores]) /
+      3;
+
+    if (avgScore <= 1.5) {
+      return 'low';
+    }
+    if (avgScore <= 2.5) {
+      return 'medium';
+    }
     return 'high';
   }
 
@@ -911,7 +1025,7 @@ export class EnhancedClassificationEngine {
     try {
       const response = await fetch(`https://api.gleif.org/api/v1/lei-records/${lei}`);
       const data = await response.json();
-      
+
       return {
         isValid: data.data?.attributes?.status === 'ISSUED',
         confidence: 0.95,
@@ -931,7 +1045,7 @@ export class EnhancedClassificationEngine {
   private async validateISIN(isin: string): Promise<any> {
     // Basic ISIN validation
     const isValid = /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(isin);
-    
+
     return {
       isValid,
       confidence: isValid ? 0.8 : 0.0,
@@ -943,7 +1057,7 @@ export class EnhancedClassificationEngine {
     try {
       const response = await fetch(`https://api.opencorporates.com/companies/search?q=${entityId}`);
       const data = await response.json();
-      
+
       return {
         isValid: data.results.companies.length > 0,
         confidence: data.results.companies.length > 0 ? 0.9 : 0.0,
@@ -963,7 +1077,7 @@ export class EnhancedClassificationEngine {
   private aggregateValidations(validations: any[]): any {
     const validCount = validations.filter(v => v.isValid).length;
     const totalCount = validations.length;
-    
+
     return {
       overallValid: validCount === totalCount,
       confidence: validCount / totalCount,
@@ -996,5 +1110,3 @@ export class EnhancedClassificationEngine {
 
 // Export singleton instance
 export const enhancedClassificationEngine = EnhancedClassificationEngine.getInstance();
-
-

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { handleAuthError } from '@/utils/error-handler';
 import { supabase } from '@/integrations/supabase/client';
-import { Session } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
 import { SecurityUtils } from '@/utils/security';
 
 // Define types
@@ -58,58 +58,56 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Set up Supabase auth state listener
   useEffect(() => {
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_, session) => {
-        setSession(session);
-        
-        if (session?.user) {
-          // Fetch user profile from profiles table
-          const { data: profile, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange(async (_, session) => {
+      setSession(session);
 
-          if (profile && !error) {
-            setUser({
-              id: profile.id,
-              email: session.user.email || '',
-              name: profile.name,
-              avatar_url: profile.avatar_url || undefined,
-              jurisdiction: profile.jurisdiction || undefined
-            });
-          } else {
-            // Create profile if it doesn't exist
-            if (session.user.email) {
-              const newProfile = {
+      if (session?.user) {
+        // Fetch user profile from profiles table
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profile && !error) {
+          setUser({
+            id: profile.id,
+            email: session.user.email || '',
+            name: profile.name,
+            avatar_url: profile.avatar_url || undefined,
+            jurisdiction: profile.jurisdiction || undefined
+          });
+        } else {
+          // Create profile if it doesn't exist
+          if (session.user.email) {
+            const newProfile = {
+              id: session.user.id,
+              name: session.user.user_metadata?.name || session.user.email.split('@')[0],
+              avatar_url: null,
+              jurisdiction: []
+            };
+
+            const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
+
+            if (!insertError) {
+              setUser({
                 id: session.user.id,
-                name: session.user.user_metadata?.name || session.user.email.split('@')[0],
-                avatar_url: null,
-                jurisdiction: []
-              };
-
-              const { error: insertError } = await supabase
-                .from('profiles')
-                .insert([newProfile]);
-
-              if (!insertError) {
-                setUser({
-                  id: session.user.id,
-                  email: session.user.email,
-                  name: newProfile.name,
-                  avatar_url: undefined,
-                  jurisdiction: newProfile.jurisdiction
-                });
-              }
+                email: session.user.email,
+                name: newProfile.name,
+                avatar_url: undefined,
+                jurisdiction: newProfile.jurisdiction
+              });
             }
           }
-        } else {
-          setUser(null);
         }
-        
-        setIsLoading(false);
+      } else {
+        setUser(null);
       }
-    );
+
+      setIsLoading(false);
+    });
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -139,7 +137,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       const sanitizedEmail = SecurityUtils.sanitizeInput(credentials.email.trim());
-      
+
       if (!isValidEmail(sanitizedEmail)) {
         throw new Error('Please enter a valid email address');
       }
@@ -278,12 +276,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         throw error;
       }
-      
+
       setUser(null);
       setSession(null);
       setError(null);
       SecurityUtils.storage.clear();
-      
+
       toast({
         title: 'Logout successful',
         description: 'You have been logged out'
@@ -320,10 +318,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         sanitizedData.jurisdiction = data.jurisdiction.map(j => SecurityUtils.sanitizeInput(j));
       }
 
-      const { error } = await supabase
-        .from('profiles')
-        .update(sanitizedData)
-        .eq('id', user.id);
+      const { error } = await supabase.from('profiles').update(sanitizedData).eq('id', user.id);
 
       if (error) {
         throw error;

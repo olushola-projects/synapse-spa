@@ -13,7 +13,7 @@ export interface ApiResponse<T = any> {
 
 export class SupabaseApiClient {
   private static instance: SupabaseApiClient;
-  
+
   static getInstance(): SupabaseApiClient {
     if (!SupabaseApiClient.instance) {
       SupabaseApiClient.instance = new SupabaseApiClient();
@@ -28,8 +28,8 @@ export class SupabaseApiClient {
    * @param options - Additional options
    */
   async callFunction<T = any>(
-    functionName: string, 
-    payload: any = {}, 
+    functionName: string,
+    payload: any = {},
     options: { requireAuth?: boolean } = {}
   ): Promise<ApiResponse<T>> {
     try {
@@ -37,7 +37,9 @@ export class SupabaseApiClient {
         body: payload,
         headers: {
           'Content-Type': 'application/json',
-          ...(options.requireAuth && { 'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` })
+          ...(options.requireAuth && {
+            Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+          })
         }
       });
 

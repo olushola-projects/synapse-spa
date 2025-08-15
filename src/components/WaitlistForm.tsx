@@ -51,7 +51,9 @@ const WaitlistForm = () => {
         company: company ? SecurityUtils.sanitizeInput(company.trim()) : null,
         role: title ? SecurityUtils.sanitizeInput(title.trim()) : null,
         country: country ? SecurityUtils.sanitizeInput(country) : null,
-        missing_capability: missingCapability ? SecurityUtils.sanitizeInput(missingCapability.trim()) : null,
+        missing_capability: missingCapability
+          ? SecurityUtils.sanitizeInput(missingCapability.trim())
+          : null,
         limiting_tools: limitingTools ? SecurityUtils.sanitizeInput(limitingTools.trim()) : null,
         engagement: engagement ? SecurityUtils.sanitizeInput(engagement.trim()) : null
       };

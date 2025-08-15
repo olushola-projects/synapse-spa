@@ -38,7 +38,7 @@ class EnterpriseMonitoringService {
   private static instance: EnterpriseMonitoringService;
   private alerts: SystemAlert[] = [];
   private metrics: PerformanceMetric[] = [];
-  private alertListeners: ((alert: SystemAlert) => void)[] = [];
+  private alertListeners: Array<(alert: SystemAlert) => void> = [];
 
   static getInstance(): EnterpriseMonitoringService {
     if (!EnterpriseMonitoringService.instance) {
@@ -69,7 +69,9 @@ class EnterpriseMonitoringService {
     this.notifyListeners(alert);
 
     // Log authentication failure for security monitoring
-    console.log(`🔒 Security Alert: Authentication Failed - ${details.endpoint} - ${details.reason}`);
+    console.log(
+      `🔒 Security Alert: Authentication Failed - ${details.endpoint} - ${details.reason}`
+    );
   }
 
   // PHASE 2: LLM Performance Monitoring
@@ -129,14 +131,18 @@ class EnterpriseMonitoringService {
           userId: event.userId
         }
       };
-      
+
       this.alerts.push(alert);
       this.notifyListeners(alert);
     }
   }
 
   // PHASE 3: System Health Monitoring
-  async recordSystemHealth(service: string, status: 'healthy' | 'degraded' | 'critical' | 'down', details?: Record<string, any>): Promise<void> {
+  async recordSystemHealth(
+    service: string,
+    status: 'healthy' | 'degraded' | 'critical' | 'down',
+    details?: Record<string, any>
+  ): Promise<void> {
     try {
       // Log system health for monitoring
       console.log(`📊 System Health: ${service} - ${status}`, details);
@@ -153,7 +159,7 @@ class EnterpriseMonitoringService {
           resolved: false,
           metadata: { service, details }
         };
-        
+
         this.alerts.push(alert);
         this.notifyListeners(alert);
       }
@@ -172,24 +178,22 @@ class EnterpriseMonitoringService {
     complianceScore: number;
   }> {
     const now = Date.now();
-    const oneHourAgo = now - (60 * 60 * 1000);
-    
+    const oneHourAgo = now - 60 * 60 * 1000;
+
     // Analyze recent metrics
-    const recentMetrics = this.metrics.filter(m => 
-      new Date(m.timestamp).getTime() > oneHourAgo
-    );
+    const recentMetrics = this.metrics.filter(m => new Date(m.timestamp).getTime() > oneHourAgo);
 
     const activeAlerts = this.alerts.filter(a => !a.resolved).length;
     const criticalAlerts = this.alerts.filter(a => !a.resolved && a.severity === 'critical').length;
-    
-    const avgResponseTime = recentMetrics.length > 0 
-      ? recentMetrics.reduce((sum, m) => sum + m.responseTime, 0) / recentMetrics.length 
-      : 0;
-    
+
+    const avgResponseTime =
+      recentMetrics.length > 0
+        ? recentMetrics.reduce((sum, m) => sum + m.responseTime, 0) / recentMetrics.length
+        : 0;
+
     const successfulCalls = recentMetrics.filter(m => m.success).length;
-    const apiSuccessRate = recentMetrics.length > 0 
-      ? (successfulCalls / recentMetrics.length) * 100 
-      : 100;
+    const apiSuccessRate =
+      recentMetrics.length > 0 ? (successfulCalls / recentMetrics.length) * 100 : 100;
 
     // Determine overall health
     let overallHealth: 'healthy' | 'degraded' | 'critical' = 'healthy';
@@ -246,7 +250,8 @@ class EnterpriseMonitoringService {
   analyzeRegulatoryFlags(event: any): Record<string, any> {
     return {
       sfdr_article: event.classification,
-      confidence_level: event.confidence >= 0.9 ? 'high' : event.confidence >= 0.7 ? 'medium' : 'low',
+      confidence_level:
+        event.confidence >= 0.9 ? 'high' : event.confidence >= 0.7 ? 'medium' : 'low',
       requires_review: event.confidence < 0.7,
       data_lineage: {
         input_hash: this.hashInput(event.inputText),
@@ -270,13 +275,15 @@ class EnterpriseMonitoringService {
   }
 
   private calculateComplianceScore(metrics: PerformanceMetric[]): number {
-    if (metrics.length === 0) return 100;
-    
+    if (metrics.length === 0) {
+      return 100;
+    }
+
     const classificationMetrics = metrics.filter(m => m.service === 'llm-classification');
     const highConfidenceClassifications = classificationMetrics.filter(m => m.success).length;
-    
-    return classificationMetrics.length > 0 
-      ? (highConfidenceClassifications / classificationMetrics.length) * 100 
+
+    return classificationMetrics.length > 0
+      ? (highConfidenceClassifications / classificationMetrics.length) * 100
       : 100;
   }
 
@@ -285,7 +292,7 @@ class EnterpriseMonitoringService {
     let hash = 0;
     for (let i = 0; i < input.length; i++) {
       const char = input.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32bit integer
     }
     return hash.toString(16);
@@ -293,20 +300,26 @@ class EnterpriseMonitoringService {
 
   private assessInputQuality(input: string): number {
     // Basic input quality assessment
-    if (input.length < 10) return 0.3;
-    if (input.length < 50) return 0.6;
-    if (input.length < 200) return 0.8;
+    if (input.length < 10) {
+      return 0.3;
+    }
+    if (input.length < 50) {
+      return 0.6;
+    }
+    if (input.length < 200) {
+      return 0.8;
+    }
     return 1.0;
   }
 
   private getStrategyReliability(strategy: string): number {
     const strategyReliability: Record<string, number> = {
-      'primary': 0.95,
-      'secondary': 0.90,
-      'hybrid': 0.85,
-      'fallback': 0.70
+      primary: 0.95,
+      secondary: 0.9,
+      hybrid: 0.85,
+      fallback: 0.7
     };
-    return strategyReliability[strategy] || 0.70;
+    return strategyReliability[strategy] || 0.7;
   }
 }
 

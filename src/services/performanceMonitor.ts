@@ -3,7 +3,7 @@
  * Tracks API response times, classification accuracy, and system health
  */
 
-import { PerformanceMetrics, ClassificationAnalytics } from '@/types/enhanced-classification';
+import type { PerformanceMetrics, ClassificationAnalytics } from '@/types/enhanced-classification';
 
 interface PerformanceEvent {
   type: 'classification' | 'health_check' | 'error';
@@ -53,15 +53,17 @@ export class PerformanceMonitor {
           has_audit_trail: request.include_audit_trail,
           has_benchmark: request.include_benchmark_comparison
         },
-        response: success ? {
-          classification: response.classification,
-          confidence: response.confidence,
-          processing_time: response.processing_time,
-          sustainability_score: response.sustainability_score,
-          explainability_score: response.explainability_score,
-          key_indicators_count: response.key_indicators?.length || 0,
-          regulatory_citations_count: response.regulatory_basis?.length || 0
-        } : null,
+        response: success
+          ? {
+              classification: response.classification,
+              confidence: response.confidence,
+              processing_time: response.processing_time,
+              sustainability_score: response.sustainability_score,
+              explainability_score: response.explainability_score,
+              key_indicators_count: response.key_indicators?.length || 0,
+              regulatory_citations_count: response.regulatory_basis?.length || 0
+            }
+          : null,
         error: error || null
       }
     };
@@ -126,17 +128,21 @@ export class PerformanceMonitor {
       .map(e => e.data?.response?.confidence)
       .filter(c => c !== undefined) as number[];
 
-    const avgResponseTime = responseTimes.length > 0 
-      ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length 
-      : 0;
+    const avgResponseTime =
+      responseTimes.length > 0
+        ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length
+        : 0;
 
-    const avgConfidence = confidenceScores.length > 0
-      ? confidenceScores.reduce((a, b) => a + b, 0) / confidenceScores.length
-      : 0;
+    const avgConfidence =
+      confidenceScores.length > 0
+        ? confidenceScores.reduce((a, b) => a + b, 0) / confidenceScores.length
+        : 0;
 
-    const errorRate = classificationEvents.length > 0
-      ? (classificationEvents.length - successfulClassifications.length) / classificationEvents.length
-      : 0;
+    const errorRate =
+      classificationEvents.length > 0
+        ? (classificationEvents.length - successfulClassifications.length) /
+          classificationEvents.length
+        : 0;
 
     // Calculate confidence distribution
     const highConfidence = confidenceScores.filter(c => c >= 0.8).length;
@@ -153,7 +159,7 @@ export class PerformanceMonitor {
         'low (50-59%)': lowConfidence / totalConfidenceScores
       },
       error_rate: errorRate,
-      throughput: (successfulClassifications.length / 60), // per minute
+      throughput: successfulClassifications.length / 60, // per minute
       timestamp: new Date().toISOString()
     };
   }
@@ -162,9 +168,7 @@ export class PerformanceMonitor {
    * Get detailed analytics
    */
   getAnalytics(): ClassificationAnalytics {
-    const allClassifications = this.events.filter(e => 
-      e.type === 'classification' && e.success
-    );
+    const allClassifications = this.events.filter(e => e.type === 'classification' && e.success);
 
     const classifications = allClassifications.map(e => e.data.response.classification);
     const article6Count = classifications.filter(c => c.includes('Article 6')).length;
@@ -181,9 +185,10 @@ export class PerformanceMonitor {
       .map(e => e.data.response.confidence)
       .filter(c => c !== undefined);
 
-    const avgConfidence = confidenceScores.length > 0
-      ? confidenceScores.reduce((a, b) => a + b, 0) / confidenceScores.length
-      : 0;
+    const avgConfidence =
+      confidenceScores.length > 0
+        ? confidenceScores.reduce((a, b) => a + b, 0) / confidenceScores.length
+        : 0;
 
     return {
       total_classifications: allClassifications.length,
@@ -194,9 +199,10 @@ export class PerformanceMonitor {
       },
       average_confidence: avgConfidence,
       processing_times: {
-        average: processingTimes.length > 0 
-          ? processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length 
-          : 0,
+        average:
+          processingTimes.length > 0
+            ? processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length
+            : 0,
         p50: processingTimes[Math.floor(processingTimes.length * 0.5)] || 0,
         p90: processingTimes[Math.floor(processingTimes.length * 0.9)] || 0,
         p99: processingTimes[Math.floor(processingTimes.length * 0.99)] || 0
@@ -216,10 +222,8 @@ export class PerformanceMonitor {
     const recentEvents = this.getRecentEvents(5 * 60 * 1000); // Last 5 minutes
     const errorEvents = recentEvents.filter(e => !e.success);
     const healthChecks = recentEvents.filter(e => e.type === 'health_check');
-    
-    const errorRate = recentEvents.length > 0 
-      ? errorEvents.length / recentEvents.length 
-      : 0;
+
+    const errorRate = recentEvents.length > 0 ? errorEvents.length / recentEvents.length : 0;
 
     const issues: string[] = [];
     let status: 'healthy' | 'degraded' | 'down' = 'healthy';
@@ -233,9 +237,8 @@ export class PerformanceMonitor {
       status = 'down';
     }
 
-    const lastHealthCheck = healthChecks.length > 0 
-      ? healthChecks[healthChecks.length - 1].timestamp 
-      : undefined;
+    const lastHealthCheck =
+      healthChecks.length > 0 ? healthChecks[healthChecks.length - 1].timestamp : undefined;
 
     if (!lastHealthCheck) {
       issues.push('No recent health checks');
@@ -254,9 +257,7 @@ export class PerformanceMonitor {
    */
   private getRecentEvents(timeWindow: number): PerformanceEvent[] {
     const cutoff = Date.now() - timeWindow;
-    return this.events.filter(e => 
-      new Date(e.timestamp).getTime() > cutoff
-    );
+    return this.events.filter(e => new Date(e.timestamp).getTime() > cutoff);
   }
 
   /**
@@ -264,7 +265,7 @@ export class PerformanceMonitor {
    */
   private addEvent(event: PerformanceEvent) {
     this.events.push(event);
-    
+
     // Keep only the most recent events
     if (this.events.length > this.maxEvents) {
       this.events = this.events.slice(-this.maxEvents);
@@ -275,8 +276,10 @@ export class PerformanceMonitor {
    * Calculate overall success rate
    */
   private getSuccessRate(): number {
-    if (this.events.length === 0) return 1.0;
-    
+    if (this.events.length === 0) {
+      return 1.0;
+    }
+
     const successfulEvents = this.events.filter(e => e.success).length;
     return successfulEvents / this.events.length;
   }
@@ -285,13 +288,15 @@ export class PerformanceMonitor {
    * Send event to monitoring webhook
    */
   private async sendToWebhook(event: PerformanceEvent) {
-    if (!this.webhookUrl) return;
+    if (!this.webhookUrl) {
+      return;
+    }
 
     try {
       await fetch(this.webhookUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           service: 'sfdr-classification',
@@ -328,23 +333,17 @@ export const withPerformanceMonitoring = async <T>(
   context: any
 ): Promise<T> => {
   const startTime = performance.now();
-  
+
   try {
     const result = await operation();
     const endTime = performance.now();
-    
-    performanceMonitor.trackClassification(
-      startTime,
-      endTime,
-      context.request,
-      result,
-      true
-    );
-    
+
+    performanceMonitor.trackClassification(startTime, endTime, context.request, result, true);
+
     return result;
   } catch (error) {
     const endTime = performance.now();
-    
+
     performanceMonitor.trackClassification(
       startTime,
       endTime,
@@ -353,7 +352,7 @@ export const withPerformanceMonitoring = async <T>(
       false,
       error instanceof Error ? error.message : 'Unknown error'
     );
-    
+
     throw error;
   }
 };

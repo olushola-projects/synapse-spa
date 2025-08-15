@@ -403,29 +403,29 @@ const SFDRGem: React.FC = () => {
           className='w-full'
         >
           <TabsList className='grid w-full grid-cols-4 mb-6'>
-            <TabsTrigger 
-              value='chat' 
+            <TabsTrigger
+              value='chat'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <Bot className='w-4 h-4' />
               AI Chat
             </TabsTrigger>
-            <TabsTrigger 
-              value='classify' 
+            <TabsTrigger
+              value='classify'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <Target className='w-4 h-4' />
               Classify
             </TabsTrigger>
-            <TabsTrigger 
-              value='documents' 
+            <TabsTrigger
+              value='documents'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <FileText className='w-4 h-4' />
               Documents
             </TabsTrigger>
-            <TabsTrigger 
-              value='export' 
+            <TabsTrigger
+              value='export'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <Download className='w-4 h-4' />
@@ -730,54 +730,74 @@ const SFDRGem: React.FC = () => {
                         {/* Core Classification */}
                         <div className='grid grid-cols-2 gap-4'>
                           <div className='space-y-2'>
-                            <span className='font-medium text-sm text-gray-600'>SFDR Classification</span>
-                          <Badge
-                            variant={
-                              classificationResult.classification === 'Article 9'
-                                ? 'default'
-                                : 'secondary'
-                            }
+                            <span className='font-medium text-sm text-gray-600'>
+                              SFDR Classification
+                            </span>
+                            <Badge
+                              variant={
+                                classificationResult.classification === 'Article 9'
+                                  ? 'default'
+                                  : 'secondary'
+                              }
                               className={`text-sm ${
-                              classificationResult.classification === 'Article 9'
+                                classificationResult.classification === 'Article 9'
                                   ? 'bg-green-600 text-white'
-                                : classificationResult.classification === 'Article 8'
+                                  : classificationResult.classification === 'Article 8'
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-gray-600 text-white'
                               }`}
-                          >
-                            {classificationResult.classification}
-                          </Badge>
-                        </div>
-                          
+                            >
+                              {classificationResult.classification}
+                            </Badge>
+                          </div>
+
                           <div className='space-y-2'>
-                            <span className='font-medium text-sm text-gray-600'>Confidence Score</span>
+                            <span className='font-medium text-sm text-gray-600'>
+                              Confidence Score
+                            </span>
                             <div className='flex items-center gap-2'>
-                              <Progress value={classificationResult.confidence} className='flex-1 h-2' />
-                              <span className='text-sm font-medium'>{classificationResult.confidence}%</span>
-                        </div>
+                              <Progress
+                                value={classificationResult.confidence}
+                                className='flex-1 h-2'
+                              />
+                              <span className='text-sm font-medium'>
+                                {classificationResult.confidence}%
+                              </span>
+                            </div>
                           </div>
                         </div>
 
                         {/* Enhanced Scores */}
-                        {(classificationResult.sustainability_score || classificationResult.explainability_score) && (
+                        {(classificationResult.sustainability_score ||
+                          classificationResult.explainability_score) && (
                           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-blue-50 rounded-lg'>
                             {classificationResult.sustainability_score && (
                               <div className='space-y-2'>
-                                <span className='font-medium text-sm text-blue-700'>Sustainability Score</span>
+                                <span className='font-medium text-sm text-blue-700'>
+                                  Sustainability Score
+                                </span>
                                 <div className='flex items-center gap-2'>
-                                  <Progress value={classificationResult.sustainability_score * 100} className='flex-1 h-2' />
+                                  <Progress
+                                    value={classificationResult.sustainability_score * 100}
+                                    className='flex-1 h-2'
+                                  />
                                   <span className='text-sm font-medium text-blue-700'>
                                     {(classificationResult.sustainability_score * 100).toFixed(1)}%
                                   </span>
                                 </div>
                               </div>
                             )}
-                            
+
                             {classificationResult.explainability_score && (
                               <div className='space-y-2'>
-                                <span className='font-medium text-sm text-green-700'>Explainability Score</span>
+                                <span className='font-medium text-sm text-green-700'>
+                                  Explainability Score
+                                </span>
                                 <div className='flex items-center gap-2'>
-                                  <Progress value={classificationResult.explainability_score * 100} className='flex-1 h-2' />
+                                  <Progress
+                                    value={classificationResult.explainability_score * 100}
+                                    className='flex-1 h-2'
+                                  />
                                   <span className='text-sm font-medium text-green-700'>
                                     {(classificationResult.explainability_score * 100).toFixed(1)}%
                                   </span>
@@ -788,55 +808,79 @@ const SFDRGem: React.FC = () => {
                         )}
 
                         {/* Regulatory Citations - Critical for compliance */}
-                        {classificationResult.regulatory_basis && classificationResult.regulatory_basis.length > 0 && (
-                          <div className='p-4 bg-amber-50 border border-amber-200 rounded-lg'>
-                            <div className='flex items-center gap-2 mb-3'>
-                              <FileCheck className='w-4 h-4 text-amber-600' />
-                              <span className='font-medium text-amber-800'>Regulatory Basis</span>
-                              <Badge variant='outline' className='text-xs text-amber-700 border-amber-300'>
-                                SFDR Compliance
-                              </Badge>
+                        {classificationResult.regulatory_basis &&
+                          classificationResult.regulatory_basis.length > 0 && (
+                            <div className='p-4 bg-amber-50 border border-amber-200 rounded-lg'>
+                              <div className='flex items-center gap-2 mb-3'>
+                                <FileCheck className='w-4 h-4 text-amber-600' />
+                                <span className='font-medium text-amber-800'>Regulatory Basis</span>
+                                <Badge
+                                  variant='outline'
+                                  className='text-xs text-amber-700 border-amber-300'
+                                >
+                                  SFDR Compliance
+                                </Badge>
+                              </div>
+                              <ul className='space-y-2'>
+                                {classificationResult.regulatory_basis.map((citation, index) => (
+                                  <li
+                                    key={index}
+                                    className='text-sm text-amber-800 flex items-start gap-2'
+                                  >
+                                    <CheckCircle className='w-3 h-3 text-amber-600 mt-0.5 flex-shrink-0' />
+                                    {citation}
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
-                            <ul className='space-y-2'>
-                              {classificationResult.regulatory_basis.map((citation, index) => (
-                                <li key={index} className='text-sm text-amber-800 flex items-start gap-2'>
-                                  <CheckCircle className='w-3 h-3 text-amber-600 mt-0.5 flex-shrink-0' />
-                                  {citation}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
+                          )}
 
                         {/* Benchmark Comparison */}
                         {classificationResult.benchmark_comparison && (
                           <div className='p-4 bg-purple-50 border border-purple-200 rounded-lg'>
                             <div className='flex items-center gap-2 mb-3'>
                               <BarChart3 className='w-4 h-4 text-purple-600' />
-                              <span className='font-medium text-purple-800'>Industry Benchmark</span>
+                              <span className='font-medium text-purple-800'>
+                                Industry Benchmark
+                              </span>
                             </div>
                             <div className='grid grid-cols-2 gap-4 text-sm'>
-                        <div>
+                              <div>
                                 <span className='text-gray-600'>Industry Baseline:</span>
                                 <div className='font-medium text-purple-700'>
-                                  {(classificationResult.benchmark_comparison.industry_baseline * 100).toFixed(1)}%
+                                  {(
+                                    classificationResult.benchmark_comparison.industry_baseline *
+                                    100
+                                  ).toFixed(1)}
+                                  %
                                 </div>
                               </div>
                               <div>
                                 <span className='text-gray-600'>Performance vs Baseline:</span>
-                                <div className={`font-medium ${
-                                  classificationResult.benchmark_comparison.performance_vs_baseline > 0 
-                                    ? 'text-green-600' 
-                                    : 'text-red-600'
-                                }`}>
-                                  {classificationResult.benchmark_comparison.performance_vs_baseline > 0 ? '+' : ''}
-                                  {(classificationResult.benchmark_comparison.performance_vs_baseline * 100).toFixed(1)}%
+                                <div
+                                  className={`font-medium ${
+                                    classificationResult.benchmark_comparison
+                                      .performance_vs_baseline > 0
+                                      ? 'text-green-600'
+                                      : 'text-red-600'
+                                  }`}
+                                >
+                                  {classificationResult.benchmark_comparison
+                                    .performance_vs_baseline > 0
+                                    ? '+'
+                                    : ''}
+                                  {(
+                                    classificationResult.benchmark_comparison
+                                      .performance_vs_baseline * 100
+                                  ).toFixed(1)}
+                                  %
                                 </div>
                               </div>
                               <div>
                                 <span className='text-gray-600'>Percentile Rank:</span>
                                 <div className='font-medium text-purple-700'>
-                                  {classificationResult.benchmark_comparison.percentile_rank}th percentile
+                                  {classificationResult.benchmark_comparison.percentile_rank}th
+                                  percentile
                                 </div>
                               </div>
                             </div>
@@ -844,38 +888,45 @@ const SFDRGem: React.FC = () => {
                         )}
 
                         {/* Key Indicators */}
-                        {classificationResult.key_indicators && classificationResult.key_indicators.length > 0 && (
-                          <div>
-                            <span className='font-medium block mb-2'>Key ESG Indicators</span>
-                            <div className='flex flex-wrap gap-2'>
-                              {classificationResult.key_indicators.map((indicator, index) => (
-                                <Badge key={index} variant='secondary' className='text-xs'>
-                                  {indicator}
-                                </Badge>
-                              ))}
+                        {classificationResult.key_indicators &&
+                          classificationResult.key_indicators.length > 0 && (
+                            <div>
+                              <span className='font-medium block mb-2'>Key ESG Indicators</span>
+                              <div className='flex flex-wrap gap-2'>
+                                {classificationResult.key_indicators.map((indicator, index) => (
+                                  <Badge key={index} variant='secondary' className='text-xs'>
+                                    {indicator}
+                                  </Badge>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
 
                         {/* Risk Assessment */}
-                        {classificationResult.risk_factors && classificationResult.risk_factors.length > 0 && (
-                          <div>
-                            <span className='font-medium block mb-2'>Risk Assessment</span>
-                            <ul className='space-y-1'>
-                              {classificationResult.risk_factors.map((risk, index) => (
-                                <li key={index} className='text-sm text-gray-700 flex items-start gap-2'>
-                                  <AlertTriangle className='w-3 h-3 text-orange-500 mt-0.5 flex-shrink-0' />
-                                  {risk}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
+                        {classificationResult.risk_factors &&
+                          classificationResult.risk_factors.length > 0 && (
+                            <div>
+                              <span className='font-medium block mb-2'>Risk Assessment</span>
+                              <ul className='space-y-1'>
+                                {classificationResult.risk_factors.map((risk, index) => (
+                                  <li
+                                    key={index}
+                                    className='text-sm text-gray-700 flex items-start gap-2'
+                                  >
+                                    <AlertTriangle className='w-3 h-3 text-orange-500 mt-0.5 flex-shrink-0' />
+                                    {risk}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
 
                         {/* Reasoning */}
                         <div>
                           <span className='font-medium block mb-2'>Classification Reasoning</span>
-                          <p className='text-sm text-gray-700 bg-gray-50 p-3 rounded-lg'>{classificationResult.reasoning}</p>
+                          <p className='text-sm text-gray-700 bg-gray-50 p-3 rounded-lg'>
+                            {classificationResult.reasoning}
+                          </p>
                         </div>
 
                         {/* Legacy Compliance Score */}
@@ -924,12 +975,18 @@ const SFDRGem: React.FC = () => {
                         {/* Audit Trail */}
                         {classificationResult.audit_trail && (
                           <div className='pt-4 border-t border-gray-200'>
-                            <span className='font-medium block mb-2 text-xs text-gray-500'>Audit Information</span>
+                            <span className='font-medium block mb-2 text-xs text-gray-500'>
+                              Audit Information
+                            </span>
                             <div className='grid grid-cols-2 gap-2 text-xs text-gray-500'>
-                              <div>ID: {classificationResult.audit_trail.classification_id?.slice(-8)}</div>
+                              <div>
+                                ID: {classificationResult.audit_trail.classification_id?.slice(-8)}
+                              </div>
                               <div>Engine: v{classificationResult.audit_trail.engine_version}</div>
                               {classificationResult.processing_time && (
-                                <div>Processing: {classificationResult.processing_time.toFixed(3)}s</div>
+                                <div>
+                                  Processing: {classificationResult.processing_time.toFixed(3)}s
+                                </div>
                               )}
                             </div>
                           </div>

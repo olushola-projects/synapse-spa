@@ -104,7 +104,10 @@ export const useConversationContext = () => {
   const addDocumentContext = useCallback((document: ConversationContext['documentContext'][0]) => {
     setContext(prev => ({
       ...prev,
-      documentContext: [...prev.documentContext.filter(doc => doc.id !== document.id), document].slice(-20), // Keep last 20 documents
+      documentContext: [
+        ...prev.documentContext.filter(doc => doc.id !== document.id),
+        document
+      ].slice(-20), // Keep last 20 documents
       sessionData: {
         ...prev.sessionData,
         lastInteraction: new Date()
@@ -128,24 +131,41 @@ export const useConversationContext = () => {
 
   const extractTopic = useCallback((message: string): string => {
     const topics = [
-      'Article 6', 'Article 8', 'Article 9', 'PAI', 'Principal Adverse Impacts',
-      'Taxonomy', 'EU Taxonomy', 'Compliance', 'Reporting', 'Disclosure',
-      'Sustainability', 'ESG', 'Environmental', 'Social', 'Governance',
-      'Classification', 'Validation', 'Document Upload', 'File Processing'
+      'Article 6',
+      'Article 8',
+      'Article 9',
+      'PAI',
+      'Principal Adverse Impacts',
+      'Taxonomy',
+      'EU Taxonomy',
+      'Compliance',
+      'Reporting',
+      'Disclosure',
+      'Sustainability',
+      'ESG',
+      'Environmental',
+      'Social',
+      'Governance',
+      'Classification',
+      'Validation',
+      'Document Upload',
+      'File Processing'
     ];
 
     const lowerMessage = message.toLowerCase();
-    const foundTopic = topics.find(topic => 
-      lowerMessage.includes(topic.toLowerCase())
-    );
+    const foundTopic = topics.find(topic => lowerMessage.includes(topic.toLowerCase()));
 
     return foundTopic || 'General Inquiry';
   }, []);
 
   const analyzeUserIntent = useCallback((message: string): string => {
     const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('upload') || lowerMessage.includes('document') || lowerMessage.includes('file')) {
+
+    if (
+      lowerMessage.includes('upload') ||
+      lowerMessage.includes('document') ||
+      lowerMessage.includes('file')
+    ) {
       return 'document_upload';
     }
     if (lowerMessage.includes('classify') || lowerMessage.includes('article')) {
@@ -163,7 +183,7 @@ export const useConversationContext = () => {
     if (lowerMessage.includes('report') || lowerMessage.includes('generate')) {
       return 'report_generation';
     }
-    
+
     return 'general_inquiry';
   }, []);
 

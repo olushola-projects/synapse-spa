@@ -178,7 +178,7 @@ const PERFORMANCE_THRESHOLDS = {
   MEMORY_WARNING: 50 * 1024 * 1024, // 50MB
   MEMORY_CRITICAL: 100 * 1024 * 1024, // 100MB
   API_RESPONSE_WARNING: 2000, // 2 seconds
-  API_RESPONSE_CRITICAL: 5000, // 5 seconds
+  API_RESPONSE_CRITICAL: 5000 // 5 seconds
 } as const;
 
 /**
@@ -194,7 +194,7 @@ export const usePerformanceMonitor = (componentName: string) => {
     memoryUsage: 0,
     apiResponseTime: 0,
     errorRate: 0,
-    userInteractions: 0,
+    userInteractions: 0
   });
 
   const renderStartTime = useRef<number>(0);
@@ -204,11 +204,11 @@ export const usePerformanceMonitor = (componentName: string) => {
   // Track component render performance
   useEffect(() => {
     renderStartTime.current = performance.now();
-    
+
     return () => {
       const renderTime = performance.now() - renderStartTime.current;
       setMetrics(prev => ({ ...prev, renderTime }));
-      
+
       // Log performance warnings
       if (renderTime > PERFORMANCE_THRESHOLDS.RENDER_TIME_WARNING) {
         console.warn(`[Performance] ${componentName} render time: ${renderTime.toFixed(2)}ms`);
@@ -222,11 +222,13 @@ export const usePerformanceMonitor = (componentName: string) => {
       if ('memory' in performance) {
         const memoryInfo = (performance as any).memory;
         const memoryUsage = memoryInfo.usedJSHeapSize;
-        
+
         setMetrics(prev => ({ ...prev, memoryUsage }));
-        
+
         if (memoryUsage > PERFORMANCE_THRESHOLDS.MEMORY_WARNING) {
-          console.warn(`[Performance] ${componentName} memory usage: ${(memoryUsage / 1024 / 1024).toFixed(2)}MB`);
+          console.warn(
+            `[Performance] ${componentName} memory usage: ${(memoryUsage / 1024 / 1024).toFixed(2)}MB`
+          );
         }
       }
     };
@@ -240,48 +242,48 @@ export const usePerformanceMonitor = (componentName: string) => {
   // Track user interactions
   const trackInteraction = useCallback(() => {
     interactionCount.current += 1;
-    setMetrics(prev => ({ 
-      ...prev, 
-      userInteractions: interactionCount.current 
+    setMetrics(prev => ({
+      ...prev,
+      userInteractions: interactionCount.current
     }));
   }, []);
 
   // Track API response times
-  const trackApiCall = useCallback(async (
-    apiCall: () => Promise<any>,
-    apiName: string
-  ): Promise<any> => {
-    const startTime = performance.now();
-    
-    try {
-      const result = await apiCall();
-      const responseTime = performance.now() - startTime;
-      
-      setMetrics(prev => ({ ...prev, apiResponseTime: responseTime }));
-      
-      if (responseTime > PERFORMANCE_THRESHOLDS.API_RESPONSE_WARNING) {
-        console.warn(`[Performance] ${apiName} response time: ${responseTime.toFixed(2)}ms`);
+  const trackApiCall = useCallback(
+    async (apiCall: () => Promise<any>, apiName: string): Promise<any> => {
+      const startTime = performance.now();
+
+      try {
+        const result = await apiCall();
+        const responseTime = performance.now() - startTime;
+
+        setMetrics(prev => ({ ...prev, apiResponseTime: responseTime }));
+
+        if (responseTime > PERFORMANCE_THRESHOLDS.API_RESPONSE_WARNING) {
+          console.warn(`[Performance] ${apiName} response time: ${responseTime.toFixed(2)}ms`);
+        }
+
+        return result;
+      } catch (error) {
+        const responseTime = performance.now() - startTime;
+        setMetrics(prev => ({
+          ...prev,
+          apiResponseTime: responseTime,
+          errorRate: prev.errorRate + 1
+        }));
+
+        console.error(`[Performance] ${apiName} failed after ${responseTime.toFixed(2)}ms:`, error);
+        throw error;
       }
-      
-      return result;
-    } catch (error) {
-      const responseTime = performance.now() - startTime;
-      setMetrics(prev => ({ 
-        ...prev, 
-        apiResponseTime: responseTime,
-        errorRate: prev.errorRate + 1
-      }));
-      
-      console.error(`[Performance] ${apiName} failed after ${responseTime.toFixed(2)}ms:`, error);
-      throw error;
-    }
-  }, []);
+    },
+    []
+  );
 
   // Calculate load time
   useEffect(() => {
     const loadTime = Date.now() - componentMountTime.current;
     setMetrics(prev => ({ ...prev, loadTime }));
-    
+
     if (loadTime > PERFORMANCE_THRESHOLDS.LOAD_TIME_WARNING) {
       console.warn(`[Performance] ${componentName} load time: ${loadTime}ms`);
     }
@@ -291,12 +293,15 @@ export const usePerformanceMonitor = (componentName: string) => {
     metrics,
     trackInteraction,
     trackApiCall,
-    isPerformanceGood: useMemo(() => ({
-      loadTime: metrics.loadTime < PERFORMANCE_THRESHOLDS.LOAD_TIME_WARNING,
-      renderTime: metrics.renderTime < PERFORMANCE_THRESHOLDS.RENDER_TIME_WARNING,
-      memoryUsage: metrics.memoryUsage < PERFORMANCE_THRESHOLDS.MEMORY_WARNING,
-      apiResponseTime: metrics.apiResponseTime < PERFORMANCE_THRESHOLDS.API_RESPONSE_WARNING,
-    }), [metrics])
+    isPerformanceGood: useMemo(
+      () => ({
+        loadTime: metrics.loadTime < PERFORMANCE_THRESHOLDS.LOAD_TIME_WARNING,
+        renderTime: metrics.renderTime < PERFORMANCE_THRESHOLDS.RENDER_TIME_WARNING,
+        memoryUsage: metrics.memoryUsage < PERFORMANCE_THRESHOLDS.MEMORY_WARNING,
+        apiResponseTime: metrics.apiResponseTime < PERFORMANCE_THRESHOLDS.API_RESPONSE_WARNING
+      }),
+      [metrics]
+    )
   };
 };
 
@@ -309,12 +314,9 @@ export const usePerformanceMonitor = (componentName: string) => {
  */
 export const useDebouncedSearch = <T extends any[]>(
   searchFunction: (...args: T) => void,
-  delay: number = 300
+  delay = 300
 ) => {
-  const debouncedFn = useMemo(
-    () => debounce(searchFunction, delay),
-    [searchFunction, delay]
-  );
+  const debouncedFn = useMemo(() => debounce(searchFunction, delay), [searchFunction, delay]);
 
   useEffect(() => {
     return () => {
@@ -331,14 +333,16 @@ export const useDebouncedSearch = <T extends any[]>(
  * @param threshold - Intersection threshold (0-1)
  * @returns Ref and visibility state
  */
-export const useLazyLoad = (threshold: number = 0.1) => {
+export const useLazyLoad = (threshold = 0.1) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const element = elementRef.current;
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -368,14 +372,14 @@ export const useLazyLoad = (threshold: number = 0.1) => {
 export class PerformanceAnalytics {
   private static instance: PerformanceAnalytics;
   private metrics: Map<string, PerformanceMetrics[]> = new Map();
-  
+
   static getInstance(): PerformanceAnalytics {
     if (!PerformanceAnalytics.instance) {
       PerformanceAnalytics.instance = new PerformanceAnalytics();
     }
     return PerformanceAnalytics.instance;
   }
-  
+
   /**
    * Record performance metrics for a component
    * @param componentName - Name of the component
@@ -385,16 +389,16 @@ export class PerformanceAnalytics {
     if (!this.metrics.has(componentName)) {
       this.metrics.set(componentName, []);
     }
-    
+
     const componentMetrics = this.metrics.get(componentName)!;
     componentMetrics.push({ ...metrics, timestamp: Date.now() } as any);
-    
+
     // Keep only last 100 entries per component
     if (componentMetrics.length > 100) {
       componentMetrics.splice(0, componentMetrics.length - 100);
     }
   }
-  
+
   /**
    * Get performance summary for a component
    * @param componentName - Name of the component
@@ -402,11 +406,11 @@ export class PerformanceAnalytics {
    */
   getPerformanceSummary(componentName: string) {
     const componentMetrics = this.metrics.get(componentName) || [];
-    
+
     if (componentMetrics.length === 0) {
       return null;
     }
-    
+
     const calculateStats = (values: number[]) => {
       const sorted = values.sort((a, b) => a - b);
       return {
@@ -417,7 +421,7 @@ export class PerformanceAnalytics {
         p99: sorted[Math.floor(sorted.length * 0.99)]
       };
     };
-    
+
     return {
       loadTime: calculateStats(componentMetrics.map(m => m.loadTime)),
       renderTime: calculateStats(componentMetrics.map(m => m.renderTime)),
@@ -426,46 +430,55 @@ export class PerformanceAnalytics {
       totalSamples: componentMetrics.length
     };
   }
-  
+
   /**
    * Generate performance report for all components
    * @returns Comprehensive performance report
    */
   generateReport() {
     const report: Record<string, any> = {};
-    
+
     for (const [componentName] of this.metrics) {
       report[componentName] = this.getPerformanceSummary(componentName);
     }
-    
+
     return {
       timestamp: new Date().toISOString(),
       components: report,
       overallHealth: this.calculateOverallHealth()
     };
   }
-  
+
   private calculateOverallHealth(): 'good' | 'warning' | 'critical' {
     let warningCount = 0;
     let criticalCount = 0;
-    
+
     for (const [componentName] of this.metrics) {
       const summary = this.getPerformanceSummary(componentName);
-      if (!summary) continue;
-      
-      if (summary.loadTime.avg > PERFORMANCE_THRESHOLDS.LOAD_TIME_CRITICAL ||
-          summary.renderTime.avg > PERFORMANCE_THRESHOLDS.RENDER_TIME_CRITICAL ||
-          summary.memoryUsage.avg > PERFORMANCE_THRESHOLDS.MEMORY_CRITICAL) {
+      if (!summary) {
+        continue;
+      }
+      if (
+        summary.loadTime.avg > PERFORMANCE_THRESHOLDS.LOAD_TIME_CRITICAL ||
+        summary.renderTime.avg > PERFORMANCE_THRESHOLDS.RENDER_TIME_CRITICAL ||
+        summary.memoryUsage.avg > PERFORMANCE_THRESHOLDS.MEMORY_CRITICAL
+      ) {
         criticalCount++;
-      } else if (summary.loadTime.avg > PERFORMANCE_THRESHOLDS.LOAD_TIME_WARNING ||
-                 summary.renderTime.avg > PERFORMANCE_THRESHOLDS.RENDER_TIME_WARNING ||
-                 summary.memoryUsage.avg > PERFORMANCE_THRESHOLDS.MEMORY_WARNING) {
+      } else if (
+        summary.loadTime.avg > PERFORMANCE_THRESHOLDS.LOAD_TIME_WARNING ||
+        summary.renderTime.avg > PERFORMANCE_THRESHOLDS.RENDER_TIME_WARNING ||
+        summary.memoryUsage.avg > PERFORMANCE_THRESHOLDS.MEMORY_WARNING
+      ) {
         warningCount++;
       }
     }
-    
-    if (criticalCount > 0) return 'critical';
-    if (warningCount > 0) return 'warning';
+
+    if (criticalCount > 0) {
+      return 'critical';
+    }
+    if (warningCount > 0) {
+      return 'warning';
+    }
     return 'good';
   }
 }

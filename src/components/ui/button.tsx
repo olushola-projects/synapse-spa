@@ -10,14 +10,19 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md',
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm hover:shadow-md',
-        outline: 'border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-2 focus:ring-ring shadow-sm hover:shadow-md',
-        secondary: 'bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary/20 shadow-sm hover:shadow-md',
+        destructive:
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm hover:shadow-md',
+        outline:
+          'border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-2 focus:ring-ring shadow-sm hover:shadow-md',
+        secondary:
+          'bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary/20 shadow-sm hover:shadow-md',
         ghost: 'hover:bg-accent/10 hover:text-accent-foreground focus:ring-2 focus:ring-accent/20',
         link: 'text-primary underline-offset-4 hover:underline focus:ring-2 focus:ring-primary/20 rounded-sm',
-        premium: 'bg-gradient-to-r from-primary to-accent text-primary-foreground hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl',
+        premium:
+          'bg-gradient-to-r from-primary to-accent text-primary-foreground hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl',
         success: 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm hover:shadow-md',
-        warning: 'bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-sm hover:shadow-md'
+        warning:
+          'bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-sm hover:shadow-md'
       },
       size: {
         default: 'h-10 px-4 py-2',

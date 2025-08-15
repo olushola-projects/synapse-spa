@@ -9,7 +9,15 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { CheckCircle, AlertTriangle, Clock, Shield, Database, Activity, FileCheck } from 'lucide-react';
+import {
+  CheckCircle,
+  AlertTriangle,
+  Clock,
+  Shield,
+  Database,
+  Activity,
+  FileCheck
+} from 'lucide-react';
 import { AuthenticationTest } from './AuthenticationTest';
 
 interface RemediationPhase {
@@ -192,17 +200,19 @@ export function RemediationDashboard() {
   useEffect(() => {
     // Calculate overall progress
     const totalTasks = phases.reduce((acc, phase) => acc + phase.tasks.length, 0);
-    const completedTasks = phases.reduce((acc, phase) => 
-      acc + phase.tasks.filter(task => task.status === 'completed').length, 0);
-    
+    const completedTasks = phases.reduce(
+      (acc, phase) => acc + phase.tasks.filter(task => task.status === 'completed').length,
+      0
+    );
+
     const progress = Math.round((completedTasks / totalTasks) * 100);
     setOverallProgress(progress);
 
     // Determine system status
-    const hasFailedTasks = phases.some(phase => 
-      phase.tasks.some(task => task.status === 'failed'));
-    const hasInProgressTasks = phases.some(phase => 
-      phase.tasks.some(task => task.status === 'in-progress'));
+    const hasFailedTasks = phases.some(phase => phase.tasks.some(task => task.status === 'failed'));
+    const hasInProgressTasks = phases.some(phase =>
+      phase.tasks.some(task => task.status === 'in-progress')
+    );
 
     if (hasFailedTasks) {
       setSystemStatus('critical');
@@ -216,26 +226,30 @@ export function RemediationDashboard() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className='h-4 w-4 text-green-500' />;
       case 'in-progress':
-        return <Clock className="h-4 w-4 text-yellow-500 animate-spin" />;
+        return <Clock className='h-4 w-4 text-yellow-500 animate-spin' />;
       case 'failed':
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+        return <AlertTriangle className='h-4 w-4 text-red-500' />;
       default:
-        return <Clock className="h-4 w-4 text-gray-400" />;
+        return <Clock className='h-4 w-4 text-gray-400' />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge variant="default" className="bg-green-100 text-green-800">Completed</Badge>;
+        return (
+          <Badge variant='default' className='bg-green-100 text-green-800'>
+            Completed
+          </Badge>
+        );
       case 'in-progress':
-        return <Badge variant="secondary">In Progress</Badge>;
+        return <Badge variant='secondary'>In Progress</Badge>;
       case 'failed':
-        return <Badge variant="destructive">Failed</Badge>;
+        return <Badge variant='destructive'>Failed</Badge>;
       default:
-        return <Badge variant="outline">Pending</Badge>;
+        return <Badge variant='outline'>Pending</Badge>;
     }
   };
 
@@ -243,28 +257,28 @@ export function RemediationDashboard() {
     switch (systemStatus) {
       case 'healthy':
         return (
-          <Alert className="border-green-200 bg-green-50">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">
-              🎉 Remediation plan completed successfully! All security vulnerabilities have been addressed.
-              The SFDR Navigator is now enterprise-ready and production-secure.
+          <Alert className='border-green-200 bg-green-50'>
+            <CheckCircle className='h-4 w-4 text-green-600' />
+            <AlertDescription className='text-green-800'>
+              🎉 Remediation plan completed successfully! All security vulnerabilities have been
+              addressed. The SFDR Navigator is now enterprise-ready and production-secure.
             </AlertDescription>
           </Alert>
         );
       case 'warning':
         return (
-          <Alert className="border-yellow-200 bg-yellow-50">
-            <Clock className="h-4 w-4 text-yellow-600" />
-            <AlertDescription className="text-yellow-800">
+          <Alert className='border-yellow-200 bg-yellow-50'>
+            <Clock className='h-4 w-4 text-yellow-600' />
+            <AlertDescription className='text-yellow-800'>
               ⚠️ Remediation in progress. Some tasks are still being completed.
             </AlertDescription>
           </Alert>
         );
       case 'critical':
         return (
-          <Alert className="border-red-200 bg-red-50">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-800">
+          <Alert className='border-red-200 bg-red-50'>
+            <AlertTriangle className='h-4 w-4 text-red-600' />
+            <AlertDescription className='text-red-800'>
               🚨 Critical issues detected. Immediate attention required.
             </AlertDescription>
           </Alert>
@@ -273,53 +287,51 @@ export function RemediationDashboard() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Shield className='h-5 w-5' />
             Comprehensive Remediation Dashboard
           </CardTitle>
           <CardDescription>
             Complete status of the SFDR Navigator security and compliance remediation plan
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {getSystemStatusAlert()}
-          
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">Overall Progress</span>
-              <span className="text-sm text-muted-foreground">{overallProgress}%</span>
+
+          <div className='space-y-2'>
+            <div className='flex justify-between items-center'>
+              <span className='text-sm font-medium'>Overall Progress</span>
+              <span className='text-sm text-muted-foreground'>{overallProgress}%</span>
             </div>
-            <Progress value={overallProgress} className="w-full" />
+            <Progress value={overallProgress} className='w-full' />
           </div>
 
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="phases">Phases</TabsTrigger>
-              <TabsTrigger value="testing">Live Testing</TabsTrigger>
+          <Tabs defaultValue='overview' className='w-full'>
+            <TabsList className='grid w-full grid-cols-3'>
+              <TabsTrigger value='overview'>Overview</TabsTrigger>
+              <TabsTrigger value='phases'>Phases</TabsTrigger>
+              <TabsTrigger value='testing'>Live Testing</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {phases.map((phase) => {
+            <TabsContent value='overview' className='space-y-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+                {phases.map(phase => {
                   const PhaseIcon = phase.icon;
                   return (
                     <Card key={phase.id}>
-                      <CardHeader className="pb-2">
-                        <div className="flex items-center justify-between">
-                          <PhaseIcon className="h-5 w-5 text-muted-foreground" />
+                      <CardHeader className='pb-2'>
+                        <div className='flex items-center justify-between'>
+                          <PhaseIcon className='h-5 w-5 text-muted-foreground' />
                           {getStatusBadge(phase.status)}
                         </div>
-                        <CardTitle className="text-sm">{phase.name}</CardTitle>
+                        <CardTitle className='text-sm'>{phase.name}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <Progress value={phase.progress} className="w-full" />
-                        <p className="text-xs text-muted-foreground mt-2">
-                          {phase.description}
-                        </p>
+                        <Progress value={phase.progress} className='w-full' />
+                        <p className='text-xs text-muted-foreground mt-2'>{phase.description}</p>
                       </CardContent>
                     </Card>
                   );
@@ -327,15 +339,15 @@ export function RemediationDashboard() {
               </div>
             </TabsContent>
 
-            <TabsContent value="phases" className="space-y-4">
-              {phases.map((phase) => {
+            <TabsContent value='phases' className='space-y-4'>
+              {phases.map(phase => {
                 const PhaseIcon = phase.icon;
                 return (
                   <Card key={phase.id}>
                     <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <PhaseIcon className="h-5 w-5" />
+                      <div className='flex items-center justify-between'>
+                        <div className='flex items-center gap-2'>
+                          <PhaseIcon className='h-5 w-5' />
                           <CardTitle>{phase.name}</CardTitle>
                         </div>
                         {getStatusBadge(phase.status)}
@@ -343,18 +355,23 @@ export function RemediationDashboard() {
                       <CardDescription>{phase.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-3">
-                        {phase.tasks.map((task) => (
-                          <div key={task.id} className="flex items-start gap-3 p-3 rounded-lg border">
+                      <div className='space-y-3'>
+                        {phase.tasks.map(task => (
+                          <div
+                            key={task.id}
+                            className='flex items-start gap-3 p-3 rounded-lg border'
+                          >
                             {getStatusIcon(task.status)}
-                            <div className="flex-1 space-y-1">
-                              <div className="flex items-center justify-between">
-                                <h4 className="text-sm font-medium">{task.name}</h4>
+                            <div className='flex-1 space-y-1'>
+                              <div className='flex items-center justify-between'>
+                                <h4 className='text-sm font-medium'>{task.name}</h4>
                                 {getStatusBadge(task.status)}
                               </div>
-                              <p className="text-xs text-muted-foreground">{task.description}</p>
+                              <p className='text-xs text-muted-foreground'>{task.description}</p>
                               {task.details && (
-                                <p className="text-xs text-muted-foreground italic">{task.details}</p>
+                                <p className='text-xs text-muted-foreground italic'>
+                                  {task.details}
+                                </p>
                               )}
                             </div>
                           </div>
@@ -366,7 +383,7 @@ export function RemediationDashboard() {
               })}
             </TabsContent>
 
-            <TabsContent value="testing">
+            <TabsContent value='testing'>
               <AuthenticationTest />
             </TabsContent>
           </Tabs>

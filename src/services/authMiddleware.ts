@@ -45,7 +45,8 @@ export interface RateLimitConfig {
 
 export class AuthMiddleware {
   private static instance: AuthMiddleware;
-  private rateLimitStore: Map<string, { count: number; resetTime: number; blockedUntil?: number }> = new Map();
+  private rateLimitStore: Map<string, { count: number; resetTime: number; blockedUntil?: number }> =
+    new Map();
   private auditLogs: AuthAuditLog[] = [];
   private circuitBreakerFailures = 0;
   private circuitBreakerLastFailure = 0;
@@ -95,8 +96,11 @@ export class AuthMiddleware {
       }
 
       // Validate session
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+        error
+      } = await supabase.auth.getSession();
+
       if (error || !session) {
         this.recordFailure();
         return {
@@ -134,13 +138,17 @@ export class AuthMiddleware {
         session,
         auditLog: this.createAuditLog(request, true, undefined, startTime)
       };
-
     } catch (error) {
       this.recordFailure();
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Authentication validation failed',
-        auditLog: this.createAuditLog(request, false, error instanceof Error ? error.message : 'Unknown error', startTime)
+        auditLog: this.createAuditLog(
+          request,
+          false,
+          error instanceof Error ? error.message : 'Unknown error',
+          startTime
+        )
       };
     }
   }
@@ -186,9 +194,9 @@ export class AuthMiddleware {
       return { rateLimited: true };
     }
 
-    return { 
-      rateLimited: false, 
-      remainingRequests: this.defaultRateLimit.maxRequests - userLimit.count 
+    return {
+      rateLimited: false,
+      remainingRequests: this.defaultRateLimit.maxRequests - userLimit.count
     };
   }
 
@@ -217,9 +225,9 @@ export class AuthMiddleware {
    * Create audit log entry
    */
   private createAuditLog(
-    request: AuthRequest, 
-    success: boolean, 
-    error?: string, 
+    request: AuthRequest,
+    success: boolean,
+    error?: string,
     startTime: number
   ): AuthAuditLog {
     const auditLog: AuthAuditLog = {
@@ -323,7 +331,8 @@ export class AuthMiddleware {
   updateRateLimitConfig(config: Partial<RateLimitConfig>): void {
     this.defaultRateLimit.maxRequests = config.maxRequests ?? this.defaultRateLimit.maxRequests;
     this.defaultRateLimit.windowMs = config.windowMs ?? this.defaultRateLimit.windowMs;
-    this.defaultRateLimit.blockDurationMs = config.blockDurationMs ?? this.defaultRateLimit.blockDurationMs;
+    this.defaultRateLimit.blockDurationMs =
+      config.blockDurationMs ?? this.defaultRateLimit.blockDurationMs;
   }
 
   /**
@@ -340,10 +349,13 @@ export class AuthMiddleware {
     const totalRequests = this.auditLogs.length;
     const successfulRequests = this.auditLogs.filter(log => log.success).length;
     const failedRequests = this.auditLogs.filter(log => !log.success).length;
-    const rateLimitedRequests = this.auditLogs.filter(log => log.error === 'Rate limit exceeded').length;
-    const averageResponseTime = this.auditLogs.length > 0 
-      ? this.auditLogs.reduce((sum, log) => sum + log.responseTime, 0) / this.auditLogs.length 
-      : 0;
+    const rateLimitedRequests = this.auditLogs.filter(
+      log => log.error === 'Rate limit exceeded'
+    ).length;
+    const averageResponseTime =
+      this.auditLogs.length > 0
+        ? this.auditLogs.reduce((sum, log) => sum + log.responseTime, 0) / this.auditLogs.length
+        : 0;
 
     return {
       totalRequests,
@@ -377,7 +389,7 @@ export function requireAuth() {
       };
 
       const authResult = await authMiddleware.validateRequest(request);
-      
+
       if (!authResult.success) {
         throw new Error(authResult.error || 'Authentication failed');
       }

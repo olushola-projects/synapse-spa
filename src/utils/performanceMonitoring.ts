@@ -19,9 +19,9 @@ export interface ClassificationMetrics {
   success_rate: number;
   average_response_time: number;
   confidence_distribution: {
-    low: number;    // < 60%
+    low: number; // < 60%
     medium: number; // 60-80%
-    high: number;   // > 80%
+    high: number; // > 80%
   };
   classification_distribution: {
     article_6: number;
@@ -47,7 +47,7 @@ class PerformanceMonitor {
   private classificationHistory: any[] = [];
   private healthCheckInterval: NodeJS.Timeout | null = null;
   private metricsInterval: NodeJS.Timeout | null = null;
-  
+
   private readonly MAX_METRICS_HISTORY = 1000;
   private readonly HEALTH_CHECK_INTERVAL = 30000; // 30 seconds
   private readonly METRICS_UPDATE_INTERVAL = 60000; // 1 minute
@@ -61,7 +61,7 @@ class PerformanceMonitor {
    */
   startMonitoring(): void {
     console.log('📊 Starting performance monitoring...');
-    
+
     // Regular health checks
     this.healthCheckInterval = setInterval(() => {
       this.performHealthCheck();
@@ -81,7 +81,7 @@ class PerformanceMonitor {
    */
   stopMonitoring(): void {
     console.log('📊 Stopping performance monitoring...');
-    
+
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
       this.healthCheckInterval = null;
@@ -119,12 +119,7 @@ class PerformanceMonitor {
   /**
    * Record classification request metrics
    */
-  recordClassification(
-    request: any,
-    response: any,
-    startTime: number,
-    endTime: number
-  ): void {
+  recordClassification(request: any, response: any, startTime: number, endTime: number): void {
     const duration = endTime - startTime;
     const classification = response?.data?.classification || 'unknown';
     const confidence = response?.data?.confidence || 0;
@@ -175,11 +170,11 @@ class PerformanceMonitor {
    */
   private async performHealthCheck(): Promise<void> {
     const startTime = Date.now();
-    
+
     try {
       const response = await backendApiClient.healthCheck();
       const duration = Date.now() - startTime;
-      
+
       this.recordMetric('health_check_time', duration, 'ms', {
         status: response.error ? 'error' : 'success',
         error: response.error
@@ -195,7 +190,7 @@ class PerformanceMonitor {
     } catch (error) {
       const duration = Date.now() - startTime;
       console.error(`💔 Health check error:`, error);
-      
+
       this.recordMetric('health_check_time', duration, 'ms', {
         status: 'error',
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -220,13 +215,13 @@ class PerformanceMonitor {
       // Calculate success rate
       const successfulRequests = recentClassifications.filter(r => r.response.success).length;
       const successRate = (successfulRequests / recentClassifications.length) * 100;
-      
+
       this.recordMetric('success_rate_1h', successRate, '%');
 
       // Calculate average response time
       const totalTime = recentClassifications.reduce((sum, r) => sum + r.duration, 0);
       const avgResponseTime = totalTime / recentClassifications.length;
-      
+
       this.recordMetric('avg_response_time_1h', avgResponseTime, 'ms');
 
       // Calculate confidence distribution
@@ -239,7 +234,9 @@ class PerformanceMonitor {
         this.recordMetric('avg_confidence_1h', avgConfidence, '%');
       }
 
-      console.log(`📊 Metrics updated: ${recentClassifications.length} requests, ${successRate.toFixed(1)}% success`);
+      console.log(
+        `📊 Metrics updated: ${recentClassifications.length} requests, ${successRate.toFixed(1)}% success`
+      );
     }
   }
 
@@ -253,7 +250,7 @@ class PerformanceMonitor {
     );
 
     const successfulClassifications = recentClassifications.filter(r => r.response.success);
-    
+
     // Calculate confidence distribution
     const confidenceDistribution = {
       low: 0,
@@ -263,9 +260,13 @@ class PerformanceMonitor {
 
     successfulClassifications.forEach(record => {
       const confidence = record.response.confidence;
-      if (confidence < 60) confidenceDistribution.low++;
-      else if (confidence <= 80) confidenceDistribution.medium++;
-      else confidenceDistribution.high++;
+      if (confidence < 60) {
+        confidenceDistribution.low++;
+      } else if (confidence <= 80) {
+        confidenceDistribution.medium++;
+      } else {
+        confidenceDistribution.high++;
+      }
     });
 
     // Calculate classification distribution
@@ -277,16 +278,21 @@ class PerformanceMonitor {
 
     successfulClassifications.forEach(record => {
       const classification = record.response.classification;
-      if (classification === 'Article 6') classificationDistribution.article_6++;
-      else if (classification === 'Article 8') classificationDistribution.article_8++;
-      else if (classification === 'Article 9') classificationDistribution.article_9++;
+      if (classification === 'Article 6') {
+        classificationDistribution.article_6++;
+      } else if (classification === 'Article 8') {
+        classificationDistribution.article_8++;
+      } else if (classification === 'Article 9') {
+        classificationDistribution.article_9++;
+      }
     });
 
     const totalRequests = recentClassifications.length;
     const successfulRequests = successfulClassifications.length;
-    const avgResponseTime = totalRequests > 0 
-      ? recentClassifications.reduce((sum, r) => sum + r.duration, 0) / totalRequests 
-      : 0;
+    const avgResponseTime =
+      totalRequests > 0
+        ? recentClassifications.reduce((sum, r) => sum + r.duration, 0) / totalRequests
+        : 0;
 
     return {
       total_requests: totalRequests,
@@ -294,7 +300,8 @@ class PerformanceMonitor {
       average_response_time: avgResponseTime,
       confidence_distribution: confidenceDistribution,
       classification_distribution: classificationDistribution,
-      error_rate: totalRequests > 0 ? ((totalRequests - successfulRequests) / totalRequests) * 100 : 0,
+      error_rate:
+        totalRequests > 0 ? ((totalRequests - successfulRequests) / totalRequests) * 100 : 0,
       last_updated: new Date().toISOString()
     };
   }
@@ -304,16 +311,15 @@ class PerformanceMonitor {
    */
   getSystemHealthMetrics(): SystemHealthMetrics {
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-    
+
     // Get recent health checks
     const recentHealthChecks = this.metrics.filter(
       m => m.metric === 'health_check_status' && m.timestamp > oneHourAgo
     );
 
     const healthCheckSuccesses = recentHealthChecks.filter(m => m.value === 1).length;
-    const uptimePercentage = recentHealthChecks.length > 0 
-      ? (healthCheckSuccesses / recentHealthChecks.length) * 100 
-      : 0;
+    const uptimePercentage =
+      recentHealthChecks.length > 0 ? (healthCheckSuccesses / recentHealthChecks.length) * 100 : 0;
 
     // Get response time percentiles
     const recentResponseTimes = this.metrics
@@ -322,7 +328,9 @@ class PerformanceMonitor {
       .sort((a, b) => a - b);
 
     const getPercentile = (percentile: number): number => {
-      if (recentResponseTimes.length === 0) return 0;
+      if (recentResponseTimes.length === 0) {
+        return 0;
+      }
       const index = Math.ceil((percentile / 100) * recentResponseTimes.length) - 1;
       return recentResponseTimes[Math.max(0, index)];
     };
@@ -331,9 +339,12 @@ class PerformanceMonitor {
     const recentClassifications = this.classificationHistory.filter(
       record => record.timestamp > oneHourAgo
     );
-    const errorRate = recentClassifications.length > 0
-      ? ((recentClassifications.filter(r => !r.response.success).length) / recentClassifications.length) * 100
-      : 0;
+    const errorRate =
+      recentClassifications.length > 0
+        ? (recentClassifications.filter(r => !r.response.success).length /
+            recentClassifications.length) *
+          100
+        : 0;
 
     // Determine API status
     let apiStatus: 'healthy' | 'degraded' | 'critical' = 'healthy';
@@ -350,16 +361,17 @@ class PerformanceMonitor {
       response_time_p99: getPercentile(99),
       error_rate_1h: errorRate,
       uptime_percentage: uptimePercentage,
-      last_health_check: recentHealthChecks.length > 0 
-        ? recentHealthChecks[recentHealthChecks.length - 1].timestamp
-        : new Date().toISOString()
+      last_health_check:
+        recentHealthChecks.length > 0
+          ? recentHealthChecks[recentHealthChecks.length - 1].timestamp
+          : new Date().toISOString()
     };
   }
 
   /**
    * Get recent metrics
    */
-  getRecentMetrics(hours: number = 1): PerformanceMetric[] {
+  getRecentMetrics(hours = 1): PerformanceMetric[] {
     const cutoffTime = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
     return this.metrics.filter(m => m.timestamp > cutoffTime);
   }

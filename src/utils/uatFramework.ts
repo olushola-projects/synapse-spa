@@ -5,7 +5,8 @@
 
 import { apiTester, TestResult, TestSuite } from './apiTesting';
 import { performanceMonitor } from './performanceMonitoring';
-import { backendApiClient, ClassificationRequest } from '@/services/backendApiClient';
+import type { ClassificationRequest } from '@/services/backendApiClient';
+import { backendApiClient } from '@/services/backendApiClient';
 
 export interface UATTestCase {
   id: string;
@@ -29,11 +30,11 @@ export interface UATResult {
   actualResults: any;
   notes: string;
   evidenceUrls?: string[];
-  issues?: {
+  issues?: Array<{
     severity: 'critical' | 'major' | 'minor';
     description: string;
     steps: string[];
-  }[];
+  }>;
 }
 
 export interface UATSession {
@@ -69,7 +70,8 @@ class UATFramework {
       {
         id: 'uat-001',
         title: 'SFDR Classification Accuracy',
-        description: 'Verify that SFDR classification returns accurate results for known fund types',
+        description:
+          'Verify that SFDR classification returns accurate results for known fund types',
         category: 'functionality',
         priority: 'critical',
         testData: {
@@ -96,11 +98,13 @@ class UATFramework {
       {
         id: 'uat-002',
         title: 'Regulatory Citations Compliance',
-        description: 'Ensure all classification responses include proper regulatory article citations',
+        description:
+          'Ensure all classification responses include proper regulatory article citations',
         category: 'compliance',
         priority: 'critical',
         testData: {
-          fundDescription: 'Article 9 sustainable investment fund with explicit sustainability objectives',
+          fundDescription:
+            'Article 9 sustainable investment fund with explicit sustainability objectives',
           requireCitations: true
         },
         expectedResults: {
@@ -245,7 +249,7 @@ class UATFramework {
     customTestCases?: UATTestCase[]
   ): UATSession {
     const sessionId = `uat_session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const session: UATSession = {
       sessionId,
       sessionName,
@@ -269,11 +273,7 @@ class UATFramework {
   /**
    * Execute a single test case
    */
-  async executeTestCase(
-    testCaseId: string,
-    executedBy: string,
-    notes: string = ''
-  ): Promise<UATResult> {
+  async executeTestCase(testCaseId: string, executedBy: string, notes = ''): Promise<UATResult> {
     if (!this.currentSession) {
       throw new Error('No active UAT session. Create a session first.');
     }
@@ -301,9 +301,11 @@ class UATFramework {
       };
 
       this.currentSession.results.push(result);
-      
-      console.log(`${result.status === 'passed' ? '✅' : '❌'} Test ${testCase.title}: ${result.status.toUpperCase()}`);
-      
+
+      console.log(
+        `${result.status === 'passed' ? '✅' : '❌'} Test ${testCase.title}: ${result.status.toUpperCase()}`
+      );
+
       return result;
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -315,16 +317,18 @@ class UATFramework {
         duration,
         actualResults: { error: error instanceof Error ? error.message : 'Unknown error' },
         notes: `${notes}\nError: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        issues: [{
-          severity: 'critical',
-          description: 'Test execution failed',
-          steps: ['Test case execution threw an exception']
-        }]
+        issues: [
+          {
+            severity: 'critical',
+            description: 'Test execution failed',
+            steps: ['Test case execution threw an exception']
+          }
+        ]
       };
 
       this.currentSession.results.push(result);
       console.log(`💥 Test ${testCase.title}: FAILED (${error})`);
-      
+
       return result;
     }
   }
@@ -364,7 +368,7 @@ class UATFramework {
       };
 
       const response = await backendApiClient.classifyDocument(request);
-      
+
       return {
         classification: response.data?.classification,
         confidence: response.data?.confidence,
@@ -379,7 +383,7 @@ class UATFramework {
     if (testCase.id === 'uat-006') {
       // Error handling test
       const errorTests = [];
-      
+
       // Test invalid input
       try {
         await backendApiClient.classifyDocument({ text: '', document_type: 'invalid' });
@@ -401,7 +405,7 @@ class UATFramework {
     if (testCase.id === 'uat-004') {
       const concurrentUsers = testCase.testData.concurrentUsers;
       const requestsPerUser = testCase.testData.requestsPerUser;
-      
+
       const startTime = Date.now();
       const promises = [];
 
@@ -418,7 +422,7 @@ class UATFramework {
 
       const results = await Promise.allSettled(promises);
       const endTime = Date.now();
-      
+
       const successful = results.filter(r => r.status === 'fulfilled').length;
       const failed = results.filter(r => r.status === 'rejected').length;
       const totalDuration = endTime - startTime;
@@ -450,14 +454,14 @@ class UATFramework {
       };
 
       const response = await backendApiClient.classifyDocument(request);
-      
+
       const citations = response.data?.regulatory_basis || [];
       const citationAnalysis = {
         citation_count: citations.length,
         has_sfdr_reference: citations.some(c => c.toLowerCase().includes('sfdr')),
         has_article_reference: citations.some(c => c.toLowerCase().includes('article')),
         has_regulation_reference: citations.some(c => c.toLowerCase().includes('regulation')),
-        citations: citations
+        citations
       };
 
       return citationAnalysis;
@@ -473,7 +477,7 @@ class UATFramework {
     if (testCase.id === 'uat-005') {
       // End-to-end workflow test
       const workflow = [];
-      
+
       // Step 1: Health check
       const healthResponse = await backendApiClient.healthCheck();
       workflow.push({
@@ -488,7 +492,7 @@ class UATFramework {
         document_type: 'SFDR_Fund_Profile',
         include_audit_trail: true
       });
-      
+
       workflow.push({
         step: 'classification',
         success: !classificationResponse.error,
@@ -512,7 +516,7 @@ class UATFramework {
       }
 
       const allStepsSuccessful = workflow.every(step => step.success);
-      
+
       return {
         workflow_steps: workflow,
         all_steps_successful: allStepsSuccessful,
@@ -558,41 +562,38 @@ class UATFramework {
           actualResults.processing_time < 3000 &&
           !actualResults.error
         );
-      
+
       case 'uat-002':
         return (
           actualResults.citation_count >= 1 &&
           actualResults.has_sfdr_reference &&
           actualResults.has_article_reference
         );
-      
+
       case 'uat-003':
         return (
           actualResults.load_time <= 3000 &&
           actualResults.accessibility_score >= 95 &&
           actualResults.responsive_design
         );
-      
+
       case 'uat-004':
         return (
           actualResults.error_rate <= 1 &&
           actualResults.average_response_time <= 2000 &&
           actualResults.throughput >= 50
         );
-      
+
       case 'uat-005':
-        return (
-          actualResults.all_steps_successful &&
-          actualResults.successful_steps >= 3
-        );
-      
+        return actualResults.all_steps_successful && actualResults.successful_steps >= 3;
+
       case 'uat-006':
         return (
           actualResults.errorTests &&
           actualResults.errorTests.length > 0 &&
           actualResults.errorTests.every((test: any) => test.handled)
         );
-      
+
       default:
         return false;
     }
@@ -607,7 +608,7 @@ class UATFramework {
     }
 
     this.currentSession.endTime = new Date().toISOString();
-    
+
     const results = this.currentSession.results;
     const summary = {
       totalTests: this.currentSession.testCases.length,
@@ -615,15 +616,21 @@ class UATFramework {
       failed: results.filter(r => r.status === 'failed').length,
       blocked: results.filter(r => r.status === 'blocked').length,
       pending: this.currentSession.testCases.length - results.length,
-      successRate: results.length > 0 ? (results.filter(r => r.status === 'passed').length / results.length) * 100 : 0,
-      criticalIssues: results.filter(r => r.issues?.some(issue => issue.severity === 'critical')).length,
+      successRate:
+        results.length > 0
+          ? (results.filter(r => r.status === 'passed').length / results.length) * 100
+          : 0,
+      criticalIssues: results.filter(r => r.issues?.some(issue => issue.severity === 'critical'))
+        .length,
       duration: Date.now() - new Date(this.currentSession.startTime).getTime()
     };
 
     this.currentSession.summary = summary;
 
     console.log(`🏁 UAT Session completed: ${this.currentSession.sessionName}`);
-    console.log(`📊 Results: ${summary.passed}/${summary.totalTests} passed (${summary.successRate.toFixed(1)}%)`);
+    console.log(
+      `📊 Results: ${summary.passed}/${summary.totalTests} passed (${summary.successRate.toFixed(1)}%)`
+    );
 
     const completedSession = this.currentSession;
     this.currentSession = null;
@@ -636,7 +643,7 @@ class UATFramework {
    */
   generateReport(session: UATSession): string {
     const { sessionName, startTime, endTime, testCases, results, summary, stakeholders } = session;
-    
+
     let report = `# User Acceptance Testing Report\n\n`;
     report += `**Session:** ${sessionName}\n`;
     report += `**Period:** ${new Date(startTime).toLocaleString()} - ${endTime ? new Date(endTime).toLocaleString() : 'In Progress'}\n`;
@@ -657,24 +664,24 @@ class UATFramework {
     }
 
     report += `## Test Results\n\n`;
-    
+
     testCases.forEach((testCase, index) => {
       const result = results.find(r => r.testCaseId === testCase.id);
-      
+
       report += `### ${index + 1}. ${testCase.title}\n`;
       report += `- **Category:** ${testCase.category}\n`;
       report += `- **Priority:** ${testCase.priority}\n`;
       report += `- **Stakeholder:** ${testCase.stakeholder}\n`;
-      
+
       if (result) {
         report += `- **Status:** ${result.status === 'passed' ? '✅ PASSED' : result.status === 'failed' ? '❌ FAILED' : '🚫 BLOCKED'}\n`;
         report += `- **Executed by:** ${result.executedBy}\n`;
         report += `- **Duration:** ${Math.round(result.duration / 1000)} seconds\n`;
-        
+
         if (result.notes) {
           report += `- **Notes:** ${result.notes}\n`;
         }
-        
+
         if (result.issues && result.issues.length > 0) {
           report += `- **Issues:**\n`;
           result.issues.forEach(issue => {
@@ -684,7 +691,7 @@ class UATFramework {
       } else {
         report += `- **Status:** ⏳ PENDING\n`;
       }
-      
+
       report += `\n`;
     });
 

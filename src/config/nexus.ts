@@ -15,7 +15,11 @@ export const NEXUS_CONFIG = {
 };
 
 // API endpoint helpers - Updated for Supabase Edge Functions
-export const getHealthEndpoint = () => `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.health}`;
-export const getClassifyEndpoint = () => `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.classify}`;
-export const getAnalyticsEndpoint = () => `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.analytics}`;
-export const getComplianceEndpoint = () => `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.compliance}`;
+export const getHealthEndpoint = () =>
+  `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.health}`;
+export const getClassifyEndpoint = () =>
+  `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.classify}`;
+export const getAnalyticsEndpoint = () =>
+  `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.analytics}`;
+export const getComplianceEndpoint = () =>
+  `${NEXUS_CONFIG.apiBaseUrl}/${NEXUS_CONFIG.endpoints.compliance}`;

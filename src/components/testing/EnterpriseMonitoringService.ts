@@ -44,9 +44,8 @@ export class EnterpriseMonitoringService {
    */
   async logPerformanceMetric(metric: PerformanceMetric): Promise<void> {
     try {
-      const { error } = await supabase
-        .from('api_performance_metrics')
-        .insert([{
+      const { error } = await supabase.from('api_performance_metrics').insert([
+        {
           endpoint_name: metric.endpoint_name,
           response_time_ms: metric.response_time_ms,
           status_code: metric.status_code,
@@ -55,7 +54,8 @@ export class EnterpriseMonitoringService {
           error_details: metric.error_details,
           load_level: metric.load_level,
           timestamp: new Date().toISOString()
-        }]);
+        }
+      ]);
 
       if (error) {
         console.error('Failed to log performance metric:', error);
@@ -73,16 +73,16 @@ export class EnterpriseMonitoringService {
    */
   async logComplianceRecord(record: ComplianceRecord): Promise<void> {
     try {
-      const { error } = await supabase
-        .from('sfdr_regulatory_compliance')
-        .insert([{
+      const { error } = await supabase.from('sfdr_regulatory_compliance').insert([
+        {
           assessment_id: record.assessment_id,
           regulatory_framework: record.regulatory_framework,
           compliance_status: record.compliance_status,
           validation_method: record.validation_method,
           risk_score: record.risk_score,
           last_validated_at: new Date().toISOString()
-        }]);
+        }
+      ]);
 
       if (error) {
         console.error('Failed to log compliance record:', error);
@@ -121,8 +121,11 @@ export class EnterpriseMonitoringService {
 
       // Check response time SLA
       if (responseTime > this.performanceBaseline.api_response_time) {
-        alerts.push(`API response time (${responseTime}ms) exceeds SLA threshold (${this.performanceBaseline.api_response_time}ms)`);
-        status = responseTime > this.performanceBaseline.api_response_time * 2 ? 'critical' : 'degraded';
+        alerts.push(
+          `API response time (${responseTime}ms) exceeds SLA threshold (${this.performanceBaseline.api_response_time}ms)`
+        );
+        status =
+          responseTime > this.performanceBaseline.api_response_time * 2 ? 'critical' : 'degraded';
       }
 
       // Test classification accuracy
@@ -136,7 +139,9 @@ export class EnterpriseMonitoringService {
       const dbMetrics = await this.testDatabasePerformance();
       if (dbMetrics.queryTime > this.performanceBaseline.database_query_time) {
         alerts.push(`Database query time (${dbMetrics.queryTime}ms) exceeds threshold`);
-        if (status === 'healthy') status = 'degraded';
+        if (status === 'healthy') {
+          status = 'degraded';
+        }
       }
 
       return {
@@ -149,7 +154,6 @@ export class EnterpriseMonitoringService {
         },
         alerts
       };
-
     } catch (error) {
       alerts.push(`Critical system error: ${error}`);
       return {
@@ -191,7 +195,9 @@ export class EnterpriseMonitoringService {
         });
 
         const isCorrect = result.data?.classification === testCase.expectedClassification;
-        if (isCorrect) correctClassifications++;
+        if (isCorrect) {
+          correctClassifications++;
+        }
 
         results.push({
           input: testCase.text,
@@ -204,7 +210,6 @@ export class EnterpriseMonitoringService {
 
       const accuracy = correctClassifications / testCases.length;
       return { accuracy, details: results };
-
     } catch (error) {
       console.error('Classification accuracy test failed:', error);
       return { accuracy: 0, details: { error: String(error) } };
@@ -217,7 +222,7 @@ export class EnterpriseMonitoringService {
   private async testDatabasePerformance(): Promise<{ queryTime: number; details: any }> {
     try {
       const startTime = Date.now();
-      
+
       const { data, error } = await supabase
         .from('compliance_assessments')
         .select('id, fund_name, created_at')
@@ -236,7 +241,6 @@ export class EnterpriseMonitoringService {
           querySuccess: !error
         }
       };
-
     } catch (error) {
       console.error('Database performance test failed:', error);
       return {
@@ -259,9 +263,15 @@ export class EnterpriseMonitoringService {
    * Determine load level based on response time
    */
   private determineLoadLevel(responseTime: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    if (responseTime < 200) return 'LOW';
-    if (responseTime < 500) return 'MEDIUM';
-    if (responseTime < 1000) return 'HIGH';
+    if (responseTime < 200) {
+      return 'LOW';
+    }
+    if (responseTime < 500) {
+      return 'MEDIUM';
+    }
+    if (responseTime < 1000) {
+      return 'HIGH';
+    }
     return 'CRITICAL';
   }
 
@@ -275,7 +285,10 @@ export class EnterpriseMonitoringService {
     if (metric.response_time_ms > this.performanceBaseline.api_response_time) {
       alerts.push({
         type: 'SLA_BREACH',
-        severity: metric.response_time_ms > this.performanceBaseline.api_response_time * 2 ? 'CRITICAL' : 'WARNING',
+        severity:
+          metric.response_time_ms > this.performanceBaseline.api_response_time * 2
+            ? 'CRITICAL'
+            : 'WARNING',
         message: `API response time (${metric.response_time_ms}ms) exceeds SLA threshold`,
         endpoint: metric.endpoint_name,
         timestamp: new Date().toISOString()
@@ -304,14 +317,14 @@ export class EnterpriseMonitoringService {
    */
   private async logAlert(alert: any): Promise<void> {
     try {
-      await supabase
-        .from('audit_logs')
-        .insert([{
+      await supabase.from('audit_logs').insert([
+        {
           action: 'SYSTEM_ALERT',
           table_name: 'monitoring',
           new_values: alert,
           timestamp: new Date().toISOString()
-        }]);
+        }
+      ]);
     } catch (error) {
       console.error('Failed to log alert:', error);
     }
@@ -337,9 +350,17 @@ export class EnterpriseMonitoringService {
         .lte('created_at', timeRange.end);
 
       // Calculate key metrics
-      const avgResponseTime = (performanceData?.reduce((sum, p) => sum + p.response_time_ms, 0) || 0) / (performanceData?.length || 1);
-      const errorRate = ((performanceData?.filter(p => p.status_code >= 400).length || 0) / (performanceData?.length || 1)) * 100;
-      const complianceRate = ((complianceData?.filter(c => c.compliance_status === 'COMPLIANT').length || 0) / (complianceData?.length || 1)) * 100;
+      const avgResponseTime =
+        (performanceData?.reduce((sum, p) => sum + p.response_time_ms, 0) || 0) /
+        (performanceData?.length || 1);
+      const errorRate =
+        ((performanceData?.filter(p => p.status_code >= 400).length || 0) /
+          (performanceData?.length || 1)) *
+        100;
+      const complianceRate =
+        ((complianceData?.filter(c => c.compliance_status === 'COMPLIANT').length || 0) /
+          (complianceData?.length || 1)) *
+        100;
 
       return {
         summary: {
@@ -353,13 +374,14 @@ export class EnterpriseMonitoringService {
         },
         performanceData,
         complianceData,
-        slaBreaches: performanceData?.filter(p => 
-          p.response_time_ms > this.performanceBaseline.api_response_time ||
-          p.status_code >= 500
-        ) || [],
+        slaBreaches:
+          performanceData?.filter(
+            p =>
+              p.response_time_ms > this.performanceBaseline.api_response_time ||
+              p.status_code >= 500
+          ) || [],
         recommendations: this.generateRecommendations(avgResponseTime, errorRate, complianceRate)
       };
-
     } catch (error) {
       console.error('Failed to generate monitoring report:', error);
       throw error;
@@ -369,7 +391,11 @@ export class EnterpriseMonitoringService {
   /**
    * Generate optimization recommendations based on metrics
    */
-  private generateRecommendations(avgResponseTime: number, errorRate: number, complianceRate: number): string[] {
+  private generateRecommendations(
+    avgResponseTime: number,
+    errorRate: number,
+    complianceRate: number
+  ): string[] {
     const recommendations = [];
 
     if (avgResponseTime > this.performanceBaseline.api_response_time) {
@@ -377,11 +403,15 @@ export class EnterpriseMonitoringService {
     }
 
     if (errorRate > 1) {
-      recommendations.push('Investigate and resolve high error rate - implement better error handling');
+      recommendations.push(
+        'Investigate and resolve high error rate - implement better error handling'
+      );
     }
 
     if (complianceRate < 95) {
-      recommendations.push('Review SFDR compliance procedures - automate compliance validation where possible');
+      recommendations.push(
+        'Review SFDR compliance procedures - automate compliance validation where possible'
+      );
     }
 
     if (recommendations.length === 0) {

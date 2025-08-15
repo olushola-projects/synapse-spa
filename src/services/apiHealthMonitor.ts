@@ -23,9 +23,9 @@ export interface SystemHealth {
 
 class ApiHealthMonitor {
   private healthData: Map<string, HealthStatus> = new Map();
-  private checkInterval: number = 60000; // 1 minute
+  private checkInterval = 60000; // 1 minute
   private intervalId: NodeJS.Timeout | null = null;
-  private listeners: ((health: SystemHealth) => void)[] = [];
+  private listeners: Array<(health: SystemHealth) => void> = [];
 
   /**
    * Start monitoring API health
@@ -108,7 +108,7 @@ class ApiHealthMonitor {
     ];
 
     await Promise.allSettled(checks);
-    
+
     // Notify listeners
     const systemHealth = this.getSystemHealth();
     this.listeners.forEach(listener => listener(systemHealth));
@@ -219,7 +219,10 @@ class ApiHealthMonitor {
   /**
    * Update health status for a service
    */
-  private updateHealthStatus(service: string, update: Omit<HealthStatus, 'service' | 'lastChecked'>): void {
+  private updateHealthStatus(
+    service: string,
+    update: Omit<HealthStatus, 'service' | 'lastChecked'>
+  ): void {
     this.healthData.set(service, {
       service,
       lastChecked: new Date(),
@@ -238,20 +241,28 @@ class ApiHealthMonitor {
     const llm = services.find(s => s.service.includes('LLM'));
 
     if (externalApi?.status === 'unhealthy') {
-      recommendations.push('External API is unreachable. Verify network connectivity and API status.');
+      recommendations.push(
+        'External API is unreachable. Verify network connectivity and API status.'
+      );
       recommendations.push('Configure NEXUS_API_KEY in Supabase secrets for authentication.');
     }
 
     if (externalApi?.status === 'degraded') {
-      recommendations.push('External API is responding slowly. Consider implementing request caching.');
+      recommendations.push(
+        'External API is responding slowly. Consider implementing request caching.'
+      );
     }
 
     if (llm?.status === 'degraded') {
-      recommendations.push('LLM integration is experiencing issues. Check API quotas and rate limits.');
+      recommendations.push(
+        'LLM integration is experiencing issues. Check API quotas and rate limits.'
+      );
     }
 
     if (supabase?.status === 'degraded') {
-      recommendations.push('Supabase Edge Functions are responding slowly. Monitor database performance.');
+      recommendations.push(
+        'Supabase Edge Functions are responding slowly. Monitor database performance.'
+      );
     }
 
     const unhealthyCount = services.filter(s => s.status === 'unhealthy').length;

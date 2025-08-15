@@ -4,7 +4,8 @@
  * Implements enterprise-grade LLM integration verification
  */
 
-import { backendApiClient, ClassificationRequest, ClassificationResponse } from './backendApiClient';
+import type { ClassificationRequest, ClassificationResponse } from './backendApiClient';
+import { backendApiClient } from './backendApiClient';
 
 export interface LLMStrategy {
   name: string;
@@ -37,7 +38,7 @@ export interface LLMValidationSummary {
 
 export class LLMValidationService {
   private static instance: LLMValidationService;
-  
+
   private strategies: LLMStrategy[] = [
     {
       name: 'Primary LLM',
@@ -48,7 +49,7 @@ export class LLMValidationService {
     },
     {
       name: 'Secondary LLM',
-      type: 'secondary', 
+      type: 'secondary',
       description: 'Claude-3 for alternative perspective and validation',
       expectedModel: 'claude-3-sonnet',
       enabled: true
@@ -74,19 +75,19 @@ export class LLMValidationService {
    */
   async validateAllStrategies(): Promise<LLMValidationSummary> {
     console.log('🤖 Starting comprehensive LLM strategy validation...');
-    
+
     const testResults: LLMValidationResult[] = [];
-    
+
     // Test each strategy with standardized test case
     for (const strategy of this.strategies) {
       if (!strategy.enabled) {
         console.log(`⏭️ Skipping disabled strategy: ${strategy.name}`);
         continue;
       }
-      
+
       const result = await this.validateStrategy(strategy);
       testResults.push(result);
-      
+
       // Log results immediately for debugging
       if (result.success) {
         console.log(`✅ ${strategy.name} validation successful: ${result.responseTime}ms`);
@@ -98,9 +99,10 @@ export class LLMValidationService {
     // Calculate summary metrics
     const successful = testResults.filter(r => r.success);
     const failed = testResults.filter(r => !r.success);
-    const avgResponseTime = successful.length > 0 
-      ? successful.reduce((sum, r) => sum + r.responseTime, 0) / successful.length 
-      : 0;
+    const avgResponseTime =
+      successful.length > 0
+        ? successful.reduce((sum, r) => sum + r.responseTime, 0) / successful.length
+        : 0;
 
     // Determine overall status
     let overallStatus: 'healthy' | 'degraded' | 'critical';
@@ -143,7 +145,7 @@ export class LLMValidationService {
    */
   private async validateStrategy(strategy: LLMStrategy): Promise<LLMValidationResult> {
     const startTime = Date.now();
-    
+
     try {
       // Standard test case for SFDR classification
       const testRequest: ClassificationRequest = {
@@ -153,7 +155,7 @@ export class LLMValidationService {
       };
 
       console.log(`🧪 Testing ${strategy.name} with strategy: ${strategy.type}`);
-      
+
       const response = await backendApiClient.classifyDocument(testRequest);
       const responseTime = Date.now() - startTime;
 
@@ -191,7 +193,6 @@ export class LLMValidationService {
         responseData: response.data,
         timestamp: new Date().toISOString()
       };
-
     } catch (error) {
       const responseTime = Date.now() - startTime;
       return {
@@ -232,11 +233,11 @@ EU Taxonomy Alignment: 75% taxonomy-aligned investments based on environmental o
     if (!data.classification) {
       errors.push('Missing classification field');
     }
-    
+
     if (typeof data.confidence !== 'number') {
       errors.push('Missing or invalid confidence field');
     }
-    
+
     if (typeof data.processing_time !== 'number') {
       errors.push('Missing or invalid processing_time field');
     }
@@ -264,26 +265,35 @@ EU Taxonomy Alignment: 75% taxonomy-aligned investments based on environmental o
     const successful = results.filter(r => r.success);
 
     if (failed.length === results.length) {
-      recommendations.push('🚨 CRITICAL: All LLM strategies failed - check API authentication and connectivity');
+      recommendations.push(
+        '🚨 CRITICAL: All LLM strategies failed - check API authentication and connectivity'
+      );
       recommendations.push('🔧 Verify NEXUS_API_KEY is properly configured in Supabase secrets');
       recommendations.push('🌐 Check network connectivity to api.joinsynapses.com');
     } else if (failed.length > 0) {
-      recommendations.push(`⚠️ ${failed.length} strategy(ies) failed - system running in degraded mode`);
-      
+      recommendations.push(
+        `⚠️ ${failed.length} strategy(ies) failed - system running in degraded mode`
+      );
+
       failed.forEach(result => {
         recommendations.push(`🔍 ${result.strategy.name}: ${result.error}`);
       });
     }
 
     if (successful.length > 0) {
-      const avgResponseTime = successful.reduce((sum, r) => sum + r.responseTime, 0) / successful.length;
+      const avgResponseTime =
+        successful.reduce((sum, r) => sum + r.responseTime, 0) / successful.length;
       if (avgResponseTime > 10000) {
-        recommendations.push(`⏱️ High response times detected (${avgResponseTime.toFixed(0)}ms) - consider performance optimization`);
+        recommendations.push(
+          `⏱️ High response times detected (${avgResponseTime.toFixed(0)}ms) - consider performance optimization`
+        );
       }
 
       const lowConfidence = successful.filter(r => r.confidence < 0.7);
       if (lowConfidence.length > 0) {
-        recommendations.push(`📊 ${lowConfidence.length} strategy(ies) showing low confidence - review model training data`);
+        recommendations.push(
+          `📊 ${lowConfidence.length} strategy(ies) showing low confidence - review model training data`
+        );
       }
     }
 
@@ -306,12 +316,12 @@ EU Taxonomy Alignment: 75% taxonomy-aligned investments based on environmental o
         id: Date.now().toString(),
         timestamp: new Date().toISOString()
       });
-      
+
       // Keep only last 50 validation runs
       if (validationHistory.length > 50) {
         validationHistory.splice(0, validationHistory.length - 50);
       }
-      
+
       localStorage.setItem('llm_validation_history', JSON.stringify(validationHistory));
       console.log('📊 LLM validation results saved to local audit trail');
     } catch (error) {

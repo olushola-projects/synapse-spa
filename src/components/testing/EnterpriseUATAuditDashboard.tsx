@@ -43,36 +43,35 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
   const runComprehensiveAudit = async () => {
     setIsRunning(true);
     setAuditResults([]);
-    
+
     const results: AuditResult[] = [];
-    
+
     try {
       // 1. SECURITY ARCHITECTURE AUDIT
       await auditSecurityArchitecture(results);
-      
+
       // 2. API INTEGRATION RESILIENCE TEST
       await auditAPIIntegration(results);
-      
+
       // 3. DATA GOVERNANCE & PRIVACY COMPLIANCE
       await auditDataGovernance(results);
-      
+
       // 4. SFDR REGULATORY COMPLIANCE
       await auditRegulatoryCompliance(results);
-      
+
       // 5. BUSINESS CONTINUITY & DISASTER RECOVERY
       await auditBusinessContinuity(results);
-      
+
       // 6. PERFORMANCE & SCALABILITY
       await auditPerformanceScalability(results);
-      
+
       setAuditResults(results);
       calculateMetrics(results);
-      
     } catch (error) {
       toast({
-        title: "Audit Error",
+        title: 'Audit Error',
         description: `Failed to complete enterprise audit: ${error}`,
-        variant: "destructive"
+        variant: 'destructive'
       });
     } finally {
       setIsRunning(false);
@@ -109,10 +108,12 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
     // Test authentication flow
     const authUser = await supabase.auth.getUser();
     results.push({
-      category: 'Security Architecture', 
+      category: 'Security Architecture',
       test: 'Authentication Framework',
       status: authUser.data.user ? 'pass' : 'warning',
-      finding: authUser.data.user ? 'Robust authentication system operational' : 'No authenticated session detected',
+      finding: authUser.data.user
+        ? 'Robust authentication system operational'
+        : 'No authenticated session detected',
       risk: authUser.data.user ? 'low' : 'medium',
       compliance: ['SOX', 'PCI-DSS']
     });
@@ -131,42 +132,43 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
   // 2. API Integration Resilience Test (RegTech Standard)
   const auditAPIIntegration = async (results: AuditResult[]) => {
     const startTime = Date.now();
-    
+
     try {
       // Health check test
       const healthCheck = await backendApiClient.healthCheck();
       const responseTime = Date.now() - startTime;
-      
+
       results.push({
         category: 'API Integration',
         test: 'Health Check Endpoint',
         status: healthCheck.error ? 'fail' : 'pass',
-        finding: healthCheck.error 
+        finding: healthCheck.error
           ? `API health check failed: ${healthCheck.error}`
           : `API operational with ${responseTime}ms response time`,
         risk: healthCheck.error ? 'high' : 'low',
-        remediation: healthCheck.error ? 'Investigate API connectivity and authentication' : undefined,
+        remediation: healthCheck.error
+          ? 'Investigate API connectivity and authentication'
+          : undefined,
         compliance: ['SFDR', 'MiFID II']
       });
 
-      // Classification accuracy test  
+      // Classification accuracy test
       const classificationTest = await backendApiClient.classifyDocument({
         text: 'ESG Global Equity Fund with Article 8 classification focusing on environmental sustainability',
         document_type: 'SFDR_Fund_Profile',
         strategy: 'hybrid'
       });
-      
+
       results.push({
         category: 'API Integration',
         test: 'SFDR Classification Accuracy',
         status: classificationTest.error ? 'fail' : 'pass',
-        finding: classificationTest.error 
+        finding: classificationTest.error
           ? 'Classification service not responding correctly'
           : 'AI classification service operational and accurate',
         risk: classificationTest.error ? 'high' : 'low',
         compliance: ['SFDR', 'EU Taxonomy']
       });
-
     } catch (error) {
       results.push({
         category: 'API Integration',
@@ -194,16 +196,13 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
 
     // Test audit logging
     try {
-      const { data: auditLogs } = await supabase
-        .from('audit_logs')
-        .select('*')
-        .limit(1);
-      
+      const { data: auditLogs } = await supabase.from('audit_logs').select('*').limit(1);
+
       results.push({
         category: 'Data Governance',
         test: 'Audit Trail Completeness',
         status: auditLogs ? 'pass' : 'fail',
-        finding: auditLogs 
+        finding: auditLogs
           ? 'Comprehensive audit logging is active'
           : 'Audit logging system not functioning',
         risk: auditLogs ? 'low' : 'high',
@@ -213,7 +212,7 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
     } catch (error) {
       results.push({
         category: 'Data Governance',
-        test: 'Audit Trail Completeness', 
+        test: 'Audit Trail Completeness',
         status: 'fail',
         finding: 'Unable to verify audit logging system',
         risk: 'high',
@@ -256,11 +255,8 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
 
     // Test regulatory reporting capability
     try {
-      await supabase
-        .from('sfdr_regulatory_compliance')
-        .select('*')
-        .limit(1);
-      
+      await supabase.from('sfdr_regulatory_compliance').select('*').limit(1);
+
       results.push({
         category: 'Regulatory Compliance',
         test: 'Regulatory Reporting Framework',
@@ -317,16 +313,16 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
   // 6. Performance & Scalability Audit
   const auditPerformanceScalability = async (results: AuditResult[]) => {
     const startTime = Date.now();
-    
+
     try {
       // Concurrent API test
-      const promises = Array(5).fill(null).map(() => 
-        backendApiClient.healthCheck()
-      );
-      
+      const promises = Array(5)
+        .fill(null)
+        .map(() => backendApiClient.healthCheck());
+
       await Promise.all(promises);
       const avgResponseTime = (Date.now() - startTime) / 5;
-      
+
       results.push({
         category: 'Performance & Scalability',
         test: 'Concurrent Load Handling',
@@ -352,7 +348,7 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
     try {
       await supabase.from('compliance_assessments').select('count');
       const dbResponseTime = Date.now() - dbStartTime;
-      
+
       results.push({
         category: 'Performance & Scalability',
         test: 'Database Query Performance',
@@ -378,10 +374,13 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
     const criticalIssues = results.filter(r => r.risk === 'critical').length;
     const highRiskIssues = results.filter(r => r.risk === 'high').length;
     const passedTests = results.filter(r => r.status === 'pass').length;
-    
+
     const complianceScore = Math.round((passedTests / results.length) * 100);
-    const riskScore = Math.max(0, 100 - (criticalIssues * 40 + highRiskIssues * 20 + totalIssues * 5));
-    
+    const riskScore = Math.max(
+      0,
+      100 - (criticalIssues * 40 + highRiskIssues * 20 + totalIssues * 5)
+    );
+
     setMetrics({
       totalIssues,
       criticalIssues,
@@ -393,10 +392,14 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pass': return <CheckCircle className="h-4 w-4 text-success" />;
-      case 'fail': return <XCircle className="h-4 w-4 text-destructive" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
-      default: return <Activity className="h-4 w-4 text-muted-foreground" />;
+      case 'pass':
+        return <CheckCircle className='h-4 w-4 text-success' />;
+      case 'fail':
+        return <XCircle className='h-4 w-4 text-destructive' />;
+      case 'warning':
+        return <AlertTriangle className='h-4 w-4 text-warning' />;
+      default:
+        return <Activity className='h-4 w-4 text-muted-foreground' />;
     }
   };
 
@@ -411,45 +414,40 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Executive Summary */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Shield className='h-5 w-5' />
             Enterprise UAT & Security Audit Dashboard
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-success">{metrics.complianceScore}%</div>
-              <div className="text-sm text-muted-foreground">Compliance Score</div>
+          <div className='grid grid-cols-1 md:grid-cols-5 gap-4 mb-6'>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-success'>{metrics.complianceScore}%</div>
+              <div className='text-sm text-muted-foreground'>Compliance Score</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{metrics.riskScore}%</div>
-              <div className="text-sm text-muted-foreground">Risk Score</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-primary'>{metrics.riskScore}%</div>
+              <div className='text-sm text-muted-foreground'>Risk Score</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-muted-foreground">{metrics.totalIssues}</div>
-              <div className="text-sm text-muted-foreground">Total Issues</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-muted-foreground'>{metrics.totalIssues}</div>
+              <div className='text-sm text-muted-foreground'>Total Issues</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-destructive">{metrics.criticalIssues}</div>
-              <div className="text-sm text-muted-foreground">Critical Issues</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-destructive'>{metrics.criticalIssues}</div>
+              <div className='text-sm text-muted-foreground'>Critical Issues</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-warning">{metrics.highRiskIssues}</div>
-              <div className="text-sm text-muted-foreground">High Risk Issues</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-warning'>{metrics.highRiskIssues}</div>
+              <div className='text-sm text-muted-foreground'>High Risk Issues</div>
             </div>
           </div>
-          
-          <Button 
-            onClick={runComprehensiveAudit} 
-            disabled={isRunning}
-            className="w-full"
-            size="lg"
-          >
+
+          <Button onClick={runComprehensiveAudit} disabled={isRunning} className='w-full' size='lg'>
             {isRunning ? 'Running Enterprise Audit...' : 'Run Comprehensive Big 4 / RegTech Audit'}
           </Button>
         </CardContent>
@@ -457,33 +455,46 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
 
       {/* Risk Assessment Alert */}
       {metrics.criticalIssues > 0 && (
-        <Alert className="border-destructive">
-          <AlertTriangle className="h-4 w-4" />
+        <Alert className='border-destructive'>
+          <AlertTriangle className='h-4 w-4' />
           <AlertDescription>
-            <strong>CRITICAL ISSUES DETECTED:</strong> {metrics.criticalIssues} critical issues require immediate remediation before production deployment.
+            <strong>CRITICAL ISSUES DETECTED:</strong> {metrics.criticalIssues} critical issues
+            require immediate remediation before production deployment.
           </AlertDescription>
         </Alert>
       )}
 
       {/* Detailed Results */}
-      <Tabs defaultValue="security" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="api">API Integration</TabsTrigger>
-          <TabsTrigger value="data">Data Governance</TabsTrigger>
-          <TabsTrigger value="regulatory">Regulatory</TabsTrigger>
-          <TabsTrigger value="continuity">Continuity</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
+      <Tabs defaultValue='security' className='space-y-4'>
+        <TabsList className='grid w-full grid-cols-6'>
+          <TabsTrigger value='security'>Security</TabsTrigger>
+          <TabsTrigger value='api'>API Integration</TabsTrigger>
+          <TabsTrigger value='data'>Data Governance</TabsTrigger>
+          <TabsTrigger value='regulatory'>Regulatory</TabsTrigger>
+          <TabsTrigger value='continuity'>Continuity</TabsTrigger>
+          <TabsTrigger value='performance'>Performance</TabsTrigger>
         </TabsList>
 
         {['security', 'api', 'data', 'regulatory', 'continuity', 'performance'].map(category => (
-          <TabsContent key={category} value={category} className="space-y-4">
+          <TabsContent key={category} value={category} className='space-y-4'>
             {auditResults
-              .filter(result => result.category.toLowerCase().includes(category === 'security' ? 'security' : 
-                category === 'api' ? 'integration' :
-                category === 'data' ? 'governance' :
-                category === 'regulatory' ? 'compliance' :
-                category === 'continuity' ? 'continuity' : 'performance'))
+              .filter(result =>
+                result.category
+                  .toLowerCase()
+                  .includes(
+                    category === 'security'
+                      ? 'security'
+                      : category === 'api'
+                        ? 'integration'
+                        : category === 'data'
+                          ? 'governance'
+                          : category === 'regulatory'
+                            ? 'compliance'
+                            : category === 'continuity'
+                              ? 'continuity'
+                              : 'performance'
+                  )
+              )
               .map((result, index) => (
                 <motion.div
                   key={index}
@@ -491,33 +502,39 @@ export const EnterpriseUATAuditDashboard: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className={`border-l-4 ${
-                    result.status === 'pass' ? 'border-l-success' :
-                    result.status === 'fail' ? 'border-l-destructive' :
-                    result.status === 'warning' ? 'border-l-warning' : 'border-l-muted'
-                  }`}>
-                    <CardContent className="pt-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
+                  <Card
+                    className={`border-l-4 ${
+                      result.status === 'pass'
+                        ? 'border-l-success'
+                        : result.status === 'fail'
+                          ? 'border-l-destructive'
+                          : result.status === 'warning'
+                            ? 'border-l-warning'
+                            : 'border-l-muted'
+                    }`}
+                  >
+                    <CardContent className='pt-4'>
+                      <div className='flex items-center justify-between mb-2'>
+                        <div className='flex items-center gap-2'>
                           {getStatusIcon(result.status)}
-                          <h4 className="font-semibold">{result.test}</h4>
+                          <h4 className='font-semibold'>{result.test}</h4>
                         </div>
                         {getRiskBadge(result.risk)}
                       </div>
-                      
-                      <p className="text-sm text-muted-foreground mb-2">{result.finding}</p>
-                      
+
+                      <p className='text-sm text-muted-foreground mb-2'>{result.finding}</p>
+
                       {result.remediation && (
-                        <Alert className="mt-2">
-                          <AlertDescription className="text-xs">
+                        <Alert className='mt-2'>
+                          <AlertDescription className='text-xs'>
                             <strong>Remediation Required:</strong> {result.remediation}
                           </AlertDescription>
                         </Alert>
                       )}
-                      
-                      <div className="flex flex-wrap gap-1 mt-2">
+
+                      <div className='flex flex-wrap gap-1 mt-2'>
                         {result.compliance.map(comp => (
-                          <Badge key={comp} variant="outline" className="text-xs">
+                          <Badge key={comp} variant='outline' className='text-xs'>
                             {comp}
                           </Badge>
                         ))}

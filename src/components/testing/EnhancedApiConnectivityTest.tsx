@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle, XCircle, Clock, AlertTriangle, Zap, Brain, Settings } from 'lucide-react';
-import { backendApiClient, ClassificationRequest } from '@/services/backendApiClient';
+import type { ClassificationRequest } from '@/services/backendApiClient';
+import { backendApiClient } from '@/services/backendApiClient';
 import { motion } from 'framer-motion';
 
 interface TestResult {
@@ -25,7 +26,7 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
     setResults(prev => {
       const existing = prev.find(r => r.name === name);
       if (existing) {
-        return prev.map(r => r.name === name ? { ...r, ...update } : r);
+        return prev.map(r => (r.name === name ? { ...r, ...update } : r));
       }
       return [...prev, { name, status: 'pending', message: '', ...update }];
     });
@@ -42,7 +43,7 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
     try {
       const result = await testFn();
       const duration = Date.now() - startTime;
-      
+
       if (result.error) {
         updateResult(name, {
           status: 'error',
@@ -97,30 +98,42 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
     };
 
     // Test Primary LLM Strategy
-    await runTest('Primary LLM Strategy', async () => {
-      return await backendApiClient.classifyDocument({
-        ...testDocument,
-        strategy: 'primary',
-        model: 'gpt-4'
-      });
-    }, 'primary');
+    await runTest(
+      'Primary LLM Strategy',
+      async () => {
+        return await backendApiClient.classifyDocument({
+          ...testDocument,
+          strategy: 'primary',
+          model: 'gpt-4'
+        });
+      },
+      'primary'
+    );
 
     // Test Secondary LLM Strategy
-    await runTest('Secondary LLM Strategy', async () => {
-      return await backendApiClient.classifyDocument({
-        ...testDocument,
-        strategy: 'secondary',
-        model: 'claude-3'
-      });
-    }, 'secondary');
+    await runTest(
+      'Secondary LLM Strategy',
+      async () => {
+        return await backendApiClient.classifyDocument({
+          ...testDocument,
+          strategy: 'secondary',
+          model: 'claude-3'
+        });
+      },
+      'secondary'
+    );
 
     // Test Hybrid LLM Strategy
-    await runTest('Hybrid LLM Strategy', async () => {
-      return await backendApiClient.classifyDocument({
-        ...testDocument,
-        strategy: 'hybrid'
-      });
-    }, 'hybrid');
+    await runTest(
+      'Hybrid LLM Strategy',
+      async () => {
+        return await backendApiClient.classifyDocument({
+          ...testDocument,
+          strategy: 'hybrid'
+        });
+      },
+      'hybrid'
+    );
 
     // 4. Document Upload Test
     await runTest('Document Upload', async () => {
@@ -157,13 +170,13 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
   const getStatusIcon = (status: TestResult['status']) => {
     switch (status) {
       case 'success':
-        return <CheckCircle className="h-4 w-4 text-success" />;
+        return <CheckCircle className='h-4 w-4 text-success' />;
       case 'error':
-        return <XCircle className="h-4 w-4 text-destructive" />;
+        return <XCircle className='h-4 w-4 text-destructive' />;
       case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-warning" />;
+        return <AlertTriangle className='h-4 w-4 text-warning' />;
       case 'pending':
-        return <Clock className="h-4 w-4 text-muted-foreground animate-spin" />;
+        return <Clock className='h-4 w-4 text-muted-foreground animate-spin' />;
       default:
         return null;
     }
@@ -187,11 +200,11 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
   const getStrategyIcon = (strategy?: string) => {
     switch (strategy) {
       case 'primary':
-        return <Zap className="h-3 w-3" />;
+        return <Zap className='h-3 w-3' />;
       case 'secondary':
-        return <Brain className="h-3 w-3" />;
+        return <Brain className='h-3 w-3' />;
       case 'hybrid':
-        return <Settings className="h-3 w-3" />;
+        return <Settings className='h-3 w-3' />;
       default:
         return null;
     }
@@ -203,37 +216,38 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
   const authErrors = results.filter(r => r.apiKey).length;
 
   return (
-    <Card className="w-full">
+    <Card className='w-full'>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Settings className="h-5 w-5" />
+        <CardTitle className='flex items-center gap-2'>
+          <Settings className='h-5 w-5' />
           Enhanced Backend Connectivity & LLM Integration Test
         </CardTitle>
         <CardDescription>
-          Comprehensive testing of external API connectivity, authentication, and LLM strategy validation
+          Comprehensive testing of external API connectivity, authentication, and LLM strategy
+          validation
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="flex flex-wrap gap-2">
+      <CardContent className='space-y-6'>
+        <div className='flex flex-wrap gap-2'>
           <Button
             onClick={runAllTests}
             disabled={isRunning}
-            className="bg-primary hover:bg-primary/90"
+            className='bg-primary hover:bg-primary/90'
           >
             {isRunning ? 'Running Tests...' : 'Run Full Test Suite'}
           </Button>
           {results.length > 0 && (
-            <div className="flex gap-2">
-              <Badge variant="outline" className="text-success border-success">
+            <div className='flex gap-2'>
+              <Badge variant='outline' className='text-success border-success'>
                 ✓ {successCount} Passed
               </Badge>
               {errorCount > 0 && (
-                <Badge variant="outline" className="text-destructive border-destructive">
+                <Badge variant='outline' className='text-destructive border-destructive'>
                   ✗ {errorCount} Failed
                 </Badge>
               )}
               {warningCount > 0 && (
-                <Badge variant="outline" className="text-warning border-warning">
+                <Badge variant='outline' className='text-warning border-warning'>
                   ⚠ {warningCount} Warnings
                 </Badge>
               )}
@@ -243,17 +257,18 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
 
         {/* Critical Issues Alert */}
         {authErrors > 0 && (
-          <Alert className="border-destructive">
-            <AlertTriangle className="h-4 w-4" />
+          <Alert className='border-destructive'>
+            <AlertTriangle className='h-4 w-4' />
             <AlertDescription>
-              <strong>Authentication Issue Detected:</strong> {authErrors} test(s) failed due to missing or invalid API credentials. 
-              Please configure the NEXUS_API_KEY in Supabase secrets.
+              <strong>Authentication Issue Detected:</strong> {authErrors} test(s) failed due to
+              missing or invalid API credentials. Please configure the NEXUS_API_KEY in Supabase
+              secrets.
             </AlertDescription>
           </Alert>
         )}
 
         {/* Test Results */}
-        <div className="space-y-3">
+        <div className='space-y-3'>
           {results.map((result, index) => (
             <motion.div
               key={result.name}
@@ -262,41 +277,42 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
               transition={{ delay: index * 0.1 }}
               className={`border rounded-lg p-4 ${getStatusColor(result.status)}`}
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
+              <div className='flex items-center justify-between mb-2'>
+                <div className='flex items-center gap-2'>
                   {getStatusIcon(result.status)}
-                  <span className="font-medium">{result.name}</span>
+                  <span className='font-medium'>{result.name}</span>
                   {result.strategy && (
-                    <Badge variant="secondary" className="flex items-center gap-1">
+                    <Badge variant='secondary' className='flex items-center gap-1'>
                       {getStrategyIcon(result.strategy)}
                       {result.strategy}
                     </Badge>
                   )}
                   {result.duration && (
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant='outline' className='text-xs'>
                       {result.duration}ms
                     </Badge>
                   )}
                 </div>
               </div>
-              
-              <p className="text-sm text-muted-foreground mb-2">{result.message}</p>
-              
+
+              <p className='text-sm text-muted-foreground mb-2'>{result.message}</p>
+
               {result.apiKey && (
-                <Alert className="mt-2">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertDescription className="text-xs">
-                    This failure appears to be authentication-related. Configure NEXUS_API_KEY in Supabase secrets.
+                <Alert className='mt-2'>
+                  <AlertTriangle className='h-4 w-4' />
+                  <AlertDescription className='text-xs'>
+                    This failure appears to be authentication-related. Configure NEXUS_API_KEY in
+                    Supabase secrets.
                   </AlertDescription>
                 </Alert>
               )}
-              
+
               {result.data && result.status === 'success' && (
-                <details className="mt-2">
-                  <summary className="text-xs cursor-pointer text-primary hover:underline">
+                <details className='mt-2'>
+                  <summary className='text-xs cursor-pointer text-primary hover:underline'>
                     View Response Data
                   </summary>
-                  <pre className="text-xs bg-muted p-2 rounded mt-1 overflow-auto">
+                  <pre className='text-xs bg-muted p-2 rounded mt-1 overflow-auto'>
                     {JSON.stringify(result.data, null, 2)}
                   </pre>
                 </details>
@@ -307,20 +323,21 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
 
         {/* Overall Status */}
         {results.length > 0 && !isRunning && (
-          <Alert className={errorCount > 0 ? "border-destructive" : "border-success"}>
-            <div className="flex items-center gap-2">
+          <Alert className={errorCount > 0 ? 'border-destructive' : 'border-success'}>
+            <div className='flex items-center gap-2'>
               {errorCount > 0 ? (
-                <XCircle className="h-4 w-4 text-destructive" />
+                <XCircle className='h-4 w-4 text-destructive' />
               ) : (
-                <CheckCircle className="h-4 w-4 text-success" />
+                <CheckCircle className='h-4 w-4 text-success' />
               )}
               <AlertDescription>
                 {errorCount > 0 ? (
                   <div>
-                    <strong>Backend Issues Detected:</strong> {errorCount} out of {results.length} tests failed.
+                    <strong>Backend Issues Detected:</strong> {errorCount} out of {results.length}{' '}
+                    tests failed.
                     <br />
                     <strong>Next Steps:</strong>
-                    <ul className="mt-1 ml-4 list-disc text-xs">
+                    <ul className='mt-1 ml-4 list-disc text-xs'>
                       <li>Verify external API status at https://api.joinsynapses.com</li>
                       <li>Configure NEXUS_API_KEY in Supabase secrets</li>
                       <li>Check network connectivity and firewall settings</li>
@@ -328,7 +345,10 @@ export const EnhancedApiConnectivityTest: React.FC = () => {
                     </ul>
                   </div>
                 ) : (
-                  <span><strong>All Systems Operational:</strong> Backend connectivity and LLM integration are working correctly.</span>
+                  <span>
+                    <strong>All Systems Operational:</strong> Backend connectivity and LLM
+                    integration are working correctly.
+                  </span>
                 )}
               </AlertDescription>
             </div>

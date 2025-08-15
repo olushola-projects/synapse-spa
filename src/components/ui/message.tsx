@@ -157,13 +157,15 @@ export const MessageComponent: React.FC<MessageComponentProps> = ({
               <span className='font-semibold'>Data Analysis</span>
             </div>
             <div className='overflow-x-auto'>
-              <div dangerouslySetInnerHTML={{ 
-                __html: DOMPurify.sanitize(content.content, {
-                  ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'div', 'span'],
-                  ALLOWED_ATTR: ['class', 'style'],
-                  ALLOW_DATA_ATTR: false
-                })
-              }} />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(content.content, {
+                    ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'div', 'span'],
+                    ALLOWED_ATTR: ['class', 'style'],
+                    ALLOW_DATA_ATTR: false
+                  })
+                }}
+              />
             </div>
           </Card>
         );

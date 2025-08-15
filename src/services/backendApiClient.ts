@@ -64,31 +64,37 @@ export class BackendApiClient {
   private static instance: BackendApiClient;
   private baseUrl: string;
   private apiKey: string | null = null;
-  private isAuthenticated: boolean = false;
-  
+  private isAuthenticated = false;
+
   constructor() {
     // SECURITY FIX: Use Supabase Edge Function proxy instead of direct API calls
     this.baseUrl = 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/nexus-proxy';
     this.validateAuthentication();
   }
-  
+
   private validateAuthentication(): void {
     // Check if we have a valid API key
     this.apiKey = this.getApiKey();
-    this.isAuthenticated = !!(this.apiKey && this.apiKey !== 'your_nexus_api_key' && this.apiKey !== 'demo_key_placeholder');
-    
+    this.isAuthenticated = !!(
+      this.apiKey &&
+      this.apiKey !== 'your_nexus_api_key' &&
+      this.apiKey !== 'demo_key_placeholder'
+    );
+
     if (!this.isAuthenticated) {
-      console.warn('🔐 CRITICAL: BackendApiClient not properly authenticated - using placeholder API key');
+      console.warn(
+        '🔐 CRITICAL: BackendApiClient not properly authenticated - using placeholder API key'
+      );
     }
   }
-  
+
   private getApiKey(): string | null {
     // SECURITY FIX: Remove client-side API key access
     // All API calls should go through Supabase Edge Functions
     console.warn('🔐 SECURITY: Direct API key access removed - use edge function proxy');
     return null;
   }
-  
+
   static getInstance(): BackendApiClient {
     if (!BackendApiClient.instance) {
       BackendApiClient.instance = new BackendApiClient();
@@ -96,40 +102,44 @@ export class BackendApiClient {
     return BackendApiClient.instance;
   }
 
-
   /**
    * Make HTTP request with proper error handling and authentication
    */
-  private async makeRequest<T = any>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T> & { 
-    success?: boolean;
-    requestId?: string;
-    authError?: boolean;
-    errorCategory?: string;
-  }> {
+  private async makeRequest<T = any>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<
+    ApiResponse<T> & {
+      success?: boolean;
+      requestId?: string;
+      authError?: boolean;
+      errorCategory?: string;
+    }
+  > {
     try {
       // SECURITY FIX: Use edge function proxy with proper authentication
       const url = this.baseUrl;
-      
+
       // Enhanced headers for edge function proxy
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'User-Agent': 'Synapse-SFDR-Navigator/1.0',
-        ...options.headers as Record<string, string>
+        ...(options.headers as Record<string, string>)
       };
 
       // SECURITY FIX: Remove direct API key usage - edge function handles authentication
       console.log('🔐 Using secure edge function proxy for API calls');
 
       console.log(`🔌 Backend API Request: ${options.method || 'GET'} ${url}`);
-      
+
       // Add timeout for requests
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-      
+
       // SECURITY FIX: Send request through edge function proxy with proper payload
       const proxyPayload = {
         method: options.method || 'GET',
-        endpoint: endpoint,
+        endpoint,
         data: options.body ? JSON.parse(options.body as string) : undefined,
         userId: 'client-request' // Add user context for audit trail
       };
@@ -157,9 +167,10 @@ export class BackendApiClient {
       }
 
       if (!response.ok) {
-        const errorMsg = (data as any)?.detail || (data as any)?.message || data || `HTTP ${response.status}`;
+        const errorMsg =
+          (data as any)?.detail || (data as any)?.message || data || `HTTP ${response.status}`;
         console.error(`❌ Backend API Error [${response.status}]:`, errorMsg);
-        
+
         // Enhanced error context
         const enhancedError = {
           error: errorMsg,
@@ -168,7 +179,7 @@ export class BackendApiClient {
           timestamp: new Date().toISOString(),
           headers: Object.fromEntries(response.headers.entries())
         };
-        
+
         return enhancedError;
       }
 
@@ -185,7 +196,7 @@ export class BackendApiClient {
           status: 408
         };
       }
-      
+
       console.error(`💥 Backend API Network Error:`, error);
       return {
         error: error instanceof Error ? error.message : 'Network connection failed',
@@ -200,7 +211,7 @@ export class BackendApiClient {
   async healthCheck(): Promise<ApiResponse<HealthResponse>> {
     try {
       const { supabase } = await import('@/integrations/supabase/client');
-      
+
       // Use Supabase Edge Function for secure API calls
       const { data, error } = await supabase.functions.invoke('nexus-proxy', {
         body: {
@@ -225,7 +236,7 @@ export class BackendApiClient {
           status: data.status || 500
         };
       }
-      
+
       console.log('💚 Health check response:', data);
       return {
         data: data.data,
@@ -250,12 +261,14 @@ export class BackendApiClient {
   /**
    * SFDR Classification with strategy support - Updated to use Supabase Edge Functions
    */
-  async classifyDocument(request: ClassificationRequest): Promise<ApiResponse<ClassificationResponse>> {
+  async classifyDocument(
+    request: ClassificationRequest
+  ): Promise<ApiResponse<ClassificationResponse>> {
     try {
       console.log('🤖 Classifying document with strategy:', request.strategy || 'primary');
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
-      
+
       // Use Supabase Edge Function for secure API calls
       const { data, error } = await supabase.functions.invoke('nexus-proxy', {
         body: {
@@ -294,7 +307,7 @@ export class BackendApiClient {
           strategy: request.strategy
         });
       }
-      
+
       return {
         data: data.data,
         status: data.status || 200
@@ -340,7 +353,7 @@ export class BackendApiClient {
       include_audit_trail: true,
       include_benchmark_comparison: true,
       require_citations: true, // Critical for regulatory compliance
-      ...(strategy ? { strategy } as Partial<ClassificationRequest> : {})
+      ...(strategy ? ({ strategy } as Partial<ClassificationRequest>) : {})
     };
 
     return this.classifyDocument(request);
@@ -351,35 +364,42 @@ export class BackendApiClient {
    */
   private formatProductDataAsText(productData: any): string {
     const parts = [];
-    
+
     if (productData.fundProfile) {
       const profile = productData.fundProfile;
       parts.push(`Fund Name: ${profile.fundName || 'N/A'}`);
       parts.push(`Investment Objective: ${profile.investmentObjective || 'N/A'}`);
       parts.push(`Target Article Classification: ${profile.targetArticleClassification || 'N/A'}`);
-      
-      if (profile.sustainabilityCharacteristics && profile.sustainabilityCharacteristics.length > 0) {
-        parts.push(`Sustainability Characteristics: ${profile.sustainabilityCharacteristics.join(', ')}`);
+
+      if (
+        profile.sustainabilityCharacteristics &&
+        profile.sustainabilityCharacteristics.length > 0
+      ) {
+        parts.push(
+          `Sustainability Characteristics: ${profile.sustainabilityCharacteristics.join(', ')}`
+        );
       }
     }
-    
+
     if (productData.paiIndicators) {
       const pai = productData.paiIndicators;
       if (pai.considerationStatement) {
         parts.push(`PAI Consideration: ${pai.considerationStatement}`);
       }
       if (pai.mandatoryIndicators && pai.mandatoryIndicators.length > 0) {
-        parts.push(`PAI Indicators: ${pai.mandatoryIndicators.length} mandatory indicators provided`);
+        parts.push(
+          `PAI Indicators: ${pai.mandatoryIndicators.length} mandatory indicators provided`
+        );
       }
     }
-    
+
     if (productData.taxonomyAlignment) {
       const taxonomy = productData.taxonomyAlignment;
       if (taxonomy.alignmentPercentage) {
         parts.push(`EU Taxonomy Alignment: ${taxonomy.alignmentPercentage}%`);
       }
     }
-    
+
     return parts.join('\n');
   }
 

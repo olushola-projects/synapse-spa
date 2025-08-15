@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { 
+import {
   PlayIcon,
   CheckCircleIcon,
   XCircleIcon,
@@ -22,7 +22,11 @@ import {
   ChartBarIcon,
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
-import { UATTestCase, UATSession, SFDRClassificationResponse } from '@/types/enhanced-classification';
+import type {
+  UATTestCase,
+  UATSession,
+  SFDRClassificationResponse
+} from '@/types/enhanced-classification';
 import { EnhancedClassificationResult } from '@/components/enhanced/EnhancedClassificationResult';
 
 interface UATTestingFrameworkProps {
@@ -96,7 +100,8 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
     {
       id: 'uat-003',
       title: 'Article 6 Traditional Fund',
-      description: 'Test classification of traditional investment fund without sustainability focus',
+      description:
+        'Test classification of traditional investment fund without sustainability focus',
       test_data: {
         text: 'This fund follows a traditional investment approach focused on capital growth and income generation. The investment strategy is based on fundamental analysis of financial metrics and market conditions. ESG factors may be considered as part of risk management but are not a primary investment criterion.',
         document_type: 'fund_prospectus'
@@ -153,7 +158,9 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
   };
 
   const runCurrentTest = async () => {
-    if (!session || currentTestIndex >= session.test_cases.length) return;
+    if (!session || currentTestIndex >= session.test_cases.length) {
+      return;
+    }
 
     const currentTest = session.test_cases[currentTestIndex];
     setIsRunningTest(true);
@@ -165,13 +172,18 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
 
       const mockResponse: SFDRClassificationResponse = {
         classification: currentTest.expected_classification,
-        confidence: Math.random() * (currentTest.expected_confidence_range[1] - currentTest.expected_confidence_range[0]) + currentTest.expected_confidence_range[0],
+        confidence:
+          Math.random() *
+            (currentTest.expected_confidence_range[1] - currentTest.expected_confidence_range[0]) +
+          currentTest.expected_confidence_range[0],
         processing_time: Math.random() * 0.3 + 0.1,
         reasoning: `Based on analysis of the provided text, this fund demonstrates characteristics consistent with ${currentTest.expected_classification} classification...`,
         sustainability_score: Math.random() * 0.3 + 0.7,
         key_indicators: ['ESG Integration', 'Sustainability Focus', 'Impact Measurement'],
         risk_factors: ['No significant risks identified'],
-        regulatory_basis: [`SFDR ${currentTest.expected_classification} - Financial products with sustainable investment objectives`],
+        regulatory_basis: [
+          `SFDR ${currentTest.expected_classification} - Financial products with sustainable investment objectives`
+        ],
         benchmark_comparison: {
           industry_baseline: 0.75,
           current_confidence: Math.random() * 0.2 + 0.8,
@@ -192,10 +204,13 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
 
       // Validate test results
       const validationResults = validateTestResult(currentTest, mockResponse);
-      
+
       const updatedTest: UATTestCase = {
         ...currentTest,
-        status: validationResults.passed.length === currentTest.validation_criteria.length ? 'passed' : 'failed',
+        status:
+          validationResults.passed.length === currentTest.validation_criteria.length
+            ? 'passed'
+            : 'failed',
         results: {
           actual_response: mockResponse,
           test_date: new Date().toISOString(),
@@ -207,14 +222,13 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
       // Update session
       const updatedSession: UATSession = {
         ...session,
-        test_cases: session.test_cases.map((tc, index) => 
+        test_cases: session.test_cases.map((tc, index) =>
           index === currentTestIndex ? updatedTest : tc
         )
       };
 
       setSession(updatedSession);
       setTestResults(prev => ({ ...prev, [currentTest.id]: mockResponse }));
-
     } catch (error) {
       console.error('Test execution failed:', error);
     } finally {
@@ -234,8 +248,9 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
           isValid = response.classification.includes(testCase.expected_classification);
           break;
         case criterion.includes('Confidence score'):
-          isValid = response.confidence >= testCase.expected_confidence_range[0] && 
-                   response.confidence <= testCase.expected_confidence_range[1];
+          isValid =
+            response.confidence >= testCase.expected_confidence_range[0] &&
+            response.confidence <= testCase.expected_confidence_range[1];
           break;
         case criterion.includes('Audit trail'):
           isValid = !!response.audit_trail;
@@ -256,10 +271,15 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
           isValid = response.processing_time !== undefined && response.processing_time < 0.5;
           break;
         case criterion.includes('Explainability score'):
-          isValid = response.explainability_score !== undefined && response.explainability_score > 0.8;
+          isValid =
+            response.explainability_score !== undefined && response.explainability_score > 0.8;
           break;
         case criterion.includes('enhanced fields'):
-          isValid = !!(response.audit_trail && response.benchmark_comparison && response.key_indicators);
+          isValid = !!(
+            response.audit_trail &&
+            response.benchmark_comparison &&
+            response.key_indicators
+          );
           break;
         default:
           isValid = true; // Assume passing for unknown criteria
@@ -276,7 +296,9 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
   };
 
   const completeSession = () => {
-    if (!session) return;
+    if (!session) {
+      return;
+    }
 
     const completedSession: UATSession = {
       ...session,
@@ -286,7 +308,9 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
         total_tests: session.test_cases.length,
         passed_tests: session.test_cases.filter(tc => tc.status === 'passed').length,
         failed_tests: session.test_cases.filter(tc => tc.status === 'failed').length,
-        success_rate: session.test_cases.filter(tc => tc.status === 'passed').length / session.test_cases.length,
+        success_rate:
+          session.test_cases.filter(tc => tc.status === 'passed').length /
+          session.test_cases.length,
         notes: ['Enhanced features validated successfully', 'All test cases executed']
       }
     };
@@ -296,7 +320,9 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
   };
 
   const exportSessionReport = () => {
-    if (!session) return;
+    if (!session) {
+      return;
+    }
 
     const report = {
       session,
@@ -317,7 +343,9 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
   };
 
   const addManualTestCase = () => {
-    if (!session) return;
+    if (!session) {
+      return;
+    }
 
     const newTestCase: UATTestCase = {
       id: `manual-${Date.now()}`,
@@ -355,20 +383,20 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <BeakerIcon className="h-8 w-8" />
+          <h2 className='text-2xl font-bold text-gray-900 flex items-center gap-2'>
+            <BeakerIcon className='h-8 w-8' />
             UAT Testing Framework
           </h2>
-          <p className="text-gray-600">Enhanced SFDR Classification Validation</p>
+          <p className='text-gray-600'>Enhanced SFDR Classification Validation</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className='flex items-center gap-3'>
           {session && (
-            <Button onClick={exportSessionReport} variant="outline" size="sm">
-              <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
+            <Button onClick={exportSessionReport} variant='outline' size='sm'>
+              <ArrowDownTrayIcon className='h-4 w-4 mr-2' />
               Export Report
             </Button>
           )}
@@ -382,7 +410,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
       {session && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className='flex items-center justify-between'>
               <span>Session: {session.session_id}</span>
               <Badge variant={session.overall_status === 'completed' ? 'default' : 'secondary'}>
                 {session.overall_status}
@@ -390,42 +418,47 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold">{session.test_cases.length}</div>
-                <div className="text-sm text-gray-600">Total Tests</div>
+            <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
+              <div className='text-center'>
+                <div className='text-2xl font-bold'>{session.test_cases.length}</div>
+                <div className='text-sm text-gray-600'>Total Tests</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">
+              <div className='text-center'>
+                <div className='text-2xl font-bold text-green-600'>
                   {session.test_cases.filter(tc => tc.status === 'passed').length}
                 </div>
-                <div className="text-sm text-gray-600">Passed</div>
+                <div className='text-sm text-gray-600'>Passed</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">
+              <div className='text-center'>
+                <div className='text-2xl font-bold text-red-600'>
                   {session.test_cases.filter(tc => tc.status === 'failed').length}
                 </div>
-                <div className="text-sm text-gray-600">Failed</div>
+                <div className='text-sm text-gray-600'>Failed</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-600">
+              <div className='text-center'>
+                <div className='text-2xl font-bold text-gray-600'>
                   {session.test_cases.filter(tc => tc.status === 'pending').length}
                 </div>
-                <div className="text-sm text-gray-600">Pending</div>
+                <div className='text-sm text-gray-600'>Pending</div>
               </div>
             </div>
-            
+
             {session.test_cases.length > 0 && (
-              <div className="mt-4">
-                <div className="flex justify-between text-sm mb-2">
+              <div className='mt-4'>
+                <div className='flex justify-between text-sm mb-2'>
                   <span>Progress</span>
                   <span>
-                    {session.test_cases.filter(tc => tc.status !== 'pending').length} / {session.test_cases.length}
+                    {session.test_cases.filter(tc => tc.status !== 'pending').length} /{' '}
+                    {session.test_cases.length}
                   </span>
                 </div>
-                <Progress 
-                  value={(session.test_cases.filter(tc => tc.status !== 'pending').length / session.test_cases.length) * 100} 
-                  className="h-2" 
+                <Progress
+                  value={
+                    (session.test_cases.filter(tc => tc.status !== 'pending').length /
+                      session.test_cases.length) *
+                    100
+                  }
+                  className='h-2'
                 />
               </div>
             )}
@@ -435,39 +468,45 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
 
       {/* Test Cases */}
       {session && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
           {/* Test Case List */}
           <Card>
             <CardHeader>
               <CardTitle>Test Cases</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className='space-y-4'>
               {session.test_cases.map((testCase, index) => (
-                <div 
+                <div
                   key={testCase.id}
                   className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                     currentTestIndex === index ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
                   }`}
                   onClick={() => setCurrentTestIndex(index)}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium">{testCase.title}</h4>
-                    <div className="flex items-center gap-2">
-                      {testCase.status === 'passed' && <CheckCircleIcon className="h-5 w-5 text-green-500" />}
-                      {testCase.status === 'failed' && <XCircleIcon className="h-5 w-5 text-red-500" />}
-                      {testCase.status === 'pending' && <ClockIcon className="h-5 w-5 text-gray-400" />}
-                      <Badge variant="outline">{testCase.expected_classification}</Badge>
+                  <div className='flex items-center justify-between mb-2'>
+                    <h4 className='font-medium'>{testCase.title}</h4>
+                    <div className='flex items-center gap-2'>
+                      {testCase.status === 'passed' && (
+                        <CheckCircleIcon className='h-5 w-5 text-green-500' />
+                      )}
+                      {testCase.status === 'failed' && (
+                        <XCircleIcon className='h-5 w-5 text-red-500' />
+                      )}
+                      {testCase.status === 'pending' && (
+                        <ClockIcon className='h-5 w-5 text-gray-400' />
+                      )}
+                      <Badge variant='outline'>{testCase.expected_classification}</Badge>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600">{testCase.description}</p>
-                  
+                  <p className='text-sm text-gray-600'>{testCase.description}</p>
+
                   {testCase.results && (
-                    <div className="mt-2 text-xs">
-                      <div className="text-green-600">
+                    <div className='mt-2 text-xs'>
+                      <div className='text-green-600'>
                         ✓ {testCase.results.passed_criteria.length} criteria passed
                       </div>
                       {testCase.results.failed_criteria.length > 0 && (
-                        <div className="text-red-600">
+                        <div className='text-red-600'>
                           ✗ {testCase.results.failed_criteria.length} criteria failed
                         </div>
                       )}
@@ -487,48 +526,52 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
             </CardHeader>
             <CardContent>
               {session.test_cases[currentTestIndex] && (
-                <div className="space-y-4">
+                <div className='space-y-4'>
                   <div>
-                    <Label className="text-sm font-medium">Test Description</Label>
-                    <p className="text-sm text-gray-600">
+                    <Label className='text-sm font-medium'>Test Description</Label>
+                    <p className='text-sm text-gray-600'>
                       {session.test_cases[currentTestIndex].description}
                     </p>
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium">Test Data</Label>
-                    <Textarea 
+                    <Label className='text-sm font-medium'>Test Data</Label>
+                    <Textarea
                       value={session.test_cases[currentTestIndex].test_data.text}
                       readOnly
-                      className="h-32 text-sm"
+                      className='h-32 text-sm'
                     />
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className='flex items-center justify-between'>
                     <div>
-                      <span className="text-sm font-medium">Expected: </span>
+                      <span className='text-sm font-medium'>Expected: </span>
                       <Badge>{session.test_cases[currentTestIndex].expected_classification}</Badge>
                     </div>
-                    <Button 
+                    <Button
                       onClick={runCurrentTest}
-                      disabled={isRunningTest || session.test_cases[currentTestIndex].status !== 'pending'}
-                      className="flex items-center gap-2"
+                      disabled={
+                        isRunningTest || session.test_cases[currentTestIndex].status !== 'pending'
+                      }
+                      className='flex items-center gap-2'
                     >
-                      <PlayIcon className="h-4 w-4" />
+                      <PlayIcon className='h-4 w-4' />
                       {isRunningTest ? 'Running...' : 'Run Test'}
                     </Button>
                   </div>
 
                   {/* Validation Criteria */}
                   <div>
-                    <Label className="text-sm font-medium">Validation Criteria</Label>
-                    <ul className="text-sm space-y-1 mt-2">
-                      {session.test_cases[currentTestIndex].validation_criteria.map((criterion, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 flex-shrink-0" />
-                          <span>{criterion}</span>
-                        </li>
-                      ))}
+                    <Label className='text-sm font-medium'>Validation Criteria</Label>
+                    <ul className='text-sm space-y-1 mt-2'>
+                      {session.test_cases[currentTestIndex].validation_criteria.map(
+                        (criterion, idx) => (
+                          <li key={idx} className='flex items-start gap-2'>
+                            <div className='w-2 h-2 bg-gray-400 rounded-full mt-2 flex-shrink-0' />
+                            <span>{criterion}</span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -545,7 +588,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
             <CardTitle>Test Results</CardTitle>
           </CardHeader>
           <CardContent>
-            <EnhancedClassificationResult 
+            <EnhancedClassificationResult
               result={testResults[session.test_cases[currentTestIndex].id]}
               showAdvancedFeatures={true}
             />
@@ -554,20 +597,22 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
       )}
 
       {/* Complete Session */}
-      {session && session.test_cases.every(tc => tc.status !== 'pending') && session.overall_status === 'in_progress' && (
-        <Card>
-          <CardContent className="p-6 text-center">
-            <CheckCircleIcon className="h-12 w-12 text-green-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">All Tests Completed</h3>
-            <p className="text-gray-600 mb-4">
-              Session ready for completion and report generation
-            </p>
-            <Button onClick={completeSession} className="w-full">
-              Complete Session
-            </Button>
-          </CardContent>
-        </Card>
-      )}
+      {session &&
+        session.test_cases.every(tc => tc.status !== 'pending') &&
+        session.overall_status === 'in_progress' && (
+          <Card>
+            <CardContent className='p-6 text-center'>
+              <CheckCircleIcon className='h-12 w-12 text-green-500 mx-auto mb-4' />
+              <h3 className='text-lg font-semibold mb-2'>All Tests Completed</h3>
+              <p className='text-gray-600 mb-4'>
+                Session ready for completion and report generation
+              </p>
+              <Button onClick={completeSession} className='w-full'>
+                Complete Session
+              </Button>
+            </CardContent>
+          </Card>
+        )}
     </div>
   );
 };

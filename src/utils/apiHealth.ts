@@ -49,10 +49,10 @@ export class HealthMonitor {
     }
 
     const startTime = Date.now();
-    
+
     try {
       let response;
-      
+
       switch (serviceName) {
         case 'nexus-health':
           response = await apiClient.healthCheck();
@@ -72,7 +72,7 @@ export class HealthMonitor {
         status: response.error ? 'down' : 'healthy',
         latency,
         timestamp: new Date().toISOString(),
-        ...(response.data && { 
+        ...(response.data && {
           version: response.data.version,
           checks: response.data.checks
         })
@@ -103,9 +103,9 @@ export class HealthMonitor {
    */
   async checkSystemHealth(): Promise<SystemHealth> {
     const services = ['nexus-health', 'nexus-classify', 'nexus-analytics'];
-    
+
     const healthChecks = await Promise.all(
-      services.map(async (service) => ({
+      services.map(async service => ({
         service,
         health: await this.checkServiceHealth(service)
       }))
@@ -114,9 +114,21 @@ export class HealthMonitor {
     const systemHealth: SystemHealth = {
       overall: 'healthy',
       services: {
-        nexusHealth: healthChecks.find(h => h.service === 'nexus-health')?.health || { status: 'down', latency: 0, timestamp: new Date().toISOString() },
-        nexusClassify: healthChecks.find(h => h.service === 'nexus-classify')?.health || { status: 'down', latency: 0, timestamp: new Date().toISOString() },
-        nexusAnalytics: healthChecks.find(h => h.service === 'nexus-analytics')?.health || { status: 'down', latency: 0, timestamp: new Date().toISOString() },
+        nexusHealth: healthChecks.find(h => h.service === 'nexus-health')?.health || {
+          status: 'down',
+          latency: 0,
+          timestamp: new Date().toISOString()
+        },
+        nexusClassify: healthChecks.find(h => h.service === 'nexus-classify')?.health || {
+          status: 'down',
+          latency: 0,
+          timestamp: new Date().toISOString()
+        },
+        nexusAnalytics: healthChecks.find(h => h.service === 'nexus-analytics')?.health || {
+          status: 'down',
+          latency: 0,
+          timestamp: new Date().toISOString()
+        },
         database: { status: 'healthy', latency: 0, timestamp: new Date().toISOString() } // Placeholder
       },
       timestamp: new Date().toISOString()

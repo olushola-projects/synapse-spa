@@ -19,46 +19,49 @@ export function useSupabaseApi<T = any>() {
     error: null
   });
 
-  const execute = useCallback(async (
-    functionName: string,
-    payload?: any,
-    options?: { requireAuth?: boolean }
-  ): Promise<T | null> => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+  const execute = useCallback(
+    async (
+      functionName: string,
+      payload?: any,
+      options?: { requireAuth?: boolean }
+    ): Promise<T | null> => {
+      setState(prev => ({ ...prev, loading: true, error: null }));
 
-    try {
-      const response: ApiResponse<T> = await apiClient.callFunction(
-        functionName,
-        payload,
-        options
-      );
+      try {
+        const response: ApiResponse<T> = await apiClient.callFunction(
+          functionName,
+          payload,
+          options
+        );
 
-      if (response.error) {
+        if (response.error) {
+          setState(prev => ({
+            ...prev,
+            loading: false,
+            error: response.error!
+          }));
+          return null;
+        }
+
         setState(prev => ({
           ...prev,
           loading: false,
-          error: response.error!
+          data: response.data!
+        }));
+
+        return response.data!;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        setState(prev => ({
+          ...prev,
+          loading: false,
+          error: errorMessage
         }));
         return null;
       }
-
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        data: response.data!
-      }));
-
-      return response.data!;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: errorMessage
-      }));
-      return null;
-    }
-  }, []);
+    },
+    []
+  );
 
   const reset = useCallback(() => {
     setState({
@@ -78,7 +81,7 @@ export function useSupabaseApi<T = any>() {
 // Specialized hooks for specific Edge Functions
 export function useHealthCheck() {
   const api = useSupabaseApi();
-  
+
   const checkHealth = useCallback(async () => {
     return api.execute('nexus-health');
   }, [api]);
@@ -91,10 +94,13 @@ export function useHealthCheck() {
 
 export function useSFDRClassify() {
   const api = useSupabaseApi();
-  
-  const classify = useCallback(async (productData: any) => {
-    return api.execute('nexus-classify', productData, { requireAuth: true });
-  }, [api]);
+
+  const classify = useCallback(
+    async (productData: any) => {
+      return api.execute('nexus-classify', productData, { requireAuth: true });
+    },
+    [api]
+  );
 
   return {
     ...api,
@@ -104,10 +110,13 @@ export function useSFDRClassify() {
 
 export function useComplianceCheck() {
   const api = useSupabaseApi();
-  
-  const checkCompliance = useCallback(async (data: any) => {
-    return api.execute('check-compliance', data, { requireAuth: true });
-  }, [api]);
+
+  const checkCompliance = useCallback(
+    async (data: any) => {
+      return api.execute('check-compliance', data, { requireAuth: true });
+    },
+    [api]
+  );
 
   return {
     ...api,
@@ -117,7 +126,7 @@ export function useComplianceCheck() {
 
 export function useAnalytics() {
   const api = useSupabaseApi();
-  
+
   const getAnalytics = useCallback(async () => {
     return api.execute('nexus-analytics', {}, { requireAuth: true });
   }, [api]);

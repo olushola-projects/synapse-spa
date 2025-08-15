@@ -47,11 +47,13 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ user, onLogout }) => {
             aria-describedby='notification-count'
           >
             <Bell className='h-5 w-5' />
-            <span 
+            <span
               className='absolute -top-1 -right-1 block h-3 w-3 rounded-full bg-destructive ring-2 ring-background'
               aria-hidden='true'
             />
-            <span id='notification-count' className='sr-only'>You have unread notifications</span>
+            <span id='notification-count' className='sr-only'>
+              You have unread notifications
+            </span>
           </Button>
 
           <DropdownMenu>

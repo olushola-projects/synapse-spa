@@ -105,9 +105,9 @@ const GamificationComponent = () => {
           <div className='mt-3'>
             <div className='bg-gray-50 border border-dashed rounded-md p-3 text-center'>
               <p className='text-sm'>Create compliance challenges with our intuitive builder</p>
-              <Button 
-                variant='success' 
-                size='sm' 
+              <Button
+                variant='success'
+                size='sm'
                 className='mt-2 text-xs'
                 aria-label='Create new compliance challenge'
               >
@@ -132,9 +132,9 @@ const GamificationComponent = () => {
             <span className='text-sm font-medium'>Your Points:</span>
             <span className='ml-2 text-sm bg-purple-100 px-2 py-0.5 rounded-full'>425 pts</span>
           </div>
-          <Button 
-            variant='secondary' 
-            size='sm' 
+          <Button
+            variant='secondary'
+            size='sm'
             className='text-xs'
             aria-label='View available rewards and redemption options'
           >

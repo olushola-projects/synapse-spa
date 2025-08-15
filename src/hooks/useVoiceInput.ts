@@ -21,7 +21,7 @@ export const useVoiceInput = () => {
   useEffect(() => {
     const isSupported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
     setState(prev => ({ ...prev, isSupported }));
-    
+
     if (!isSupported) {
       logger.warn('Speech recognition not supported in this browser');
     }
@@ -31,7 +31,8 @@ export const useVoiceInput = () => {
     if (!state.isSupported) {
       toast({
         title: 'Voice Input Not Supported',
-        description: 'Your browser does not support voice input. Please use a modern browser like Chrome or Edge.',
+        description:
+          'Your browser does not support voice input. Please use a modern browser like Chrome or Edge.',
         variant: 'destructive'
       });
       return;
@@ -39,7 +40,8 @@ export const useVoiceInput = () => {
 
     try {
       // Use the appropriate speech recognition API
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const SpeechRecognition =
+        (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
       const recognition = new SpeechRecognition();
 
       // Configure recognition settings
@@ -50,11 +52,11 @@ export const useVoiceInput = () => {
 
       // Set up event handlers
       recognition.onstart = () => {
-        setState(prev => ({ 
-          ...prev, 
-          isListening: true, 
+        setState(prev => ({
+          ...prev,
+          isListening: true,
           error: null,
-          transcript: '' 
+          transcript: ''
         }));
         logger.info('Voice recognition started');
       };
@@ -80,7 +82,7 @@ export const useVoiceInput = () => {
 
       recognition.onerror = (event: any) => {
         let errorMessage = 'Voice recognition error occurred';
-        
+
         switch (event.error) {
           case 'no-speech':
             errorMessage = 'No speech detected. Please try again.';
@@ -89,7 +91,8 @@ export const useVoiceInput = () => {
             errorMessage = 'Microphone access denied. Please check your microphone permissions.';
             break;
           case 'not-allowed':
-            errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings.';
+            errorMessage =
+              'Microphone access denied. Please allow microphone access in your browser settings.';
             break;
           case 'network':
             errorMessage = 'Network error occurred. Please check your internet connection.';
@@ -101,10 +104,10 @@ export const useVoiceInput = () => {
             errorMessage = `Voice recognition error: ${event.error}`;
         }
 
-        setState(prev => ({ 
-          ...prev, 
-          isListening: false, 
-          error: errorMessage 
+        setState(prev => ({
+          ...prev,
+          isListening: false,
+          error: errorMessage
         }));
 
         toast({
@@ -123,21 +126,21 @@ export const useVoiceInput = () => {
 
       // Start recognition
       recognition.start();
-
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to start voice recognition';
-      setState(prev => ({ 
-        ...prev, 
-        isListening: false, 
-        error: errorMessage 
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to start voice recognition';
+      setState(prev => ({
+        ...prev,
+        isListening: false,
+        error: errorMessage
       }));
-      
+
       toast({
         title: 'Voice Input Error',
         description: errorMessage,
         variant: 'destructive'
       });
-      
+
       logger.error('Failed to start voice recognition:', error);
     }
   }, [state.isSupported]);

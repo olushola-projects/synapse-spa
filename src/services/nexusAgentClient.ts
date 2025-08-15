@@ -61,8 +61,12 @@ export class NexusAgentClient {
   }
 
   private mapConfidenceToRiskLevel(confidence: number): string {
-    if (confidence >= 0.8) return 'Low';
-    if (confidence >= 0.6) return 'Medium';
+    if (confidence >= 0.8) {
+      return 'Low';
+    }
+    if (confidence >= 0.6) {
+      return 'Medium';
+    }
     return 'High';
   }
 

@@ -55,7 +55,7 @@ export class EnterpriseMonitoringService {
   private metrics: MetricData[] = [];
   private healthChecks: HealthCheck[] = [];
   private monitoringInterval: NodeJS.Timeout | null = null;
-  private subscribers: ((status: SystemStatus) => void)[] = [];
+  private subscribers: Array<(status: SystemStatus) => void> = [];
 
   // SLA Thresholds
   private readonly SLA_THRESHOLDS = {
@@ -74,16 +74,16 @@ export class EnterpriseMonitoringService {
   /**
    * Start continuous monitoring
    */
-  startMonitoring(intervalMs: number = 60000): void {
+  startMonitoring(intervalMs = 60000): void {
     if (this.monitoringInterval) {
       this.stopMonitoring();
     }
 
     console.log('📊 Starting enterprise monitoring...');
-    
+
     // Initial check
     this.performComprehensiveCheck();
-    
+
     // Set up periodic monitoring
     this.monitoringInterval = setInterval(() => {
       this.performComprehensiveCheck();
@@ -106,7 +106,7 @@ export class EnterpriseMonitoringService {
    */
   subscribe(callback: (status: SystemStatus) => void): () => void {
     this.subscribers.push(callback);
-    
+
     // Return unsubscribe function
     return () => {
       const index = this.subscribers.indexOf(callback);
@@ -121,17 +121,12 @@ export class EnterpriseMonitoringService {
    */
   private async performComprehensiveCheck(): Promise<void> {
     const startTime = Date.now();
-    
+
     try {
       console.log('🔍 Performing comprehensive system check...');
-      
+
       // Run all health checks in parallel
-      const [
-        apiHealth,
-        llmHealth,
-        authHealth,
-        performanceMetrics
-      ] = await Promise.allSettled([
+      const [apiHealth, llmHealth, authHealth, performanceMetrics] = await Promise.allSettled([
         this.checkApiHealth(),
         this.checkLLMHealth(),
         this.checkAuthenticationHealth(),
@@ -154,7 +149,6 @@ export class EnterpriseMonitoringService {
 
       const checkDuration = Date.now() - startTime;
       console.log(`✅ System check completed in ${checkDuration}ms`);
-
     } catch (error) {
       console.error('❌ Comprehensive check failed:', error);
       this.addAlert({
@@ -172,7 +166,7 @@ export class EnterpriseMonitoringService {
    */
   private async checkApiHealth(): Promise<HealthCheck> {
     const startTime = Date.now();
-    
+
     try {
       const response = await backendApiClient.healthCheck();
       const responseTime = Date.now() - startTime;
@@ -189,7 +183,7 @@ export class EnterpriseMonitoringService {
       }
 
       const status = responseTime > this.SLA_THRESHOLDS.responseTime ? 'degraded' : 'healthy';
-      
+
       return {
         service: 'API',
         status,
@@ -198,7 +192,6 @@ export class EnterpriseMonitoringService {
         timestamp: new Date().toISOString(),
         metadata: response.data
       };
-
     } catch (error) {
       return {
         service: 'API',
@@ -216,7 +209,7 @@ export class EnterpriseMonitoringService {
    */
   private async checkLLMHealth(): Promise<HealthCheck> {
     const startTime = Date.now();
-    
+
     try {
       const validationResults = await llmValidationService.validateAllStrategies();
       const responseTime = Date.now() - startTime;
@@ -255,7 +248,6 @@ export class EnterpriseMonitoringService {
           averageResponseTime: validationResults.averageResponseTime
         }
       };
-
     } catch (error) {
       return {
         service: 'LLM',
@@ -273,12 +265,14 @@ export class EnterpriseMonitoringService {
    */
   private async checkAuthenticationHealth(): Promise<HealthCheck> {
     const startTime = Date.now();
-    
+
     try {
       // Check if API key is properly configured
-      const hasApiKey = !!(config.NEXUS_API_KEY && 
-                          config.NEXUS_API_KEY !== 'your_nexus_api_key' && 
-                          config.NEXUS_API_KEY !== 'demo_key_placeholder');
+      const hasApiKey = !!(
+        config.NEXUS_API_KEY &&
+        config.NEXUS_API_KEY !== 'your_nexus_api_key' &&
+        config.NEXUS_API_KEY !== 'demo_key_placeholder'
+      );
 
       const responseTime = Date.now() - startTime;
 
@@ -289,7 +283,7 @@ export class EnterpriseMonitoringService {
           responseTime,
           message: 'NEXUS_API_KEY not configured or using placeholder',
           timestamp: new Date().toISOString(),
-          metadata: { 
+          metadata: {
             configured: false,
             recommendation: 'Configure NEXUS_API_KEY in Supabase secrets'
           }
@@ -298,19 +292,18 @@ export class EnterpriseMonitoringService {
 
       // Test authentication with simple API call
       const authTest = await backendApiClient.healthCheck();
-      
+
       return {
         service: 'Authentication',
         status: authTest.error ? 'degraded' : 'healthy',
         responseTime,
         message: authTest.error ? 'Authentication may be invalid' : 'Authentication verified',
         timestamp: new Date().toISOString(),
-        metadata: { 
+        metadata: {
           configured: true,
           validated: !authTest.error
         }
       };
-
     } catch (error) {
       return {
         service: 'Authentication',
@@ -328,17 +321,22 @@ export class EnterpriseMonitoringService {
    */
   private async collectPerformanceMetrics(): Promise<HealthCheck> {
     const startTime = Date.now();
-    
+
     try {
       // Collect browser performance metrics
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        'navigation'
+      )[0] as PerformanceNavigationTiming;
       const paintEntries = performance.getEntriesByType('paint');
-      
+
       const metrics = {
         pageLoadTime: navigation ? navigation.loadEventEnd - navigation.fetchStart : 0,
-        domContentLoaded: navigation ? navigation.domContentLoadedEventEnd - navigation.fetchStart : 0,
+        domContentLoaded: navigation
+          ? navigation.domContentLoadedEventEnd - navigation.fetchStart
+          : 0,
         firstPaint: paintEntries.find(entry => entry.name === 'first-paint')?.startTime || 0,
-        firstContentfulPaint: paintEntries.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0
+        firstContentfulPaint:
+          paintEntries.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0
       };
 
       // Add metrics to collection
@@ -353,7 +351,7 @@ export class EnterpriseMonitoringService {
       });
 
       const responseTime = Date.now() - startTime;
-      
+
       return {
         service: 'Performance',
         status: 'healthy',
@@ -362,7 +360,6 @@ export class EnterpriseMonitoringService {
         timestamp: new Date().toISOString(),
         metadata: metrics
       };
-
     } catch (error) {
       return {
         service: 'Performance',
@@ -378,13 +375,15 @@ export class EnterpriseMonitoringService {
   /**
    * Process health check results and generate alerts
    */
-  private processHealthCheckResults(results: Array<{ name: string; result: PromiseSettledResult<HealthCheck> }>): void {
+  private processHealthCheckResults(
+    results: Array<{ name: string; result: PromiseSettledResult<HealthCheck> }>
+  ): void {
     this.healthChecks = []; // Reset health checks
 
     results.forEach(({ name, result }) => {
       if (result.status === 'fulfilled') {
         this.healthChecks.push(result.value);
-        
+
         // Generate alerts for degraded or critical services
         if (result.value.status === 'critical') {
           this.addAlert({
@@ -429,7 +428,7 @@ export class EnterpriseMonitoringService {
    */
   private addMetric(metric: MetricData): void {
     this.metrics.push(metric);
-    
+
     // Keep only last 100 metrics per type
     const metricsOfType = this.metrics.filter(m => m.name === metric.name);
     if (metricsOfType.length > 100) {
@@ -448,14 +447,14 @@ export class EnterpriseMonitoringService {
       timestamp: new Date().toISOString(),
       resolved: false
     };
-    
+
     this.alerts.push(newAlert);
-    
+
     // Keep only last 50 alerts
     if (this.alerts.length > 50) {
       this.alerts = this.alerts.slice(-50);
     }
-    
+
     console.warn(`🚨 Alert [${alert.level.toUpperCase()}]:`, alert.title, '-', alert.message);
   }
 
@@ -466,17 +465,20 @@ export class EnterpriseMonitoringService {
     const now = new Date().toISOString();
     const healthyServices = this.healthChecks.filter(h => h.status === 'healthy').length;
     const totalServices = this.healthChecks.length;
-    
+
     // Calculate availability (percentage of healthy services)
     const availability = totalServices > 0 ? (healthyServices / totalServices) * 100 : 0;
-    
+
     // Calculate average response time
-    const avgResponseTime = totalServices > 0 
-      ? this.healthChecks.reduce((sum, h) => sum + h.responseTime, 0) / totalServices 
-      : 0;
-      
+    const avgResponseTime =
+      totalServices > 0
+        ? this.healthChecks.reduce((sum, h) => sum + h.responseTime, 0) / totalServices
+        : 0;
+
     // Calculate error rate (percentage of critical/degraded services)
-    const errorServices = this.healthChecks.filter(h => h.status === 'critical' || h.status === 'degraded').length;
+    const errorServices = this.healthChecks.filter(
+      h => h.status === 'critical' || h.status === 'degraded'
+    ).length;
     const errorRate = totalServices > 0 ? (errorServices / totalServices) * 100 : 0;
 
     // Add SLA metrics
@@ -491,7 +493,7 @@ export class EnterpriseMonitoringService {
     this.addMetric({
       name: 'sla_response_time',
       value: avgResponseTime,
-      unit: 'ms', 
+      unit: 'ms',
       timestamp: now,
       tags: { category: 'sla' }
     });
@@ -511,7 +513,7 @@ export class EnterpriseMonitoringService {
   getSystemStatus(): SystemStatus {
     const criticalServices = this.healthChecks.filter(h => h.status === 'critical');
     const degradedServices = this.healthChecks.filter(h => h.status === 'degraded');
-    
+
     let overall: SystemStatus['overall'];
     if (criticalServices.length > 0) {
       overall = 'critical';

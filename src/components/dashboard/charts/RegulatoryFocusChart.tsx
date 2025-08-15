@@ -11,7 +11,7 @@ const pieChartData = [
   { name: 'SFDR', value: 5, fill: '#8B5CF6' }
 ];
 
-export const RegulatoryFocusChart = () => {
+const RegulatoryFocusChart = () => {
   return (
     <div className='h-[30%] bg-white rounded-md p-1 border border-gray-100 shadow-sm cursor-pointer'>
       <div className='flex items-center justify-between mb-0.5'>
@@ -50,3 +50,5 @@ export const RegulatoryFocusChart = () => {
     </div>
   );
 };
+
+export default RegulatoryFocusChart;

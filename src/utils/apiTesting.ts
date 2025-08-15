@@ -3,7 +3,8 @@
  * Validates enhanced backend features and response format
  */
 
-import { backendApiClient, ClassificationRequest, ClassificationResponse } from '@/services/backendApiClient';
+import type { ClassificationRequest, ClassificationResponse } from '@/services/backendApiClient';
+import { backendApiClient } from '@/services/backendApiClient';
 
 export interface TestResult {
   testName: string;
@@ -31,10 +32,7 @@ class ApiTester {
   /**
    * Run a single test with timing and error handling
    */
-  private async runTest(
-    testName: string,
-    testFn: () => Promise<any>
-  ): Promise<TestResult> {
+  private async runTest(testName: string, testFn: () => Promise<any>): Promise<TestResult> {
     const startTime = Date.now();
     const timestamp = new Date().toISOString();
 
@@ -76,7 +74,7 @@ class ApiTester {
   async testConnectivity(): Promise<TestResult> {
     return this.runTest('API Connectivity', async () => {
       const response = await backendApiClient.healthCheck();
-      
+
       if (response.error) {
         throw new Error(`Health check failed: ${response.error}`);
       }
@@ -106,13 +104,13 @@ class ApiTester {
       };
 
       const response = await backendApiClient.classifyDocument(request);
-      
+
       if (response.error) {
         throw new Error(`Classification failed: ${response.error}`);
       }
 
       const data = response.data as ClassificationResponse;
-      
+
       // Validate core fields
       if (!data.classification || !data.confidence || !data.reasoning) {
         throw new Error('Missing core classification fields');
@@ -120,11 +118,11 @@ class ApiTester {
 
       // Validate enhanced fields
       const validations = {
-        'sustainability_score': typeof data.sustainability_score === 'number',
-        'regulatory_basis': Array.isArray(data.regulatory_basis),
-        'benchmark_comparison': typeof data.benchmark_comparison === 'object',
-        'audit_trail': typeof data.audit_trail === 'object',
-        'explainability_score': typeof data.explainability_score === 'number'
+        sustainability_score: typeof data.sustainability_score === 'number',
+        regulatory_basis: Array.isArray(data.regulatory_basis),
+        benchmark_comparison: typeof data.benchmark_comparison === 'object',
+        audit_trail: typeof data.audit_trail === 'object',
+        explainability_score: typeof data.explainability_score === 'number'
       };
 
       const failedValidations = Object.entries(validations)
@@ -163,21 +161,21 @@ class ApiTester {
       };
 
       const response = await backendApiClient.classifyDocument(request);
-      
+
       if (response.error) {
         throw new Error(`Citation test failed: ${response.error}`);
       }
 
       const data = response.data as ClassificationResponse;
-      
+
       if (!data.regulatory_basis || data.regulatory_basis.length === 0) {
         throw new Error('No regulatory citations provided despite requirement');
       }
 
       // Check if citations contain SFDR references
-      const hasValidCitations = data.regulatory_basis.some(citation => 
-        citation.toLowerCase().includes('sfdr') || 
-        citation.toLowerCase().includes('article')
+      const hasValidCitations = data.regulatory_basis.some(
+        citation =>
+          citation.toLowerCase().includes('sfdr') || citation.toLowerCase().includes('article')
       );
 
       if (!hasValidCitations) {
@@ -198,7 +196,7 @@ class ApiTester {
   async testPerformanceBenchmarks(): Promise<TestResult> {
     return this.runTest('Performance Benchmarks', async () => {
       const startTime = Date.now();
-      
+
       const request: ClassificationRequest = {
         text: 'Performance test for SFDR classification timing',
         document_type: 'SFDR_Fund_Profile',
@@ -207,13 +205,13 @@ class ApiTester {
 
       const response = await backendApiClient.classifyDocument(request);
       const totalTime = Date.now() - startTime;
-      
+
       if (response.error) {
         throw new Error(`Performance test failed: ${response.error}`);
       }
 
       const data = response.data as ClassificationResponse;
-      
+
       // Check response time requirements
       const targetResponseTime = 3000; // 3 seconds
       if (totalTime > targetResponseTime) {
@@ -232,7 +230,7 @@ class ApiTester {
   /**
    * Run comprehensive test suite
    */
-  async runTestSuite(suiteName: string = 'Enhanced SFDR API'): Promise<TestSuite> {
+  async runTestSuite(suiteName = 'Enhanced SFDR API'): Promise<TestSuite> {
     console.log(`🚀 Starting test suite: ${suiteName}`);
     const suiteStartTime = Date.now();
 
@@ -259,7 +257,9 @@ class ApiTester {
       duration: suiteDuration
     };
 
-    console.log(`📊 Test Suite Complete: ${summary.passed}/${summary.total} passed (${suiteDuration}ms)`);
+    console.log(
+      `📊 Test Suite Complete: ${summary.passed}/${summary.total} passed (${suiteDuration}ms)`
+    );
 
     return {
       name: suiteName,
@@ -273,7 +273,7 @@ class ApiTester {
    */
   generateReport(testSuite: TestSuite): string {
     const { name, results, summary } = testSuite;
-    
+
     let report = `# ${name} - Test Report\n\n`;
     report += `**Generated:** ${new Date().toLocaleString()}\n\n`;
     report += `## Summary\n`;
@@ -284,20 +284,20 @@ class ApiTester {
     report += `- **Total Duration:** ${summary.duration}ms\n\n`;
 
     report += `## Test Results\n\n`;
-    
+
     results.forEach((result, index) => {
       report += `### ${index + 1}. ${result.testName}\n`;
       report += `- **Status:** ${result.success ? '✅ PASSED' : '❌ FAILED'}\n`;
       report += `- **Duration:** ${result.duration}ms\n`;
-      
+
       if (result.error) {
         report += `- **Error:** ${result.error}\n`;
       }
-      
+
       if (result.data) {
         report += `- **Data:** \`${JSON.stringify(result.data, null, 2)}\`\n`;
       }
-      
+
       report += `\n`;
     });
 
@@ -313,14 +313,14 @@ export const apiTester = new ApiTester();
  */
 export const runQuickApiTest = async (): Promise<void> => {
   console.log('🔍 Running quick API validation...');
-  
+
   try {
     const suite = await apiTester.runTestSuite('Quick Validation');
     const report = apiTester.generateReport(suite);
-    
+
     console.log('\n📋 Test Report:');
     console.log(report);
-    
+
     if (suite.summary.failed > 0) {
       console.warn(`⚠️ ${suite.summary.failed} tests failed - check implementation`);
     } else {

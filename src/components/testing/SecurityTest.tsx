@@ -9,11 +9,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
-import { 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
-  Shield, 
+import {
+  CheckCircle,
+  XCircle,
+  Clock,
+  Shield,
   AlertTriangle,
   Lock,
   Users,
@@ -81,11 +81,12 @@ export function SecurityTest() {
     const passedTests = testResults.filter(t => t.status === 'success').length;
     const failedTests = testResults.filter(t => t.status === 'error').length;
     const warningTests = testResults.filter(t => t.status === 'warning').length;
-    const criticalIssues = testResults.filter(t => t.severity === 'critical' && t.status === 'error').length;
-    
-    const securityScore = totalTests > 0 
-      ? Math.round(((passedTests / totalTests) * 100) - (criticalIssues * 20))
-      : 0;
+    const criticalIssues = testResults.filter(
+      t => t.severity === 'critical' && t.status === 'error'
+    ).length;
+
+    const securityScore =
+      totalTests > 0 ? Math.round((passedTests / totalTests) * 100 - criticalIssues * 20) : 0;
 
     return {
       totalTests,
@@ -107,13 +108,18 @@ export function SecurityTest() {
 
     // Test 1: Client-Side API Key Exposure (CRITICAL)
     const startApiKeyTest = Date.now();
-    updateTest('Client-Side API Key Exposure', 'pending', 'Checking for client-side API key exposure...', 'critical');
-    
+    updateTest(
+      'Client-Side API Key Exposure',
+      'pending',
+      'Checking for client-side API key exposure...',
+      'critical'
+    );
+
     try {
       // Check if API keys are exposed in environment
       const envCheck = await checkEnvironmentVariables();
       const duration = Date.now() - startApiKeyTest;
-      
+
       if (envCheck.exposed) {
         updateTest(
           'Client-Side API Key Exposure',
@@ -147,12 +153,17 @@ export function SecurityTest() {
 
     // Test 2: Supabase Secrets Configuration (CRITICAL)
     const startSecretsTest = Date.now();
-    updateTest('Supabase Secrets Configuration', 'pending', 'Validating Supabase secrets configuration...', 'critical');
-    
+    updateTest(
+      'Supabase Secrets Configuration',
+      'pending',
+      'Validating Supabase secrets configuration...',
+      'critical'
+    );
+
     try {
       const secretsResult = await testSupabaseSecrets();
       const duration = Date.now() - startSecretsTest;
-      
+
       if (secretsResult.configured) {
         updateTest(
           'Supabase Secrets Configuration',
@@ -186,12 +197,17 @@ export function SecurityTest() {
 
     // Test 3: Edge Function Authentication (CRITICAL)
     const startEdgeFunctionTest = Date.now();
-    updateTest('Edge Function Authentication', 'pending', 'Testing edge function authentication...', 'critical');
-    
+    updateTest(
+      'Edge Function Authentication',
+      'pending',
+      'Testing edge function authentication...',
+      'critical'
+    );
+
     try {
       const edgeFunctionResult = await testEdgeFunctionAuth();
       const duration = Date.now() - startEdgeFunctionTest;
-      
+
       if (edgeFunctionResult.authenticated) {
         updateTest(
           'Edge Function Authentication',
@@ -226,11 +242,11 @@ export function SecurityTest() {
     // Test 4: Rate Limiting (HIGH)
     const startRateLimitTest = Date.now();
     updateTest('Rate Limiting', 'pending', 'Testing rate limiting functionality...', 'high');
-    
+
     try {
       const rateLimitResult = await testRateLimiting();
       const duration = Date.now() - startRateLimitTest;
-      
+
       if (rateLimitResult.working) {
         updateTest(
           'Rate Limiting',
@@ -265,11 +281,11 @@ export function SecurityTest() {
     // Test 5: Circuit Breaker (HIGH)
     const startCircuitBreakerTest = Date.now();
     updateTest('Circuit Breaker', 'pending', 'Testing circuit breaker pattern...', 'high');
-    
+
     try {
       const circuitBreakerResult = await testCircuitBreaker();
       const duration = Date.now() - startCircuitBreakerTest;
-      
+
       if (circuitBreakerResult.working) {
         updateTest(
           'Circuit Breaker',
@@ -304,11 +320,11 @@ export function SecurityTest() {
     // Test 6: Session Management (MEDIUM)
     const startSessionTest = Date.now();
     updateTest('Session Management', 'pending', 'Testing session management...', 'medium');
-    
+
     try {
       const sessionResult = await testSessionManagement();
       const duration = Date.now() - startSessionTest;
-      
+
       if (sessionResult.valid) {
         updateTest(
           'Session Management',
@@ -343,11 +359,11 @@ export function SecurityTest() {
     // Test 7: Audit Logging (MEDIUM)
     const startAuditTest = Date.now();
     updateTest('Audit Logging', 'pending', 'Testing audit logging functionality...', 'medium');
-    
+
     try {
       const auditResult = await testAuditLogging();
       const duration = Date.now() - startAuditTest;
-      
+
       if (auditResult.logging) {
         updateTest(
           'Audit Logging',
@@ -382,11 +398,11 @@ export function SecurityTest() {
     // Test 8: CORS Configuration (LOW)
     const startCorsTest = Date.now();
     updateTest('CORS Configuration', 'pending', 'Testing CORS configuration...', 'low');
-    
+
     try {
       const corsResult = await testCorsConfiguration();
       const duration = Date.now() - startCorsTest;
-      
+
       if (corsResult.configured) {
         updateTest(
           'CORS Configuration',
@@ -424,17 +440,17 @@ export function SecurityTest() {
   // Helper functions for individual tests
   const checkEnvironmentVariables = async () => {
     const exposedFiles: string[] = [];
-    
+
     // Check for API key patterns in environment files
     const patterns = ['VITE_NEXUS_API_KEY', 'VITE_OPENAI_API_KEY'];
-    
+
     // This would normally check actual files, but for demo we'll simulate
     const hasExposure = false; // Simulate no exposure after fixes
-    
+
     return {
       exposed: hasExposure,
       files: exposedFiles,
-      patterns: patterns
+      patterns
     };
   };
 
@@ -537,17 +553,19 @@ export function SecurityTest() {
       low: 'bg-blue-100 text-blue-800'
     };
 
-    return (
-      <Badge className={colors[severity]}>
-        {severity.toUpperCase()}
-      </Badge>
-    );
+    return <Badge className={colors[severity]}>{severity.toUpperCase()}</Badge>;
   };
 
   const getSecurityScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    if (score >= 50) return 'text-orange-600';
+    if (score >= 90) {
+      return 'text-green-600';
+    }
+    if (score >= 70) {
+      return 'text-yellow-600';
+    }
+    if (score >= 50) {
+      return 'text-orange-600';
+    }
     return 'text-red-600';
   };
 
@@ -568,42 +586,38 @@ export function SecurityTest() {
           <Card>
             <CardContent className='pt-6'>
               <div className='text-center'>
-                <div className={`text-3xl font-bold ${getSecurityScoreColor(metrics.securityScore)}`}>
+                <div
+                  className={`text-3xl font-bold ${getSecurityScoreColor(metrics.securityScore)}`}
+                >
                   {metrics.securityScore}
                 </div>
                 <p className='text-sm text-muted-foreground'>Security Score</p>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className='pt-6'>
               <div className='text-center'>
-                <div className='text-3xl font-bold text-green-600'>
-                  {metrics.passedTests}
-                </div>
+                <div className='text-3xl font-bold text-green-600'>{metrics.passedTests}</div>
                 <p className='text-sm text-muted-foreground'>Passed Tests</p>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className='pt-6'>
               <div className='text-center'>
-                <div className='text-3xl font-bold text-red-600'>
-                  {metrics.failedTests}
-                </div>
+                <div className='text-3xl font-bold text-red-600'>{metrics.failedTests}</div>
                 <p className='text-sm text-muted-foreground'>Failed Tests</p>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className='pt-6'>
               <div className='text-center'>
-                <div className='text-3xl font-bold text-red-600'>
-                  {metrics.criticalIssues}
-                </div>
+                <div className='text-3xl font-bold text-red-600'>{metrics.criticalIssues}</div>
                 <p className='text-sm text-muted-foreground'>Critical Issues</p>
               </div>
             </CardContent>
@@ -615,15 +629,20 @@ export function SecurityTest() {
           <Alert className='border-red-200 bg-red-50'>
             <AlertTriangle className='h-4 w-4 text-red-600' />
             <AlertDescription className='text-red-800'>
-              <strong>CRITICAL SECURITY ISSUES DETECTED:</strong> {metrics.criticalIssues} critical security vulnerabilities found. 
-              These must be addressed immediately to ensure system security.
+              <strong>CRITICAL SECURITY ISSUES DETECTED:</strong> {metrics.criticalIssues} critical
+              security vulnerabilities found. These must be addressed immediately to ensure system
+              security.
             </AlertDescription>
           </Alert>
         )}
 
         {/* Test Controls */}
         <div className='flex items-center justify-between'>
-          <Button onClick={runSecurityTests} disabled={isRunning} className='flex items-center gap-2'>
+          <Button
+            onClick={runSecurityTests}
+            disabled={isRunning}
+            className='flex items-center gap-2'
+          >
             {isRunning ? (
               <>
                 <Clock className='h-4 w-4 animate-spin' />
@@ -636,7 +655,7 @@ export function SecurityTest() {
               </>
             )}
           </Button>
-          
+
           <Button
             variant='outline'
             onClick={() => setShowDetails(!showDetails)}
@@ -654,7 +673,7 @@ export function SecurityTest() {
               <Activity className='h-5 w-5' />
               Security Test Results
             </h3>
-            
+
             {tests.map((test, index) => (
               <Card key={index} className='p-4'>
                 <div className='flex items-center justify-between mb-2'>
@@ -706,7 +725,7 @@ export function SecurityTest() {
                   </div>
                   <Progress value={metrics.securityScore} className='h-2' />
                 </div>
-                
+
                 <div className='grid grid-cols-2 gap-4 text-sm'>
                   <div>
                     <span className='text-muted-foreground'>Total Tests:</span>
@@ -715,7 +734,10 @@ export function SecurityTest() {
                   <div>
                     <span className='text-muted-foreground'>Success Rate:</span>
                     <span className='ml-2 font-medium'>
-                      {metrics.totalTests > 0 ? Math.round((metrics.passedTests / metrics.totalTests) * 100) : 0}%
+                      {metrics.totalTests > 0
+                        ? Math.round((metrics.passedTests / metrics.totalTests) * 100)
+                        : 0}
+                      %
                     </span>
                   </div>
                 </div>
@@ -728,13 +750,11 @@ export function SecurityTest() {
         {tests.length > 0 && !isRunning && (
           <Alert>
             <AlertDescription>
-              {metrics.criticalIssues === 0 && metrics.failedTests === 0 ? (
-                '✅ All security tests passed! The system is properly secured.'
-              ) : metrics.criticalIssues > 0 ? (
-                `🚨 CRITICAL: ${metrics.criticalIssues} critical security issues found. Immediate action required.`
-              ) : (
-                `⚠️ ${metrics.failedTests} security test(s) failed. Review and address the issues above.`
-              )}
+              {metrics.criticalIssues === 0 && metrics.failedTests === 0
+                ? '✅ All security tests passed! The system is properly secured.'
+                : metrics.criticalIssues > 0
+                  ? `🚨 CRITICAL: ${metrics.criticalIssues} critical security issues found. Immediate action required.`
+                  : `⚠️ ${metrics.failedTests} security test(s) failed. Review and address the issues above.`}
             </AlertDescription>
           </Alert>
         )}

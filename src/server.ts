@@ -21,12 +21,15 @@ app.use(helmet());
 app.use(compression());
 
 // CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-domain.com'] 
-    : ['http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? ['https://your-domain.com']
+        : ['http://localhost:5173', 'http://localhost:3000'],
+    credentials: true
+  })
+);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -83,5 +86,3 @@ app.listen(PORT, () => {
 });
 
 export default app;
-
-

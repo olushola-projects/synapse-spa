@@ -121,21 +121,26 @@ class NexusAgentService {
       // Use backendApiClient for consistency
       const { backendApiClient } = await import('./backendApiClient');
       const response = await backendApiClient.classifyProduct(request);
-      
+
       if (response.error) {
         throw new Error(response.error);
       }
-      
+
       const classificationResult = response.data?.classification || 'Article6';
-      const validClassification = ['Article6', 'Article8', 'Article9'].includes(classificationResult) 
-        ? classificationResult as 'Article6' | 'Article8' | 'Article9'
+      const validClassification = ['Article6', 'Article8', 'Article9'].includes(
+        classificationResult
+      )
+        ? (classificationResult as 'Article6' | 'Article8' | 'Article9')
         : this.determineRecommendedArticle(request);
-      
+
       return {
         recommendedArticle: validClassification,
         confidence: response.data?.confidence || 0.85,
         reasoning: this.generateReasoning(request, request.fundProfile.targetArticleClassification),
-        alternativeClassifications: this.generateAlternatives(request, request.fundProfile.targetArticleClassification)
+        alternativeClassifications: this.generateAlternatives(
+          request,
+          request.fundProfile.targetArticleClassification
+        )
       };
     } catch (_error) {
       return this.generateMockClassification(request);
@@ -162,9 +167,9 @@ class NexusAgentService {
 
     // SECURITY FIX: Send request through edge function proxy
     const proxyPayload = {
-      method: method,
-      endpoint: endpoint,
-      data: data,
+      method,
+      endpoint,
+      data,
       userId: 'nexus-agent-request'
     };
 
@@ -177,19 +182,24 @@ class NexusAgentService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        logger.error(`Nexus API Error: ${response.status} ${response.statusText}`, { 
-          url, 
-          status: response.status, 
-          error: errorText 
+        logger.error(`Nexus API Error: ${response.status} ${response.statusText}`, {
+          url,
+          status: response.status,
+          error: errorText
         });
-        throw new Error(`Nexus API Error: ${response.status} ${response.statusText} - ${errorText}`);
+        throw new Error(
+          `Nexus API Error: ${response.status} ${response.statusText} - ${errorText}`
+        );
       }
 
       const result = await response.json();
       logger.info(`Nexus API Success`, { endpoint, responseSize: JSON.stringify(result).length });
       return result;
     } catch (error) {
-      logger.error(`Nexus API Request Failed`, { url, error: error instanceof Error ? error.message : 'Unknown error' });
+      logger.error(`Nexus API Request Failed`, {
+        url,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
       throw error;
     }
   }

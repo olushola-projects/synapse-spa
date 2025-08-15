@@ -17,7 +17,6 @@ import {
 } from 'recharts';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-
 // Sample data for the charts
 const euData = [
   { name: 'Jan', updates: 24, compliance: 76, riskScore: 15 },

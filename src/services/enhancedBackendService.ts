@@ -38,7 +38,7 @@ export interface HealthCheckResponse {
 
 class EnhancedBackendService {
   private static instance: EnhancedBackendService;
-  
+
   public static getInstance(): EnhancedBackendService {
     if (!EnhancedBackendService.instance) {
       EnhancedBackendService.instance = new EnhancedBackendService();
@@ -52,11 +52,11 @@ class EnhancedBackendService {
   async classifyDocument(request: ClassificationRequest): Promise<ClassificationResponse> {
     const startTime = Date.now();
     let response: ClassificationResponse;
-    
+
     try {
       // Generate unique classification ID for audit trail
       const classificationId = crypto.randomUUID();
-      
+
       // Call Nexus API through secure proxy
       const { data, error } = await supabase.functions.invoke('nexus-proxy', {
         body: {
@@ -77,7 +77,7 @@ class EnhancedBackendService {
       }
 
       const processingTime = Date.now() - startTime;
-      
+
       response = {
         classification: data.data?.classification || 'Article 6',
         confidence: data.data?.confidence || 0,
@@ -96,8 +96,8 @@ class EnhancedBackendService {
 
       // SFDR compliance validation
       const complianceCheck = this.validateSFDRCompliance(
-        response.classification, 
-        response.confidence, 
+        response.classification,
+        response.confidence,
         request
       );
 
@@ -115,26 +115,24 @@ class EnhancedBackendService {
 
       // Store classification data in compliance assessments using proper format
       try {
-        const { error: assessmentError } = await supabase
-          .from('compliance_assessments')
-          .insert({
-            user_id: request.user_id || '',
-            fund_name: request.fund_name || 'Unknown Fund',
-            entity_id: classificationId,
-            target_article: response.classification,
-            assessment_data: {
-              text: request.text,
-              document_type: request.document_type,
-              strategy: request.strategy || 'primary',
-              processing_pipeline: 'enhanced_classification_v1.0'
-            },
-            validation_results: {
-              quality_metrics: qualityCheck.metrics,
-              compliance_status: complianceCheck
-            },
-            compliance_score: Math.round(response.confidence * 100),
-            status: complianceCheck.isCompliant ? 'validated' : 'needs_review'
-          });
+        const { error: assessmentError } = await supabase.from('compliance_assessments').insert({
+          user_id: request.user_id || '',
+          fund_name: request.fund_name || 'Unknown Fund',
+          entity_id: classificationId,
+          target_article: response.classification,
+          assessment_data: {
+            text: request.text,
+            document_type: request.document_type,
+            strategy: request.strategy || 'primary',
+            processing_pipeline: 'enhanced_classification_v1.0'
+          },
+          validation_results: {
+            quality_metrics: qualityCheck.metrics,
+            compliance_status: complianceCheck
+          },
+          compliance_score: Math.round(response.confidence * 100),
+          status: complianceCheck.isCompliant ? 'validated' : 'needs_review'
+        });
 
         if (assessmentError) {
           console.error('Failed to record compliance assessment:', assessmentError);
@@ -159,10 +157,9 @@ class EnhancedBackendService {
       }
 
       return response;
-
     } catch (error) {
       const processingTime = Date.now() - startTime;
-      
+
       // Log failure metrics
       console.error('Classification failure metrics:', {
         service: 'enhanced_classification',
@@ -181,34 +178,35 @@ class EnhancedBackendService {
    */
   async performHealthCheck(): Promise<HealthCheckResponse> {
     const startTime = Date.now();
-    
+
     try {
       // Check Nexus API health
-      const { data: nexusHealth, error: nexusError } = await supabase.functions.invoke('nexus-proxy', {
-        body: {
-          method: 'GET',
-          endpoint: 'api/health'
+      const { data: nexusHealth, error: nexusError } = await supabase.functions.invoke(
+        'nexus-proxy',
+        {
+          body: {
+            method: 'GET',
+            endpoint: 'api/health'
+          }
         }
-      });
+      );
 
       const nexusHealthy = !nexusError && nexusHealth?.data?.status === 'healthy';
 
-      // Check database connectivity  
-      const { error: dbError } = await supabase
-        .from('profiles')
-        .select('id')
-        .limit(1);
-      
+      // Check database connectivity
+      const { error: dbError } = await supabase.from('profiles').select('id').limit(1);
+
       const dbHealthy = !dbError;
 
       // Check monitoring service
       const monitoringHealthy = await this.checkMonitoringHealth();
 
-      const overallStatus = nexusHealthy && dbHealthy && monitoringHealthy 
-        ? 'healthy' 
-        : (nexusHealthy || dbHealthy) 
-          ? 'degraded' 
-          : 'down';
+      const overallStatus =
+        nexusHealthy && dbHealthy && monitoringHealthy
+          ? 'healthy'
+          : nexusHealthy || dbHealthy
+            ? 'degraded'
+            : 'down';
 
       const response: HealthCheckResponse = {
         status: overallStatus,
@@ -232,10 +230,9 @@ class EnhancedBackendService {
       });
 
       return response;
-
     } catch (error) {
       const processingTime = Date.now() - startTime;
-      
+
       console.error('Health check failure:', {
         service: 'health_check',
         status: 'critical',
@@ -334,7 +331,6 @@ class EnhancedBackendService {
         storage_path: uploadData.path,
         processing_status: 'uploaded'
       };
-
     } catch (error) {
       console.error('Error uploading document:', error);
       throw error;
@@ -342,7 +338,11 @@ class EnhancedBackendService {
   }
 
   // Helper methods
-  private validateSFDRCompliance(classification: string, confidence: number, _inputData: any): {
+  private validateSFDRCompliance(
+    classification: string,
+    confidence: number,
+    _inputData: any
+  ): {
     isCompliant: boolean;
     issues: string[];
     recommendations: string[];
@@ -404,7 +404,8 @@ class EnhancedBackendService {
       return { total_classifications: 0, avg_confidence: 0, compliance_score: 100 };
     }
 
-    const avgConfidence = assessments.reduce((sum, a) => sum + (a.compliance_score || 0), 0) / assessments.length / 100;
+    const avgConfidence =
+      assessments.reduce((sum, a) => sum + (a.compliance_score || 0), 0) / assessments.length / 100;
     const validatedCount = assessments.filter(a => a.status === 'validated').length;
     const complianceScore = (validatedCount / assessments.length) * 100;
 
@@ -424,15 +425,10 @@ class EnhancedBackendService {
     }, {});
   }
 
-
-
   private async checkMonitoringHealth(): Promise<boolean> {
     try {
       // Simple check to see if we can access existing tables
-      const { error } = await supabase
-        .from('compliance_assessments')
-        .select('id')
-        .limit(1);
+      const { error } = await supabase.from('compliance_assessments').select('id').limit(1);
       return !error;
     } catch (error) {
       return false;
@@ -441,12 +437,20 @@ class EnhancedBackendService {
 
   private inferDocumentType(filename: string, mimeType: string): string {
     const ext = filename.toLowerCase().split('.').pop();
-    
-    if (mimeType.includes('pdf') || ext === 'pdf') return 'fund_prospectus';
-    if (mimeType.includes('word') || ['doc', 'docx'].includes(ext || '')) return 'regulatory_document';
-    if (mimeType.includes('excel') || ['xls', 'xlsx'].includes(ext || '')) return 'financial_data';
-    if (mimeType.includes('text') || ext === 'txt') return 'text_document';
-    
+
+    if (mimeType.includes('pdf') || ext === 'pdf') {
+      return 'fund_prospectus';
+    }
+    if (mimeType.includes('word') || ['doc', 'docx'].includes(ext || '')) {
+      return 'regulatory_document';
+    }
+    if (mimeType.includes('excel') || ['xls', 'xlsx'].includes(ext || '')) {
+      return 'financial_data';
+    }
+    if (mimeType.includes('text') || ext === 'txt') {
+      return 'text_document';
+    }
+
     return 'general_document';
   }
 }

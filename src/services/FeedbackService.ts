@@ -390,7 +390,7 @@ class FeedbackService {
 
     // Group by date using Map for better TypeScript support
     const groupedByDate = new Map<string, FeedbackData[]>();
-    
+
     recentFeedback.forEach(f => {
       const dateStr = new Date(f.timestamp).toISOString().split('T')[0];
       if (dateStr && !groupedByDate.has(dateStr)) {

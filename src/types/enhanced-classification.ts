@@ -49,13 +49,13 @@ export interface SFDRClassificationResponse extends Partial<EnhancedSFDRClassifi
   classification: string;
   confidence: number;
   reasoning: string;
-  
+
   // Legacy fields for backward compatibility (optional)
   riskLevel?: string;
   complianceScore?: number;
   recommendations?: string[];
   timestamp?: string;
-  
+
   // Enhanced fields (optional for backward compatibility)
   processing_time?: number;
   sustainability_score?: number;

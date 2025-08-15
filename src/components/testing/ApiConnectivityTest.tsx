@@ -23,13 +23,19 @@ export function ApiConnectivityTest() {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<TestResult[]>([]);
 
-  const updateResult = (name: string, status: TestResult['status'], message: string, data?: any, duration?: number) => {
+  const updateResult = (
+    name: string,
+    status: TestResult['status'],
+    message: string,
+    data?: any,
+    duration?: number
+  ) => {
     setResults(prev => {
       const existing = prev.find(r => r.name === name);
       const newResult = { name, status, message, data, duration };
-      
+
       if (existing) {
-        return prev.map(r => r.name === name ? newResult : r);
+        return prev.map(r => (r.name === name ? newResult : r));
       }
       return [...prev, newResult];
     });
@@ -38,7 +44,7 @@ export function ApiConnectivityTest() {
   const runTest = async (name: string, testFn: () => Promise<any>) => {
     const startTime = Date.now();
     updateResult(name, 'pending', 'Running...');
-    
+
     try {
       const result = await testFn();
       const duration = Date.now() - startTime;
@@ -46,7 +52,13 @@ export function ApiConnectivityTest() {
       return result;
     } catch (error) {
       const duration = Date.now() - startTime;
-      updateResult(name, 'error', error instanceof Error ? error.message : 'Unknown error', null, duration);
+      updateResult(
+        name,
+        'error',
+        error instanceof Error ? error.message : 'Unknown error',
+        null,
+        duration
+      );
       throw error;
     }
   };
@@ -118,7 +130,8 @@ export function ApiConnectivityTest() {
         const response = await backendApiClient.classifyProduct({
           fundProfile: {
             fundName: 'Test Sustainable Fund',
-            investmentObjective: 'To promote environmental sustainability through renewable energy investments',
+            investmentObjective:
+              'To promote environmental sustainability through renewable energy investments',
             targetArticleClassification: 'Article8',
             sustainabilityCharacteristics: ['Environmental', 'Carbon reduction']
           },
@@ -129,7 +142,6 @@ export function ApiConnectivityTest() {
         }
         return response.data;
       });
-
     } catch (error) {
       console.error('Test suite failed:', error);
     } finally {
@@ -139,19 +151,27 @@ export function ApiConnectivityTest() {
 
   const getStatusIcon = (status: TestResult['status']) => {
     switch (status) {
-      case 'pending': return <Loader2 className="h-4 w-4 animate-spin" />;
-      case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case 'pending':
+        return <Loader2 className='h-4 w-4 animate-spin' />;
+      case 'success':
+        return <CheckCircle className='h-4 w-4 text-green-500' />;
+      case 'error':
+        return <XCircle className='h-4 w-4 text-red-500' />;
+      case 'warning':
+        return <AlertTriangle className='h-4 w-4 text-yellow-500' />;
     }
   };
 
   const getStatusColor = (status: TestResult['status']) => {
     switch (status) {
-      case 'pending': return 'bg-blue-50 text-blue-700 border-blue-200';
-      case 'success': return 'bg-green-50 text-green-700 border-green-200';
-      case 'error': return 'bg-red-50 text-red-700 border-red-200';
-      case 'warning': return 'bg-yellow-50 text-yellow-700 border-yellow-200';
+      case 'pending':
+        return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'success':
+        return 'bg-green-50 text-green-700 border-green-200';
+      case 'error':
+        return 'bg-red-50 text-red-700 border-red-200';
+      case 'warning':
+        return 'bg-yellow-50 text-yellow-700 border-yellow-200';
     }
   };
 
@@ -160,9 +180,9 @@ export function ApiConnectivityTest() {
   const totalTests = 6;
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className='w-full max-w-4xl mx-auto'>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className='flex items-center gap-2'>
           Backend API Connectivity Test
           {results.length > 0 && (
             <Badge variant={errorCount === 0 ? 'default' : 'destructive'}>
@@ -175,40 +195,34 @@ export function ApiConnectivityTest() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-4">
-        <div className="flex gap-2">
-          <Button 
-            onClick={runAllTests} 
-            disabled={isRunning}
-            className="flex items-center gap-2"
-          >
-            {isRunning && <Loader2 className="h-4 w-4 animate-spin" />}
+      <CardContent className='space-y-4'>
+        <div className='flex gap-2'>
+          <Button onClick={runAllTests} disabled={isRunning} className='flex items-center gap-2'>
+            {isRunning && <Loader2 className='h-4 w-4 animate-spin' />}
             {isRunning ? 'Running Tests...' : 'Run All Tests'}
           </Button>
         </div>
 
         {results.length > 0 && (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {results.map((result, index) => (
               <div key={index} className={`p-3 rounded-lg border ${getStatusColor(result.status)}`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-2'>
                     {getStatusIcon(result.status)}
-                    <span className="font-medium">{result.name}</span>
+                    <span className='font-medium'>{result.name}</span>
                     {result.duration && (
-                      <span className="text-xs opacity-70">({result.duration}ms)</span>
+                      <span className='text-xs opacity-70'>({result.duration}ms)</span>
                     )}
                   </div>
                 </div>
-                <div className="mt-1 text-sm opacity-80">
-                  {result.message}
-                </div>
+                <div className='mt-1 text-sm opacity-80'>{result.message}</div>
                 {result.data && (
-                  <details className="mt-2">
-                    <summary className="text-xs cursor-pointer opacity-70 hover:opacity-100">
+                  <details className='mt-2'>
+                    <summary className='text-xs cursor-pointer opacity-70 hover:opacity-100'>
                       View response data
                     </summary>
-                    <pre className="mt-1 text-xs bg-black/10 p-2 rounded overflow-auto max-h-32">
+                    <pre className='mt-1 text-xs bg-black/10 p-2 rounded overflow-auto max-h-32'>
                       {JSON.stringify(result.data, null, 2)}
                     </pre>
                   </details>
@@ -220,21 +234,26 @@ export function ApiConnectivityTest() {
 
         {errorCount > 0 && (
           <Alert>
-            <AlertTriangle className="h-4 w-4" />
+            <AlertTriangle className='h-4 w-4' />
             <AlertDescription>
-              <strong>Backend Connectivity Issues Detected:</strong><br/>
+              <strong>Backend Connectivity Issues Detected:</strong>
+              <br />
               {errorCount} out of {totalTests} tests failed. This indicates:
-              <ul className="mt-2 ml-4 list-disc text-sm">
+              <ul className='mt-2 ml-4 list-disc text-sm'>
                 <li>External API (api.joinsynapses.com) may be unreachable</li>
                 <li>Authentication or configuration issues</li>
                 <li>LLM integration problems</li>
                 <li>Network connectivity issues</li>
               </ul>
-              <div className="mt-2">
-                <strong>Recommended Actions:</strong><br/>
-                1. Verify api.joinsynapses.com is accessible<br/>
-                2. Check API authentication configuration<br/>
-                3. Test with different LLM strategies<br/>
+              <div className='mt-2'>
+                <strong>Recommended Actions:</strong>
+                <br />
+                1. Verify api.joinsynapses.com is accessible
+                <br />
+                2. Check API authentication configuration
+                <br />
+                3. Test with different LLM strategies
+                <br />
                 4. Review network and CORS settings
               </div>
             </AlertDescription>
@@ -243,9 +262,10 @@ export function ApiConnectivityTest() {
 
         {results.length > 0 && errorCount === 0 && (
           <Alert>
-            <CheckCircle className="h-4 w-4" />
+            <CheckCircle className='h-4 w-4' />
             <AlertDescription>
-              <strong>All Tests Passed!</strong><br/>
+              <strong>All Tests Passed!</strong>
+              <br />
               Backend API connectivity is working properly. Both LLMs are responding correctly.
             </AlertDescription>
           </Alert>
