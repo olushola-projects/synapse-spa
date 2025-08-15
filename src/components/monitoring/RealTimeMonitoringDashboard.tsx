@@ -25,42 +25,41 @@ export function RealTimeMonitoringDashboard() {
     return null;
   }
 
-  const renderTabs = () => (
-    <Tabs defaultValue='alerts' className='space-y-4'>
-      <TabsList>
-        <TabsTrigger value='alerts'>Active Alerts ({activeAlerts.length})</TabsTrigger>
-        <TabsTrigger value='metrics'>Metrics</TabsTrigger>
-        <TabsTrigger value='compliance'>SFDR Compliance</TabsTrigger>
-        <TabsTrigger value='security'>Security</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value='alerts' className='space-y-4'>
-        <AlertsTab alerts={activeAlerts} onResolve={(id: string) => { resolveAlertFn(id); }} />
-      </TabsContent>
-
-      <TabsContent value='metrics' className='space-y-4'>
-        <MetricsTab />
-      </TabsContent>
-
-      <TabsContent value='compliance' className='space-y-4'>
-        <ComplianceTab overview={overview} />
-      </TabsContent>
-
-      <TabsContent value='security' className='space-y-4'>
-        <SecurityTab />
-      </TabsContent>
-    </Tabs>
-  );
-
   return (
     <div className='space-y-6'>
       <MonitoringOverview overview={overview} alerts={activeAlerts} />
-      {renderTabs()}
+      
+      <Tabs defaultValue='alerts' className='space-y-4'>
+        <TabsList>
+          <TabsTrigger value='alerts'>Active Alerts ({activeAlerts.length})</TabsTrigger>
+          <TabsTrigger value='metrics'>Metrics</TabsTrigger>
+          <TabsTrigger value='compliance'>SFDR Compliance</TabsTrigger>
+          <TabsTrigger value='security'>Security</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value='alerts' className='space-y-4'>
+          <AlertsTab alerts={activeAlerts} onResolve={(id: string) => { resolveAlertFn(id); }} />
+        </TabsContent>
+
+        <TabsContent value='metrics' className='space-y-4'>
+          <MetricsTab />
+        </TabsContent>
+
+        <TabsContent value='compliance' className='space-y-4'>
+          <ComplianceTab overview={overview} />
+        </TabsContent>
+
+        <TabsContent value='security' className='space-y-4'>
+          <SecurityTab />
+        </TabsContent>
+      </Tabs>
+      
       <div className='text-center text-sm text-muted-foreground'>
         Last updated: {lastUpdate.toLocaleTimeString()}
       </div>
     </div>
   );
 }
+
 
 export default RealTimeMonitoringDashboard;
