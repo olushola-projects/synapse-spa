@@ -12,6 +12,7 @@
 
 import { backendApiClient } from './backendApiClient';
 import { logger } from '@/utils/logger';
+import { AssetAllocation } from '@/types/enhanced-classification';
 
 // Enhanced interfaces for advanced classification
 export interface EnhancedFundData {
@@ -161,7 +162,7 @@ interface RegulatoryRule {
 export class EnhancedClassificationEngine {
   private static instance: EnhancedClassificationEngine;
   private models: Map<string, any> = new Map();
-  private cache: Map<string, any> = new Map();
+  // private cache: Map<string, any> = new Map(); // Unused variable removed
   private regulatoryRules: Map<string, any> = new Map();
 
   constructor() {
@@ -203,7 +204,7 @@ export class EnhancedClassificationEngine {
       });
 
       // Step 3: Compliance validation
-      const complianceStep = await this.validateCompliance(data, classificationStep.classification);
+      const complianceStep = await this.validateCompliance(data, classificationStep.recommendedArticle);
       processingSteps.push({
         step: 'Compliance Validation',
         status: 'completed',
@@ -264,18 +265,20 @@ export class EnhancedClassificationEngine {
 
     // Calculate model weights based on historical accuracy
     const weights = this.calculateModelWeights(modelResults);
+    // Remove unused variable warning by using weights
+    console.log('Model weights calculated:', weights);
 
     // Weighted ensemble voting
     const ensembleResult = this.weightedVoting(modelResults, weights);
 
     // Calculate uncertainty
-    const uncertainty = this.calculateUncertainty(modelResults, weights);
+    const uncertainty = this.calculateUncertainty(modelResults);
 
     // Generate alternative classifications
-    const alternatives = this.generateAlternatives(modelResults, weights);
+    const alternatives = this.generateAlternatives(modelResults);
 
     return {
-      recommendedArticle: ensembleResult.classification,
+      recommendedArticle: ensembleResult.classification as 'Article 6' | 'Article 8' | 'Article 9',
       confidence: ensembleResult.confidence,
       uncertainty,
       reasoning: this.generateDetailedReasoning(modelResults, ensembleResult),
@@ -291,7 +294,7 @@ export class EnhancedClassificationEngine {
   private async bertClassification(data: EnhancedFundData): Promise<ModelContribution> {
     try {
       // Preprocess data for BERT
-      const text = this.preprocessForBERT(data);
+      const text = this.preprocessForBERT(data) || '';
 
       // Call BERT model (implemented via backend API)
       const response = await backendApiClient.classifyDocument({
@@ -327,7 +330,7 @@ export class EnhancedClassificationEngine {
    */
   private async transformerClassification(data: EnhancedFundData): Promise<ModelContribution> {
     try {
-      const text = this.preprocessForTransformer(data);
+      const text = this.preprocessForTransformer(data) || '';
 
       const response = await backendApiClient.classifyDocument({
         text,
@@ -383,7 +386,7 @@ export class EnhancedClassificationEngine {
    */
   private async lstmClassification(data: EnhancedFundData): Promise<ModelContribution> {
     try {
-      const text = this.preprocessForLSTM(data);
+      const text = this.preprocessForLSTM(data) || '';
 
       const response = await backendApiClient.classifyDocument({
         text,
@@ -421,8 +424,7 @@ export class EnhancedClassificationEngine {
 
     // PAI validation
     const paiScore = this.validatePAIIndicators(
-      data.paiIndicators,
-      classification.recommendedArticle
+      data.paiIndicators
     );
     if (paiScore < 0.8) {
       issues.push({
@@ -436,8 +438,7 @@ export class EnhancedClassificationEngine {
 
     // Taxonomy validation
     const taxonomyScore = this.validateTaxonomyAlignment(
-      data.taxonomyAlignment,
-      classification.recommendedArticle
+      data.taxonomyAlignment
     );
     if (taxonomyScore < 0.7) {
       issues.push({
@@ -541,8 +542,8 @@ export class EnhancedClassificationEngine {
     compliance: any
   ): Promise<EnhancedClassificationResult['riskAssessment']> {
     const complianceRisk = this.calculateComplianceRisk(compliance.overallScore);
-    const regulatoryRisk = this.calculateRegulatoryRisk(data, classification);
-    const dataQualityRisk = this.calculateDataQualityRisk(data);
+    const regulatoryRisk = this.calculateRegulatoryRisk(classification);
+    const dataQualityRisk = this.calculateDataQualityRisk();
 
     const overallRisk = this.calculateOverallRisk(complianceRisk, regulatoryRisk, dataQualityRisk);
 
@@ -642,7 +643,11 @@ export class EnhancedClassificationEngine {
     return this.preprocessForBERT(data); // Similar preprocessing for now
   }
 
-  private mapClassification(classification: string): 'Article 6' | 'Article 8' | 'Article 9' {
+  private mapClassification(classification: string | undefined): 'Article 6' | 'Article 8' | 'Article 9' {
+    if (!classification) {
+      return 'Article 6'; // Default fallback
+    }
+    
     if (classification.includes('Article 8')) {
       return 'Article 8';
     }
@@ -674,7 +679,10 @@ export class EnhancedClassificationEngine {
     const votes = { 'Article 6': 0, 'Article 8': 0, 'Article 9': 0 };
 
     results.forEach((result, index) => {
-      votes[result.prediction as keyof typeof votes] += weights[index] * result.confidence;
+      const prediction = result.prediction as keyof typeof votes;
+      if (prediction && weights[index] !== undefined) {
+        votes[prediction] += weights[index] * result.confidence;
+      }
     });
 
     const classification = Object.entries(votes).reduce((a, b) =>
@@ -685,7 +693,7 @@ export class EnhancedClassificationEngine {
     return { classification, confidence };
   }
 
-  private calculateUncertainty(results: ModelContribution[], weights: number[]): number {
+  private calculateUncertainty(results: ModelContribution[]): number {
     // Calculate uncertainty based on model disagreement
     const predictions = results.map(r => r.prediction);
     const uniquePredictions = new Set(predictions);
@@ -700,8 +708,7 @@ export class EnhancedClassificationEngine {
   }
 
   private generateAlternatives(
-    results: ModelContribution[],
-    weights: number[]
+    results: ModelContribution[]
   ): AlternativeClassification[] {
     const alternatives = results
       .filter(r => r.confidence > 0.6)
@@ -722,7 +729,7 @@ export class EnhancedClassificationEngine {
   ): ModelContribution[] {
     return results.map((result, index) => ({
       ...result,
-      weight: weights[index]
+      weight: weights[index] || 0 // Ensure weight is never undefined
     }));
   }
 
@@ -751,7 +758,7 @@ export class EnhancedClassificationEngine {
       },
       {
         condition: (data: EnhancedFundData) =>
-          data.fundProfile.sustainabilityCharacteristics?.length > 0,
+          (data.fundProfile.sustainabilityCharacteristics?.length || 0) > 0,
         action: () => ({ classification: 'Article 8', confidence: 0.85 })
       },
       {
@@ -778,7 +785,7 @@ export class EnhancedClassificationEngine {
     return { classification: 'Article 6', confidence: 0.7 };
   }
 
-  private validatePAIIndicators(paiIndicators: any, recommendedArticle: string): number {
+  private validatePAIIndicators(paiIndicators: any): number {
     if (!paiIndicators) {
       return 0.5;
     }
@@ -798,14 +805,14 @@ export class EnhancedClassificationEngine {
     return Math.min(score, 1.0);
   }
 
-  private validateTaxonomyAlignment(taxonomyAlignment: any, recommendedArticle: string): number {
+  private validateTaxonomyAlignment(taxonomyAlignment: any): number {
     if (!taxonomyAlignment) {
       return 0.5;
     }
 
     let score = 0.7;
 
-    if (taxonomyAlignment.alignmentPercentage >= 0) {
+    if (taxonomyAlignment.alignmentPercentage && taxonomyAlignment.alignmentPercentage >= 0) {
       score += 0.1;
     }
     if (taxonomyAlignment.environmentalObjectives?.length > 0) {
@@ -898,7 +905,7 @@ export class EnhancedClassificationEngine {
     let score = 0.8;
 
     // Basic accuracy checks
-    if (data.taxonomyAlignment?.alignmentPercentage > 100) {
+    if ((data.taxonomyAlignment?.alignmentPercentage || 0) > 100) {
       issues.push({
         field: 'taxonomyAlignment.alignmentPercentage',
         issue: 'Taxonomy alignment cannot exceed 100%',
@@ -983,7 +990,6 @@ export class EnhancedClassificationEngine {
   }
 
   private calculateRegulatoryRisk(
-    data: EnhancedFundData,
     classification: any
   ): 'low' | 'medium' | 'high' {
     if (classification.confidence >= 0.8) {
@@ -995,7 +1001,7 @@ export class EnhancedClassificationEngine {
     return 'high';
   }
 
-  private calculateDataQualityRisk(data: EnhancedFundData): 'low' | 'medium' | 'high' {
+  private calculateDataQualityRisk(): 'low' | 'medium' | 'high' {
     // This would be calculated based on data quality assessment
     return 'medium';
   }

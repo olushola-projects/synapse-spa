@@ -22,6 +22,7 @@ export interface EnvironmentConfig {
   // AI Services
   OPENAI_API_KEY?: string;
   NEXUS_API_KEY?: string;
+  OPENROUTER_API_KEY?: string;
 
   // Feature Flags
   ENABLE_ANALYTICS: boolean;

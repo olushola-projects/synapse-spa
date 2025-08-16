@@ -1,4 +1,4 @@
-import { LayoutDashboard, MessageSquare, Settings, Users, Target, Bot } from 'lucide-react';
+import { LayoutDashboard, Settings, Users, Target, Bot } from 'lucide-react';
 
 // Navigation items shared between sidebar and mobile navigation
 export const navItems = [

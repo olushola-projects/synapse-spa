@@ -28,14 +28,14 @@ export function RealTimeMonitoringDashboard() {
   const renderTabs = () => (
     <Tabs defaultValue='alerts' className='space-y-4'>
       <TabsList>
-        <TabsTrigger value='alerts'>Active Alerts ({overview.activeAlerts})</TabsTrigger>
+        <TabsTrigger value='alerts'>Active Alerts ({overview.activeAlerts.length})</TabsTrigger>
         <TabsTrigger value='metrics'>Metrics</TabsTrigger>
         <TabsTrigger value='compliance'>SFDR Compliance</TabsTrigger>
         <TabsTrigger value='security'>Security</TabsTrigger>
       </TabsList>
 
       <TabsContent value='alerts' className='space-y-4'>
-        <AlertsTab alerts={activeAlerts} onResolve={resolveAlert} />
+        <AlertsTab alerts={activeAlerts} onResolve={(id: string) => resolveAlert(id)} />
       </TabsContent>
 
       <TabsContent value='metrics' className='space-y-4'>

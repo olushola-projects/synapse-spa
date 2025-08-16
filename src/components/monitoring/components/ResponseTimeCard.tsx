@@ -29,7 +29,7 @@ interface ResponseTimeDisplayProps {
 
 function ResponseTimeDisplay({ time, color }: ResponseTimeDisplayProps) {
   const progressValue = Math.min(
-    (time / MONITORING_CONSTANTS.METRICS.API_LATENCY.CRITICAL_MS) * 100,
+    (time / MONITORING_CONSTANTS.METRICS.API.LATENCY.CRITICAL_MS) * 100,
     100
   );
 
@@ -52,7 +52,7 @@ function ResponseTimeDisplay({ time, color }: ResponseTimeDisplayProps) {
         <Progress
           value={progressValue}
           className='mt-2 h-2'
-          indicatorClassName={color.replace('text-', 'bg-')}
+          style={{ backgroundColor: color.replace('text-', '') }}
         />
       </div>
     </div>

@@ -80,7 +80,7 @@ export class AuthMiddleware {
         return {
           success: false,
           error: 'Service temporarily unavailable due to high error rate',
-          auditLog: this.createAuditLog(request, false, 'Circuit breaker open', startTime)
+          auditLog: this.createAuditLog(request, false, startTime, 'Circuit breaker open')
         };
       }
 
@@ -91,7 +91,7 @@ export class AuthMiddleware {
           success: false,
           rateLimited: true,
           error: 'Rate limit exceeded',
-          auditLog: this.createAuditLog(request, false, 'Rate limit exceeded', startTime)
+          auditLog: this.createAuditLog(request, false, startTime, 'Rate limit exceeded')
         };
       }
 
@@ -106,7 +106,7 @@ export class AuthMiddleware {
         return {
           success: false,
           error: 'Invalid or expired session',
-          auditLog: this.createAuditLog(request, false, 'Invalid session', startTime)
+          auditLog: this.createAuditLog(request, false, startTime, 'Invalid session')
         };
       }
 
@@ -116,7 +116,7 @@ export class AuthMiddleware {
         return {
           success: false,
           error: 'User ID mismatch',
-          auditLog: this.createAuditLog(request, false, 'User ID mismatch', startTime)
+          auditLog: this.createAuditLog(request, false, startTime, 'User ID mismatch')
         };
       }
 
@@ -126,7 +126,7 @@ export class AuthMiddleware {
         return {
           success: false,
           error: 'Session expired',
-          auditLog: this.createAuditLog(request, false, 'Session expired', startTime)
+          auditLog: this.createAuditLog(request, false, startTime, 'Session expired')
         };
       }
 
@@ -136,7 +136,7 @@ export class AuthMiddleware {
         success: true,
         userId: session.user.id,
         session,
-        auditLog: this.createAuditLog(request, true, undefined, startTime)
+        auditLog: this.createAuditLog(request, true, startTime)
       };
     } catch (error) {
       this.recordFailure();
@@ -146,8 +146,8 @@ export class AuthMiddleware {
         auditLog: this.createAuditLog(
           request,
           false,
-          error instanceof Error ? error.message : 'Unknown error',
-          startTime
+          startTime,
+          error instanceof Error ? error.message : 'Unknown error'
         )
       };
     }
@@ -227,8 +227,8 @@ export class AuthMiddleware {
   private createAuditLog(
     request: AuthRequest,
     success: boolean,
-    error?: string,
-    startTime: number
+    startTime: number,
+    error?: string
   ): AuthAuditLog {
     const auditLog: AuthAuditLog = {
       timestamp: new Date().toISOString(),
@@ -375,7 +375,7 @@ export const authMiddleware = AuthMiddleware.getInstance();
  * Decorator for API functions to automatically apply authentication
  */
 export function requireAuth() {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (_target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {

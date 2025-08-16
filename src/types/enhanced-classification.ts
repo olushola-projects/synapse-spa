@@ -173,3 +173,11 @@ export interface CitationEnhancedResponse extends SFDRClassificationResponse {
     citation_completeness: number;
   };
 }
+
+export interface AssetAllocation {
+  assetClass: string;
+  percentage: number;
+  description?: string;
+  sustainabilityScore?: number;
+  esgIntegration?: string;
+}

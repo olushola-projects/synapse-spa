@@ -101,6 +101,15 @@ export class SFDRValidationService {
     return esgKeywords.some(keyword => text.toLowerCase().includes(keyword));
   }
 
+  private static sanitizeFile(file: File): any {
+    return {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      lastModified: file.lastModified
+    };
+  }
+
   // File validation
   static validateFile(file: File): ValidationResult {
     const errors: string[] = [];
@@ -143,7 +152,7 @@ export class SFDRValidationService {
     return {
       isValid: errors.length === 0,
       errors,
-      file
+      sanitizedData: this.sanitizeFile(file)
     };
   }
 }

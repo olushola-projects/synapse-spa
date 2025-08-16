@@ -15,8 +15,8 @@ import {
   Clock,
   Shield,
   AlertTriangle,
-  Lock,
-  Users,
+  // Lock, // Unused import removed
+  // Users, // Unused import removed
   Activity,
   Zap,
   Eye,

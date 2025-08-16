@@ -18,7 +18,7 @@ export function MonitoringOverview({ overview, alerts }: MonitoringOverviewProps
         criticalAlerts={alerts.filter(alert => alert.severity === 'critical').length}
       />
       <ResponseTimeCard avgResponseTime={overview.avgResponseTime} />
-      <ApiSuccessCard apiSuccessRate={overview.apiSuccessRate} />
+      <ApiSuccessCard successRate={overview.apiSuccessRate} />
     </div>
   );
 }

@@ -38,27 +38,7 @@ export const LazyMobileCharts = () => (
   </Suspense>
 );
 
-// Monitoring skeleton
-const MonitoringSkeleton = ({ title }: { title: string }) => (
-  <Card>
-    <CardHeader>
-      <CardTitle>{title}</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className='space-y-6'>
-        <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className='space-y-2'>
-              <Skeleton className='h-4 w-20' />
-              <Skeleton className='h-8 w-full' />
-            </div>
-          ))}
-        </div>
-        <Skeleton className='h-48 w-full' />
-      </div>
-    </CardContent>
-  </Card>
-);
+// Monitoring skeleton - removed unused component
 
 // Simple imports for monitoring components
 export { default as PerformanceMonitoringDashboard } from '../monitoring/PerformanceMonitoringDashboard';

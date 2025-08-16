@@ -4,7 +4,7 @@
  */
 
 import { apiTester, TestResult, TestSuite } from './apiTesting';
-import { performanceMonitor } from './performanceMonitoring';
+// import { performanceMonitor } from './performanceMonitoring'; // Unused import removed
 import type { ClassificationRequest } from '@/services/backendApiClient';
 import { backendApiClient } from '@/services/backendApiClient';
 

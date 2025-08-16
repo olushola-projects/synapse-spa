@@ -7,7 +7,7 @@
 import type { LLMStrategy, LLMModel } from './llmConfigurationService';
 import { llmConfigurationService } from './llmConfigurationService';
 import type { ClassificationRequest } from './backendApiClient';
-import { backendApiClient, ClassificationResponse } from './backendApiClient';
+import { backendApiClient } from './backendApiClient';
 
 export interface LLMRequest {
   text: string;
@@ -86,19 +86,17 @@ export class LLMIntegrationService {
 
       // Determine the best strategy and model
       const strategy = this.determineStrategy(request);
-      const model = this.determineModel(request, strategy);
-
-      if (!model) {
-        throw new Error('No suitable LLM model available');
-      }
+                              const model = this.determineModel(request, strategy);
+        if (!model) {
+          throw new Error('No suitable LLM model available');
+        }
 
       // Prepare the classification request
       const classificationRequest: ClassificationRequest = {
         text: request.text,
         document_type: request.document_type,
         strategy: strategy.type,
-        model: model.model,
-        provider: model.provider
+        model: model.model
       };
 
       // Handle consensus-based classification
@@ -127,7 +125,6 @@ export class LLMIntegrationService {
         strategy_used: strategy.name,
         provider: model.provider,
         metadata: {
-          tokens_used: response.data?.tokens_used,
           cost_estimate: this.calculateCost(model, response.data?.tokens_used || 0)
         }
       };
@@ -203,9 +200,10 @@ export class LLMIntegrationService {
       {} as Record<string, number>
     );
 
-    const consensusClassification = Object.entries(classificationCounts).sort(
+    const sortedClassifications = Object.entries(classificationCounts).sort(
       ([, a], [, b]) => b - a
-    )[0][0];
+    );
+    const consensusClassification = sortedClassifications[0]?.[0] || 'Article 6';
 
     // Calculate average confidence
     const averageConfidence = confidences.reduce((sum, conf) => sum + conf, 0) / confidences.length;
@@ -304,7 +302,7 @@ export class LLMIntegrationService {
         m => m.provider === request.provider && m.enabled
       );
       if (providerModels.length > 0) {
-        return providerModels.sort((a, b) => a.priority - b.priority)[0];
+        return providerModels.sort((a, b) => a.priority - b.priority)[0] || null;
       }
     }
 

@@ -3,8 +3,7 @@
     "src/**/*",
     "tests/**/*.ts"
   ],
-  "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+  "files": ["src/main.tsx"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

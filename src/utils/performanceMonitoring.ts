@@ -203,7 +203,7 @@ class PerformanceMonitor {
    * Update aggregate metrics
    */
   private updateMetrics(): void {
-    const now = new Date().toISOString();
+    // const now = new Date().toISOString(); // Unused variable removed
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
 
     // Filter recent classifications
@@ -219,7 +219,7 @@ class PerformanceMonitor {
       this.recordMetric('success_rate_1h', successRate, '%');
 
       // Calculate average response time
-      const totalTime = recentClassifications.reduce((sum, r) => sum + r.duration, 0);
+      const totalTime = recentClassifications.reduce((sum, r) => sum + (r.duration || 0), 0);
       const avgResponseTime = totalTime / recentClassifications.length;
 
       this.recordMetric('avg_response_time_1h', avgResponseTime, 'ms');
@@ -291,7 +291,7 @@ class PerformanceMonitor {
     const successfulRequests = successfulClassifications.length;
     const avgResponseTime =
       totalRequests > 0
-        ? recentClassifications.reduce((sum, r) => sum + r.duration, 0) / totalRequests
+        ? recentClassifications.reduce((sum, r) => sum + (r.duration || 0), 0) / totalRequests
         : 0;
 
     return {
@@ -332,7 +332,7 @@ class PerformanceMonitor {
         return 0;
       }
       const index = Math.ceil((percentile / 100) * recentResponseTimes.length) - 1;
-      return recentResponseTimes[Math.max(0, index)];
+      return recentResponseTimes[Math.max(0, index)] || 0;
     };
 
     // Calculate error rate
@@ -363,7 +363,7 @@ class PerformanceMonitor {
       uptime_percentage: uptimePercentage,
       last_health_check:
         recentHealthChecks.length > 0
-          ? recentHealthChecks[recentHealthChecks.length - 1].timestamp
+          ? recentHealthChecks[recentHealthChecks.length - 1]?.timestamp || new Date().toISOString()
           : new Date().toISOString()
     };
   }

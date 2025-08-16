@@ -86,7 +86,7 @@ const SFDRChatIntegration = () => {
 
     const regulatoryBasis =
       classification.regulatory_basis && classification.regulatory_basis.length > 0
-        ? `\n⚖️ **Regulatory Basis**:\n${classification.regulatory_basis.map((citation: string, index: number) => `• ${citation}`).join('\n')}\n`
+        ? `\n⚖️ **Regulatory Basis**:\n${classification.regulatory_basis.map((citation: string) => `• ${citation}`).join('\n')}\n`
         : '';
 
     const benchmarkInfo = classification.benchmark_comparison

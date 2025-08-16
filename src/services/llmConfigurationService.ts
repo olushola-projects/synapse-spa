@@ -212,11 +212,11 @@ export class LLMConfigurationService {
 
     if (capableModels.length === 0) {
       // Fallback to any available model
-      return availableModels.sort((a, b) => a.priority - b.priority)[0];
+      return availableModels.sort((a, b) => a.priority - b.priority)[0] || null;
     }
 
     // Return the highest priority capable model
-    return capableModels.sort((a, b) => a.priority - b.priority)[0];
+    return capableModels.sort((a, b) => a.priority - b.priority)[0] || null;
   }
 
   /**
@@ -291,12 +291,12 @@ export class LLMConfigurationService {
 
         try {
           // Test with a simple classification request
-          const testRequest = {
-            text: 'Test SFDR classification for validation',
-            document_type: 'validation_test',
-            strategy: strategy.type,
-            model: model.model
-          };
+                      // const testRequest = { // Unused variable removed
+            //   text: 'Test SFDR classification for validation',
+            //   document_type: 'validation_test',
+            //   strategy: strategy.type,
+            //   model: model.model
+            // };
 
           // This would integrate with the actual API client
           // For now, we'll simulate a successful test
