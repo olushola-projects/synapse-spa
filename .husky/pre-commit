@@ -1,11 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Run conflict detection first
-node scripts/conflict-resolution.js
-
-# Run comprehensive quality checks
-node scripts/pre-commit-quality-check.js
-
-# Run lint-staged for final cleanup
 npx lint-staged

@@ -7,27 +7,19 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./tests/setup.ts'],
-    globalSetup: ['./tests/globalSetup.ts'],
-    globalTeardown: ['./tests/globalTeardown.ts'],
+    setupFiles: ['./src/test/setup.ts'],
     css: true,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html', 'lcov'],
+      reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/',
-        'dist/',
-        'coverage/',
+        'src/test/',
         '**/*.d.ts',
-        '**/*.test.{ts,tsx}',
-        '**/*.spec.{ts,tsx}',
-        'tests/',
-        'vite.config.ts',
-        'vitest.config.ts',
-        'tailwind.config.ts',
-        'commitlint.config.js',
-        'eslint.config.js',
-        'scripts/'
+        '**/*.config.*',
+        '**/coverage/**',
+        'dist/',
+        'build/'
       ],
       thresholds: {
         global: {
@@ -36,12 +28,6 @@ export default defineConfig({
           lines: 80,
           statements: 80
         }
-      }
-    },
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true
       }
     }
   },
