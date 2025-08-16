@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useRef, useEffect, Suspense } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -267,7 +267,7 @@ const SFDRNavigator: React.FC = () => {
       for (let i = 0; i < stages.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 800));
         setProcessingProgress((i + 1) * 25);
-        addMessage('system', stages[i]);
+        addMessage('system', stages[i] || 'Processing...');
       }
 
       // Generate classification with mandatory regulatory citations
@@ -419,7 +419,18 @@ const SFDRNavigator: React.FC = () => {
   );
 
   if (error) {
-    return <CriticalErrorAlert message={error} onRetry={() => setError(null)} />;
+    return <CriticalErrorAlert 
+      errors={[{
+        id: '1',
+        type: 'system_error',
+        title: 'System Error',
+        message: error,
+        severity: 'critical' as const,
+        timestamp: new Date().toISOString(),
+        actionable: true
+      }]} 
+      onRetry={() => setError(null)} 
+    />;
   }
 
   return (

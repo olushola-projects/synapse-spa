@@ -17,8 +17,16 @@ export const MONITORING_CONSTANTS = {
       CRITICAL_THRESHOLD_PERCENT: 90,
     },
     API: {
-      WARNING_THRESHOLD: 200,
-      CRITICAL_THRESHOLD: 500,
+      WARNING_THRESHOLD: 0.95,
+      CRITICAL_THRESHOLD: 0.9,
+      SUCCESS_RATE: {
+        WARNING_THRESHOLD: 0.95,
+        CRITICAL_THRESHOLD: 0.9,
+      },
+      LATENCY: {
+        WARNING_MS: 200,
+        CRITICAL_MS: 400,
+      }
     },
     API_LATENCY: {
       WARNING_MS: 200,
