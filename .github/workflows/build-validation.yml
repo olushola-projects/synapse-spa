@@ -1,0 +1,103 @@
+name: Build Validation & Quality Gates
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for merge conflicts
+        run: |
+          if grep -r "<<<<<<< HEAD\|=======\|>>>>>>> " src/ --exclude-dir=node_modules || false; then
+            echo "❌ Merge conflict markers detected"
+            exit 1
+          else
+            echo "✅ No merge conflicts found"
+          fi
+
+      - name: TypeScript strict compilation check
+        run: |
+          npx tsc --noEmit --strict --project tsconfig.app.json
+          npx tsc --noEmit --strict --project tsconfig.backend.json
+
+      - name: Component structure validation
+        run: |
+          # Check for proper Tabs/TabsContent usage
+          if grep -r "TabsContent" src/ | grep -v "Tabs>" | head -5; then
+            echo "⚠️ Potential TabsContent usage outside Tabs context detected"
+          fi
+          
+          # Check for missing key props in lists
+          if grep -r "\.map(" src/ | grep -v "key=" | head -3; then
+            echo "⚠️ Potential missing key props in list rendering"
+          fi
+
+      - name: ESLint with strict rules
+        run: npm run lint
+
+      - name: Prettier format check
+        run: npm run format:check
+
+      - name: Build validation (frontend)
+        run: npm run build:frontend
+
+      - name: Build validation (backend)
+        run: npm run build:backend
+
+      - name: Test execution
+        run: npm run test:coverage
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        if: matrix.node-version == '20.x'
+        with:
+          file: ./coverage/lcov.info
+          fail_ci_if_error: false
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: validate-build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Security audit
+        run: npm audit --audit-level=moderate
+
+      - name: Dependency vulnerability check
+        run: |
+          npx audit-ci --moderate
