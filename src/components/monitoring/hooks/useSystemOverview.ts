@@ -24,25 +24,20 @@ export function useSystemOverview() {
 
       if (data) {
         setOverview({
-          status: data.overview.overallHealth,
-          uptime: 99.9,
-          responseTime: data.overview.avgResponseTime,
-          errorRate: 0.1,
-          apiSuccessRate: data.overview.apiSuccessRate,
-          activeAlerts: [],
-          lastUpdated: new Date().toISOString(),
-          overallHealth: data.overview.overallHealth,
-          avgResponseTime: data.overview.avgResponseTime,
-          complianceScore: data.overview.complianceScore,
-          criticalAlerts: data.overview.criticalAlerts,
+          ...data.overview,
+          systemHealth: data.overview.overallHealth,
+          apiStatus: 'operational',
           metrics: {
-            cpu: 45,
-            memory: 60,
-            disk: 30,
-            network: 80
+            cpu: 0,
+            memory: 0,
+            load: 0,
+            apiLatency: data.overview.avgResponseTime,
+            apiSuccessRate: data.overview.apiSuccessRate,
+            activeAlerts: data.overview.activeAlerts,
+            timestamp: new Date().toISOString()
           }
-        });
-        setActiveAlerts(data.alerts);
+        } as any);
+        setActiveAlerts(data.alerts.map(alert => ({ ...alert, category: 'system' as const, type: 'performance' as const })));
         setLastUpdate(new Date());
       }
       setIsLoading(false);
@@ -51,8 +46,8 @@ export function useSystemOverview() {
     fetchData();
     const overviewInterval = setInterval(fetchData, POLLING_INTERVALS.SYSTEM_OVERVIEW);
 
-    const handleNewAlert = (alert: SystemAlert) => {
-      setActiveAlerts(prevAlerts => [alert, ...prevAlerts]);
+    const handleNewAlert = (alert: any) => {
+      setActiveAlerts(prevAlerts => [{ ...alert, category: 'system' as const, type: 'performance' as const }, ...prevAlerts]);
     };
 
     enterpriseMonitoring.addAlertListener(handleNewAlert);
@@ -63,10 +58,13 @@ export function useSystemOverview() {
     };
   }, []);
 
-  const resolveAlert = withErrorHandling(async (alertId: string) => {
-    await enterpriseMonitoring.resolveAlert(alertId);
-    setActiveAlerts(prev => prev.filter(alert => alert.id !== alertId));
-  }, 'resolveAlert');
+  const resolveAlert = async (alertId: string) => {
+    const result = await withErrorHandling(async () => {
+      await enterpriseMonitoring.resolveAlert(alertId);
+      setActiveAlerts(prev => prev.filter(alert => alert.id !== alertId));
+    }, 'resolving alert');
+    return result;
+  };
 
   return {
     overview,

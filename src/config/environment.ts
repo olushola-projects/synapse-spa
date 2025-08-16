@@ -118,7 +118,6 @@ export function getEnvironmentConfig(): EnvironmentConfig {
     // All API calls go through Supabase Edge Functions
     OPENAI_API_KEY: '', // Removed for security
     NEXUS_API_KEY: '', // Removed for security
-    OPENROUTER_API_KEY: '', // Removed for security
 
     // Feature Flags
     ENABLE_ANALYTICS: parseBoolean(env.VITE_ENABLE_ANALYTICS, false),
@@ -229,7 +228,6 @@ export function logConfiguration(): void {
     POSTHOG_KEY: config.POSTHOG_KEY ? '[CONFIGURED]' : '[MISSING]',
     OPENAI_API_KEY: config.OPENAI_API_KEY ? '[CONFIGURED]' : '[MISSING]',
     NEXUS_API_KEY: config.NEXUS_API_KEY ? '[CONFIGURED]' : '[MISSING]',
-    OPENROUTER_API_KEY: config.OPENROUTER_API_KEY ? '[CONFIGURED]' : '[MISSING]',
     ENABLE_ANALYTICS: config.ENABLE_ANALYTICS,
     ENABLE_ERROR_REPORTING: config.ENABLE_ERROR_REPORTING,
     ENABLE_DEBUG_MODE: config.ENABLE_DEBUG_MODE,

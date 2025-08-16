@@ -7,11 +7,12 @@ interface SystemHealthCardProps {
 }
 
 export function SystemHealthCard({ health }: SystemHealthCardProps) {
-  const iconProps = {
-    icon: health === 'healthy' ? 'CheckCircle' : health === 'degraded' ? 'AlertTriangle' : 'XCircle',
-    color: health === 'healthy' ? 'text-green-500' : health === 'degraded' ? 'text-yellow-500' : 'text-red-500',
-    className: health === 'healthy' ? 'text-green-500' : health === 'degraded' ? 'text-yellow-500' : 'text-red-500'
-  };
+  const getHealthIconProps = (health: string) => ({
+    className: health === 'healthy' ? 'text-green-500' : health === 'degraded' ? 'text-yellow-500' : 'text-red-500',
+    size: 16
+  });
+  
+  const iconProps = getHealthIconProps(health);
   const Icon =
     health === 'healthy'
       ? CheckCircle

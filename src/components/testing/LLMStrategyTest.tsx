@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-// import { Separator } from '@/components/ui/separator'; // Unused import removed
+
 import {
   Bot,
   CheckCircle,
@@ -245,7 +245,7 @@ Investment Strategy: The fund invests at least 80% of its assets in equity secur
 
       // Convert to TestResult format
       const results: TestResult[] = validationSummary.testResults.map(result => ({
-        id: `validation-${result.strategy.name}-${Date.now()}`,
+        id: `validation-${result.strategy.id}-${Date.now()}`,
         strategy: result.strategy.name,
         model: result.strategy.expectedModel,
         provider: 'validation',

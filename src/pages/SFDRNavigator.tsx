@@ -27,8 +27,6 @@ import {
 } from 'lucide-react';
 
 // Import existing components
-// import { NexusAgentChat } from '@/components/NexusAgentChat'; // Unused import removed
-// import { LoadingFallback } from '@/components/LoadingFallback'; // Unused import removed
 import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
 
 /**
@@ -269,9 +267,7 @@ const SFDRNavigator: React.FC = () => {
       for (let i = 0; i < stages.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 800));
         setProcessingProgress((i + 1) * 25);
-        if (stages[i]) {
-          addMessage('system', stages[i]);
-        }
+        addMessage('system', stages[i] || 'Processing...');
       }
 
       // Generate classification with mandatory regulatory citations
@@ -423,7 +419,18 @@ const SFDRNavigator: React.FC = () => {
   );
 
   if (error) {
-    return <CriticalErrorAlert errors={[{ id: '1', type: 'system_error', title: 'Error', message: error, severity: 'critical', timestamp: new Date().toISOString(), actionable: true }]} onRetry={() => setError(null)} />;
+    return <CriticalErrorAlert 
+      errors={[{
+        id: '1',
+        type: 'system_error',
+        title: 'System Error',
+        message: error,
+        severity: 'critical' as const,
+        timestamp: new Date().toISOString(),
+        actionable: true
+      }]} 
+      onRetry={() => setError(null)} 
+    />;
   }
 
   return (
