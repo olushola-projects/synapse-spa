@@ -245,7 +245,7 @@ Investment Strategy: The fund invests at least 80% of its assets in equity secur
 
       // Convert to TestResult format
       const results: TestResult[] = validationSummary.testResults.map(result => ({
-        id: `validation-${result.strategy.id}-${Date.now()}`,
+        id: `validation-${result.strategy.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
         strategy: result.strategy.name,
         model: result.strategy.expectedModel,
         provider: 'validation',

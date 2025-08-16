@@ -38,10 +38,7 @@ export const LazyMobileCharts = () => (
   </Suspense>
 );
 
-<<<<<<< HEAD
 // Monitoring skeleton - removed unused component
-=======
->>>>>>> 69d3f4ad25ef33aba3f69bdcd8f1f3d482ccfd57
 
 // Simple imports for monitoring components
 export { default as PerformanceMonitoringDashboard } from '../monitoring/PerformanceMonitoringDashboard';

@@ -238,7 +238,7 @@ export class PerformanceMonitor {
     }
 
     const lastHealthCheck =
-      healthChecks.length > 0 ? healthChecks[healthChecks.length - 1].timestamp : undefined;
+      healthChecks.length > 0 ? healthChecks[healthChecks.length - 1]?.timestamp : undefined;
 
     if (!lastHealthCheck) {
       issues.push('No recent health checks');

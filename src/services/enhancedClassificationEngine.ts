@@ -12,7 +12,7 @@
 
 import { backendApiClient } from './backendApiClient';
 import { logger } from '@/utils/logger';
-import { AssetAllocation } from '@/types/enhanced-classification';
+// import { AssetAllocation } from '@/types/enhanced-classification';
 
 // Enhanced interfaces for advanced classification
 export interface EnhancedFundData {
@@ -421,7 +421,7 @@ export class EnhancedClassificationEngine {
    */
   private async validateCompliance(
     data: EnhancedFundData,
-    classification: any
+    _classification: any
   ): Promise<EnhancedClassificationResult['compliance']> {
     const issues: ComplianceIssue[] = [];
     const recommendations: string[] = [];
@@ -541,12 +541,12 @@ export class EnhancedClassificationEngine {
    * Risk assessment
    */
   private async assessRisk(
-    data: EnhancedFundData,
-    classification: any,
+    _data: EnhancedFundData,
+    _classification: any,
     compliance: any
   ): Promise<EnhancedClassificationResult['riskAssessment']> {
     const complianceRisk = this.calculateComplianceRisk(compliance.overallScore);
-    const regulatoryRisk = this.calculateRegulatoryRisk(classification);
+    const regulatoryRisk = this.calculateRegulatoryRisk(_classification);
     const dataQualityRisk = this.calculateDataQualityRisk();
 
     const overallRisk = this.calculateOverallRisk(complianceRisk, regulatoryRisk, dataQualityRisk);
@@ -563,7 +563,7 @@ export class EnhancedClassificationEngine {
       });
     }
 
-    if (classification.confidence < 0.8) {
+    if (_classification.confidence < 0.8) {
       riskFactors.push({
         category: 'Classification',
         description: 'Low classification confidence indicates uncertain fund categorization',

@@ -1,80 +1,7 @@
 /**
-<<<<<<< HEAD
- * Monitoring Types
- * Type definitions for system monitoring and alerting
- */
-
-export interface SystemAlert {
-  id: string;
-  type: 'authentication' | 'performance' | 'compliance' | 'security' | 'error' | 'warning' | 'info';
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  title: string;
-  message: string;
-  timestamp: string;
-  resolved: boolean;
-  source?: string;
-  metadata?: Record<string, any>;
-}
-
-export interface SystemOverview {
-  status: 'healthy' | 'degraded' | 'critical';
-  uptime: number;
-  responseTime: number;
-  errorRate: number;
-  apiSuccessRate: number;
-  activeAlerts: SystemAlert[];
-  lastUpdated: string;
-  overallHealth: 'healthy' | 'degraded' | 'critical';
-  avgResponseTime: number;
-  complianceScore: number;
-  criticalAlerts: number;
-  metrics: {
-    cpu: number;
-    memory: number;
-    disk: number;
-    network: number;
-  };
-}
-
-export interface HealthCheck {
-  timestamp: string;
-  status: 'healthy' | 'degraded' | 'critical';
-  responseTime: number;
-  error?: string;
-}
-
-export interface PerformanceMetric {
-  timestamp: string;
-  value: number;
-  unit: string;
-  type: string;
-  metadata?: Record<string, any>;
-}
-
-export interface MonitoringConfig {
-  updateInterval: number;
-  alertThresholds: {
-    responseTime: number;
-    errorRate: number;
-    cpuUsage: number;
-    memoryUsage: number;
-  };
-  enabled: boolean;
-}
-=======
  * Monitoring System Types
  * Defines interfaces for the monitoring dashboard and metrics
  */
-
-export interface SystemMetrics {
-  cpu: number;
-  memory: number;
-  load: number;
-  apiLatency: number;
-  apiSuccessRate: number;
-  activeAlerts: number;
-  timestamp: string;
-}
 
 export interface SystemAlert {
   id: string;
@@ -88,6 +15,16 @@ export interface SystemAlert {
 }
 
 export interface Alert extends SystemAlert {}
+
+export interface SystemMetrics {
+  cpu: number;
+  memory: number;
+  load: number;
+  apiLatency: number;
+  apiSuccessRate: number;
+  activeAlerts: number;
+  timestamp: string;
+}
 
 export interface MetricThresholds {
   WARNING_THRESHOLD: number;
@@ -129,4 +66,29 @@ export interface SystemOverview {
 }
 
 export interface MonitoringOverview extends SystemOverview {}
->>>>>>> 69d3f4ad25ef33aba3f69bdcd8f1f3d482ccfd57
+
+export interface HealthCheck {
+  timestamp: string;
+  status: 'healthy' | 'degraded' | 'critical';
+  responseTime: number;
+  error?: string;
+}
+
+export interface PerformanceMetric {
+  timestamp: string;
+  value: number;
+  unit: string;
+  type: string;
+  metadata?: Record<string, any>;
+}
+
+export interface MonitoringConfig {
+  updateInterval: number;
+  alertThresholds: {
+    responseTime: number;
+    errorRate: number;
+    cpuUsage: number;
+    memoryUsage: number;
+  };
+  enabled: boolean;
+}

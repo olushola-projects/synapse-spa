@@ -28,14 +28,10 @@ interface ResponseTimeDisplayProps {
 }
 
 function ResponseTimeDisplay({ time, color }: ResponseTimeDisplayProps) {
-<<<<<<< HEAD
   const progressValue = Math.min(
     (time / MONITORING_CONSTANTS.METRICS.API.LATENCY.CRITICAL_MS) * 100,
     100
   );
-=======
-  const progressValue = Math.min((time / 500) * 100, 100); // Using 500ms as critical threshold
->>>>>>> 69d3f4ad25ef33aba3f69bdcd8f1f3d482ccfd57
 
   return (
     <div className='flex items-center space-x-4'>
@@ -56,10 +52,6 @@ function ResponseTimeDisplay({ time, color }: ResponseTimeDisplayProps) {
         <Progress
           value={progressValue}
           className='mt-2 h-2'
-<<<<<<< HEAD
-          style={{ backgroundColor: color.replace('text-', '') }}
-=======
->>>>>>> 69d3f4ad25ef33aba3f69bdcd8f1f3d482ccfd57
         />
       </div>
     </div>

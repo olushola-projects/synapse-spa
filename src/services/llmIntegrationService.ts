@@ -125,7 +125,7 @@ export class LLMIntegrationService {
         strategy_used: strategy.name,
         provider: model.provider,
         metadata: {
-          cost_estimate: this.calculateCost(model, response.data?.tokens_used || 0)
+          cost_estimate: this.calculateCost(model, 1000) // Use estimated tokens since tokens_used property doesn't exist
         }
       };
     } catch (error) {

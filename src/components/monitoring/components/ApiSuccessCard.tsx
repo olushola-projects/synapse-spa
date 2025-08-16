@@ -23,10 +23,6 @@ function SuccessRateDisplay({ rate, color }: { rate: number; color: string }) {
       <Progress
         value={rate}
         className='w-full h-2 bg-gray-200 rounded-full'
-<<<<<<< HEAD
-        style={{ backgroundColor: color.replace('text-', '') }}
-=======
->>>>>>> 69d3f4ad25ef33aba3f69bdcd8f1f3d482ccfd57
       />
     </div>
   );
