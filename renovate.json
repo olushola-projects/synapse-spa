@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    "group:monorepos", 
+    "group:recommended",
+    "schedule:weekends"
+  ],
+  "timezone": "UTC",
+  "labels": ["dependencies"],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "schedule": ["at any time"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "groupName": "dependencies (non-major)",
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "matchPackageNames": ["@types/**"],
+      "groupName": "typescript types"
+    },
+    {
+      "matchPackageNames": ["@radix-ui/**"],
+      "groupName": "radix-ui components"
+    }
+  ],
+  "prConcurrentLimit": 5,
+  "semanticCommits": "enabled",
+  "dependencyDashboard": true,
+  "automerge": false
+}
+
+

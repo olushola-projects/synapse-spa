@@ -11,7 +11,7 @@ test.describe('Dashboard and Navigation', () => {
 
   test.beforeEach(async ({ page }) => {
     helper = createTestHelper(page);
-    
+
     // Login before each test
     await helper.navigateTo('/login');
     await helper.fillField('[data-testid="email-input"]', TestData.user.email);
@@ -48,7 +48,9 @@ test.describe('Dashboard and Navigation', () => {
       await helper.expectVisible('[data-testid="active-projects"]');
 
       // Verify metrics are numeric
-      const totalClassifications = await helper.getElementText('[data-testid="total-classifications"]');
+      const totalClassifications = await helper.getElementText(
+        '[data-testid="total-classifications"]'
+      );
       expect(parseInt(totalClassifications)).toBeGreaterThanOrEqual(0);
 
       const successRate = await helper.getElementText('[data-testid="success-rate"]');
@@ -175,7 +177,7 @@ test.describe('Dashboard and Navigation', () => {
 
       // Verify notifications content
       await helper.expectText(/Notifications/);
-      
+
       // Close notifications
       await helper.clickButton('[data-testid="close-notifications"]');
       await helper.expectNotVisible('[data-testid="notifications-panel"]');
@@ -278,7 +280,7 @@ test.describe('Dashboard and Navigation', () => {
 
       // Switch to landscape
       await page.setViewportSize({ width: 667, height: 375 });
-      
+
       // Verify layout adjusts
       await helper.expectVisible('[data-testid="dashboard-content"]');
     });

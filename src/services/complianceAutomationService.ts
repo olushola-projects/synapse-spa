@@ -114,9 +114,12 @@ class ComplianceAutomationService {
   }
 
   private startAutomatedChecks(): void {
-    setInterval(async () => {
-      await this.runAutomatedChecks();
-    }, 5 * 60 * 1000); // Check every 5 minutes
+    setInterval(
+      async () => {
+        await this.runAutomatedChecks();
+      },
+      5 * 60 * 1000
+    ); // Check every 5 minutes
   }
 
   private async runAutomatedChecks(): Promise<void> {
@@ -182,8 +185,8 @@ class ComplianceAutomationService {
     period: { start: Date; end: Date },
     generatedBy: string // Will be used when implementing full report generation
   ): Promise<ComplianceReport> {
-    const checksInPeriod = this.checks.filter(check => 
-      check.timestamp >= period.start && check.timestamp <= period.end
+    const checksInPeriod = this.checks.filter(
+      check => check.timestamp >= period.start && check.timestamp <= period.end
     );
 
     const totalChecks = checksInPeriod.length;

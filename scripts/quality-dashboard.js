@@ -22,16 +22,16 @@ async function generateQualityDashboard() {
   // Generate HTML dashboard
   const html = generateHTMLDashboard(dashboard);
   writeFileSync('quality-dashboard.html', html);
-  
+
   // Generate JSON report
   writeFileSync('quality-dashboard.json', JSON.stringify(dashboard, null, 2));
-  
+
   console.log('✅ Quality Dashboard generated:');
   console.log('   📄 quality-dashboard.html');
   console.log('   📋 quality-dashboard.json\n');
-  
+
   displaySummary(dashboard);
-  
+
   return dashboard;
 }
 
@@ -130,7 +130,9 @@ async function getCodebaseMetrics() {
     metrics.componentFiles = parseInt(tsxResult.trim());
 
     // Simple line count
-    const lineResult = execSync('find src -name "*.ts" -o -name "*.tsx" | xargs wc -l | tail -1', { encoding: 'utf8' });
+    const lineResult = execSync('find src -name "*.ts" -o -name "*.tsx" | xargs wc -l | tail -1', {
+      encoding: 'utf8'
+    });
     const lineMatch = lineResult.match(/^\s*(\d+)/);
     if (lineMatch) {
       metrics.totalLines = parseInt(lineMatch[1]);
@@ -176,7 +178,10 @@ async function getTestMetrics() {
       metrics.coverage = coverage.total.lines.pct;
     }
 
-    const testFileCount = execSync('find src -name "*.test.ts" -o -name "*.test.tsx" -o -name "*.spec.ts" -o -name "*.spec.tsx" | wc -l', { encoding: 'utf8' });
+    const testFileCount = execSync(
+      'find src -name "*.test.ts" -o -name "*.test.tsx" -o -name "*.spec.ts" -o -name "*.spec.tsx" | wc -l',
+      { encoding: 'utf8' }
+    );
     metrics.testFiles = parseInt(testFileCount.trim());
   } catch (error) {
     console.log('⚠️  Could not gather test metrics');
@@ -236,15 +241,15 @@ async function generateRecommendations() {
 
 function calculateQualityScore(overview) {
   let score = 0;
-  
+
   if (overview.buildStatus === 'PASSING') score += 30;
   if (overview.testCoverage >= 80) score += 25;
   else if (overview.testCoverage >= 60) score += 15;
   else if (overview.testCoverage >= 40) score += 5;
-  
+
   // Add other factors...
   score += 45; // Base score for other factors
-  
+
   return Math.min(score, 100);
 }
 
@@ -326,11 +331,14 @@ function generateHTMLDashboard(dashboard) {
         
         <div class="recommendations">
             <h3>📋 Recommendations</h3>
-            ${dashboard.recommendations.map(rec => 
-                `<div class="recommendation priority-${rec.priority.toLowerCase()}">
+            ${dashboard.recommendations
+              .map(
+                rec =>
+                  `<div class="recommendation priority-${rec.priority.toLowerCase()}">
                     <strong>${rec.type}:</strong> ${rec.message}
                 </div>`
-            ).join('')}
+              )
+              .join('')}
         </div>
         
         <div class="timestamp">

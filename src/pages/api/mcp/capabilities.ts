@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -30,7 +27,7 @@ export default async function handler(
     const response = await fetch(`${mcpServerUrl}/capabilities`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${mcpAuthToken}`,
+        Authorization: `Bearer ${mcpAuthToken}`,
         'Content-Type': 'application/json'
       },
       signal: AbortSignal.timeout(10000)
@@ -38,7 +35,7 @@ export default async function handler(
 
     if (response.ok) {
       const mcpCapabilities = await response.json();
-      
+
       // Map MCP capabilities to our testing framework
       const capabilities = {
         aiTestGeneration: mcpCapabilities.aiTestGeneration || false,

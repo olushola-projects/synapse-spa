@@ -38,16 +38,19 @@ supabase functions deploy nexus-proxy
 ### Step 3: Update Environment Variables
 
 **DO NOT** set these in client-side environment:
+
 - ❌ `VITE_NEXUS_API_KEY`
 - ❌ `VITE_OPENAI_API_KEY`
 
 **DO** set these in Supabase Secrets:
+
 - ✅ `NEXUS_API_KEY`
 - ✅ `OPENAI_API_KEY` (if needed)
 
 ## 🔍 VERIFICATION STEPS
 
 ### 1. Test Authentication Flow
+
 ```javascript
 // Test the secure API call
 const response = await fetch('https://your-project.supabase.co/functions/v1/nexus-proxy', {
@@ -62,12 +65,14 @@ const response = await fetch('https://your-project.supabase.co/functions/v1/nexu
 ```
 
 ### 2. Check Edge Function Logs
+
 ```bash
 # Monitor edge function logs for authentication issues
 supabase functions logs nexus-proxy
 ```
 
 ### 3. Verify No Client-Side API Keys
+
 ```bash
 # Search for any remaining client-side API key usage
 grep -r "VITE_NEXUS_API_KEY" src/
@@ -77,6 +82,7 @@ grep -r "VITE_OPENAI_API_KEY" src/
 ## 🛡️ SECURITY BEST PRACTICES
 
 ### ✅ DO
+
 - Use Supabase Edge Functions for all external API calls
 - Configure API keys in Supabase Secrets only
 - Implement proper error handling and logging
@@ -84,8 +90,9 @@ grep -r "VITE_OPENAI_API_KEY" src/
 - Regular security audits
 
 ### ❌ DON'T
+
 - Expose API keys in client-side code
-- Use VITE_ prefixed variables for sensitive data
+- Use VITE\_ prefixed variables for sensitive data
 - Commit real API keys to version control
 - Bypass edge function authentication
 - Use placeholder values in production
@@ -103,11 +110,13 @@ grep -r "VITE_OPENAI_API_KEY" src/
 ## 🔄 MONITORING AND ALERTING
 
 ### Authentication Monitoring
+
 - Monitor edge function logs for authentication failures
 - Set up alerts for repeated authentication errors
 - Track API usage patterns for suspicious activity
 
 ### Security Alerts
+
 - Failed authentication attempts
 - Unusual API usage patterns
 - Edge function errors
@@ -116,6 +125,7 @@ grep -r "VITE_OPENAI_API_KEY" src/
 ## 📞 INCIDENT RESPONSE
 
 ### Authentication Failure Response
+
 1. Check Supabase Secrets configuration
 2. Verify edge function deployment
 3. Review authentication logs
@@ -123,6 +133,7 @@ grep -r "VITE_OPENAI_API_KEY" src/
 5. Update security measures if needed
 
 ### Security Breach Response
+
 1. Immediately rotate API keys
 2. Review access logs
 3. Update security measures
@@ -130,6 +141,7 @@ grep -r "VITE_OPENAI_API_KEY" src/
 5. Implement additional safeguards
 
 ---
+
 **Status**: SECURITY FIXES IMPLEMENTED
 **Next Steps**: Configure Supabase Secrets and Deploy
 **Priority**: P0 - Security Critical

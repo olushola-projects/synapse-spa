@@ -11,9 +11,9 @@ import { glob } from 'glob';
 
 const CONFLICT_PATTERNS = {
   MERGE_MARKERS: /^(<{7}|={7}|>{7})/gm,
-  TYPESCRIPT_CONFLICTS: /^(<{7}.*typescript|={7}.*typescript|>{7}.*typescript)/gmi,
-  COMPONENT_CONFLICTS: /^(<{7}.*component|={7}.*component|>{7}.*component)/gmi,
-  IMPORT_CONFLICTS: /^(<{7}.*import|={7}.*import|>{7}.*import)/gmi
+  TYPESCRIPT_CONFLICTS: /^(<{7}.*typescript|={7}.*typescript|>{7}.*typescript)/gim,
+  COMPONENT_CONFLICTS: /^(<{7}.*component|={7}.*component|>{7}.*component)/gim,
+  IMPORT_CONFLICTS: /^(<{7}.*import|={7}.*import|>{7}.*import)/gim
 };
 
 async function detectAndResolveConflicts() {
@@ -24,7 +24,7 @@ async function detectAndResolveConflicts() {
 
   for (const file of files) {
     const content = readFileSync(file, 'utf8');
-    
+
     if (CONFLICT_PATTERNS.MERGE_MARKERS.test(content)) {
       conflictFiles.push({
         file,
@@ -45,7 +45,7 @@ async function detectAndResolveConflicts() {
     console.log(`📁 ${conflict.file}`);
     console.log(`   Type: ${conflict.type}`);
     console.log(`   Resolution: ${getResolutionStrategy(conflict.type)}\n`);
-    
+
     // Attempt auto-resolution for simple cases
     if (conflict.type === 'import' || conflict.type === 'simple') {
       const resolved = attemptAutoResolution(conflict.content, conflict.type);
@@ -64,24 +64,24 @@ function categorizeConflict(content) {
   if (CONFLICT_PATTERNS.TYPESCRIPT_CONFLICTS.test(content)) return 'typescript';
   if (CONFLICT_PATTERNS.COMPONENT_CONFLICTS.test(content)) return 'component';
   if (CONFLICT_PATTERNS.IMPORT_CONFLICTS.test(content)) return 'import';
-  
+
   const lines = content.split('\n');
-  const conflictSize = lines.filter(line => 
-    line.startsWith('<<<<<<<') || line.startsWith('=======') || line.startsWith('>>>>>>>')
+  const conflictSize = lines.filter(
+    line => line.startsWith('<<<<<<<') || line.startsWith('=======') || line.startsWith('>>>>>>>')
   ).length;
-  
+
   return conflictSize <= 6 ? 'simple' : 'complex';
 }
 
 function getResolutionStrategy(type) {
   const strategies = {
-    'typescript': 'Review type definitions and merge compatible types',
-    'component': 'Check component structure and merge UI changes carefully',
-    'import': 'Merge import statements and remove duplicates',
-    'simple': 'Can be auto-resolved',
-    'complex': 'Manual review required - check business logic'
+    typescript: 'Review type definitions and merge compatible types',
+    component: 'Check component structure and merge UI changes carefully',
+    import: 'Merge import statements and remove duplicates',
+    simple: 'Can be auto-resolved',
+    complex: 'Manual review required - check business logic'
   };
-  
+
   return strategies[type] || 'Manual review required';
 }
 
@@ -89,11 +89,11 @@ function attemptAutoResolution(content, type) {
   if (type === 'import') {
     return resolveImportConflicts(content);
   }
-  
+
   if (type === 'simple') {
     return resolveSimpleConflicts(content);
   }
-  
+
   return null;
 }
 
@@ -111,25 +111,25 @@ function resolveImportConflicts(content) {
       isHeadSection = true;
       continue;
     }
-    
+
     if (line.startsWith('=======')) {
       isHeadSection = false;
       continue;
     }
-    
+
     if (line.startsWith('>>>>>>>')) {
       inConflict = false;
-      
+
       // Merge imports
       const allImports = [...headImports, ...incomingImports];
       const uniqueImports = [...new Set(allImports)];
       resolved.push(...uniqueImports.sort());
-      
+
       headImports = [];
       incomingImports = [];
       continue;
     }
-    
+
     if (inConflict) {
       if (line.trim().startsWith('import')) {
         if (isHeadSection) {
@@ -142,16 +142,13 @@ function resolveImportConflicts(content) {
       resolved.push(line);
     }
   }
-  
+
   return resolved.join('\n');
 }
 
 function resolveSimpleConflicts(content) {
   // For very simple conflicts, prefer the incoming changes
-  return content.replace(
-    /^<{7}.*\n([\s\S]*?)\n={7}.*\n([\s\S]*?)\n>{7}.*$/gm,
-    '$2'
-  );
+  return content.replace(/^<{7}.*\n([\s\S]*?)\n={7}.*\n([\s\S]*?)\n>{7}.*$/gm, '$2');
 }
 
 function generateConflictReport(conflicts) {

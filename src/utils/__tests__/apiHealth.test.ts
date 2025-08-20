@@ -21,7 +21,7 @@ describe('API Health Monitoring', () => {
     describe('checkServiceHealth', () => {
       it('should return healthy status for successful API response', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockResolvedValueOnce({
           data: { status: 'ok', version: '1.0.0' },
           error: null
@@ -37,7 +37,7 @@ describe('API Health Monitoring', () => {
 
       it('should return down status for failed API response', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockResolvedValueOnce({
           data: null,
           error: { message: 'Service unavailable' }
@@ -52,7 +52,7 @@ describe('API Health Monitoring', () => {
 
       it('should handle network errors', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockRejectedValueOnce(new Error('Network error'));
 
         const result = await monitor.checkServiceHealth('nexus-health');
@@ -63,12 +63,14 @@ describe('API Health Monitoring', () => {
       });
 
       it('should handle unknown service names', async () => {
-        await expect(monitor.checkServiceHealth('unknown-service')).rejects.toThrow('Unknown service: unknown-service');
+        await expect(monitor.checkServiceHealth('unknown-service')).rejects.toThrow(
+          'Unknown service: unknown-service'
+        );
       });
 
       it('should cache results and return cached data', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockResolvedValueOnce({
           data: { status: 'ok' },
           error: null
@@ -76,7 +78,7 @@ describe('API Health Monitoring', () => {
 
         // First call
         const result1 = await monitor.checkServiceHealth('nexus-health');
-        
+
         // Second call should use cache
         const result2 = await monitor.checkServiceHealth('nexus-health');
 
@@ -88,12 +90,12 @@ describe('API Health Monitoring', () => {
     describe('checkSystemHealth', () => {
       it('should aggregate multiple service health checks', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockResolvedValue({
           data: { status: 'ok' },
           error: null
         });
-        
+
         vi.mocked(apiClient.callFunction).mockResolvedValue({
           data: { status: 'ok' },
           error: null
@@ -110,12 +112,12 @@ describe('API Health Monitoring', () => {
 
       it('should calculate degraded status when some services are down', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockResolvedValue({
           data: { status: 'ok' },
           error: null
         });
-        
+
         vi.mocked(apiClient.callFunction)
           .mockResolvedValueOnce({
             data: { status: 'ok' },
@@ -140,7 +142,7 @@ describe('API Health Monitoring', () => {
 
       it('should return cached health when available', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockResolvedValue({
           data: { status: 'ok' },
           error: null
@@ -155,14 +157,14 @@ describe('API Health Monitoring', () => {
 
       it('should return null for expired cache', async () => {
         const { apiClient } = await import('@/services/supabaseApiClient');
-        
+
         vi.mocked(apiClient.healthCheck).mockResolvedValue({
           data: { status: 'ok' },
           error: null
         });
 
         await monitor.checkServiceHealth('nexus-health');
-        
+
         // Manually expire cache by setting expiry to past
         const cache = (monitor as any).healthCache;
         const entry = cache.get('nexus-health');
@@ -185,7 +187,7 @@ describe('API Health Monitoring', () => {
 
     it('should share cache between instances', async () => {
       const { apiClient } = await import('@/services/supabaseApiClient');
-      
+
       vi.mocked(apiClient.healthCheck).mockResolvedValue({
         data: { status: 'ok' },
         error: null
@@ -214,7 +216,7 @@ describe('API Health Monitoring', () => {
 
     it('should use the singleton instance', async () => {
       const { apiClient } = await import('@/services/supabaseApiClient');
-      
+
       vi.mocked(apiClient.healthCheck).mockResolvedValue({
         data: { status: 'ok' },
         error: null
@@ -230,7 +232,7 @@ describe('API Health Monitoring', () => {
   describe('Performance', () => {
     it('should complete health checks within reasonable time', async () => {
       const { apiClient } = await import('@/services/supabaseApiClient');
-      
+
       vi.mocked(apiClient.healthCheck).mockResolvedValue({
         data: { status: 'ok' },
         error: null
@@ -245,7 +247,7 @@ describe('API Health Monitoring', () => {
 
     it('should handle concurrent health checks efficiently', async () => {
       const { apiClient } = await import('@/services/supabaseApiClient');
-      
+
       vi.mocked(apiClient.healthCheck).mockResolvedValue({
         data: { status: 'ok' },
         error: null
@@ -267,7 +269,7 @@ describe('API Health Monitoring', () => {
   describe('Error Handling', () => {
     it('should handle malformed API responses', async () => {
       const { apiClient } = await import('@/services/supabaseApiClient');
-      
+
       vi.mocked(apiClient.healthCheck).mockResolvedValue({
         data: null,
         error: null
@@ -280,11 +282,9 @@ describe('API Health Monitoring', () => {
 
     it('should handle timeout scenarios', async () => {
       const { apiClient } = await import('@/services/supabaseApiClient');
-      
-      vi.mocked(apiClient.healthCheck).mockImplementation(() => 
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Timeout')), 100)
-        )
+
+      vi.mocked(apiClient.healthCheck).mockImplementation(
+        () => new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 100))
       );
 
       const result = await monitor.checkServiceHealth('nexus-health');

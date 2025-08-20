@@ -7,12 +7,14 @@ This guide details the deployment of the **Enhanced Qwen Classification Engine**
 ## 📋 Prerequisites
 
 ### Required Software
+
 - **Node.js** 18+ (for Vercel CLI)
 - **Python** 3.9+ (for local testing)
 - **Vercel CLI** (install with `npm install -g vercel`)
 - **Git** (for version control)
 
 ### Required Files
+
 - ✅ `api_server_enhanced.py` - Enhanced FastAPI server
 - ✅ `enhanced_qwen_classification_engine.py` - Advanced AI classification engine
 - ✅ `requirements-backend.txt` - Python dependencies
@@ -20,6 +22,7 @@ This guide details the deployment of the **Enhanced Qwen Classification Engine**
 - ✅ `deploy-advanced-engine.ps1` - Deployment script
 
 ### Environment Variables
+
 - `QWEN_API_KEY` - API key for Qwen AI models (set in Vercel dashboard)
 - `ENVIRONMENT` - Set to "production"
 
@@ -64,6 +67,7 @@ vercel deploy --prod
 ```
 
 The deployment will:
+
 - Use Python 3.9 runtime
 - Install ML dependencies
 - Configure API routing to enhanced backend
@@ -72,11 +76,13 @@ The deployment will:
 ### Step 4: Verify Deployment
 
 #### Health Check
+
 ```bash
 curl https://api.joinsynapses.com/api/health
 ```
 
 Expected response:
+
 ```json
 {
   "status": "healthy",
@@ -88,6 +94,7 @@ Expected response:
 ```
 
 #### Classification Test
+
 ```bash
 curl -X POST https://api.joinsynapses.com/api/classify \
   -H "Content-Type: application/json" \
@@ -98,6 +105,7 @@ curl -X POST https://api.joinsynapses.com/api/classify \
 ```
 
 Expected response includes:
+
 - `classification` (Article 6/8/9)
 - `confidence` (0.0-1.0)
 - `reasoning` (detailed explanation)
@@ -109,11 +117,13 @@ Expected response includes:
 ## 🔍 Enhanced Features Verification
 
 ### 1. Advanced ML Classification
+
 - ✅ Multi-strategy ensemble learning
 - ✅ Dynamic confidence scoring
 - ✅ Regulatory compliance validation
 
 ### 2. Audit Trail Capabilities
+
 ```json
 {
   "audit_trail": {
@@ -127,6 +137,7 @@ Expected response includes:
 ```
 
 ### 3. Benchmark Comparison
+
 ```json
 {
   "benchmark_comparison": {
@@ -139,6 +150,7 @@ Expected response includes:
 ```
 
 ### 4. Explainability Scoring
+
 ```json
 {
   "explainability_score": 0.87,
@@ -149,16 +161,19 @@ Expected response includes:
 ## 📊 Performance Expectations
 
 ### Response Times
+
 - **Basic Classification**: < 500ms
 - **Enhanced Classification**: < 2000ms
 - **Document Upload**: < 5000ms (depending on size)
 
 ### Accuracy Improvements
+
 - **Article 8 Detection**: 85% → 92%
 - **Article 9 Detection**: 80% → 89%
 - **Overall Confidence**: 75% → 87%
 
 ### New Capabilities
+
 - ✅ Multi-modal processing
 - ✅ Real-time audit trails
 - ✅ Regulatory compliance scoring
@@ -168,6 +183,7 @@ Expected response includes:
 ## 🔧 Configuration Options
 
 ### Classification Strategies
+
 The enhanced engine supports multiple strategies:
 
 1. **Primary Strategy**: Advanced AI with Qwen models
@@ -175,11 +191,13 @@ The enhanced engine supports multiple strategies:
 3. **Hybrid Strategy**: Ensemble of both approaches
 
 ### Confidence Thresholds
+
 - **Article 6**: ≥ 0.70 (basic classification)
 - **Article 8**: ≥ 0.75 (ESG characteristics)
 - **Article 9**: ≥ 0.80 (sustainable objective)
 
 ### Audit Trail Settings
+
 - **Full Logging**: Production environment
 - **Minimal Logging**: Development/testing
 - **Compliance Mode**: Enhanced regulatory tracking
@@ -189,11 +207,13 @@ The enhanced engine supports multiple strategies:
 If issues arise, rollback to the basic system:
 
 1. **Restore Backup:**
+
    ```bash
    cp vercel.json.backup vercel.json
    ```
 
 2. **Redeploy:**
+
    ```bash
    vercel deploy --prod
    ```
@@ -209,28 +229,36 @@ If issues arise, rollback to the basic system:
 ### Common Issues
 
 #### 1. Import Errors
+
 **Problem**: `ImportError: No module named 'enhanced_qwen_classification_engine'`
-**Solution**: 
+**Solution**:
+
 - Check file placement in root directory
 - Verify Python syntax with `python -m py_compile`
 
 #### 2. Dependency Issues
+
 **Problem**: ML dependencies fail to install
 **Solution**:
+
 - Update `requirements-backend.txt`
 - Use lighter weight alternatives
 - Consider fallback to basic classification
 
 #### 3. API Timeout
+
 **Problem**: Classification requests timeout
 **Solution**:
+
 - Check Qwen API key configuration
 - Verify network connectivity
 - Enable fallback classification
 
 #### 4. Low Confidence Scores
+
 **Problem**: All classifications return low confidence
 **Solution**:
+
 - Review SFDR framework configuration
 - Update feature extraction keywords
 - Calibrate confidence thresholds
@@ -261,12 +289,14 @@ asyncio.run(test())
 ## 📈 Monitoring and Maintenance
 
 ### Key Metrics to Monitor
+
 1. **Response Times**: API endpoint latency
 2. **Error Rates**: Failed classification requests
 3. **Confidence Scores**: Classification quality
 4. **Usage Patterns**: API request volume
 
 ### Regular Maintenance Tasks
+
 1. **Weekly**: Review classification accuracy
 2. **Monthly**: Update ML model dependencies
 3. **Quarterly**: Benchmark performance analysis
@@ -275,11 +305,13 @@ asyncio.run(test())
 ## 📞 Support and Resources
 
 ### Documentation
+
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Vercel Python Runtime](https://vercel.com/docs/functions/serverless-functions/runtimes/python)
 - [SFDR Regulation Guide](https://ec.europa.eu/info/business-economy-euro/banking-and-finance/sustainable-finance/sustainability-related-disclosure-financial-services-sector_en)
 
 ### Contact
+
 - **Technical Issues**: Development team
 - **Regulatory Questions**: Compliance team
 - **Performance Issues**: DevOps team

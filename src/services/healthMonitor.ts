@@ -94,7 +94,7 @@ class HealthMonitor {
 
         // Memory usage thresholds
         const memoryUsagePercent = (this.metrics.memoryUsage / this.metrics.memoryLimit) * 100;
-        
+
         if (memoryUsagePercent > 90) {
           errors.push(`Critical memory usage: ${memoryUsagePercent.toFixed(1)}%`);
           this.metrics.status = 'critical';
@@ -110,7 +110,8 @@ class HealthMonitor {
       this.metrics.loadTime = Date.now() - this.startTime;
 
       // Check for memory leaks
-      if (this.metrics.memoryUsage > 100 * 1024 * 1024) { // 100MB threshold
+      if (this.metrics.memoryUsage > 100 * 1024 * 1024) {
+        // 100MB threshold
         warnings.push('Potential memory leak detected');
       }
 
@@ -129,9 +130,10 @@ class HealthMonitor {
       if (this.errorCount > 10) {
         warnings.push('High error count detected');
       }
-
     } catch (error) {
-      errors.push(`Health check failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      errors.push(
+        `Health check failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
       this.metrics.status = 'critical';
     }
 
@@ -162,7 +164,7 @@ class HealthMonitor {
   recordError(error: Error): void {
     this.errorCount++;
     console.error('Health monitor recorded error:', error);
-    
+
     // Perform immediate health check on error
     this.performHealthCheck();
   }
@@ -227,10 +229,10 @@ class HealthMonitor {
    */
   emergencyCleanup(): void {
     console.warn('Performing emergency cleanup');
-    
+
     // Force garbage collection
     this.forceGarbageCollection();
-    
+
     // Clear any cached data
     if ('caches' in window) {
       caches.keys().then(names => {
@@ -239,7 +241,7 @@ class HealthMonitor {
         });
       });
     }
-    
+
     // Clear localStorage if memory usage is critical
     if (this.metrics.memoryUsage > this.metrics.memoryLimit * 0.95) {
       localStorage.clear();
@@ -253,17 +255,17 @@ const setupGlobalErrorHandling = (): void => {
   const healthMonitor = HealthMonitor.getInstance();
 
   // Handle unhandled promise rejections
-  window.addEventListener('unhandledrejection', (event) => {
+  window.addEventListener('unhandledrejection', event => {
     healthMonitor.recordError(new Error(`Unhandled promise rejection: ${event.reason}`));
   });
 
   // Handle JavaScript errors
-  window.addEventListener('error', (event) => {
+  window.addEventListener('error', event => {
     healthMonitor.recordError(new Error(`JavaScript error: ${event.message}`));
   });
 
   // Handle React errors
-  window.addEventListener('error', (event) => {
+  window.addEventListener('error', event => {
     if (event.error && event.error.message && event.error.message.includes('React')) {
       healthMonitor.recordError(new Error(`React error: ${event.error.message}`));
     }

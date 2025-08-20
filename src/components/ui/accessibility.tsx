@@ -2,14 +2,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import {
-    AlertTriangle,
-    Eye,
-    Info,
-    Keyboard,
-    SkipForward,
-    VolumeX
-} from 'lucide-react';
+import { AlertTriangle, Eye, Info, Keyboard, SkipForward, VolumeX } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 // Skip to main content link
@@ -24,13 +17,13 @@ export function SkipToMainContent() {
 
   return (
     <Button
-      variant="outline"
-      size="sm"
+      variant='outline'
+      size='sm'
       onClick={handleSkip}
-      className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
-      aria-label="Skip to main content"
+      className='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50'
+      aria-label='Skip to main content'
     >
-      <SkipForward className="w-4 h-4 mr-2" />
+      <SkipForward className='w-4 h-4 mr-2' />
       Skip to main content
     </Button>
   );
@@ -65,53 +58,53 @@ export function AccessibilityToolbar() {
   }, [isHighContrast, isLargeText, isReducedMotion]);
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className='fixed top-4 right-4 z-50'>
       <Button
-        variant="outline"
-        size="sm"
+        variant='outline'
+        size='sm'
         onClick={() => setIsVisible(!isVisible)}
-        aria-label="Toggle accessibility options"
-        className="bg-background/80 backdrop-blur-sm"
+        aria-label='Toggle accessibility options'
+        className='bg-background/80 backdrop-blur-sm'
       >
-        <Keyboard className="w-4 h-4" />
+        <Keyboard className='w-4 h-4' />
       </Button>
 
       {isVisible && (
-        <Card className="absolute top-12 right-0 w-64 shadow-lg">
-          <CardContent className="p-4 space-y-3">
-            <h3 className="text-sm font-semibold">Accessibility Options</h3>
-            
-            <div className="space-y-2">
+        <Card className='absolute top-12 right-0 w-64 shadow-lg'>
+          <CardContent className='p-4 space-y-3'>
+            <h3 className='text-sm font-semibold'>Accessibility Options</h3>
+
+            <div className='space-y-2'>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={() => setIsHighContrast(!isHighContrast)}
-                className="w-full justify-start"
+                className='w-full justify-start'
                 aria-pressed={isHighContrast}
               >
-                <Eye className="w-4 h-4 mr-2" />
+                <Eye className='w-4 h-4 mr-2' />
                 High Contrast
               </Button>
 
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={() => setIsLargeText(!isLargeText)}
-                className="w-full justify-start"
+                className='w-full justify-start'
                 aria-pressed={isLargeText}
               >
-                <Eye className="w-4 h-4 mr-2" />
+                <Eye className='w-4 h-4 mr-2' />
                 Large Text
               </Button>
 
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={() => setIsReducedMotion(!isReducedMotion)}
-                className="w-full justify-start"
+                className='w-full justify-start'
                 aria-pressed={isReducedMotion}
               >
-                <VolumeX className="w-4 h-4 mr-2" />
+                <VolumeX className='w-4 h-4 mr-2' />
                 Reduced Motion
               </Button>
             </div>
@@ -123,7 +116,13 @@ export function AccessibilityToolbar() {
 }
 
 // Focus trap for modals and dialogs
-export function FocusTrap({ children, isActive = true }: { children: React.ReactNode; isActive?: boolean }) {
+export function FocusTrap({
+  children,
+  isActive = true
+}: {
+  children: React.ReactNode;
+  isActive?: boolean;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [focusableElements, setFocusableElements] = useState<HTMLElement[]>([]);
 
@@ -165,26 +164,21 @@ export function FocusTrap({ children, isActive = true }: { children: React.React
 
 // Screen reader only text
 export function SrOnly({ children }: { children: React.ReactNode }) {
-  return <span className="sr-only">{children}</span>;
+  return <span className='sr-only'>{children}</span>;
 }
 
 // Live region for announcements
-export function LiveRegion({ 
-  message, 
+export function LiveRegion({
+  message,
   role = 'status',
-  className 
-}: { 
-  message: string; 
+  className
+}: {
+  message: string;
   role?: 'status' | 'alert' | 'log';
   className?: string;
 }) {
   return (
-    <div
-      role={role}
-      aria-live="polite"
-      aria-atomic="true"
-      className={cn('sr-only', className)}
-    >
+    <div role={role} aria-live='polite' aria-atomic='true' className={cn('sr-only', className)}>
       {message}
     </div>
   );
@@ -198,11 +192,11 @@ export function useKeyboardNavigation() {
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        setFocusedIndex((prev) => (prev + 1) % itemCount);
+        setFocusedIndex(prev => (prev + 1) % itemCount);
         break;
       case 'ArrowUp':
         event.preventDefault();
-        setFocusedIndex((prev) => (prev - 1 + itemCount) % itemCount);
+        setFocusedIndex(prev => (prev - 1 + itemCount) % itemCount);
         break;
       case 'Home':
         event.preventDefault();
@@ -239,28 +233,28 @@ export function useAccessibilityAnnouncement() {
 }
 
 // Accessibility info component
-export function AccessibilityInfo({ 
-  title, 
+export function AccessibilityInfo({
+  title,
   description,
   type = 'info'
-}: { 
-  title: string; 
+}: {
+  title: string;
   description: string;
   type?: 'info' | 'warning' | 'error';
 }) {
   const getIcon = () => {
     switch (type) {
       case 'warning':
-        return <AlertTriangle className="w-4 h-4" />;
+        return <AlertTriangle className='w-4 h-4' />;
       case 'error':
-        return <AlertTriangle className="w-4 h-4" />;
+        return <AlertTriangle className='w-4 h-4' />;
       default:
-        return <Info className="w-4 h-4" />;
+        return <Info className='w-4 h-4' />;
     }
   };
 
   return (
-    <Alert className="border-l-4 border-l-blue-500 bg-blue-50">
+    <Alert className='border-l-4 border-l-blue-500 bg-blue-50'>
       {getIcon()}
       <AlertDescription>
         <strong>{title}:</strong> {description}
@@ -300,8 +294,8 @@ export function AccessibleButton({
       {...props}
     >
       {loading ? (
-        <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <div className='flex items-center space-x-2'>
+          <div className='w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin' />
           <span>Loading...</span>
         </div>
       ) : (

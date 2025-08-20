@@ -37,7 +37,13 @@ export function useSystemOverview() {
             timestamp: new Date().toISOString()
           }
         } as any);
-        setActiveAlerts(data.alerts.map(alert => ({ ...alert, category: 'system' as const, type: 'performance' as const })));
+        setActiveAlerts(
+          data.alerts.map(alert => ({
+            ...alert,
+            category: 'system' as const,
+            type: 'performance' as const
+          }))
+        );
         setLastUpdate(new Date());
       }
       setIsLoading(false);
@@ -47,7 +53,10 @@ export function useSystemOverview() {
     const overviewInterval = setInterval(fetchData, POLLING_INTERVALS.SYSTEM_OVERVIEW);
 
     const handleNewAlert = (alert: any) => {
-      setActiveAlerts(prevAlerts => [{ ...alert, category: 'system' as const, type: 'performance' as const }, ...prevAlerts]);
+      setActiveAlerts(prevAlerts => [
+        { ...alert, category: 'system' as const, type: 'performance' as const },
+        ...prevAlerts
+      ]);
     };
 
     enterpriseMonitoring.addAlertListener(handleNewAlert);

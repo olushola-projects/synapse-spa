@@ -5,15 +5,15 @@
  */
 
 import {
-    createApiTimestamp,
-    createCursorTimestamp,
-    createDocumentTimestamp,
-    formatDateTime,
-    formatRelativeTime,
-    getCurrentTime,
-    getCurrentTimestamp,
-    TIME_FORMATS,
-    TIMEZONE_CONFIG
+  createApiTimestamp,
+  createCursorTimestamp,
+  createDocumentTimestamp,
+  formatDateTime,
+  formatRelativeTime,
+  getCurrentTime,
+  getCurrentTimestamp,
+  TIME_FORMATS,
+  TIMEZONE_CONFIG
 } from '@/utils/timeUtils';
 
 /**
@@ -27,14 +27,14 @@ export interface CursorTimeConfig {
     format: keyof typeof TIME_FORMATS;
     updateInterval: number; // milliseconds
   };
-  
+
   // Document creation settings
   documentSettings: {
     autoTimestamp: boolean;
     includeTimezone: boolean;
     format: keyof typeof TIME_FORMATS;
   };
-  
+
   // Activity tracking settings
   activitySettings: {
     trackCursorMovement: boolean;
@@ -42,7 +42,7 @@ export interface CursorTimeConfig {
     trackUserActions: boolean;
     retentionPeriod: number; // days
   };
-  
+
   // Performance monitoring settings
   performanceSettings: {
     enableTiming: boolean;
@@ -61,20 +61,20 @@ export const DEFAULT_CURSOR_TIME_CONFIG: CursorTimeConfig = {
     format: 'SHORT_DATETIME',
     updateInterval: 1000 // Update every second
   },
-  
+
   documentSettings: {
     autoTimestamp: true,
     includeTimezone: true,
     format: 'LONG_DATETIME'
   },
-  
+
   activitySettings: {
     trackCursorMovement: true,
     trackDocumentChanges: true,
     trackUserActions: true,
     retentionPeriod: 30 // 30 days
   },
-  
+
   performanceSettings: {
     enableTiming: true,
     logPerformance: true,
@@ -119,7 +119,7 @@ export class CursorTimeManager {
    */
   private updateTime(): void {
     this.lastUpdate = getCurrentTimestamp();
-    
+
     // Trigger any time-based events
     this.onTimeUpdate();
   }
@@ -130,12 +130,14 @@ export class CursorTimeManager {
   private onTimeUpdate(): void {
     // Emit time update event for components that need it
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('cursorTimeUpdate', {
-        detail: {
-          timestamp: this.getCurrentCursorTime(),
-          formatted: this.getFormattedCurrentTime()
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('cursorTimeUpdate', {
+          detail: {
+            timestamp: this.getCurrentCursorTime(),
+            formatted: this.getFormattedCurrentTime()
+          }
+        })
+      );
     }
   }
 
@@ -162,7 +164,7 @@ export class CursorTimeManager {
    */
   createDocumentTimestamp(): ReturnType<typeof createDocumentTimestamp> {
     const timestamp = createDocumentTimestamp();
-    
+
     // Log document creation activity
     if (this.config.activitySettings.trackDocumentChanges) {
       this.logActivity('document_created', {
@@ -170,7 +172,7 @@ export class CursorTimeManager {
         format: this.config.documentSettings.format
       });
     }
-    
+
     return timestamp;
   }
 
@@ -233,7 +235,7 @@ export class CursorTimeManager {
    * Get recent activities
    */
   getRecentActivities(hours: number = 24): typeof this.activityLog {
-    const cutoffTime = getCurrentTimestamp() - (hours * 60 * 60 * 1000);
+    const cutoffTime = getCurrentTimestamp() - hours * 60 * 60 * 1000;
     return this.activityLog.filter(activity => {
       const activityTime = new Date(activity.timestamp).getTime();
       return activityTime > cutoffTime;
@@ -266,7 +268,7 @@ export class CursorTimeManager {
    */
   updateConfig(newConfig: Partial<CursorTimeConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    
+
     // Restart time updates if interval changed
     if (this.updateTimer) {
       clearInterval(this.updateTimer);
@@ -326,47 +328,47 @@ export const cursorTimeUtils = {
    * Get current cursor time
    */
   getCurrentTime: () => getCurrentTime(),
-  
+
   /**
    * Get current timestamp
    */
   getCurrentTimestamp: () => getCurrentTimestamp(),
-  
+
   /**
    * Create cursor timestamp
    */
   createCursorTimestamp: () => createCursorTimestamp(),
-  
+
   /**
    * Create document timestamp
    */
   createDocumentTimestamp: () => createDocumentTimestamp(),
-  
+
   /**
    * Create API timestamp
    */
   createApiTimestamp: () => createApiTimestamp(),
-  
+
   /**
    * Format time
    */
-  formatTime: (date: Date | string | number, format?: keyof typeof TIME_FORMATS) => 
+  formatTime: (date: Date | string | number, format?: keyof typeof TIME_FORMATS) =>
     formatDateTime(date, format || 'SHORT_DATETIME'),
-  
+
   /**
    * Format relative time
    */
-  formatRelativeTime: (date: Date | string | number, short: boolean = false) => 
+  formatRelativeTime: (date: Date | string | number, short: boolean = false) =>
     formatRelativeTime(
       typeof date === 'string' || typeof date === 'number' ? new Date(date) : date,
       short
     ),
-  
+
   /**
    * Get user timezone
    */
   getUserTimezone: () => TIMEZONE_CONFIG.USER_TIMEZONE,
-  
+
   /**
    * Get supported timezones
    */

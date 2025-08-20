@@ -31,11 +31,13 @@ npm install --save-dev vitest@latest @vitest/coverage-v8@latest
 ### **Solution 2: Alternative Coverage Providers**
 
 #### **Option A: Use Istanbul Coverage**
+
 ```bash
 npm install --save-dev @vitest/coverage-istanbul
 ```
 
 Update `vitest.config.ts`:
+
 ```typescript
 coverage: {
   provider: 'istanbul',
@@ -45,11 +47,13 @@ coverage: {
 ```
 
 #### **Option B: Use C8 Coverage**
+
 ```bash
 npm install --save-dev c8
 ```
 
 Add to package.json:
+
 ```json
 {
   "scripts": {
@@ -74,12 +78,14 @@ npm run test:coverage:manual
 ### **Phase 1: Critical Components (Week 1)**
 
 #### **Priority 1: Core Business Logic**
+
 - [ ] SFDR Classification Engine (`src/components/sfdr-gem/SFDRGem.tsx`)
 - [ ] Authentication System (`src/contexts/AuthContext.tsx`)
 - [ ] API Services (`src/services/`)
 - [ ] Form Validation (`src/utils/validation.ts`)
 
 #### **Priority 2: User Interface Components**
+
 - [ ] Dashboard Components (`src/components/dashboard/`)
 - [ ] Navigation Components (`src/components/ui/`)
 - [ ] Form Components (`src/components/forms/`)
@@ -87,12 +93,14 @@ npm run test:coverage:manual
 ### **Phase 2: Integration Tests (Week 2)**
 
 #### **API Integration Tests**
+
 - [ ] Supabase Integration (`src/integrations/supabase/`)
 - [ ] External API Calls (`src/services/apiHealth.ts`)
 - [ ] Authentication Flow
 - [ ] Data Persistence
 
 #### **User Workflow Tests**
+
 - [ ] Complete SFDR Classification Flow
 - [ ] User Registration/Login
 - [ ] Dashboard Navigation
@@ -101,12 +109,14 @@ npm run test:coverage:manual
 ### **Phase 3: Advanced Testing (Week 3)**
 
 #### **Performance Tests**
+
 - [ ] Component Rendering Performance
 - [ ] API Response Time Tests
 - [ ] Memory Leak Detection
 - [ ] Bundle Size Analysis
 
 #### **Security Tests**
+
 - [ ] Input Validation Tests
 - [ ] XSS Prevention Tests
 - [ ] Authentication Security
@@ -130,6 +140,7 @@ npm run test:run
 ### **Step 2: Create Test Templates**
 
 #### **Component Test Template**
+
 ```typescript
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -149,10 +160,10 @@ describe('ComponentName', () => {
   it('should handle user interactions', async () => {
     const user = userEvent.setup();
     render(<ComponentName />);
-    
+
     const button = screen.getByRole('button');
     await user.click(button);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Expected Result')).toBeInTheDocument();
     });
@@ -165,6 +176,7 @@ describe('ComponentName', () => {
 ```
 
 #### **Service Test Template**
+
 ```typescript
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { serviceFunction } from './service';
@@ -192,6 +204,7 @@ describe('Service Tests', () => {
 ### **Step 3: Automated Test Generation**
 
 #### **Create Test Generator Script**
+
 ```javascript
 // scripts/generate-tests.js
 const fs = require('fs');
@@ -211,7 +224,7 @@ describe('ComponentName', () => {
   });
 });
 `;
-  
+
   return testContent;
 }
 ```
@@ -219,12 +232,14 @@ describe('ComponentName', () => {
 ## 📈 Coverage Targets
 
 ### **Minimum Coverage Requirements**
+
 - **Lines**: 75%
 - **Functions**: 75%
 - **Branches**: 70%
 - **Statements**: 75%
 
 ### **Target Coverage by Component Type**
+
 - **Business Logic**: 90%
 - **UI Components**: 80%
 - **Utilities**: 85%
@@ -233,21 +248,25 @@ describe('ComponentName', () => {
 ## 🚀 Alternative Testing Approaches
 
 ### **1. Snapshot Testing**
+
 ```bash
 npm install --save-dev @testing-library/jest-dom
 ```
 
 ### **2. Visual Regression Testing**
+
 ```bash
 npm install --save-dev @percy/cli
 ```
 
 ### **3. Contract Testing**
+
 ```bash
 npm install --save-dev @pact-foundation/pact
 ```
 
 ### **4. Mutation Testing**
+
 ```bash
 npm install --save-dev stryker-js
 ```
@@ -255,18 +274,21 @@ npm install --save-dev stryker-js
 ## 📋 Action Items
 
 ### **Immediate (Today)**
+
 - [ ] Try alternative coverage commands
 - [ ] Update Vitest and coverage provider versions
 - [ ] Create basic test for SFDRGem component
 - [ ] Set up test coverage monitoring
 
 ### **Short-term (This Week)**
+
 - [ ] Implement test templates
 - [ ] Add tests for critical components
 - [ ] Set up CI/CD test automation
 - [ ] Create test coverage reports
 
 ### **Medium-term (Next 2 Weeks)**
+
 - [ ] Achieve 75% coverage target
 - [ ] Implement integration tests
 - [ ] Add performance tests
@@ -275,16 +297,19 @@ npm install --save-dev stryker-js
 ## 🔍 Monitoring & Reporting
 
 ### **Coverage Reports**
+
 - HTML reports in `coverage/` directory
 - LCOV format for CI/CD integration
 - JSON format for programmatic analysis
 
 ### **Quality Gates**
+
 - Minimum 75% coverage required for merge
 - No decrease in coverage allowed
 - Critical components must have 90%+ coverage
 
 ### **Continuous Monitoring**
+
 - Automated coverage checks in CI/CD
 - Weekly coverage trend analysis
 - Monthly test quality review
@@ -292,17 +317,20 @@ npm install --save-dev stryker-js
 ## 📞 Support & Resources
 
 ### **Documentation**
+
 - [Vitest Documentation](https://vitest.dev/)
 - [Testing Library Guide](https://testing-library.com/docs/)
 - [React Testing Best Practices](https://react.dev/learn/testing)
 
 ### **Tools & Libraries**
+
 - Vitest: Modern test runner
 - Testing Library: Component testing utilities
 - MSW: API mocking
 - Faker.js: Test data generation
 
 ### **Community Resources**
+
 - React Testing Discord
 - Vitest GitHub Discussions
 - Testing Library Community

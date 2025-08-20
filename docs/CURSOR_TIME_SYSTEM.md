@@ -37,12 +37,12 @@ The Cursor Time System ensures that all cursor settings and activities use live 
 ### Basic Time Operations
 
 ```typescript
-import { 
-  getCurrentTime, 
-  getCurrentTimestamp, 
+import {
+  getCurrentTime,
+  getCurrentTimestamp,
   formatDateTime,
   createCursorTimestamp,
-  createDocumentTimestamp 
+  createDocumentTimestamp
 } from '@/utils/timeUtils';
 
 // Get current live time
@@ -64,16 +64,11 @@ import { useCursorTime, useCurrentTime } from '@/hooks/useCursorTime';
 
 function MyComponent() {
   // Full cursor time functionality
-  const {
-    currentTime,
-    formattedTime,
-    createDocumentTimestamp,
-    logActivity,
-    formatTime
-  } = useCursorTime({
-    updateInterval: 1000, // Update every second
-    enableActivityTracking: true
-  });
+  const { currentTime, formattedTime, createDocumentTimestamp, logActivity, formatTime } =
+    useCursorTime({
+      updateInterval: 1000, // Update every second
+      enableActivityTracking: true
+    });
 
   // Or use simplified hook for basic time
   const { currentTime, formattedTime } = useCurrentTime();
@@ -81,7 +76,7 @@ function MyComponent() {
   const handleDocumentCreate = () => {
     const timestamp = createDocumentTimestamp();
     logActivity('document_created', { timestamp });
-    
+
     console.log(`Document created at: ${formatTime(timestamp.created_at_iso)}`);
   };
 
@@ -101,7 +96,7 @@ import { createDocumentTimestamp } from '@/utils/timeUtils';
 
 function createNewDocument() {
   const timestamp = createDocumentTimestamp();
-  
+
   const document = {
     id: `doc_${timestamp.created_at_timestamp}`,
     title: 'New Document',
@@ -110,7 +105,7 @@ function createNewDocument() {
     created_at_formatted: timestamp.created_at,
     created_at_relative: timestamp.created_at_relative
   };
-  
+
   return document;
 }
 ```
@@ -122,16 +117,16 @@ import { createApiTimestamp } from '@/utils/timeUtils';
 
 async function makeApiCall() {
   const startTime = createApiTimestamp();
-  
+
   try {
     const response = await fetch('/api/data');
     const data = await response.json();
-    
+
     const endTime = createApiTimestamp();
     const processingTime = endTime.timestamp_ms - startTime.timestamp_ms;
-    
+
     console.log(`API call completed in ${processingTime}ms`);
-    
+
     return data;
   } catch (error) {
     console.error('API call failed:', error);
@@ -196,27 +191,27 @@ const timeManager = getCursorTimeManager({
 import { TIME_FORMATS } from '@/utils/timeUtils';
 
 // Short formats for UI display
-TIME_FORMATS.SHORT_TIME        // "14:30"
-TIME_FORMATS.SHORT_DATE        // "Jan 15, 2024"
-TIME_FORMATS.SHORT_DATETIME    // "Jan 15, 2024 14:30"
+TIME_FORMATS.SHORT_TIME; // "14:30"
+TIME_FORMATS.SHORT_DATE; // "Jan 15, 2024"
+TIME_FORMATS.SHORT_DATETIME; // "Jan 15, 2024 14:30"
 
 // Long formats for detailed display
-TIME_FORMATS.LONG_TIME         // "14:30:45"
-TIME_FORMATS.LONG_DATE         // "Monday, January 15, 2024"
-TIME_FORMATS.LONG_DATETIME     // "Monday, January 15, 2024 14:30:45"
+TIME_FORMATS.LONG_TIME; // "14:30:45"
+TIME_FORMATS.LONG_DATE; // "Monday, January 15, 2024"
+TIME_FORMATS.LONG_DATETIME; // "Monday, January 15, 2024 14:30:45"
 
 // ISO formats for API and storage
-TIME_FORMATS.ISO_DATE          // "2024-01-15"
-TIME_FORMATS.ISO_DATETIME      // "2024-01-15T14:30:45.123Z"
-TIME_FORMATS.ISO_DATETIME_UTC  // "2024-01-15T14:30:45.123Z"
+TIME_FORMATS.ISO_DATE; // "2024-01-15"
+TIME_FORMATS.ISO_DATETIME; // "2024-01-15T14:30:45.123Z"
+TIME_FORMATS.ISO_DATETIME_UTC; // "2024-01-15T14:30:45.123Z"
 
 // Relative time formats
-TIME_FORMATS.RELATIVE          // "2 hours ago"
-TIME_FORMATS.RELATIVE_SHORT    // "2h ago"
+TIME_FORMATS.RELATIVE; // "2 hours ago"
+TIME_FORMATS.RELATIVE_SHORT; // "2h ago"
 
 // Timestamp formats
-TIME_FORMATS.TIMESTAMP         // "1705329045123"
-TIME_FORMATS.TIMESTAMP_MS      // "1705329045123"
+TIME_FORMATS.TIMESTAMP; // "1705329045123"
+TIME_FORMATS.TIMESTAMP_MS; // "1705329045123"
 ```
 
 ### Formatting Examples
@@ -227,14 +222,14 @@ import { formatDateTime, formatRelativeTime } from '@/utils/timeUtils';
 const date = new Date();
 
 // Different format examples
-formatDateTime(date, 'SHORT_TIME')        // "14:30"
-formatDateTime(date, 'LONG_DATE')         // "Monday, January 15, 2024"
-formatDateTime(date, 'ISO_DATETIME')      // "2024-01-15T14:30:45.123Z"
-formatDateTime(date, 'RELATIVE')          // "just now" or "2 hours ago"
+formatDateTime(date, 'SHORT_TIME'); // "14:30"
+formatDateTime(date, 'LONG_DATE'); // "Monday, January 15, 2024"
+formatDateTime(date, 'ISO_DATETIME'); // "2024-01-15T14:30:45.123Z"
+formatDateTime(date, 'RELATIVE'); // "just now" or "2 hours ago"
 
 // Relative time formatting
-formatRelativeTime(date)                  // "2 hours ago"
-formatRelativeTime(date, true)            // "2h ago"
+formatRelativeTime(date); // "2 hours ago"
+formatRelativeTime(date, true); // "2h ago"
 ```
 
 ## Activity Tracking
@@ -283,13 +278,13 @@ import { createTimer } from '@/utils/timeUtils';
 
 function performOperation() {
   const timer = createTimer();
-  
+
   // Perform some operation
   const result = expensiveOperation();
-  
+
   const elapsed = timer.stop().getElapsedFormatted();
   console.log(`Operation completed in ${elapsed}`);
-  
+
   return result;
 }
 ```
@@ -306,7 +301,7 @@ function PerformanceComponent() {
 
   const handleExpensiveOperation = () => {
     startTimer();
-    
+
     // Perform expensive operation
     setTimeout(() => {
       const elapsed = getElapsedFormatted();
@@ -314,11 +309,7 @@ function PerformanceComponent() {
     }, 1000);
   };
 
-  return (
-    <button onClick={handleExpensiveOperation}>
-      Run Expensive Operation
-    </button>
-  );
+  return <button onClick={handleExpensiveOperation}>Run Expensive Operation</button>;
 }
 ```
 
@@ -339,10 +330,7 @@ console.log('Supported timezones:', TIMEZONE_CONFIG.SUPPORTED_TIMEZONES);
 ### Timezone Conversion
 
 ```typescript
-import { 
-  convertToUserTimezone, 
-  getCurrentTimeInTimezone 
-} from '@/utils/timeUtils';
+import { convertToUserTimezone, getCurrentTimeInTimezone } from '@/utils/timeUtils';
 
 // Convert UTC time to user's timezone
 const utcTime = new Date('2024-01-15T14:30:00Z');
@@ -357,12 +345,14 @@ const tokyoTime = getCurrentTimeInTimezone('Asia/Tokyo');
 ### From Direct Date Usage
 
 **Before:**
+
 ```typescript
 const timestamp = new Date().toISOString();
 const formatted = new Date().toLocaleTimeString();
 ```
 
 **After:**
+
 ```typescript
 import { createApiTimestamp, formatDateTime } from '@/utils/timeUtils';
 
@@ -373,8 +363,9 @@ const formatted = formatDateTime(new Date(), 'SHORT_TIME');
 ### From Manual Time Formatting
 
 **Before:**
+
 ```typescript
-const formatTime = (date) => {
+const formatTime = date => {
   return date.toLocaleString('en-US', {
     hour: '2-digit',
     minute: '2-digit'
@@ -383,6 +374,7 @@ const formatTime = (date) => {
 ```
 
 **After:**
+
 ```typescript
 import { formatDateTime } from '@/utils/timeUtils';
 
@@ -451,16 +443,18 @@ const result = expensiveOperation();
 ### Common Issues
 
 1. **Timezone Issues**
+
    ```typescript
    // Check user timezone
    console.log('User timezone:', TIMEZONE_CONFIG.USER_TIMEZONE);
-   
+
    // Validate timezone
    import { isValidTimezone } from '@/utils/timeUtils';
    const isValid = isValidTimezone('America/New_York');
    ```
 
 2. **Performance Issues**
+
    ```typescript
    // Monitor update frequency
    const timeManager = getCursorTimeManager();
@@ -520,6 +514,7 @@ const timeManager = getCursorTimeManager({
 The Cursor Time System provides a comprehensive solution for ensuring all cursor settings and activities use live time and date from the computer. By following the patterns and best practices outlined in this documentation, you can ensure consistent, accurate, and reliable time handling throughout your application.
 
 For additional support or questions, refer to the source code in:
+
 - `src/utils/timeUtils.ts/js`
 - `src/config/cursorTimeConfig.ts`
 - `src/hooks/useCursorTime.ts/js`

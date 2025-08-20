@@ -13,12 +13,14 @@
 ### 1.1 Repository Structure
 
 **Frontend Repository** (Current):
+
 - **Location**: `synapse-landing-nexus` (this repo)
 - **Type**: React/Vite frontend with Supabase Edge Functions
 - **Backend Connection**: Points to `https://api.joinsynapses.com`
 - **Status**: ✅ Deployed on Vercel
 
 **Backend Repository** (Missing Connection):
+
 - **Location**: `https://github.com/nairamint/Nexus`
 - **Type**: Full backend implementation with advanced features
 - **Status**: ❌ Not connected to frontend
@@ -26,6 +28,7 @@
 ### 1.2 Current Configuration
 
 **Frontend Configuration**:
+
 ```typescript
 // src/config/environment.ts
 API_BASE_URL: 'https://api.joinsynapses.com',
@@ -45,6 +48,7 @@ const NEXUS_CONFIG = {
 ```
 
 **Supabase Edge Functions**:
+
 ```typescript
 // supabase/functions/nexus-proxy/index.ts
 const nexusBaseUrl = 'https://api.joinsynapses.com';
@@ -59,6 +63,7 @@ const nexusBaseUrl = 'https://api.joinsynapses.com';
 Based on the audit report and your statement, the backend repository at `https://github.com/nairamint/Nexus` contains:
 
 **✅ ADVANCED FEATURES** (in backend repo):
+
 1. **Advanced ML Models**: BERT/Transformer models for classification
 2. **Ensemble Learning**: Multi-model approach for accuracy
 3. **Dynamic Confidence Scoring**: Intelligent confidence calculation
@@ -67,6 +72,7 @@ Based on the audit report and your statement, the backend repository at `https:/
 6. **Enterprise-grade Features**: Full compliance suite
 
 **❌ CURRENT IMPLEMENTATION** (in frontend repo):
+
 1. **Basic Rule-based Classification**: Simple keyword matching
 2. **Static Confidence**: Hardcoded 0.85 confidence
 3. **No ML Models**: No BERT/Transformer integration
@@ -77,11 +83,13 @@ Based on the audit report and your statement, the backend repository at `https:/
 ### 2.2 Architecture Comparison
 
 **Backend Repository Architecture**:
+
 ```
 Frontend → Backend API (Nexus Repo) → ML Models → Database
 ```
 
 **Current Frontend Repository Architecture**:
+
 ```
 Frontend → Supabase Edge Functions → External API → Basic Logic
 ```
@@ -95,13 +103,16 @@ Frontend → Supabase Edge Functions → External API → Basic Logic
 **Action**: Deploy the backend repository to `https://api.joinsynapses.com`
 
 **Steps**:
+
 1. **Clone Backend Repository**:
+
    ```bash
    git clone https://github.com/nairamint/Nexus
    cd Nexus
    ```
 
 2. **Deploy to Production**:
+
    ```bash
    # Deploy to your production server
    npm run deploy:production
@@ -122,7 +133,9 @@ Frontend → Supabase Edge Functions → External API → Basic Logic
 **Action**: Copy backend implementation into this repository
 
 **Steps**:
+
 1. **Copy Backend Code**:
+
    ```bash
    # Copy backend implementation
    cp -r ../Nexus/src/backend ./src/
@@ -151,6 +164,7 @@ Frontend → Supabase Edge Functions → External API → Basic Logic
 **Action**: Keep current architecture but enhance with backend features
 
 **Steps**:
+
 1. **Enhance Edge Functions**:
    - Add ML model integration
    - Implement dynamic confidence
@@ -169,6 +183,7 @@ Frontend → Supabase Edge Functions → External API → Basic Logic
 **Priority**: CRITICAL
 
 1. **Deploy Backend Repository**:
+
    ```bash
    # Clone and deploy backend
    git clone https://github.com/nairamint/Nexus
@@ -184,10 +199,11 @@ Frontend → Supabase Edge Functions → External API → Basic Logic
    - Configure environment variables
 
 3. **Test Integration**:
+
    ```bash
    # Test health endpoint
    curl -X GET "https://api.joinsynapses.com/api/health"
-   
+
    # Test classification endpoint
    curl -X POST "https://api.joinsynapses.com/api/classify" \
      -H "Content-Type: application/json" \
@@ -199,6 +215,7 @@ Frontend → Supabase Edge Functions → External API → Basic Logic
 **Priority**: HIGH
 
 1. **Update API Configuration**:
+
    ```typescript
    // src/config/environment.ts
    API_BASE_URL: 'https://api.joinsynapses.com',
@@ -278,7 +295,7 @@ echo "✅ Backend deployment complete!"
 // Test integration with deployed backend
 async function testBackendIntegration() {
   const baseUrl = 'https://api.joinsynapses.com';
-  
+
   // Test health endpoint
   try {
     const healthResponse = await fetch(`${baseUrl}/api/health`);
@@ -286,7 +303,7 @@ async function testBackendIntegration() {
   } catch (error) {
     console.error('Health Check Failed:', error);
   }
-  
+
   // Test classification endpoint
   try {
     const classificationResponse = await fetch(`${baseUrl}/api/classify`, {

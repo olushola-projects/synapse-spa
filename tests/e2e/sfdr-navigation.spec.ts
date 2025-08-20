@@ -9,7 +9,7 @@ test.describe('SFDR Navigator E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the SFDR Navigator page
     await page.goto('/sfdr-navigator');
-    
+
     // Wait for the page to load
     await page.waitForLoadState('networkidle');
   });
@@ -88,7 +88,7 @@ test.describe('SFDR Navigator E2E Tests', () => {
     // Submit classification
     const fundNameInput = page.getByTestId('fund-name-input');
     const classifyButton = page.getByTestId('classify-button');
-    
+
     await fundNameInput.fill('Test Fund');
     await classifyButton.click();
 
@@ -111,7 +111,7 @@ test.describe('SFDR Navigator E2E Tests', () => {
     await expect(page.getByTestId('classify-button')).toBeFocused();
 
     await page.keyboard.press('Enter');
-    
+
     // Wait for results
     await expect(page.getByTestId('classification-result')).toBeVisible();
   });
@@ -128,7 +128,7 @@ test.describe('SFDR Navigator E2E Tests', () => {
     // Check focus indicators
     await page.keyboard.press('Tab');
     await expect(page.getByTestId('fund-name-input')).toBeFocused();
-    
+
     // Verify focus is visible
     await expect(page.getByTestId('fund-name-input')).toHaveCSS('outline', /none|auto/);
   });
@@ -142,7 +142,7 @@ test.describe('SFDR Navigator E2E Tests', () => {
     // Try to submit classification
     const fundNameInput = page.getByTestId('fund-name-input');
     const classifyButton = page.getByTestId('classify-button');
-    
+
     await fundNameInput.fill('Test Fund');
     await classifyButton.click();
 
@@ -162,9 +162,9 @@ test.describe('SFDR Navigator E2E Tests', () => {
     // Test touch interactions
     await page.getByTestId('fund-name-input').tap();
     await page.keyboard.type('Mobile Test Fund');
-    
+
     await page.getByTestId('classify-button').tap();
-    
+
     // Wait for results
     await expect(page.getByTestId('classification-result')).toBeVisible();
   });
@@ -203,7 +203,7 @@ test.describe('SFDR Navigator E2E Tests', () => {
   test('should handle large input data', async ({ page }) => {
     // Test with large fund name
     const largeFundName = 'A'.repeat(1000);
-    
+
     const fundNameInput = page.getByTestId('fund-name-input');
     await fundNameInput.fill(largeFundName);
 
@@ -274,7 +274,7 @@ test.describe('SFDR Navigator E2E Tests', () => {
     // Submit classification
     const fundNameInput = page.getByTestId('fund-name-input');
     const classifyButton = page.getByTestId('classify-button');
-    
+
     await fundNameInput.fill('Test Fund');
     await classifyButton.click();
 

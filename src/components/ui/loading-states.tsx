@@ -12,11 +12,7 @@ interface LoadingSpinnerProps {
   className?: string;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 'md',
-  text,
-  className
-}) => {
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', text, className }) => {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-6 w-6',
@@ -26,7 +22,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   return (
     <div className={cn('flex items-center justify-center gap-2', className)}>
       <Loader2 className={cn('animate-spin', sizeClasses[size])} />
-      {text && <span className="text-sm text-muted-foreground">{text}</span>}
+      {text && <span className='text-sm text-muted-foreground'>{text}</span>}
     </div>
   );
 };
@@ -42,12 +38,12 @@ export const PageLoading: React.FC<PageLoadingProps> = ({
   description = 'Please wait while we fetch your data'
 }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md">
-        <CardContent className="pt-6 text-center">
-          <LoadingSpinner size="lg" className="mb-4" />
-          <h2 className="text-xl font-semibold mb-2">{title}</h2>
-          <p className="text-muted-foreground">{description}</p>
+    <div className='min-h-screen flex items-center justify-center bg-background'>
+      <Card className='w-full max-w-md'>
+        <CardContent className='pt-6 text-center'>
+          <LoadingSpinner size='lg' className='mb-4' />
+          <h2 className='text-xl font-semibold mb-2'>{title}</h2>
+          <p className='text-muted-foreground'>{description}</p>
         </CardContent>
       </Card>
     </div>
@@ -72,11 +68,11 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
 }) => {
   return (
     <div className={cn('flex flex-col items-center justify-center p-8 text-center', className)}>
-      <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4 max-w-md">{description}</p>
+      <AlertCircle className='h-12 w-12 text-destructive mb-4' />
+      <h3 className='text-lg font-semibold mb-2'>{title}</h3>
+      <p className='text-muted-foreground mb-4 max-w-md'>{description}</p>
       {onRetry && (
-        <Button onClick={onRetry} variant="outline">
+        <Button onClick={onRetry} variant='outline'>
           {retryText}
         </Button>
       )}
@@ -102,9 +98,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <div className={cn('flex flex-col items-center justify-center p-8 text-center', className)}>
-      {icon && <div className="mb-4">{icon}</div>}
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4 max-w-md">{description}</p>
+      {icon && <div className='mb-4'>{icon}</div>}
+      <h3 className='text-lg font-semibold mb-2'>{title}</h3>
+      <p className='text-muted-foreground mb-4 max-w-md'>{description}</p>
       {action}
     </div>
   );
@@ -116,15 +112,12 @@ interface ConnectionStatusProps {
   className?: string;
 }
 
-export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
-  isOnline,
-  className
-}) => {
+export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ isOnline, className }) => {
   if (isOnline) return null;
 
   return (
     <Alert className={cn('border-destructive bg-destructive/5', className)}>
-      <WifiOff className="h-4 w-4" />
+      <WifiOff className='h-4 w-4' />
       <AlertDescription>
         You're currently offline. Some features may not be available.
       </AlertDescription>
@@ -156,9 +149,7 @@ export const useNetworkStatus = () => {
 export const useLoadingState = (initialState = false) => {
   const [isLoading, setIsLoading] = React.useState(initialState);
 
-  const withLoading = React.useCallback(async <T,>(
-    asyncFn: () => Promise<T>
-  ): Promise<T> => {
+  const withLoading = React.useCallback(async <T,>(asyncFn: () => Promise<T>): Promise<T> => {
     setIsLoading(true);
     try {
       return await asyncFn();

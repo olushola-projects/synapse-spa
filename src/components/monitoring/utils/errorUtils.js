@@ -5,7 +5,7 @@ import { logger } from '@/utils/logger';
  * @param context - Additional context about where the error occurred
  */
 export function handleMonitoringError(error, context) {
-    logger.error(`Error in monitoring dashboard: ${context}`, error);
+  logger.error(`Error in monitoring dashboard: ${context}`, error);
 }
 /**
  * Wraps an async function with consistent error handling for monitoring operations.
@@ -14,11 +14,10 @@ export function handleMonitoringError(error, context) {
  * @returns A promise that resolves to the operation result or undefined on error
  */
 export async function withErrorHandling(operation, context) {
-    try {
-        return await operation();
-    }
-    catch (error) {
-        handleMonitoringError(error, context);
-        return undefined;
-    }
+  try {
+    return await operation();
+  } catch (error) {
+    handleMonitoringError(error, context);
+    return undefined;
+  }
 }

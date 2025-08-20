@@ -67,9 +67,9 @@ export class TestHelpers {
    */
   async takeScreenshot(name: string): Promise<void> {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    await this.page.screenshot({ 
+    await this.page.screenshot({
       path: `test-results/screenshots/${name}-${timestamp}.png`,
-      fullPage: true 
+      fullPage: true
     });
   }
 
@@ -103,10 +103,7 @@ export class TestHelpers {
    * Wait for API call to complete
    */
   async waitForApiCall(url: string, timeout = 30000): Promise<void> {
-    await this.page.waitForResponse(response => 
-      response.url().includes(url), 
-      { timeout }
-    );
+    await this.page.waitForResponse(response => response.url().includes(url), { timeout });
   }
 
   /**
@@ -134,9 +131,9 @@ export class TestHelpers {
    * Wait for loading spinner to disappear
    */
   async waitForLoadingComplete(): Promise<void> {
-    await this.page.waitForSelector('[data-testid="loading-spinner"]', { 
+    await this.page.waitForSelector('[data-testid="loading-spinner"]', {
       state: 'hidden',
-      timeout: 30000 
+      timeout: 30000
     });
   }
 
@@ -144,7 +141,7 @@ export class TestHelpers {
    * Check if element exists
    */
   async elementExists(selector: string): Promise<boolean> {
-    return await this.page.locator(selector).count() > 0;
+    return (await this.page.locator(selector).count()) > 0;
   }
 
   /**
@@ -270,7 +267,7 @@ export class TestHelpers {
    */
   async getElementText(selector: string): Promise<string> {
     const element = this.page.locator(selector);
-    return await element.textContent() || '';
+    return (await element.textContent()) || '';
   }
 
   /**
@@ -294,7 +291,12 @@ export class TestHelpers {
   /**
    * Wait for element to have specific attribute
    */
-  async waitForElementAttribute(selector: string, attribute: string, value: string, timeout = 10000): Promise<void> {
+  async waitForElementAttribute(
+    selector: string,
+    attribute: string,
+    value: string,
+    timeout = 10000
+  ): Promise<void> {
     await expect(async () => {
       const attrValue = await this.getElementAttribute(selector, attribute);
       expect(attrValue).toBe(value);
@@ -316,7 +318,8 @@ export const TestData = {
   // SFDR Test Data
   sfdr: {
     fundName: 'Test Sustainable Fund',
-    fundDescription: 'A fund focused on sustainable investments with ESG integration and climate impact measurement',
+    fundDescription:
+      'A fund focused on sustainable investments with ESG integration and climate impact measurement',
     shortDescription: 'Sustainable investment fund',
     invalidFundName: 'ab',
     longDescription: 'A'.repeat(1001)
@@ -345,21 +348,21 @@ export const Selectors = {
   // Navigation
   navigation: '[data-testid="navigation"]',
   menuButton: '[data-testid="menu-button"]',
-  
+
   // Forms
   fundNameInput: '[data-testid="fund-name-input"]',
   fundDescriptionInput: '[data-testid="fund-description-input"]',
   classifyButton: '[data-testid="classify-button"]',
-  
+
   // Results
   classificationResult: '[data-testid="classification-result"]',
   loadingSpinner: '[data-testid="loading-spinner"]',
-  
+
   // Common
   submitButton: '[data-testid="submit-button"]',
   cancelButton: '[data-testid="cancel-button"]',
   closeButton: '[data-testid="close-button"]',
-  
+
   // Alerts
   successAlert: '[data-testid="success-alert"]',
   errorAlert: '[data-testid="error-alert"]',

@@ -52,11 +52,13 @@ async function runQualityChecks() {
 
 async function checkMergeConflicts() {
   process.stdout.write('Checking for merge conflicts... ');
-  
+
   try {
-    const result = execSync('grep -r "<<<<<<< HEAD\\|=======\\|>>>>>>> " src/ --exclude-dir=node_modules', 
-      { encoding: 'utf8', stdio: 'pipe' });
-    
+    const result = execSync(
+      'grep -r "<<<<<<< HEAD\\|=======\\|>>>>>>> " src/ --exclude-dir=node_modules',
+      { encoding: 'utf8', stdio: 'pipe' }
+    );
+
     if (result.trim()) {
       throw new Error('Merge conflict markers detected in source files');
     }
@@ -71,7 +73,7 @@ async function checkMergeConflicts() {
 
 async function checkTypeScript() {
   process.stdout.write('Running TypeScript compilation check... ');
-  
+
   try {
     execSync('npx tsc --noEmit --project tsconfig.app.json', { stdio: 'pipe' });
     execSync('npx tsc --noEmit --project tsconfig.backend.json', { stdio: 'pipe' });
@@ -82,17 +84,19 @@ async function checkTypeScript() {
 
 async function checkCodeComplexity() {
   process.stdout.write('Checking code complexity... ');
-  
-  const files = await glob('src/**/*.{ts,tsx}', { ignore: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'] });
-  
+
+  const files = await glob('src/**/*.{ts,tsx}', {
+    ignore: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}']
+  });
+
   for (const file of files) {
     const content = readFileSync(file, 'utf8');
     const lines = content.split('\n');
-    
+
     // Simple complexity check - count nested blocks
     let maxComplexity = 0;
     let currentComplexity = 0;
-    
+
     for (const line of lines) {
       const trimmed = line.trim();
       if (trimmed.includes('{')) currentComplexity++;
@@ -100,31 +104,37 @@ async function checkCodeComplexity() {
       if (trimmed.match(/\b(if|for|while|switch|catch)\b/)) currentComplexity++;
       maxComplexity = Math.max(maxComplexity, currentComplexity);
     }
-    
+
     if (maxComplexity > QUALITY_GATES.MAX_COMPLEXITY) {
-      throw new Error(`File ${file} exceeds complexity threshold (${maxComplexity} > ${QUALITY_GATES.MAX_COMPLEXITY})`);
+      throw new Error(
+        `File ${file} exceeds complexity threshold (${maxComplexity} > ${QUALITY_GATES.MAX_COMPLEXITY})`
+      );
     }
   }
 }
 
 async function checkFileSize() {
   process.stdout.write('Checking file sizes... ');
-  
-  const files = await glob('src/**/*.{ts,tsx}', { ignore: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'] });
-  
+
+  const files = await glob('src/**/*.{ts,tsx}', {
+    ignore: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}']
+  });
+
   for (const file of files) {
     const content = readFileSync(file, 'utf8');
     const lineCount = content.split('\n').length;
-    
+
     if (lineCount > QUALITY_GATES.MAX_FILE_SIZE) {
-      throw new Error(`File ${file} exceeds size limit (${lineCount} > ${QUALITY_GATES.MAX_FILE_SIZE} lines)`);
+      throw new Error(
+        `File ${file} exceeds size limit (${lineCount} > ${QUALITY_GATES.MAX_FILE_SIZE} lines)`
+      );
     }
   }
 }
 
 async function runLinter() {
   process.stdout.write('Running ESLint... ');
-  
+
   try {
     execSync('npm run lint', { stdio: 'pipe' });
   } catch (error) {
@@ -134,7 +144,7 @@ async function runLinter() {
 
 async function runFormattingCheck() {
   process.stdout.write('Checking code formatting... ');
-  
+
   try {
     execSync('npm run format:check', { stdio: 'pipe' });
   } catch (error) {
@@ -144,18 +154,20 @@ async function runFormattingCheck() {
 
 async function runTests() {
   process.stdout.write('Running tests... ');
-  
+
   try {
     execSync('npm run test:coverage', { stdio: 'pipe' });
-    
+
     // Check coverage if coverage file exists
     const coveragePath = 'coverage/coverage-summary.json';
     if (existsSync(coveragePath)) {
       const coverage = JSON.parse(readFileSync(coveragePath, 'utf8'));
       const totalCoverage = coverage.total.lines.pct;
-      
+
       if (totalCoverage < QUALITY_GATES.REQUIRED_COVERAGE) {
-        throw new Error(`Test coverage below threshold (${totalCoverage}% < ${QUALITY_GATES.REQUIRED_COVERAGE}%)`);
+        throw new Error(
+          `Test coverage below threshold (${totalCoverage}% < ${QUALITY_GATES.REQUIRED_COVERAGE}%)`
+        );
       }
     }
   } catch (error) {

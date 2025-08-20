@@ -76,7 +76,7 @@ module.exports = {
         'categories:accessibility': ['error', { minScore: 0.95 }],
         'categories:best-practices': ['error', { minScore: 0.9 }],
         'categories:seo': ['error', { minScore: 0.9 }],
-        
+
         // Performance metrics thresholds
         'first-contentful-paint': ['error', { maxNumericValue: 2000 }],
         'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
@@ -85,28 +85,28 @@ module.exports = {
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
         'total-blocking-time': ['error', { maxNumericValue: 300 }],
         'max-potential-fid': ['error', { maxNumericValue: 130 }],
-        
+
         // Resource optimization
         'total-byte-weight': ['warn', { maxNumericValue: 500000 }], // 500KB
         'render-blocking-resources': ['warn', { maxLength: 5 }],
         'unused-css-rules': ['warn', { maxLength: 10 }],
         'unused-javascript': ['warn', { maxLength: 10 }],
-        
+
         // Image optimization
         'modern-image-formats': ['warn', { maxLength: 5 }],
         'uses-optimized-images': ['warn', { maxLength: 5 }],
         'uses-responsive-images': ['warn', { maxLength: 5 }],
-        
+
         // Caching and compression
         'uses-text-compression': ['error', { maxLength: 0 }],
         'uses-long-cache-ttl': ['warn', { maxLength: 10 }],
-        
+
         // Accessibility
         'color-contrast': ['error', { maxLength: 0 }],
         'image-alt': ['error', { maxLength: 0 }],
-        'label': ['error', { maxLength: 0 }],
+        label: ['error', { maxLength: 0 }],
         'link-name': ['error', { maxLength: 0 }],
-        
+
         // Best practices
         'no-document-write': ['error', { maxLength: 0 }],
         'external-anchors-use-rel-noopener': ['error', { maxLength: 0 }],
@@ -125,7 +125,7 @@ module.exports = {
       token: process.env.LHCI_GITHUB_APP_TOKEN
     }
   },
-  
+
   // Performance budgets
   budgets: [
     {
@@ -159,7 +159,7 @@ module.exports = {
       ]
     }
   ],
-  
+
   // Custom configurations for different environments
   environments: {
     development: {
@@ -205,7 +205,7 @@ module.exports = {
       }
     }
   },
-  
+
   // CI/CD integration
   ci: {
     // GitHub Actions integration
@@ -213,13 +213,13 @@ module.exports = {
       statusCheck: true,
       commitStatus: true
     },
-    
+
     // Slack notifications
     slack: {
       webhookUrl: process.env.SLACK_WEBHOOK_URL,
       channel: '#performance-alerts'
     },
-    
+
     // Email notifications
     email: {
       smtp: {

@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build:prod",
-  "outputDirectory": "dist", 
+  "outputDirectory": "dist",
   "framework": "vite",
   "functions": {
     "api/index.py": {
@@ -28,7 +28,7 @@
           "value": "nosniff"
         },
         {
-          "key": "X-Frame-Options", 
+          "key": "X-Frame-Options",
           "value": "DENY"
         },
         {

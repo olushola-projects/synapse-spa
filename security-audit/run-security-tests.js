@@ -54,7 +54,9 @@ class SecurityTester {
       console.log('\n📊 SECURITY TEST RESULTS');
       console.log('========================');
       console.log(`⏱️  Duration: ${duration}s`);
-      console.log(`🎯 Overall Score: ${this.results.overall.score}/100 (${this.results.overall.grade})`);
+      console.log(
+        `🎯 Overall Score: ${this.results.overall.score}/100 (${this.results.overall.grade})`
+      );
       console.log(`🔍 Total Tests: ${this.getTotalTests()}`);
       console.log(`✅ Passed: ${this.getTotalPassed()}`);
       console.log(`❌ Failed: ${this.getTotalFailed()}`);
@@ -65,7 +67,6 @@ class SecurityTester {
       console.log(`📄 Detailed report saved to: ${reportPath}`);
 
       return report;
-
     } catch (error) {
       console.error('❌ Security testing failed:', error);
       return { error: error.message };
@@ -274,7 +275,7 @@ class SecurityTester {
 
     for (const token of invalidTokens) {
       const response = await this.makeRequest('/api/protected', {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       if (response.status === 200) {
@@ -287,29 +288,29 @@ class SecurityTester {
 
   async testSessionManagement() {
     const response = await this.makeRequest('/api/session');
-    
+
     // Check for secure session attributes
-    const secureAttributes = [
-      'httpOnly',
-      'secure',
-      'sameSite'
-    ];
+    const secureAttributes = ['httpOnly', 'secure', 'sameSite'];
 
     const cookies = response.headers['set-cookie'] || [];
-    const hasSecureCookies = cookies.some(cookie => 
+    const hasSecureCookies = cookies.some(cookie =>
       secureAttributes.some(attr => cookie.includes(attr))
     );
 
-    return { 
-      passed: hasSecureCookies, 
-      reason: hasSecureCookies ? null : 'Session cookies not properly secured' 
+    return {
+      passed: hasSecureCookies,
+      reason: hasSecureCookies ? null : 'Session cookies not properly secured'
     };
   }
 
   async testMFAImplementation() {
     // Test MFA bypass attempts
     const mfaBypassAttempts = [
-      { endpoint: '/api/auth/login', method: 'POST', data: { username: 'admin', password: 'password' } },
+      {
+        endpoint: '/api/auth/login',
+        method: 'POST',
+        data: { username: 'admin', password: 'password' }
+      },
       { endpoint: '/api/auth/mfa-bypass', method: 'POST', data: { token: 'invalid' } }
     ];
 
@@ -328,13 +329,7 @@ class SecurityTester {
   }
 
   async testPasswordPolicy() {
-    const weakPasswords = [
-      'password',
-      '123456',
-      'admin',
-      'qwerty',
-      'password123'
-    ];
+    const weakPasswords = ['password', '123456', 'admin', 'qwerty', 'password123'];
 
     for (const password of weakPasswords) {
       const response = await this.makeRequest('/api/auth/register', {
@@ -364,9 +359,9 @@ class SecurityTester {
     const responses = await Promise.all(attempts);
     const rateLimited = responses.some(r => r.status === 429);
 
-    return { 
-      passed: rateLimited, 
-      reason: rateLimited ? null : 'No rate limiting detected' 
+    return {
+      passed: rateLimited,
+      reason: rateLimited ? null : 'No rate limiting detected'
     };
   }
 
@@ -411,16 +406,11 @@ class SecurityTester {
   }
 
   async testAPIEndpointProtection() {
-    const protectedEndpoints = [
-      '/api/admin',
-      '/api/users',
-      '/api/settings',
-      '/api/system'
-    ];
+    const protectedEndpoints = ['/api/admin', '/api/users', '/api/settings', '/api/system'];
 
     for (const endpoint of protectedEndpoints) {
       const response = await this.makeRequest(endpoint);
-      
+
       if (response.status === 200) {
         return { passed: false, reason: `Protected endpoint ${endpoint} accessible without auth` };
       }
@@ -460,7 +450,7 @@ class SecurityTester {
 
     for (const payload of sqlPayloads) {
       const response = await this.makeRequest(`/api/search?q=${encodeURIComponent(payload)}`);
-      
+
       if (this.detectSQLInjection(response.body)) {
         return { passed: false, reason: 'SQL injection vulnerability detected' };
       }
@@ -479,7 +469,7 @@ class SecurityTester {
 
     for (const payload of xssPayloads) {
       const response = await this.makeRequest(`/api/comment?text=${encodeURIComponent(payload)}`);
-      
+
       if (this.detectXSS(response.body)) {
         return { passed: false, reason: 'XSS vulnerability detected' };
       }
@@ -489,18 +479,14 @@ class SecurityTester {
   }
 
   async testNoSQLInjectionPrevention() {
-    const nosqlPayloads = [
-      '{"$gt": ""}',
-      '{"$ne": null}',
-      '{"$where": "1==1"}'
-    ];
+    const nosqlPayloads = ['{"$gt": ""}', '{"$ne": null}', '{"$where": "1==1"}'];
 
     for (const payload of nosqlPayloads) {
       const response = await this.makeRequest('/api/search', {
         method: 'POST',
         data: { query: payload }
       });
-      
+
       if (response.status === 200 && response.body.includes('error')) {
         return { passed: false, reason: 'NoSQL injection vulnerability detected' };
       }
@@ -510,16 +496,13 @@ class SecurityTester {
   }
 
   async testCommandInjectionPrevention() {
-    const commandPayloads = [
-      '; ls -la',
-      '| cat /etc/passwd',
-      '&& rm -rf /',
-      '`whoami`'
-    ];
+    const commandPayloads = ['; ls -la', '| cat /etc/passwd', '&& rm -rf /', '`whoami`'];
 
     for (const payload of commandPayloads) {
-      const response = await this.makeRequest(`/api/execute?command=${encodeURIComponent(payload)}`);
-      
+      const response = await this.makeRequest(
+        `/api/execute?command=${encodeURIComponent(payload)}`
+      );
+
       if (response.status === 200) {
         return { passed: false, reason: 'Command injection vulnerability detected' };
       }
@@ -537,7 +520,7 @@ class SecurityTester {
 
     for (const payload of pathPayloads) {
       const response = await this.makeRequest(`/api/file?path=${encodeURIComponent(payload)}`);
-      
+
       if (response.status === 200) {
         return { passed: false, reason: 'Path traversal vulnerability detected' };
       }
@@ -556,24 +539,23 @@ class SecurityTester {
     const responses = await Promise.all(requests);
     const rateLimited = responses.some(r => r.status === 429);
 
-    return { 
-      passed: rateLimited, 
-      reason: rateLimited ? null : 'No rate limiting detected' 
+    return {
+      passed: rateLimited,
+      reason: rateLimited ? null : 'No rate limiting detected'
     };
   }
 
   async testAPIAuthentication() {
-    const protectedEndpoints = [
-      '/api/users',
-      '/api/data',
-      '/api/admin'
-    ];
+    const protectedEndpoints = ['/api/users', '/api/data', '/api/admin'];
 
     for (const endpoint of protectedEndpoints) {
       const response = await this.makeRequest(endpoint);
-      
+
       if (response.status === 200) {
-        return { passed: false, reason: `API endpoint ${endpoint} accessible without authentication` };
+        return {
+          passed: false,
+          reason: `API endpoint ${endpoint} accessible without authentication`
+        };
       }
     }
 
@@ -582,15 +564,15 @@ class SecurityTester {
 
   async testCORSConfiguration() {
     const response = await this.makeRequest('/api/test', {
-      headers: { 'Origin': 'https://malicious-site.com' }
+      headers: { Origin: 'https://malicious-site.com' }
     });
 
     const corsHeaders = response.headers['access-control-allow-origin'];
     const isSecure = !corsHeaders || corsHeaders === this.targetUrl;
 
-    return { 
-      passed: isSecure, 
-      reason: isSecure ? null : 'Insecure CORS configuration' 
+    return {
+      passed: isSecure,
+      reason: isSecure ? null : 'Insecure CORS configuration'
     };
   }
 
@@ -617,15 +599,16 @@ class SecurityTester {
   // Data Protection Test Implementations
   async testDataEncryption() {
     const response = await this.makeRequest('/api/data');
-    
-    // Check if sensitive data is encrypted
-    const hasEncryption = response.headers['content-encoding'] || 
-                         response.body.includes('encrypted') ||
-                         response.headers['x-encrypted'];
 
-    return { 
-      passed: hasEncryption, 
-      reason: hasEncryption ? null : 'Data not encrypted' 
+    // Check if sensitive data is encrypted
+    const hasEncryption =
+      response.headers['content-encoding'] ||
+      response.body.includes('encrypted') ||
+      response.headers['x-encrypted'];
+
+    return {
+      passed: hasEncryption,
+      reason: hasEncryption ? null : 'Data not encrypted'
     };
   }
 
@@ -633,9 +616,9 @@ class SecurityTester {
     const isHttps = this.targetUrl.startsWith('https://');
     const hasHSTS = await this.checkHSTS();
 
-    return { 
-      passed: isHttps && hasHSTS, 
-      reason: (!isHttps || !hasHSTS) ? 'Insecure communication detected' : null 
+    return {
+      passed: isHttps && hasHSTS,
+      reason: !isHttps || !hasHSTS ? 'Insecure communication detected' : null
     };
   }
 
@@ -647,7 +630,7 @@ class SecurityTester {
     ];
 
     const response = await this.makeRequest('/api/test');
-    
+
     for (const pattern of sensitivePatterns) {
       if (pattern.test(response.body)) {
         return { passed: false, reason: 'Sensitive data leakage detected' };
@@ -660,14 +643,15 @@ class SecurityTester {
   async testKeyManagement() {
     // Test for proper key rotation and management
     const response = await this.makeRequest('/api/keys/status');
-    
-    const hasKeyRotation = response.body.includes('rotation') || 
-                          response.body.includes('expiry') ||
-                          response.headers['x-key-rotation'];
 
-    return { 
-      passed: hasKeyRotation, 
-      reason: hasKeyRotation ? null : 'No key management detected' 
+    const hasKeyRotation =
+      response.body.includes('rotation') ||
+      response.body.includes('expiry') ||
+      response.headers['x-key-rotation'];
+
+    return {
+      passed: hasKeyRotation,
+      reason: hasKeyRotation ? null : 'No key management detected'
     };
   }
 
@@ -676,7 +660,7 @@ class SecurityTester {
     return new Promise((resolve, reject) => {
       const url = `${this.targetUrl}${endpoint}`;
       const urlObj = new URL(url);
-      
+
       const requestOptions = {
         hostname: urlObj.hostname,
         port: urlObj.port || (urlObj.protocol === 'https:' ? 443 : 80),
@@ -684,7 +668,7 @@ class SecurityTester {
         method: options.method || 'GET',
         headers: {
           'User-Agent': 'SecurityTester/1.0',
-          'Accept': 'application/json',
+          Accept: 'application/json',
           ...options.headers
         }
       };
@@ -696,9 +680,9 @@ class SecurityTester {
       }
 
       const protocol = urlObj.protocol === 'https:' ? https : http;
-      const req = protocol.request(requestOptions, (res) => {
+      const req = protocol.request(requestOptions, res => {
         let body = '';
-        res.on('data', (chunk) => body += chunk);
+        res.on('data', chunk => (body += chunk));
         res.on('end', () => {
           resolve({
             status: res.statusCode,
@@ -709,11 +693,11 @@ class SecurityTester {
       });
 
       req.on('error', reject);
-      
+
       if (options.data) {
         req.write(JSON.stringify(options.data));
       }
-      
+
       req.end();
     });
   }
@@ -726,19 +710,13 @@ class SecurityTester {
       'postgresql error',
       'sql server error'
     ];
-    
-    return sqlErrors.some(error => 
-      body.toLowerCase().includes(error.toLowerCase())
-    );
+
+    return sqlErrors.some(error => body.toLowerCase().includes(error.toLowerCase()));
   }
 
   detectXSS(body) {
-    const xssPatterns = [
-      /<script[^>]*>.*?<\/script>/i,
-      /javascript:/i,
-      /on\w+\s*=/i
-    ];
-    
+    const xssPatterns = [/<script[^>]*>.*?<\/script>/i, /javascript:/i, /on\w+\s*=/i];
+
     return xssPatterns.some(pattern => pattern.test(body));
   }
 
@@ -752,13 +730,20 @@ class SecurityTester {
   }
 
   calculateOverallScore() {
-    const categories = ['authentication', 'authorization', 'inputValidation', 'apiSecurity', 'dataProtection'];
+    const categories = [
+      'authentication',
+      'authorization',
+      'inputValidation',
+      'apiSecurity',
+      'dataProtection'
+    ];
     let totalScore = 0;
     let totalTests = 0;
 
     categories.forEach(category => {
       const categoryResults = this.results[category];
-      const categoryScore = (categoryResults.passed / (categoryResults.passed + categoryResults.failed)) * 100;
+      const categoryScore =
+        (categoryResults.passed / (categoryResults.passed + categoryResults.failed)) * 100;
       totalScore += categoryScore;
       totalTests += categoryResults.passed + categoryResults.failed;
     });
@@ -777,21 +762,39 @@ class SecurityTester {
   }
 
   getTotalTests() {
-    const categories = ['authentication', 'authorization', 'inputValidation', 'apiSecurity', 'dataProtection'];
+    const categories = [
+      'authentication',
+      'authorization',
+      'inputValidation',
+      'apiSecurity',
+      'dataProtection'
+    ];
     return categories.reduce((total, category) => {
       return total + this.results[category].passed + this.results[category].failed;
     }, 0);
   }
 
   getTotalPassed() {
-    const categories = ['authentication', 'authorization', 'inputValidation', 'apiSecurity', 'dataProtection'];
+    const categories = [
+      'authentication',
+      'authorization',
+      'inputValidation',
+      'apiSecurity',
+      'dataProtection'
+    ];
     return categories.reduce((total, category) => {
       return total + this.results[category].passed;
     }, 0);
   }
 
   getTotalFailed() {
-    const categories = ['authentication', 'authorization', 'inputValidation', 'apiSecurity', 'dataProtection'];
+    const categories = [
+      'authentication',
+      'authorization',
+      'inputValidation',
+      'apiSecurity',
+      'dataProtection'
+    ];
     return categories.reduce((total, category) => {
       return total + this.results[category].failed;
     }, 0);
@@ -842,7 +845,8 @@ class SecurityTester {
 
 // Run the security test
 const tester = new SecurityTester();
-tester.runComprehensiveSecurityTest()
+tester
+  .runComprehensiveSecurityTest()
   .then(result => {
     if (result.error) {
       console.error('❌ Security test failed:', result.error);

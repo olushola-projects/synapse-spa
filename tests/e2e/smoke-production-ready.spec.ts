@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 /**
  * Nexus Agent – Navigation Smoke Tests (Production-Ready)
  * Based on Technical Director's recommendations
- * 
+ *
  * Features:
  * - Environment-flexible navigation testing (EXPECT_NAV env var)
  * - API mocking for backend stability
@@ -25,7 +25,7 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
           items: [
             { label: 'Home', path: '/' },
             { label: 'SFDR Navigator', path: '/sfdr-navigator' },
-            { label: 'Reports', path: '/reports' },
+            { label: 'Reports', path: '/reports' }
           ]
         })
       });
@@ -70,7 +70,7 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
     for (const selector of navSelectors) {
       const elements = page.locator(selector);
       const count = await elements.count();
-      
+
       if (count > 0) {
         // Verify the element is actually visible
         const isVisible = await elements.first().isVisible();
@@ -93,12 +93,16 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
     // Case 1: Navigation is expected → enforce failure if none
     if (process.env.EXPECT_NAV === 'true') {
       expect(navigationFound, 'Expected navigation element(s) to exist').toBeTruthy();
-      console.log(`✅ Navigation found using selector: ${foundSelector} (${totalElements} elements)`);
-    } 
+      console.log(
+        `✅ Navigation found using selector: ${foundSelector} (${totalElements} elements)`
+      );
+    }
     // Case 2: Navigation optional → log but don't fail
     else {
       if (navigationFound) {
-        console.log(`✅ Navigation found using selector: ${foundSelector} (${totalElements} elements)`);
+        console.log(
+          `✅ Navigation found using selector: ${foundSelector} (${totalElements} elements)`
+        );
       } else {
         console.warn('⚠️ No navigation elements found (optional case)');
       }
@@ -108,9 +112,9 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
 
   test('should allow SFDR Navigator route', async ({ page }) => {
     // ✅ Enhanced SFDR route testing with error handling
-    const response = await page.goto('/sfdr-navigator', { 
+    const response = await page.goto('/sfdr-navigator', {
       waitUntil: 'domcontentloaded',
-      timeout: 15000 
+      timeout: 15000
     });
 
     // Check response status
@@ -118,9 +122,9 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
 
     // Wait for body to be visible
     await page.waitForSelector('body', { state: 'visible', timeout: 10000 });
-    
+
     const bodyVisible = await page.isVisible('body');
-    
+
     test.info().annotations.push({
       type: 'note',
       description: `Body visibility on /sfdr-navigator: ${bodyVisible}, Status: ${response?.status()}`
@@ -130,9 +134,10 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
 
     // ✅ Check for SFDR-specific content
     const pageContent = await page.textContent('body');
-    const hasSFDRContent = pageContent?.toLowerCase().includes('sfdr') || 
-                          pageContent?.toLowerCase().includes('navigator') ||
-                          pageContent?.toLowerCase().includes('compliance');
+    const hasSFDRContent =
+      pageContent?.toLowerCase().includes('sfdr') ||
+      pageContent?.toLowerCase().includes('navigator') ||
+      pageContent?.toLowerCase().includes('compliance');
 
     test.info().annotations.push({
       type: 'note',
@@ -159,10 +164,10 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
     for (const viewport of viewports) {
       await page.setViewportSize(viewport);
       await page.waitForTimeout(1000); // Allow layout to adjust
-      
+
       // Verify body is visible in all viewports
       const bodyVisible = await page.isVisible('body');
-      
+
       test.info().annotations.push({
         type: 'note',
         description: `${viewport.name} viewport: body visible = ${bodyVisible}`
@@ -176,16 +181,16 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
     // ✅ Test API endpoints are working (with mocks)
     const apiResponse = await page.request.get('/api/navigation');
     expect(apiResponse.status()).toBe(200);
-    
+
     // Verify the mocked response structure
     const apiData = await apiResponse.json();
     expect(apiData).toHaveProperty('items');
     expect(Array.isArray(apiData.items)).toBeTruthy();
-    
+
     // Verify environment configuration
     const baseUrl = page.url();
     expect(baseUrl).toContain('localhost:8080');
-    
+
     test.info().annotations.push({
       type: 'note',
       description: `Environment: ${baseUrl}, API status: healthy, Navigation items: ${apiData.items.length}`
@@ -195,7 +200,7 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
   test('should detect and report console errors', async ({ page }) => {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
+
     // Listen for console messages
     page.on('console', msg => {
       if (msg.type() === 'error') {
@@ -204,10 +209,10 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
         warnings.push(msg.text());
       }
     });
-    
+
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('body', { state: 'visible', timeout: 10000 });
-    
+
     // Log all issues for debugging
     if (errors.length > 0) {
       console.log('❌ Console errors detected:', errors);
@@ -216,7 +221,7 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
         description: `Console errors: ${errors.length}`
       });
     }
-    
+
     if (warnings.length > 0) {
       console.log('⚠️ Console warnings detected:', warnings);
       test.info().annotations.push({
@@ -224,20 +229,19 @@ test.describe('Nexus Agent – Navigation Smoke Tests', () => {
         description: `Console warnings: ${warnings.length}`
       });
     }
-    
+
     // Fail test if critical errors are present
-    const criticalErrors = errors.filter(error => 
-      error.includes('Failed to load resource') ||
-      error.includes('500') ||
-      error.includes('NetworkError')
+    const criticalErrors = errors.filter(
+      error =>
+        error.includes('Failed to load resource') ||
+        error.includes('500') ||
+        error.includes('NetworkError')
     );
-    
+
     expect(criticalErrors.length).toBe(0);
-    
+
     if (errors.length === 0 && warnings.length === 0) {
       console.log('✅ No console errors or warnings detected');
     }
   });
 });
-
-

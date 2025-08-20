@@ -5,7 +5,7 @@ import { server } from './mocks/server';
 // Configure Testing Library
 configure({
   testIdAttribute: 'data-testid',
-  asyncUtilTimeout: 5000,
+  asyncUtilTimeout: 5000
 });
 
 // Mock Intersection Observer
@@ -35,26 +35,26 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: jest.fn(), // deprecated
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+    dispatchEvent: jest.fn()
+  }))
 });
 
 // Mock window.scrollTo
 Object.defineProperty(window, 'scrollTo', {
   writable: true,
-  value: jest.fn(),
+  value: jest.fn()
 });
 
 // Mock window.URL.createObjectURL
 Object.defineProperty(window.URL, 'createObjectURL', {
   writable: true,
-  value: jest.fn(() => 'mocked-url'),
+  value: jest.fn(() => 'mocked-url')
 });
 
 // Mock window.URL.revokeObjectURL
 Object.defineProperty(window.URL, 'revokeObjectURL', {
   writable: true,
-  value: jest.fn(),
+  value: jest.fn()
 });
 
 // Mock localStorage
@@ -62,7 +62,7 @@ const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn()
 };
 global.localStorage = localStorageMock;
 
@@ -71,7 +71,7 @@ const sessionStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn()
 };
 global.sessionStorage = sessionStorageMock;
 
@@ -85,23 +85,20 @@ const originalWarn = console.warn;
 beforeAll(() => {
   // Start MSW server
   server.listen({ onUnhandledRequest: 'error' });
-  
+
   // Suppress console errors and warnings in tests
   console.error = (...args: any[]) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render is deprecated')
-    ) {
+    if (typeof args[0] === 'string' && args[0].includes('Warning: ReactDOM.render is deprecated')) {
       return;
     }
     originalError.call(console, ...args);
   };
-  
+
   console.warn = (...args: any[]) => {
     if (
       typeof args[0] === 'string' &&
       (args[0].includes('Warning: componentWillReceiveProps') ||
-       args[0].includes('Warning: componentWillUpdate'))
+        args[0].includes('Warning: componentWillUpdate'))
     ) {
       return;
     }
@@ -112,10 +109,10 @@ beforeAll(() => {
 afterEach(() => {
   // Reset all mocks after each test
   jest.clearAllMocks();
-  
+
   // Reset MSW handlers
   server.resetHandlers();
-  
+
   // Clear localStorage and sessionStorage
   localStorageMock.clear();
   sessionStorageMock.clear();
@@ -124,7 +121,7 @@ afterEach(() => {
 afterAll(() => {
   // Stop MSW server
   server.close();
-  
+
   // Restore console methods
   console.error = originalError;
   console.warn = originalWarn;
@@ -137,48 +134,50 @@ expect.extend({
     if (pass) {
       return {
         message: () => `expected ${received} not to be in the document`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to be in the document`,
-        pass: false,
+        pass: false
       };
     }
   },
-  
+
   toHaveClass(received, className) {
     const pass = received.classList.contains(className);
     if (pass) {
       return {
         message: () => `expected ${received} not to have class ${className}`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to have class ${className}`,
-        pass: false,
+        pass: false
       };
     }
   },
-  
+
   toHaveAttribute(received, attribute, value) {
     const hasAttribute = received.hasAttribute(attribute);
     const attributeValue = received.getAttribute(attribute);
     const pass = hasAttribute && (value === undefined || attributeValue === value);
-    
+
     if (pass) {
       return {
-        message: () => `expected ${received} not to have attribute ${attribute}${value ? ` with value ${value}` : ''}`,
-        pass: true,
+        message: () =>
+          `expected ${received} not to have attribute ${attribute}${value ? ` with value ${value}` : ''}`,
+        pass: true
       };
     } else {
       return {
-        message: () => `expected ${received} to have attribute ${attribute}${value ? ` with value ${value}` : ''}`,
-        pass: false,
+        message: () =>
+          `expected ${received} to have attribute ${attribute}${value ? ` with value ${value}` : ''}`,
+        pass: false
       };
     }
-  },
+  }
 });
 
 // Global test utilities
@@ -187,7 +186,7 @@ global.testUtils = {
   waitForElement: (selector: string, timeout = 5000) => {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
-      
+
       const checkElement = () => {
         const element = document.querySelector(selector);
         if (element) {
@@ -198,26 +197,26 @@ global.testUtils = {
           setTimeout(checkElement, 100);
         }
       };
-      
+
       checkElement();
     });
   },
-  
+
   // Mock API responses
   mockApiResponse: (url: string, response: any, status = 200) => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: status >= 200 && status < 300,
       status,
       json: async () => response,
-      text: async () => JSON.stringify(response),
+      text: async () => JSON.stringify(response)
     });
   },
-  
+
   // Mock API error
   mockApiError: (url: string, error: string, status = 500) => {
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error(error));
   },
-  
+
   // Create test user
   createTestUser: (overrides = {}) => ({
     id: 'test-user-id',
@@ -225,9 +224,9 @@ global.testUtils = {
     name: 'Test User',
     role: 'user',
     permissions: ['read', 'write'],
-    ...overrides,
+    ...overrides
   }),
-  
+
   // Create test data
   createTestData: (type: string, overrides = {}) => {
     const baseData = {
@@ -237,19 +236,19 @@ global.testUtils = {
         classification: 'Article 8',
         confidence: 0.95,
         citations: ['EU/2020/852', 'EU/2019/2088'],
-        ...overrides,
+        ...overrides
       },
       compliance: {
         id: 'test-compliance-id',
         status: 'compliant',
         score: 95,
         lastCheck: new Date().toISOString(),
-        ...overrides,
-      },
+        ...overrides
+      }
     };
-    
+
     return baseData[type as keyof typeof baseData] || overrides;
-  },
+  }
 };
 
 // Type declarations for global test utilities
@@ -261,7 +260,7 @@ declare global {
       toHaveAttribute(attribute: string, value?: string): R;
     }
   }
-  
+
   var testUtils: {
     waitForElement: (selector: string, timeout?: number) => Promise<Element>;
     mockApiResponse: (url: string, response: any, status?: number) => void;

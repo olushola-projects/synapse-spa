@@ -79,11 +79,13 @@ After configuring the secrets, you should see:
 ### 🚨 Security Status
 
 **BEFORE (CRITICAL VULNERABILITIES):**
+
 - ❌ Client-side API key exposure
 - ❌ All API calls failing
 - ❌ LLM functionality broken
 
 **AFTER (SECURE):**
+
 - ✅ Client-side API keys removed
 - ✅ Server-side secrets configured
 - ✅ All functionality restored

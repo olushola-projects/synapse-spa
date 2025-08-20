@@ -1,7 +1,7 @@
 /**
  * Security Headers Configuration
  * Implements comprehensive security headers for Zero-Trust architecture
- * 
+ *
  * Based on OWASP Security Headers recommendations and Zero-Trust principles
  */
 
@@ -36,7 +36,7 @@ export const securityHeaders: SecurityHeaders = {
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "upgrade-insecure-requests"
+    'upgrade-insecure-requests'
   ].join('; '),
 
   // Prevent MIME type sniffing
@@ -116,7 +116,9 @@ export const developmentSecurityHeaders: SecurityHeaders = {
 /**
  * Get security headers based on environment
  */
-export function getSecurityHeaders(environment: 'production' | 'development' = 'production'): SecurityHeaders {
+export function getSecurityHeaders(
+  environment: 'production' | 'development' = 'production'
+): SecurityHeaders {
   return environment === 'production' ? securityHeaders : developmentSecurityHeaders;
 }
 
@@ -128,25 +130,27 @@ export function applySecurityHeaders(
   environment: 'production' | 'development' = 'production'
 ): Response {
   const headers = getSecurityHeaders(environment);
-  
+
   Object.entries(headers).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
-  
+
   return response;
 }
 
 /**
  * Security headers middleware for Express.js
  */
-export function securityHeadersMiddleware(environment: 'production' | 'development' = 'production') {
+export function securityHeadersMiddleware(
+  environment: 'production' | 'development' = 'production'
+) {
   return (req: any, res: any, next: any) => {
     const headers = getSecurityHeaders(environment);
-    
+
     Object.entries(headers).forEach(([key, value]) => {
       res.setHeader(key, value);
     });
-    
+
     next();
   };
 }
@@ -154,17 +158,19 @@ export function securityHeadersMiddleware(environment: 'production' | 'developme
 /**
  * Vite plugin for security headers
  */
-export function securityHeadersVitePlugin(environment: 'production' | 'development' = 'production') {
+export function securityHeadersVitePlugin(
+  environment: 'production' | 'development' = 'production'
+) {
   return {
     name: 'security-headers',
     configureServer(server: any) {
       server.middlewares.use((req: any, res: any, next: any) => {
         const headers = getSecurityHeaders(environment);
-        
+
         Object.entries(headers).forEach(([key, value]) => {
           res.setHeader(key, value);
         });
-        
+
         next();
       });
     }
@@ -199,22 +205,22 @@ export function validateSecurityHeaders(headers: Record<string, string>): {
   const requiredHeaders = Object.keys(securityHeaders);
   const presentHeaders = Object.keys(headers);
   const missingHeaders = requiredHeaders.filter(header => !presentHeaders.includes(header));
-  
+
   const recommendations: string[] = [];
-  
+
   if (missingHeaders.length > 0) {
     recommendations.push(`Add missing security headers: ${missingHeaders.join(', ')}`);
   }
-  
+
   // Check for weak configurations
   if (headers['X-Frame-Options'] && headers['X-Frame-Options'] !== 'DENY') {
     recommendations.push('Consider setting X-Frame-Options to DENY for maximum security');
   }
-  
+
   if (headers['X-Content-Type-Options'] && headers['X-Content-Type-Options'] !== 'nosniff') {
     recommendations.push('Set X-Content-Type-Options to nosniff to prevent MIME type sniffing');
   }
-  
+
   return {
     valid: missingHeaders.length === 0,
     missing: missingHeaders,

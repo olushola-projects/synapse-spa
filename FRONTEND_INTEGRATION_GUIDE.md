@@ -1,6 +1,7 @@
 # 🎨 Frontend Integration Guide - Enhanced SFDR Backend
 
 ## Overview
+
 This guide covers integrating the enhanced SFDR classification backend features into the frontend application. The new backend provides comprehensive audit trails, benchmark comparisons, regulatory citations, and performance metrics.
 
 ## 🔄 **Enhanced Response Format Integration**
@@ -12,38 +13,38 @@ The enhanced backend now returns a comprehensive response structure:
 ```typescript
 interface EnhancedSFDRClassificationResponse {
   // Core classification
-  classification: string;              // "Article 6", "Article 8", "Article 9"
-  confidence: number;                  // 0.50 - 0.95
-  processing_time: number;             // Processing time in seconds
-  reasoning: string;                   // Detailed explanation
-  
+  classification: string; // "Article 6", "Article 8", "Article 9"
+  confidence: number; // 0.50 - 0.95
+  processing_time: number; // Processing time in seconds
+  reasoning: string; // Detailed explanation
+
   // Enhanced features
-  sustainability_score: number;        // 0.0 - 1.0 sustainability rating
-  key_indicators: string[];           // ESG indicators found
-  risk_factors: string[];             // Risk assessment results
-  regulatory_basis: string[];         // SFDR article citations
-  
+  sustainability_score: number; // 0.0 - 1.0 sustainability rating
+  key_indicators: string[]; // ESG indicators found
+  risk_factors: string[]; // Risk assessment results
+  regulatory_basis: string[]; // SFDR article citations
+
   // Performance benchmarks
   benchmark_comparison: {
-    industry_baseline: number;         // Industry average confidence
-    current_confidence: number;       // Current classification confidence
-    performance_vs_baseline: number;  // Difference from baseline
-    percentile_rank: number;          // Ranking vs industry (0-100)
+    industry_baseline: number; // Industry average confidence
+    current_confidence: number; // Current classification confidence
+    performance_vs_baseline: number; // Difference from baseline
+    percentile_rank: number; // Ranking vs industry (0-100)
   };
-  
+
   // Audit trail for compliance
   audit_trail: {
-    classification_id: string;        // Unique ID for tracking
-    timestamp: string;                // ISO timestamp
-    engine_version: string;           // Backend version
-    processing_time: number;          // Detailed timing
-    confidence: number;               // Final confidence score
+    classification_id: string; // Unique ID for tracking
+    timestamp: string; // ISO timestamp
+    engine_version: string; // Backend version
+    processing_time: number; // Detailed timing
+    confidence: number; // Final confidence score
     article_scores?: Record<string, number>; // Individual article scores
-    method: string;                   // Classification method used
-    document_type?: string;           // Type of document analyzed
+    method: string; // Classification method used
+    document_type?: string; // Type of document analyzed
   };
-  
-  explainability_score: number;       // Transparency score (0.0 - 1.0)
+
+  explainability_score: number; // Transparency score (0.0 - 1.0)
 }
 ```
 
@@ -55,7 +56,7 @@ interface EnhancedSFDRClassificationResponse {
 import { EnhancedClassificationResult } from '@/components/enhanced/EnhancedClassificationResult';
 
 // Usage in your SFDR components
-<EnhancedClassificationResult 
+<EnhancedClassificationResult
   result={classificationResponse}
   showAdvancedFeatures={true}
   onExportAuditTrail={() => exportAuditTrail(classificationResponse.audit_trail)}
@@ -68,7 +69,7 @@ import { EnhancedClassificationResult } from '@/components/enhanced/EnhancedClas
 import { PerformanceMonitoringDashboard } from '@/components/monitoring/PerformanceMonitoringDashboard';
 
 // Add to admin/monitoring pages
-<PerformanceMonitoringDashboard 
+<PerformanceMonitoringDashboard
   refreshInterval={30000}  // 30 seconds
   showDetailedMetrics={true}
 />
@@ -80,7 +81,7 @@ import { PerformanceMonitoringDashboard } from '@/components/monitoring/Performa
 import { UATTestingFramework } from '@/components/testing/UATTestingFramework';
 
 // For validation and testing pages
-<UATTestingFramework 
+<UATTestingFramework
   onTestComplete={(session) => handleUATComplete(session)}
   preloadedTestCases={customTestCases}
 />
@@ -91,11 +92,13 @@ import { UATTestingFramework } from '@/components/testing/UATTestingFramework';
 ### **Update Existing SFDR Components**
 
 #### 1. **SFDRChatIntegration.tsx** ✅ **COMPLETED**
+
 - Updated `formatChatResponse()` to handle enhanced fields
 - Added support for audit trails, benchmarks, and regulatory citations
 - Maintains backward compatibility with legacy responses
 
 #### 2. **SFDRGem.tsx** - Needs Update
+
 ```typescript
 // Update the classification handler to use enhanced response
 const handleClassification = async () => {
@@ -107,7 +110,7 @@ const handleClassification = async () => {
       include_benchmark_comparison: true,
       require_citations: true
     });
-    
+
     // Use EnhancedClassificationResult component
     setClassificationResult(response);
   } catch (error) {
@@ -117,6 +120,7 @@ const handleClassification = async () => {
 ```
 
 #### 3. **NexusAgentChat.tsx** - Needs Update
+
 ```typescript
 // Update form submission to request enhanced features
 const handleFormSubmit = async () => {
@@ -127,7 +131,7 @@ const handleFormSubmit = async () => {
     require_citations: true,
     confidence_threshold: 0.75
   };
-  
+
   const response = await validateSFDRCompliance(enhancedRequest);
   // Handle enhanced response...
 };
@@ -156,7 +160,7 @@ const exportAuditTrail = (auditTrail: any) => {
       audit_requirements: 'EU Regulation 2019/2088'
     }
   };
-  
+
   downloadJSON(auditReport, `audit-trail-${auditTrail.classification_id}.json`);
 };
 ```
@@ -173,7 +177,7 @@ const trackClassificationMetrics = (response: EnhancedSFDRClassificationResponse
     timestamp: new Date().toISOString(),
     explainability: response.explainability_score
   };
-  
+
   // Send to analytics service
   analyticsClient.track('sfdr_classification', metrics);
 };
@@ -222,7 +226,7 @@ export const classifyDocumentEnhanced = async (request: {
       require_citations: true
     })
   });
-  
+
   return response.json();
 };
 ```
@@ -281,7 +285,7 @@ const TestingPage = () => {
 // Add to admin dashboard
 const AdminDashboard = () => (
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <PerformanceMonitoringDashboard 
+    <PerformanceMonitoringDashboard
       refreshInterval={30000}
       showDetailedMetrics={true}
     />
@@ -304,7 +308,7 @@ const collectMetrics = (response: EnhancedSFDRClassificationResponse) => {
     explainability_score: response.explainability_score,
     engine_version: response.audit_trail?.engine_version
   };
-  
+
   // Store in analytics system
   window.analytics?.track('classification_completed', metrics);
 };
@@ -322,14 +326,14 @@ return (
   <div>
     {/* Basic classification result */}
     <ClassificationSummary result={result} />
-    
+
     {/* Progressive disclosure for advanced features */}
     <Button onClick={() => setShowAdvanced(!showAdvanced)}>
       {showAdvanced ? 'Hide' : 'Show'} Advanced Analysis
     </Button>
-    
+
     {showAdvanced && (
-      <EnhancedClassificationResult 
+      <EnhancedClassificationResult
         result={result}
         showAdvancedFeatures={true}
       />
@@ -377,7 +381,7 @@ const handleAuditTrail = (auditTrail: any) => {
       purpose: 'regulatory_compliance'
     }
   };
-  
+
   // Send to secure audit log
   auditLogger.log(secureAudit);
 };
@@ -386,6 +390,7 @@ const handleAuditTrail = (auditTrail: any) => {
 ## 📋 **Implementation Checklist**
 
 ### ✅ **Completed**
+
 - [x] Enhanced classification response types
 - [x] EnhancedClassificationResult component
 - [x] PerformanceMonitoringDashboard component
@@ -394,6 +399,7 @@ const handleAuditTrail = (auditTrail: any) => {
 - [x] Backward compatibility maintained
 
 ### 🔄 **In Progress**
+
 - [ ] Update SFDRGem.tsx component
 - [ ] Update NexusAgentChat.tsx component
 - [ ] API client enhancements
@@ -401,6 +407,7 @@ const handleAuditTrail = (auditTrail: any) => {
 - [ ] Testing framework integration
 
 ### 📋 **Pending**
+
 - [ ] Admin dashboard integration
 - [ ] User experience testing
 - [ ] Documentation updates
@@ -409,16 +416,19 @@ const handleAuditTrail = (auditTrail: any) => {
 ## 🚀 **Deployment Steps**
 
 1. **Test Enhanced Components**
+
    ```bash
    npm run test:enhanced-components
    ```
 
 2. **Build with Enhanced Features**
+
    ```bash
    npm run build:enhanced
    ```
 
 3. **Deploy to Vercel**
+
    ```bash
    npm run deploy:production
    ```
@@ -432,12 +442,13 @@ const handleAuditTrail = (auditTrail: any) => {
 ---
 
 **📚 Related Documentation:**
+
 - [Enhanced Backend Deployment Success](ENHANCED_BACKEND_DEPLOYMENT_SUCCESS.md)
 - [Vercel Environment Setup Guide](VERCEL_ENVIRONMENT_SETUP_GUIDE.md)
 - [Performance Monitoring Setup](PERFORMANCE_MONITORING_SETUP.md)
 
 ---
 
-*Last Updated: January 29, 2025*  
-*Version: Frontend Integration v1.0*  
-*Status: ✅ Core components completed, 🔄 Integration in progress*
+_Last Updated: January 29, 2025_  
+_Version: Frontend Integration v1.0_  
+_Status: ✅ Core components completed, 🔄 Integration in progress_

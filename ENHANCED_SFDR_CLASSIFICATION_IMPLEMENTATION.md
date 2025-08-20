@@ -11,23 +11,23 @@
 interface BERTClassificationEngine {
   private model: BertModel;
   private tokenizer: BertTokenizer;
-  
+
   async classifyFund(input: FundData): Promise<ClassificationResult> {
     // Preprocess fund data
     const text = this.preprocessFundData(input);
-    
+
     // Tokenize input
     const tokens = await this.tokenizer.encode(text);
-    
+
     // Get BERT embeddings
     const embeddings = await this.model.forward(tokens);
-    
+
     // Classification layers
     const classification = await this.classificationHead(embeddings);
-    
+
     // Calculate confidence with uncertainty quantification
     const confidence = await this.calculateConfidenceWithUncertainty(embeddings);
-    
+
     return {
       classification: classification.article,
       confidence: confidence.score,
@@ -50,7 +50,7 @@ interface EnsembleClassificationEngine {
     ruleBased: RuleBasedClassificationEngine;
     lstm: LSTMClassificationEngine;
   };
-  
+
   async classifyWithEnsemble(input: FundData): Promise<EnsembleResult> {
     // Run all models in parallel
     const results = await Promise.all([
@@ -59,14 +59,14 @@ interface EnsembleClassificationEngine {
       this.models.ruleBased.classify(input),
       this.models.lstm.classify(input)
     ]);
-    
+
     // Weighted ensemble voting
     const weights = this.calculateModelWeights(results);
     const ensembleClassification = this.weightedVoting(results, weights);
-    
+
     // Uncertainty quantification
     const uncertainty = this.calculateEnsembleUncertainty(results, weights);
-    
+
     return {
       classification: ensembleClassification,
       confidence: this.calculateEnsembleConfidence(results, weights),
@@ -100,7 +100,7 @@ const RealTimeValidationWidget: React.FC = () => {
   const [validationStatus, setValidationStatus] = useState<ValidationStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState('');
-  
+
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-4">
@@ -109,23 +109,23 @@ const RealTimeValidationWidget: React.FC = () => {
           {validationStatus}
         </Badge>
       </div>
-      
+
       <div className="space-y-4">
         <Progress value={progress} className="w-full" />
         <p className="text-sm text-gray-600">{currentStep}</p>
-        
+
         <div className="grid grid-cols-3 gap-4">
-          <ValidationStep 
+          <ValidationStep
             icon={<Shield className="w-4 h-4" />}
             label="Data Quality"
             status={validationStatus}
           />
-          <ValidationStep 
+          <ValidationStep
             icon={<CheckCircle className="w-4 h-4" />}
             label="Regulatory Compliance"
             status={validationStatus}
           />
-          <ValidationStep 
+          <ValidationStep
             icon={<Target className="w-4 h-4" />}
             label="Classification"
             status={validationStatus}
@@ -143,7 +143,7 @@ const RealTimeValidationWidget: React.FC = () => {
 // Interactive compliance score chart
 const ComplianceScoreChart: React.FC<{ data: ComplianceData }> = ({ data }) => {
   const [selectedMetric, setSelectedMetric] = useState('overall');
-  
+
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-4">
@@ -160,7 +160,7 @@ const ComplianceScoreChart: React.FC<{ data: ComplianceData }> = ({ data }) => {
           </SelectContent>
         </Select>
       </div>
-      
+
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={data[selectedMetric]}>
@@ -199,7 +199,7 @@ const ClassificationWizard: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<WizardFormData>({});
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
-  
+
   const steps = [
     {
       id: 'fund-basics',
@@ -238,13 +238,13 @@ const ClassificationWizard: React.FC = () => {
       validation: validateFinalSubmission
     }
   ];
-  
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <Steps currentStep={currentStep} steps={steps} />
       </div>
-      
+
       <Card className="p-6">
         <div className="min-h-[400px]">
           {React.createElement(steps[currentStep].component, {
@@ -268,7 +268,7 @@ const ClassificationWizard: React.FC = () => {
 const ContextualHelp: React.FC<{ field: string; context: any }> = ({ field, context }) => {
   const [helpContent, setHelpContent] = useState<HelpContent | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     const loadHelpContent = async () => {
       setIsLoading(true);
@@ -281,10 +281,10 @@ const ContextualHelp: React.FC<{ field: string; context: any }> = ({ field, cont
         setIsLoading(false);
       }
     };
-    
+
     loadHelpContent();
   }, [field, context]);
-  
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -337,7 +337,7 @@ const ContextualHelp: React.FC<{ field: string; context: any }> = ({ field, cont
 interface RegulatoryMonitoringService {
   private feeds: RegulatoryFeed[];
   private subscribers: RegulatoryUpdateSubscriber[];
-  
+
   async startMonitoring(): Promise<void> {
     // Subscribe to regulatory feeds
     const feeds = [
@@ -346,20 +346,20 @@ interface RegulatoryMonitoringService {
       { url: 'https://www.ecb.europa.eu/rss/regulatory-changes', type: 'ECB' },
       { url: 'https://www.fca.org.uk/rss/regulatory-updates', type: 'FCA' }
     ];
-    
+
     for (const feed of feeds) {
       await this.monitorFeed(feed);
     }
   }
-  
+
   private async monitorFeed(feed: RegulatoryFeed): Promise<void> {
     const parser = new Parser();
-    
+
     setInterval(async () => {
       try {
         const feedData = await parser.parseURL(feed.url);
         const updates = this.processFeedData(feedData, feed.type);
-        
+
         if (updates.length > 0) {
           await this.notifySubscribers(updates);
           await this.updateClassificationRules(updates);
@@ -369,7 +369,7 @@ interface RegulatoryMonitoringService {
       }
     }, 300000); // Check every 5 minutes
   }
-  
+
   private async updateClassificationRules(updates: RegulatoryUpdate[]): Promise<void> {
     for (const update of updates) {
       if (update.affectsSFDR) {
@@ -388,7 +388,7 @@ interface RegulatoryMonitoringService {
 const RegulatoryUpdatesFeed: React.FC = () => {
   const [updates, setUpdates] = useState<RegulatoryUpdate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     const loadUpdates = async () => {
       setIsLoading(true);
@@ -401,17 +401,17 @@ const RegulatoryUpdatesFeed: React.FC = () => {
         setIsLoading(false);
       }
     };
-    
+
     loadUpdates();
-    
+
     // Subscribe to real-time updates
     const unsubscribe = regulatoryService.subscribeToUpdates((update) => {
       setUpdates(prev => [update, ...prev.slice(0, 9)]); // Keep latest 10
     });
-    
+
     return unsubscribe;
   }, []);
-  
+
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-4">
@@ -420,7 +420,7 @@ const RegulatoryUpdatesFeed: React.FC = () => {
           Live
         </Badge>
       </div>
-      
+
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
           <Loader2 className="h-6 w-6 animate-spin" />
@@ -465,39 +465,39 @@ interface CrossReferenceValidator {
       this.validateDataConsistency(data),
       this.validateHistoricalData(data)
     ]);
-    
+
     return this.aggregateValidationResults(validations);
   }
-  
+
   private async validateEntityIdentifiers(data: FundData): Promise<ValidationResult> {
     const validations = [];
-    
+
     // Validate LEI
     if (data.lei) {
       const leiValidation = await this.validateLEI(data.lei);
       validations.push(leiValidation);
     }
-    
+
     // Validate ISIN
     if (data.isin) {
       const isinValidation = await this.validateISIN(data.isin);
       validations.push(isinValidation);
     }
-    
+
     // Validate against OpenCorporates
     if (data.entityId) {
       const corporateValidation = await this.validateWithOpenCorporates(data.entityId);
       validations.push(corporateValidation);
     }
-    
+
     return this.aggregateValidations(validations);
   }
-  
+
   private async validateLEI(lei: string): Promise<ValidationResult> {
     try {
       const response = await fetch(`https://api.gleif.org/api/v1/lei-records/${lei}`);
       const data = await response.json();
-      
+
       return {
         isValid: data.data?.attributes?.status === 'ISSUED',
         confidence: 0.95,
@@ -529,9 +529,9 @@ interface DataQualityEngine {
       timeliness: this.assessTimeliness(data),
       validity: this.assessValidity(data)
     };
-    
+
     const overallScore = this.calculateOverallScore(assessments);
-    
+
     return {
       overallScore,
       assessments,
@@ -539,19 +539,19 @@ interface DataQualityEngine {
       riskLevel: this.determineRiskLevel(overallScore)
     };
   }
-  
+
   private assessCompleteness(data: FundData): CompletenessAssessment {
     const requiredFields = this.getRequiredFields(data.fundType);
     const providedFields = this.getProvidedFields(data);
     const missingFields = requiredFields.filter(field => !providedFields.includes(field));
-    
+
     return {
       score: (providedFields.length / requiredFields.length) * 100,
       missingFields,
       completeness: providedFields.length / requiredFields.length
     };
   }
-  
+
   private async assessAccuracy(data: FundData): Promise<AccuracyAssessment> {
     const accuracyChecks = [
       await this.validateNumericalRanges(data),
@@ -559,7 +559,7 @@ interface DataQualityEngine {
       await this.validateCrossFieldRelationships(data),
       await this.validateAgainstExternalSources(data)
     ];
-    
+
     return {
       score: accuracyChecks.reduce((sum, check) => sum + check.score, 0) / accuracyChecks.length,
       checks: accuracyChecks,
@@ -578,13 +578,13 @@ interface DataQualityEngine {
 interface CachingStrategy {
   private redis: Redis;
   private memoryCache: Map<string, any>;
-  
+
   async getCachedResult(key: string): Promise<any> {
     // Check memory cache first
     if (this.memoryCache.has(key)) {
       return this.memoryCache.get(key);
     }
-    
+
     // Check Redis cache
     const cached = await this.redis.get(key);
     if (cached) {
@@ -592,24 +592,24 @@ interface CachingStrategy {
       this.memoryCache.set(key, parsed);
       return parsed;
     }
-    
+
     return null;
   }
-  
+
   async setCachedResult(key: string, value: any, ttl: number = 3600): Promise<void> {
     // Set in memory cache
     this.memoryCache.set(key, value);
-    
+
     // Set in Redis cache
     await this.redis.setex(key, ttl, JSON.stringify(value));
   }
-  
+
   async invalidateCache(pattern: string): Promise<void> {
     const keys = await this.redis.keys(pattern);
     if (keys.length > 0) {
       await this.redis.del(...keys);
     }
-    
+
     // Clear memory cache entries matching pattern
     for (const key of this.memoryCache.keys()) {
       if (key.includes(pattern)) {
@@ -626,7 +626,7 @@ interface CachingStrategy {
 // Background processing for heavy computations
 interface BackgroundProcessor {
   private queue: Bull.Queue;
-  
+
   async processClassification(data: FundData): Promise<string> {
     const job = await this.queue.add('classification', {
       data,
@@ -638,20 +638,20 @@ interface BackgroundProcessor {
         delay: 2000
       }
     });
-    
+
     return job.id.toString();
   }
-  
+
   async getJobStatus(jobId: string): Promise<JobStatus> {
     const job = await this.queue.getJob(jobId);
-    
+
     if (!job) {
       return { status: 'not_found' };
     }
-    
+
     const state = await job.getState();
     const progress = await job.progress();
-    
+
     return {
       status: state,
       progress,
@@ -667,15 +667,14 @@ interface BackgroundProcessor {
 #### 7.1 Open Source Integrations
 
 **1. OpenCorporates API Integration**
+
 ```typescript
 // Entity validation with OpenCorporates
 const openCorporatesService = {
   async validateEntity(entityId: string): Promise<EntityValidationResult> {
-    const response = await fetch(
-      `https://api.opencorporates.com/companies/search?q=${entityId}`
-    );
+    const response = await fetch(`https://api.opencorporates.com/companies/search?q=${entityId}`);
     const data = await response.json();
-    
+
     return {
       isValid: data.results.companies.length > 0,
       entity: data.results.companies[0] || null,
@@ -686,16 +685,17 @@ const openCorporatesService = {
 ```
 
 **2. OpenSPI Integration**
+
 ```typescript
 // Sustainability metrics with OpenSPI
 const openSPIService = {
   async getSustainabilityMetrics(fundData: FundData): Promise<SustainabilityMetrics> {
     // Map fund data to OpenSPI standards
     const mappedData = this.mapToOpenSPI(fundData);
-    
+
     // Get standardized metrics
     const metrics = await this.calculateMetrics(mappedData);
-    
+
     return {
       environmentalScore: metrics.environmental,
       socialScore: metrics.social,
@@ -709,13 +709,14 @@ const openSPIService = {
 #### 7.2 External Data Sources
 
 **1. Bloomberg ESG Data**
+
 ```typescript
 // Bloomberg ESG integration
 const bloombergService = {
   async getESGData(isin: string): Promise<BloombergESGData> {
     // Integration with Bloomberg API
     const response = await this.bloombergAPI.getESGData(isin);
-    
+
     return {
       esgScore: response.esgScore,
       environmentalScore: response.environmentalScore,
@@ -728,13 +729,14 @@ const bloombergService = {
 ```
 
 **2. MSCI ESG Data**
+
 ```typescript
 // MSCI ESG integration
 const msciService = {
   async getESGRatings(isin: string): Promise<MSCIESGData> {
     // Integration with MSCI API
     const response = await this.msciAPI.getESGRatings(isin);
-    
+
     return {
       esgRating: response.esgRating,
       esgScore: response.esgScore,
@@ -749,24 +751,28 @@ const msciService = {
 ### 8. Implementation Timeline
 
 #### Phase 1: Core Enhancements (4-6 weeks)
+
 - [ ] Implement BERT-based classification engine
 - [ ] Add ensemble learning capabilities
 - [ ] Enhance data validation framework
 - [ ] Implement caching strategy
 
 #### Phase 2: User Experience (4-6 weeks)
+
 - [ ] Build interactive compliance dashboard
 - [ ] Implement guided classification wizard
 - [ ] Add contextual help system
 - [ ] Create advanced visualizations
 
 #### Phase 3: Regulatory Integration (6-8 weeks)
+
 - [ ] Implement real-time regulatory monitoring
 - [ ] Add cross-reference validation
 - [ ] Integrate external data sources
 - [ ] Build audit trail system
 
 #### Phase 4: Advanced Features (8-10 weeks)
+
 - [ ] Add predictive compliance monitoring
 - [ ] Implement comparative analysis tools
 - [ ] Build automated reporting engine
@@ -775,17 +781,17 @@ const msciService = {
 ### 9. Success Metrics
 
 #### Technical Metrics
+
 - Classification accuracy: >95%
 - Processing time: <2 seconds
 - System uptime: >99.9%
 - User satisfaction: >4.5/5
 
 #### Business Metrics
+
 - User adoption rate: >80%
 - Compliance validation success: >90%
 - Customer retention: >85%
 - Revenue growth: >200% YoY
 
 This enhanced implementation will position your SFDR classification system as a market-leading solution, capable of competing with Big 4 offerings while providing superior user experience and advanced AI capabilities.
-
-

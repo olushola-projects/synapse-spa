@@ -9,7 +9,13 @@ import { SecurityTab } from './components/SecurityTab';
 import { useSystemOverview } from './hooks/useSystemOverview';
 
 export function RealTimeMonitoringDashboard() {
-  const { overview, activeAlerts, isLoading, lastUpdate, resolveAlert: resolveAlertFn } = useSystemOverview();
+  const {
+    overview,
+    activeAlerts,
+    isLoading,
+    lastUpdate,
+    resolveAlert: resolveAlertFn
+  } = useSystemOverview();
 
   if (isLoading) {
     return (
@@ -28,7 +34,7 @@ export function RealTimeMonitoringDashboard() {
   return (
     <div className='space-y-6'>
       <MonitoringOverview overview={overview} alerts={activeAlerts} />
-      
+
       <Tabs defaultValue='alerts' className='space-y-4'>
         <TabsList>
           <TabsTrigger value='alerts'>Active Alerts ({activeAlerts.length})</TabsTrigger>
@@ -38,7 +44,12 @@ export function RealTimeMonitoringDashboard() {
         </TabsList>
 
         <TabsContent value='alerts' className='space-y-4'>
-          <AlertsTab alerts={activeAlerts} onResolve={(id: string) => { resolveAlertFn(id); }} />
+          <AlertsTab
+            alerts={activeAlerts}
+            onResolve={(id: string) => {
+              resolveAlertFn(id);
+            }}
+          />
         </TabsContent>
 
         <TabsContent value='metrics' className='space-y-4'>
@@ -53,13 +64,12 @@ export function RealTimeMonitoringDashboard() {
           <SecurityTab />
         </TabsContent>
       </Tabs>
-      
+
       <div className='text-center text-sm text-muted-foreground'>
         Last updated: {lastUpdate.toLocaleTimeString()}
       </div>
     </div>
   );
 }
-
 
 export default RealTimeMonitoringDashboard;

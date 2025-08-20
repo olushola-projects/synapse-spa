@@ -12,14 +12,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { mcpSecurityService } from '@/services/mcp-security';
 import { mcpTestingService } from '@/services/mcp-testing';
 import {
-    AlertTriangle,
-    CheckCircle,
-    FileText,
-    Play,
-    Settings,
-    Shield,
-    XCircle,
-    Zap
+  AlertTriangle,
+  CheckCircle,
+  FileText,
+  Play,
+  Settings,
+  Shield,
+  XCircle,
+  Zap
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -60,7 +60,7 @@ export const Phase1TestingDashboard: React.FC = () => {
     // Get MCP status
     const testingStatus = mcpTestingService.getStatus();
     const securityStatus = mcpSecurityService.getStatus();
-    
+
     setMcpStatus({
       testing: testingStatus,
       security: securityStatus
@@ -111,20 +111,19 @@ export const Phase1TestingDashboard: React.FC = () => {
 
   const runAllTests = async () => {
     setIsRunning(true);
-    
+
     try {
       // Run functional tests
       await runFunctionalTests();
-      
+
       // Run security tests
       await runSecurityTests();
-      
+
       // Run performance tests
       await runPerformanceTests();
-      
+
       // Run compliance tests
       await runComplianceTests();
-      
     } catch (error) {
       console.error('Test execution failed:', error);
     } finally {
@@ -240,32 +239,30 @@ export const Phase1TestingDashboard: React.FC = () => {
     }
   };
 
-  const updateSuiteStatus = (suiteId: string, status: 'running' | 'completed' | 'failed', progress: number) => {
-    setTestSuites(prev => prev.map(suite => 
-      suite.id === suiteId 
-        ? { ...suite, status, progress }
-        : suite
-    ));
+  const updateSuiteStatus = (
+    suiteId: string,
+    status: 'running' | 'completed' | 'failed',
+    progress: number
+  ) => {
+    setTestSuites(prev =>
+      prev.map(suite => (suite.id === suiteId ? { ...suite, status, progress } : suite))
+    );
   };
 
   const updateSuiteTests = (suiteId: string, tests: TestResult[]) => {
-    setTestSuites(prev => prev.map(suite => 
-      suite.id === suiteId 
-        ? { ...suite, tests }
-        : suite
-    ));
+    setTestSuites(prev => prev.map(suite => (suite.id === suiteId ? { ...suite, tests } : suite)));
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'passed':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className='h-4 w-4 text-green-500' />;
       case 'failed':
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className='h-4 w-4 text-red-500' />;
       case 'skipped':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+        return <AlertTriangle className='h-4 w-4 text-yellow-500' />;
       default:
-        return <AlertTriangle className="h-4 w-4 text-gray-500" />;
+        return <AlertTriangle className='h-4 w-4 text-gray-500' />;
     }
   };
 
@@ -283,29 +280,25 @@ export const Phase1TestingDashboard: React.FC = () => {
   };
 
   const totalTests = testSuites.reduce((sum, suite) => sum + suite.tests.length, 0);
-  const passedTests = testSuites.reduce((sum, suite) => 
-    sum + suite.tests.filter(test => test.status === 'passed').length, 0
+  const passedTests = testSuites.reduce(
+    (sum, suite) => sum + suite.tests.filter(test => test.status === 'passed').length,
+    0
   );
-  const mcpEnhancedTests = testSuites.reduce((sum, suite) => 
-    sum + suite.tests.filter(test => test.mcpEnhanced).length, 0
+  const mcpEnhancedTests = testSuites.reduce(
+    (sum, suite) => sum + suite.tests.filter(test => test.mcpEnhanced).length,
+    0
   );
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h1 className="text-3xl font-bold">Phase 1 Testing Dashboard</h1>
-          <p className="text-muted-foreground">
-            MCP-Enhanced Testing with Advanced Capabilities
-          </p>
+          <h1 className='text-3xl font-bold'>Phase 1 Testing Dashboard</h1>
+          <p className='text-muted-foreground'>MCP-Enhanced Testing with Advanced Capabilities</p>
         </div>
-        <Button 
-          onClick={runAllTests} 
-          disabled={isRunning}
-          className="flex items-center gap-2"
-        >
-          <Play className="h-4 w-4" />
+        <Button onClick={runAllTests} disabled={isRunning} className='flex items-center gap-2'>
+          <Play className='h-4 w-4' />
           {isRunning ? 'Running Tests...' : 'Run All Tests'}
         </Button>
       </div>
@@ -313,9 +306,9 @@ export const Phase1TestingDashboard: React.FC = () => {
       {/* MCP Status */}
       {mcpStatus && (
         <Alert>
-          <Shield className="h-4 w-4" />
+          <Shield className='h-4 w-4' />
           <AlertDescription>
-            <div className="flex items-center gap-4">
+            <div className='flex items-center gap-4'>
               <span>MCP Status:</span>
               <Badge variant={mcpStatus.testing.connected ? 'default' : 'secondary'}>
                 Testing: {mcpStatus.testing.connected ? 'Connected' : 'Disconnected'}
@@ -323,7 +316,7 @@ export const Phase1TestingDashboard: React.FC = () => {
               <Badge variant={mcpStatus.security.connected ? 'default' : 'secondary'}>
                 Security: {mcpStatus.security.connected ? 'Connected' : 'Disconnected'}
               </Badge>
-              <span className="text-sm text-muted-foreground">
+              <span className='text-sm text-muted-foreground'>
                 Priority: MCP-First with Traditional Fallback
               </span>
             </div>
@@ -332,41 +325,41 @@ export const Phase1TestingDashboard: React.FC = () => {
       )}
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Tests</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+            <CardTitle className='text-sm font-medium'>Total Tests</CardTitle>
+            <FileText className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalTests}</div>
+            <div className='text-2xl font-bold'>{totalTests}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Passed Tests</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+            <CardTitle className='text-sm font-medium'>Passed Tests</CardTitle>
+            <CheckCircle className='h-4 w-4 text-green-500' />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{passedTests}</div>
+            <div className='text-2xl font-bold text-green-600'>{passedTests}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">MCP Enhanced</CardTitle>
-            <Zap className="h-4 w-4 text-blue-500" />
+          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+            <CardTitle className='text-sm font-medium'>MCP Enhanced</CardTitle>
+            <Zap className='h-4 w-4 text-blue-500' />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{mcpEnhancedTests}</div>
+            <div className='text-2xl font-bold text-blue-600'>{mcpEnhancedTests}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-            <Settings className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+            <CardTitle className='text-sm font-medium'>Success Rate</CardTitle>
+            <Settings className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className='text-2xl font-bold'>
               {totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0}%
             </div>
           </CardContent>
@@ -376,30 +369,28 @@ export const Phase1TestingDashboard: React.FC = () => {
       {/* Test Suites */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="functional">Functional</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
+          <TabsTrigger value='overview'>Overview</TabsTrigger>
+          <TabsTrigger value='functional'>Functional</TabsTrigger>
+          <TabsTrigger value='security'>Security</TabsTrigger>
+          <TabsTrigger value='performance'>Performance</TabsTrigger>
+          <TabsTrigger value='compliance'>Compliance</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value='overview' className='space-y-4'>
           {testSuites.map(suite => (
             <Card key={suite.id}>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-3'>
                     <CardTitle>{suite.name}</CardTitle>
                     <Badge variant={suite.mcpEnabled ? 'default' : 'secondary'}>
                       {suite.mcpEnabled ? 'MCP Enhanced' : 'Traditional'}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge className={getStatusColor(suite.status)}>
-                      {suite.status}
-                    </Badge>
+                  <div className='flex items-center gap-2'>
+                    <Badge className={getStatusColor(suite.status)}>{suite.status}</Badge>
                     <Button
-                      size="sm"
+                      size='sm'
                       onClick={() => {
                         switch (suite.id) {
                           case 'functional-tests':
@@ -418,21 +409,22 @@ export const Phase1TestingDashboard: React.FC = () => {
                       }}
                       disabled={isRunning}
                     >
-                      <Play className="h-4 w-4" />
+                      <Play className='h-4 w-4' />
                     </Button>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground">{suite.description}</p>
+                <p className='text-sm text-muted-foreground'>{suite.description}</p>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                <div className='space-y-2'>
+                  <div className='flex justify-between text-sm'>
                     <span>Progress</span>
                     <span>{suite.progress}%</span>
                   </div>
                   <Progress value={suite.progress} />
-                  <div className="text-sm text-muted-foreground">
-                    {suite.tests.length} tests • {suite.tests.filter(t => t.status === 'passed').length} passed
+                  <div className='text-sm text-muted-foreground'>
+                    {suite.tests.length} tests •{' '}
+                    {suite.tests.filter(t => t.status === 'passed').length} passed
                   </div>
                 </div>
               </CardContent>
@@ -441,34 +433,37 @@ export const Phase1TestingDashboard: React.FC = () => {
         </TabsContent>
 
         {testSuites.map(suite => (
-          <TabsContent key={suite.id} value={suite.id.split('-')[0]} className="space-y-4">
+          <TabsContent key={suite.id} value={suite.id.split('-')[0]} className='space-y-4'>
             <Card>
               <CardHeader>
                 <CardTitle>{suite.name} - Test Results</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className='space-y-3'>
                   {suite.tests.length === 0 ? (
-                    <p className="text-muted-foreground">No tests run yet. Click "Run Tests" to start.</p>
+                    <p className='text-muted-foreground'>
+                      No tests run yet. Click "Run Tests" to start.
+                    </p>
                   ) : (
                     suite.tests.map(test => (
-                      <div key={test.testId} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div className="flex items-center gap-3">
+                      <div
+                        key={test.testId}
+                        className='flex items-center justify-between p-3 border rounded-lg'
+                      >
+                        <div className='flex items-center gap-3'>
                           {getStatusIcon(test.status)}
                           <div>
-                            <div className="font-medium">{test.details.description}</div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className='font-medium'>{test.details.description}</div>
+                            <div className='text-sm text-muted-foreground'>
                               Expected: {test.details.expected} • Actual: {test.details.actual}
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className='flex items-center gap-2'>
                           <Badge variant={test.mcpEnhanced ? 'default' : 'secondary'}>
                             {test.mcpEnhanced ? 'MCP' : 'Traditional'}
                           </Badge>
-                          <Badge className={getStatusColor(test.status)}>
-                            {test.status}
-                          </Badge>
+                          <Badge className={getStatusColor(test.status)}>{test.status}</Badge>
                         </div>
                       </div>
                     ))

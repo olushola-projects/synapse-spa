@@ -242,16 +242,22 @@ class AdvancedSecurityService {
   }
 
   private startThreatIntelligenceCollection(): void {
-    setInterval(async () => {
-      await this.collectThreatIntelligence();
-    }, 30 * 60 * 1000);
+    setInterval(
+      async () => {
+        await this.collectThreatIntelligence();
+      },
+      30 * 60 * 1000
+    );
     log.info('Threat intelligence collection started');
   }
 
   private startMLSecurityAnalysis(): void {
-    setInterval(async () => {
-      await this.runMLSecurityAnalysis();
-    }, 5 * 60 * 1000);
+    setInterval(
+      async () => {
+        await this.runMLSecurityAnalysis();
+      },
+      5 * 60 * 1000
+    );
     log.info('ML security analysis started');
   }
 
@@ -263,9 +269,12 @@ class AdvancedSecurityService {
   }
 
   private startIncidentMonitoring(): void {
-    setInterval(async () => {
-      await this.monitorIncidents();
-    }, 5 * 60 * 1000);
+    setInterval(
+      async () => {
+        await this.monitorIncidents();
+      },
+      5 * 60 * 1000
+    );
     log.info('Incident monitoring started');
   }
 
@@ -398,7 +407,7 @@ class AdvancedSecurityService {
 
     const recentAnomalies = this.anomalies.filter(a => a.timestamp >= last24Hours);
     const recentIncidents = this.incidents.filter(i => i.detectedAt >= last24Hours);
-    
+
     // TODO: Use these variables when implementing full metrics
     console.log('Recent anomalies:', recentAnomalies.length);
     console.log('Recent incidents:', recentIncidents.length);
@@ -430,9 +439,13 @@ class AdvancedSecurityService {
     return this.mlModels;
   }
 
-  async checkThreatIndicator(indicator: string, type: ThreatIntelligence['type']): Promise<ThreatIntelligence | null> {
-    const threat = Array.from(this.threatIntelligence.values())
-      .find(t => t.indicator === indicator && t.type === type);
+  async checkThreatIndicator(
+    indicator: string,
+    type: ThreatIntelligence['type']
+  ): Promise<ThreatIntelligence | null> {
+    const threat = Array.from(this.threatIntelligence.values()).find(
+      t => t.indicator === indicator && t.type === type
+    );
 
     return threat || null;
   }
@@ -446,12 +459,16 @@ class AdvancedSecurityService {
     }
   }
 
-  async updateIncidentStatus(incidentId: string, status: SecurityIncident['status'], updates?: Partial<SecurityIncident>): Promise<void> {
+  async updateIncidentStatus(
+    incidentId: string,
+    status: SecurityIncident['status'],
+    updates?: Partial<SecurityIncident>
+  ): Promise<void> {
     const incident = this.incidents.find(i => i.id === incidentId);
     if (incident) {
       incident.status = status;
       incident.updatedAt = new Date();
-      
+
       if (updates) {
         Object.assign(incident, updates);
       }

@@ -176,9 +176,12 @@ class PerformanceOptimizationService {
     }, 60 * 1000);
 
     // Generate performance reports every hour
-    setInterval(async () => {
-      await this.generatePerformanceReport();
-    }, 60 * 60 * 1000);
+    setInterval(
+      async () => {
+        await this.generatePerformanceReport();
+      },
+      60 * 60 * 1000
+    );
   }
 
   async collectPerformanceMetrics(): Promise<void> {
@@ -254,7 +257,6 @@ class PerformanceOptimizationService {
 
       // Cleanup old metrics (keep last 24 hours)
       this.cleanupOldMetrics();
-
     } catch (error) {
       log.error('Failed to collect performance metrics', { error });
     }
@@ -402,8 +404,10 @@ class PerformanceOptimizationService {
         const threshold = this.performanceThresholds.get(metric.name);
         if (!threshold) continue;
 
-        const avgValue = this.calculateAverageValue(recentMetrics.filter(m => m.name === metric.name));
-        
+        const avgValue = this.calculateAverageValue(
+          recentMetrics.filter(m => m.name === metric.name)
+        );
+
         if (avgValue >= threshold.critical) {
           await this.createPerformanceAlert(metric.name, threshold.critical, avgValue, 'critical');
         } else if (avgValue >= threshold.warning) {
@@ -429,9 +433,7 @@ class PerformanceOptimizationService {
   ): Promise<void> {
     // Check if alert already exists
     const existingAlert = this.alerts.find(
-      alert => alert.metricName === metricName && 
-               alert.severity === severity && 
-               !alert.acknowledged
+      alert => alert.metricName === metricName && alert.severity === severity && !alert.acknowledged
     );
 
     if (existingAlert) return;
@@ -480,10 +482,8 @@ class PerformanceOptimizationService {
     try {
       const now = new Date();
       const lastHour = new Date(now.getTime() - 60 * 60 * 1000);
-      
-      const recentMetrics = this.metrics.filter(
-        metric => metric.timestamp >= lastHour
-      );
+
+      const recentMetrics = this.metrics.filter(metric => metric.timestamp >= lastHour);
 
       const responseTimeMetrics = recentMetrics.filter(m => m.name === 'response_time');
       const throughputMetrics = recentMetrics.filter(m => m.name === 'throughput');
@@ -523,7 +523,6 @@ class PerformanceOptimizationService {
 
       log.info('Performance report generated', { report: report.summary });
       return report;
-
     } catch (error) {
       log.error('Failed to generate performance report', { error });
       throw error;
@@ -642,7 +641,9 @@ class PerformanceOptimizationService {
     critical: number
   ): Promise<void> {
     this.performanceThresholds.set(metricName, { warning, critical });
-    log.info(`Performance threshold updated for ${metricName}: warning=${warning}, critical=${critical}`);
+    log.info(
+      `Performance threshold updated for ${metricName}: warning=${warning}, critical=${critical}`
+    );
   }
 
   async getPerformanceOptimizations(): Promise<PerformanceOptimization[]> {
@@ -689,36 +690,26 @@ class PerformanceOptimizationService {
   }
 
   // Public method to measure execution time of a function
-  async measureExecutionTime<T>(
-    name: string,
-    fn: () => Promise<T>
-  ): Promise<T> {
+  async measureExecutionTime<T>(name: string, fn: () => Promise<T>): Promise<T> {
     const startTime = Date.now();
-    
+
     try {
       const result = await fn();
       const executionTime = Date.now() - startTime;
-      
-      await this.recordMetric(
-        `${name}_execution_time`,
-        executionTime,
-        'ms',
-        'response_time',
-        { function: name }
-      );
-      
+
+      await this.recordMetric(`${name}_execution_time`, executionTime, 'ms', 'response_time', {
+        function: name
+      });
+
       return result;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      
-      await this.recordMetric(
-        `${name}_execution_time`,
-        executionTime,
-        'ms',
-        'response_time',
-        { function: name, error: true }
-      );
-      
+
+      await this.recordMetric(`${name}_execution_time`, executionTime, 'ms', 'response_time', {
+        function: name,
+        error: true
+      });
+
       throw error;
     }
   }

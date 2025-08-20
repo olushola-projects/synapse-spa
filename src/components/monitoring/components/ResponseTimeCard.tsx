@@ -49,10 +49,7 @@ function ResponseTimeDisplay({ time, color }: ResponseTimeDisplayProps) {
             ms
           </span>
         </div>
-        <Progress
-          value={progressValue}
-          className='mt-2 h-2'
-        />
+        <Progress value={progressValue} className='mt-2 h-2' />
       </div>
     </div>
   );

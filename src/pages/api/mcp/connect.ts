@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -33,7 +30,7 @@ export default async function handler(
     const response = await fetch(`${mcpServerUrl}/connect`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${mcpAuthToken}`,
+        Authorization: `Bearer ${mcpAuthToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -47,7 +44,7 @@ export default async function handler(
 
     if (response.ok) {
       const connectionResult = await response.json();
-      
+
       return res.status(200).json({
         status: 'connected',
         client,

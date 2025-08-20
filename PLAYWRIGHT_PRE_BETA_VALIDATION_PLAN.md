@@ -39,6 +39,7 @@ This plan outlines the consolidation of testing frameworks to Playwright for com
 ### **Phase 1: Framework Consolidation (Week 1)**
 
 #### **Step 1: Remove Conflicting Frameworks**
+
 ```bash
 # Remove Vitest and Jest dependencies
 npm uninstall vitest @vitest/coverage-v8 @vitest/ui jest @types/jest
@@ -55,6 +56,7 @@ rm -rf src/**/*.spec.ts
 ```
 
 #### **Step 2: Update Package.json Scripts**
+
 ```json
 {
   "scripts": {
@@ -73,6 +75,7 @@ rm -rf src/**/*.spec.ts
 ```
 
 #### **Step 3: Update CI/CD Pipeline**
+
 ```yaml
 # .github/workflows/ci.yml
 name: Pre-Beta Validation CI/CD
@@ -86,33 +89,33 @@ on:
 jobs:
   pre-beta-validation:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-        
+
       - name: Run Pre-Beta Validation Tests
         run: npm run test:pre-beta
         env:
           BASE_URL: ${{ secrets.TEST_BASE_URL }}
-          
+
       - name: Run Security Hardening Tests
         run: npm run test:security
         env:
           BASE_URL: ${{ secrets.TEST_BASE_URL }}
-          
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -179,11 +182,11 @@ import { test, expect } from '@playwright/test';
 test.describe('Security Hardening Tests', () => {
   test('should prevent SQL injection attacks', async ({ page }) => {
     await page.goto('/sfdr-navigator');
-    
+
     // Test SQL injection payload
     const sqlPayload = "'; DROP TABLE users; --";
     await page.getByTestId('fund-name-input').fill(sqlPayload);
-    
+
     // Verify payload is sanitized
     const inputValue = await page.getByTestId('fund-name-input').inputValue();
     expect(inputValue).not.toContain('DROP TABLE');
@@ -191,11 +194,11 @@ test.describe('Security Hardening Tests', () => {
 
   test('should prevent XSS attacks', async ({ page }) => {
     await page.goto('/sfdr-navigator');
-    
+
     // Test XSS payload
     const xssPayload = '<script>alert("XSS")</script>';
     await page.getByTestId('fund-description-input').fill(xssPayload);
-    
+
     // Verify XSS is prevented
     const pageContent = await page.content();
     expect(pageContent).not.toContain('<script>');
@@ -203,25 +206,25 @@ test.describe('Security Hardening Tests', () => {
 
   test('should validate file uploads', async ({ page }) => {
     await page.goto('/sfdr-navigator');
-    
+
     // Test malicious file upload
     const maliciousFile = 'test-data/malicious.js';
     await page.setInputFiles('input[type="file"]', maliciousFile);
-    
+
     // Verify file is rejected
     await expect(page.getByText(/Invalid file type/i)).toBeVisible();
   });
 
   test('should enforce password policies', async ({ page }) => {
     await page.goto('/auth/register');
-    
+
     // Test weak passwords
     const weakPasswords = ['123', 'password', 'abc123'];
-    
+
     for (const weakPassword of weakPasswords) {
       await page.getByTestId('password-input').fill(weakPassword);
       await page.getByTestId('register-button').click();
-      
+
       await expect(page.getByText(/Password too weak/i)).toBeVisible();
     }
   });
@@ -241,7 +244,7 @@ test.describe('Performance & Load Tests', () => {
     const userCount = 100;
     const contexts = [];
     const pages = [];
-    
+
     // Create browser contexts for concurrent users
     for (let i = 0; i < userCount; i++) {
       const context = await browser.newContext();
@@ -249,22 +252,20 @@ test.describe('Performance & Load Tests', () => {
       contexts.push(context);
       pages.push(page);
     }
-    
+
     // Navigate all pages simultaneously
     const startTime = Date.now();
-    await Promise.all(
-      pages.map(page => page.goto('/'))
-    );
+    await Promise.all(pages.map(page => page.goto('/')));
     const loadTime = Date.now() - startTime;
-    
+
     // Verify all pages loaded successfully
     for (const page of pages) {
       await expect(page.getByRole('heading', { name: /SFDR Navigator/i })).toBeVisible();
     }
-    
+
     // Performance assertions
     expect(loadTime).toBeLessThan(10000); // Should load within 10 seconds
-    
+
     // Clean up
     await Promise.all(contexts.map(context => context.close()));
   });
@@ -272,7 +273,7 @@ test.describe('Performance & Load Tests', () => {
   test('should maintain performance under load', async ({ page }) => {
     // Monitor performance metrics
     const performanceMetrics = [];
-    
+
     for (let i = 0; i < 10; i++) {
       const startTime = Date.now();
       await page.goto('/');
@@ -280,7 +281,7 @@ test.describe('Performance & Load Tests', () => {
       const loadTime = Date.now() - startTime;
       performanceMetrics.push(loadTime);
     }
-    
+
     // Calculate average and verify consistency
     const averageLoadTime = performanceMetrics.reduce((a, b) => a + b) / performanceMetrics.length;
     expect(averageLoadTime).toBeLessThan(3000); // Average should be under 3 seconds
@@ -396,11 +397,13 @@ npm run test:debug tests/e2e/pre-beta-validation.spec.ts
 ## 📞 Support & Resources
 
 ### **Documentation**
+
 - [Playwright Documentation](https://playwright.dev/)
 - [E2E Testing Best Practices](https://playwright.dev/docs/best-practices)
 - [Security Testing Guide](https://playwright.dev/docs/security)
 
 ### **Community Resources**
+
 - Playwright Discord
 - GitHub Discussions
 - Stack Overflow

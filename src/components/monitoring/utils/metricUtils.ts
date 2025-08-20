@@ -16,21 +16,23 @@ interface MetricThresholds {
 }
 
 function evaluateMetric(value: number, thresholds: MetricThresholds): MetricStatus {
-  const { 
-    WARNING_THRESHOLD, 
-    CRITICAL_THRESHOLD, 
-    WARNING_THRESHOLD_MB, 
+  const {
+    WARNING_THRESHOLD,
+    CRITICAL_THRESHOLD,
+    WARNING_THRESHOLD_MB,
     CRITICAL_THRESHOLD_MB,
     WARNING_THRESHOLD_PERCENT,
     CRITICAL_THRESHOLD_PERCENT,
     WARNING_MS,
     CRITICAL_MS,
-    isHigherBetter = false 
+    isHigherBetter = false
   } = thresholds;
 
   // Use the appropriate threshold based on what's available
-  const warningThreshold = WARNING_THRESHOLD || WARNING_THRESHOLD_MB || WARNING_THRESHOLD_PERCENT || WARNING_MS;
-  const criticalThreshold = CRITICAL_THRESHOLD || CRITICAL_THRESHOLD_MB || CRITICAL_THRESHOLD_PERCENT || CRITICAL_MS;
+  const warningThreshold =
+    WARNING_THRESHOLD || WARNING_THRESHOLD_MB || WARNING_THRESHOLD_PERCENT || WARNING_MS;
+  const criticalThreshold =
+    CRITICAL_THRESHOLD || CRITICAL_THRESHOLD_MB || CRITICAL_THRESHOLD_PERCENT || CRITICAL_MS;
 
   if (warningThreshold === undefined || criticalThreshold === undefined) {
     return 'healthy'; // Default to healthy if thresholds are not defined

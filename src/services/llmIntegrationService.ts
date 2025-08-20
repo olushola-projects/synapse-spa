@@ -86,10 +86,10 @@ export class LLMIntegrationService {
 
       // Determine the best strategy and model
       const strategy = this.determineStrategy(request);
-                              const model = this.determineModel(request, strategy);
-        if (!model) {
-          throw new Error('No suitable LLM model available');
-        }
+      const model = this.determineModel(request, strategy);
+      if (!model) {
+        throw new Error('No suitable LLM model available');
+      }
 
       // Prepare the classification request
       const classificationRequest: ClassificationRequest = {

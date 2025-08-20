@@ -10,14 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import {
-  Play,
-  CheckCircle,
-  XCircle,
-  Clock,
-  TestTube,
-  Download
-} from 'lucide-react';
+import { Play, CheckCircle, XCircle, Clock, TestTube, Download } from 'lucide-react';
 import type {
   UATTestCase,
   UATSession,
@@ -152,7 +145,7 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
 
     const currentTest = session.test_cases[currentTestIndex];
     if (!currentTest) return;
-    
+
     setIsRunningTest(true);
 
     try {
@@ -333,7 +326,6 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
     URL.revokeObjectURL(url);
   };
 
-
   return (
     <div className='space-y-6'>
       {/* Header */}
@@ -441,12 +433,8 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
                       {testCase.status === 'passed' && (
                         <CheckCircle className='h-5 w-5 text-green-500' />
                       )}
-                      {testCase.status === 'failed' && (
-                        <XCircle className='h-5 w-5 text-red-500' />
-                      )}
-                      {testCase.status === 'pending' && (
-                        <Clock className='h-5 w-5 text-gray-400' />
-                      )}
+                      {testCase.status === 'failed' && <XCircle className='h-5 w-5 text-red-500' />}
+                      {testCase.status === 'pending' && <Clock className='h-5 w-5 text-gray-400' />}
                       <Badge variant='outline'>{testCase.expected_classification}</Badge>
                     </div>
                   </div>
@@ -534,25 +522,24 @@ export const UATTestingFramework: React.FC<UATTestingFrameworkProps> = ({
       )}
 
       {/* Test Results Display */}
-      {session && session.test_cases[currentTestIndex] && testResults[session.test_cases[currentTestIndex].id] && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Test Results</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {(() => {
-              const currentTest = session.test_cases[currentTestIndex];
-              const result = testResults[currentTest.id];
-              return result ? (
-                <EnhancedClassificationResult
-                  result={result}
-                  showAdvancedFeatures={true}
-                />
-              ) : null;
-            })()}
-          </CardContent>
-        </Card>
-      )}
+      {session &&
+        session.test_cases[currentTestIndex] &&
+        testResults[session.test_cases[currentTestIndex].id] && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Test Results</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {(() => {
+                const currentTest = session.test_cases[currentTestIndex];
+                const result = testResults[currentTest.id];
+                return result ? (
+                  <EnhancedClassificationResult result={result} showAdvancedFeatures={true} />
+                ) : null;
+              })()}
+            </CardContent>
+          </Card>
+        )}
 
       {/* Complete Session */}
       {session &&

@@ -71,10 +71,10 @@ export class MCPEnhancedTestingService {
   private async initializeMCP(): Promise<void> {
     try {
       logger.info('🔧 Initializing MCP-Enhanced Testing Service...');
-      
+
       // Check for MCP availability
       const mcpAvailable = await this.checkMCPAvailability();
-      
+
       if (mcpAvailable) {
         await this.connectToMCP();
         await this.discoverMCPCapabilities();
@@ -98,7 +98,7 @@ export class MCPEnhancedTestingService {
       // Check for MCP environment variables
       const mcpUrl = process.env.MCP_SERVER_URL || process.env.NEXT_PUBLIC_MCP_SERVER_URL;
       const mcpToken = process.env.MCP_AUTH_TOKEN || process.env.NEXT_PUBLIC_MCP_AUTH_TOKEN;
-      
+
       if (mcpUrl && mcpToken) {
         logger.info('🔍 MCP environment variables detected');
         return true;
@@ -162,7 +162,7 @@ export class MCPEnhancedTestingService {
 
       if (response.ok) {
         const capabilities = await response.json();
-        
+
         this.capabilities = {
           aiTestGeneration: capabilities.aiTestGeneration || false,
           visualRegression: capabilities.visualRegression || false,
@@ -193,7 +193,10 @@ export class MCPEnhancedTestingService {
   /**
    * Generate tests using MCP AI capabilities
    */
-  private async generateMCPTests(component: string, requirements: string[]): Promise<MCPTestResult[]> {
+  private async generateMCPTests(
+    component: string,
+    requirements: string[]
+  ): Promise<MCPTestResult[]> {
     try {
       const response = await fetch('/api/mcp/generate-tests', {
         method: 'POST',
@@ -212,10 +215,10 @@ export class MCPEnhancedTestingService {
       }
 
       const result = await response.json();
-      logger.info('🤖 Generated AI tests using MCP', { 
-        component, 
+      logger.info('🤖 Generated AI tests using MCP', {
+        component,
         testCount: result.tests.length,
-        confidence: result.confidence 
+        confidence: result.confidence
       });
 
       return result.tests.map((test: any) => ({
@@ -232,9 +235,12 @@ export class MCPEnhancedTestingService {
   /**
    * Generate traditional tests as fallback
    */
-  private async generateTraditionalTests(component: string, requirements: string[]): Promise<MCPTestResult[]> {
+  private async generateTraditionalTests(
+    component: string,
+    requirements: string[]
+  ): Promise<MCPTestResult[]> {
     logger.info('🔄 Generating traditional tests as fallback', { component });
-    
+
     // Generate basic test structure
     const tests: MCPTestResult[] = requirements.map((req, index) => ({
       testId: `${component}-test-${index + 1}`,
@@ -262,7 +268,10 @@ export class MCPEnhancedTestingService {
   /**
    * Run visual regression tests with MCP enhancement
    */
-  async runVisualRegressionTests(component: string, screenshots: string[]): Promise<MCPTestResult[]> {
+  async runVisualRegressionTests(
+    component: string,
+    screenshots: string[]
+  ): Promise<MCPTestResult[]> {
     if (this.isConnected && this.capabilities.visualRegression) {
       return this.runMCPVisualTests(component, screenshots);
     } else {
@@ -273,7 +282,10 @@ export class MCPEnhancedTestingService {
   /**
    * Run visual tests using MCP
    */
-  private async runMCPVisualTests(component: string, screenshots: string[]): Promise<MCPTestResult[]> {
+  private async runMCPVisualTests(
+    component: string,
+    screenshots: string[]
+  ): Promise<MCPTestResult[]> {
     try {
       const response = await fetch('/api/mcp/visual-regression', {
         method: 'POST',
@@ -291,10 +303,10 @@ export class MCPEnhancedTestingService {
       }
 
       const result = await response.json();
-      logger.info('🎨 Completed MCP visual regression tests', { 
-        component, 
+      logger.info('🎨 Completed MCP visual regression tests', {
+        component,
         passed: result.passed,
-        failed: result.failed 
+        failed: result.failed
       });
 
       return result.tests.map((test: any) => ({
@@ -311,9 +323,12 @@ export class MCPEnhancedTestingService {
   /**
    * Run traditional visual tests as fallback
    */
-  private async runTraditionalVisualTests(component: string, screenshots: string[]): Promise<MCPTestResult[]> {
+  private async runTraditionalVisualTests(
+    component: string,
+    screenshots: string[]
+  ): Promise<MCPTestResult[]> {
     logger.info('🔄 Running traditional visual tests as fallback', { component });
-    
+
     return screenshots.map((screenshot, index) => ({
       testId: `${component}-visual-${index + 1}`,
       testType: 'visual-regression',
@@ -325,7 +340,11 @@ export class MCPEnhancedTestingService {
         description: `Visual regression test for ${screenshot}`,
         expected: 'Screenshot should match baseline',
         actual: 'Visual test not implemented',
-        recommendations: ['Configure visual testing tool', 'Set up baseline images', 'Implement screenshot comparison']
+        recommendations: [
+          'Configure visual testing tool',
+          'Set up baseline images',
+          'Implement screenshot comparison'
+        ]
       },
       metadata: {
         timestamp: new Date().toISOString(),
@@ -349,7 +368,10 @@ export class MCPEnhancedTestingService {
   /**
    * Run performance tests using MCP
    */
-  private async runMCPPerformanceTests(component: string, metrics: string[]): Promise<MCPTestResult[]> {
+  private async runMCPPerformanceTests(
+    component: string,
+    metrics: string[]
+  ): Promise<MCPTestResult[]> {
     try {
       const response = await fetch('/api/mcp/performance', {
         method: 'POST',
@@ -371,10 +393,10 @@ export class MCPEnhancedTestingService {
       }
 
       const result = await response.json();
-      logger.info('⚡ Completed MCP performance tests', { 
-        component, 
+      logger.info('⚡ Completed MCP performance tests', {
+        component,
         metrics: result.metrics,
-        score: result.score 
+        score: result.score
       });
 
       return result.tests.map((test: any) => ({
@@ -391,9 +413,12 @@ export class MCPEnhancedTestingService {
   /**
    * Run traditional performance tests as fallback
    */
-  private async runTraditionalPerformanceTests(component: string, metrics: string[]): Promise<MCPTestResult[]> {
+  private async runTraditionalPerformanceTests(
+    component: string,
+    metrics: string[]
+  ): Promise<MCPTestResult[]> {
     logger.info('🔄 Running traditional performance tests as fallback', { component });
-    
+
     return metrics.map((metric, index) => ({
       testId: `${component}-performance-${index + 1}`,
       testType: 'performance',
@@ -405,7 +430,11 @@ export class MCPEnhancedTestingService {
         description: `Performance test for ${metric}`,
         expected: `${metric} should be within acceptable range`,
         actual: 'Performance test not implemented',
-        recommendations: ['Configure performance testing tool', 'Set up performance budgets', 'Implement metric collection']
+        recommendations: [
+          'Configure performance testing tool',
+          'Set up performance budgets',
+          'Implement metric collection'
+        ]
       },
       metadata: {
         timestamp: new Date().toISOString(),
@@ -429,7 +458,10 @@ export class MCPEnhancedTestingService {
   /**
    * Run security tests using MCP
    */
-  private async runMCPSecurityTests(component: string, vulnerabilities: string[]): Promise<MCPTestResult[]> {
+  private async runMCPSecurityTests(
+    component: string,
+    vulnerabilities: string[]
+  ): Promise<MCPTestResult[]> {
     try {
       const response = await fetch('/api/mcp/security', {
         method: 'POST',
@@ -447,10 +479,10 @@ export class MCPEnhancedTestingService {
       }
 
       const result = await response.json();
-      logger.info('🔒 Completed MCP security tests', { 
-        component, 
+      logger.info('🔒 Completed MCP security tests', {
+        component,
         vulnerabilities: result.vulnerabilities,
-        riskScore: result.riskScore 
+        riskScore: result.riskScore
       });
 
       return result.tests.map((test: any) => ({
@@ -467,9 +499,12 @@ export class MCPEnhancedTestingService {
   /**
    * Run traditional security tests as fallback
    */
-  private async runTraditionalSecurityTests(component: string, vulnerabilities: string[]): Promise<MCPTestResult[]> {
+  private async runTraditionalSecurityTests(
+    component: string,
+    vulnerabilities: string[]
+  ): Promise<MCPTestResult[]> {
     logger.info('🔄 Running traditional security tests as fallback', { component });
-    
+
     return vulnerabilities.map((vulnerability, index) => ({
       testId: `${component}-security-${index + 1}`,
       testType: 'security',
@@ -481,7 +516,11 @@ export class MCPEnhancedTestingService {
         description: `Security test for ${vulnerability}`,
         expected: 'Component should not be vulnerable',
         actual: 'Security test not implemented',
-        recommendations: ['Configure security scanning tool', 'Set up vulnerability database', 'Implement security checks']
+        recommendations: [
+          'Configure security scanning tool',
+          'Set up vulnerability database',
+          'Implement security checks'
+        ]
       },
       metadata: {
         timestamp: new Date().toISOString(),
@@ -505,7 +544,10 @@ export class MCPEnhancedTestingService {
   /**
    * Run compliance tests using MCP
    */
-  private async runMCPComplianceTests(component: string, regulations: string[]): Promise<MCPTestResult[]> {
+  private async runMCPComplianceTests(
+    component: string,
+    regulations: string[]
+  ): Promise<MCPTestResult[]> {
     try {
       const response = await fetch('/api/mcp/compliance', {
         method: 'POST',
@@ -523,10 +565,10 @@ export class MCPEnhancedTestingService {
       }
 
       const result = await response.json();
-      logger.info('⚖️ Completed MCP compliance tests', { 
-        component, 
+      logger.info('⚖️ Completed MCP compliance tests', {
+        component,
         regulations: result.regulations,
-        complianceScore: result.complianceScore 
+        complianceScore: result.complianceScore
       });
 
       return result.tests.map((test: any) => ({
@@ -543,9 +585,12 @@ export class MCPEnhancedTestingService {
   /**
    * Run traditional compliance tests as fallback
    */
-  private async runTraditionalComplianceTests(component: string, regulations: string[]): Promise<MCPTestResult[]> {
+  private async runTraditionalComplianceTests(
+    component: string,
+    regulations: string[]
+  ): Promise<MCPTestResult[]> {
     logger.info('🔄 Running traditional compliance tests as fallback', { component });
-    
+
     return regulations.map((regulation, index) => ({
       testId: `${component}-compliance-${index + 1}`,
       testType: 'compliance',
@@ -557,7 +602,11 @@ export class MCPEnhancedTestingService {
         description: `Compliance test for ${regulation}`,
         expected: 'Component should comply with regulation',
         actual: 'Compliance test not implemented',
-        recommendations: ['Configure compliance validation tool', 'Set up regulatory database', 'Implement compliance checks']
+        recommendations: [
+          'Configure compliance validation tool',
+          'Set up regulatory database',
+          'Implement compliance checks'
+        ]
       },
       metadata: {
         timestamp: new Date().toISOString(),

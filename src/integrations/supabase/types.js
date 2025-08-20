@@ -1,5 +1,5 @@
 export const Constants = {
-    public: {
-        Enums: {}
-    }
+  public: {
+    Enums: {}
+  }
 };

@@ -27,7 +27,7 @@ export interface BackendEnvironmentConfig {
   JWT_REFRESH_SECRET: string;
   SESSION_SECRET: string;
   COOKIE_SECRET: string;
-  
+
   // Security Monitoring
   ENABLE_SECURITY_MONITORING: boolean;
   WAZUH_ENDPOINT?: string;
@@ -88,7 +88,7 @@ export interface BackendEnvironmentConfig {
   ENABLE_SESSION_MANAGEMENT: boolean;
   ENABLE_AUDIT_TRAIL: boolean;
   ENABLE_COMPLIANCE_REPORTING: boolean;
-  
+
   // Priority 3 Feature Flags
   ENABLE_ADVANCED_SECURITY: boolean;
   ENABLE_THREAT_INTELLIGENCE: boolean;
@@ -97,7 +97,7 @@ export interface BackendEnvironmentConfig {
   ENABLE_AUTO_REFRESH: boolean;
   ENABLE_DOCUMENTATION: boolean;
   ENABLE_AUTO_REVIEW: boolean;
-  
+
   // Performance & APM Configuration
   ENABLE_PERFORMANCE_MONITORING: boolean;
   ENABLE_APM_INTEGRATION: boolean;
@@ -177,7 +177,8 @@ const developmentConfig: BackendEnvironmentConfig = {
 
   // External Services
   SUPABASE_URL: process.env.SUPABASE_URL || 'https://placeholder.supabase.co',
-  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key',
+  SUPABASE_SERVICE_ROLE_KEY:
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key',
   SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || 'placeholder-anon-key',
 
   // Feature Flags (Development - Enable all features)
@@ -189,7 +190,7 @@ const developmentConfig: BackendEnvironmentConfig = {
   ENABLE_SESSION_MANAGEMENT: true,
   ENABLE_AUDIT_TRAIL: true,
   ENABLE_COMPLIANCE_REPORTING: true,
-  
+
   // Priority 3 Feature Flags (Development - Enable all features)
   ENABLE_ADVANCED_SECURITY: true,
   ENABLE_THREAT_INTELLIGENCE: true,
@@ -198,7 +199,7 @@ const developmentConfig: BackendEnvironmentConfig = {
   ENABLE_AUTO_REFRESH: true,
   ENABLE_DOCUMENTATION: true,
   ENABLE_AUTO_REVIEW: true,
-  
+
   // Performance & APM Configuration (Development)
   ENABLE_PERFORMANCE_MONITORING: true,
   ENABLE_APM_INTEGRATION: false,
@@ -274,36 +275,52 @@ const productionConfig: BackendEnvironmentConfig = {
   HOST: '0.0.0.0',
 
   // Security (Production - Maximum security)
-  JWT_SECRET: process.env.JWT_SECRET || (() => {
-    throw new Error('JWT_SECRET must be set in production');
-  })(),
-  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || (() => {
-    throw new Error('JWT_REFRESH_SECRET must be set in production');
-  })(),
-  SESSION_SECRET: process.env.SESSION_SECRET || (() => {
-    throw new Error('SESSION_SECRET must be set in production');
-  })(),
-  COOKIE_SECRET: process.env.COOKIE_SECRET || (() => {
-    throw new Error('COOKIE_SECRET must be set in production');
-  })(),
+  JWT_SECRET:
+    process.env.JWT_SECRET ||
+    (() => {
+      throw new Error('JWT_SECRET must be set in production');
+    })(),
+  JWT_REFRESH_SECRET:
+    process.env.JWT_REFRESH_SECRET ||
+    (() => {
+      throw new Error('JWT_REFRESH_SECRET must be set in production');
+    })(),
+  SESSION_SECRET:
+    process.env.SESSION_SECRET ||
+    (() => {
+      throw new Error('SESSION_SECRET must be set in production');
+    })(),
+  COOKIE_SECRET:
+    process.env.COOKIE_SECRET ||
+    (() => {
+      throw new Error('COOKIE_SECRET must be set in production');
+    })(),
 
   // Security Monitoring (Production - Full monitoring)
   ENABLE_SECURITY_MONITORING: true,
-  WAZUH_ENDPOINT: process.env.WAZUH_ENDPOINT || (() => {
-    throw new Error('WAZUH_ENDPOINT must be set in production');
-  })(),
-  FALCO_ENDPOINT: process.env.FALCO_ENDPOINT || (() => {
-    throw new Error('FALCO_ENDPOINT must be set in production');
-  })(),
-  SECURITY_ALERT_EMAIL: process.env.SECURITY_ALERT_EMAIL || (() => {
-    throw new Error('SECURITY_ALERT_EMAIL must be set in production');
-  })(),
+  WAZUH_ENDPOINT:
+    process.env.WAZUH_ENDPOINT ||
+    (() => {
+      throw new Error('WAZUH_ENDPOINT must be set in production');
+    })(),
+  FALCO_ENDPOINT:
+    process.env.FALCO_ENDPOINT ||
+    (() => {
+      throw new Error('FALCO_ENDPOINT must be set in production');
+    })(),
+  SECURITY_ALERT_EMAIL:
+    process.env.SECURITY_ALERT_EMAIL ||
+    (() => {
+      throw new Error('SECURITY_ALERT_EMAIL must be set in production');
+    })(),
   SECURITY_ALERT_WEBHOOK: process.env.SECURITY_ALERT_WEBHOOK,
 
   // API Keys (Production - Must be set)
-  NEXUS_API_KEY: process.env.NEXUS_API_KEY || (() => {
-    throw new Error('NEXUS_API_KEY must be set in production');
-  })(),
+  NEXUS_API_KEY:
+    process.env.NEXUS_API_KEY ||
+    (() => {
+      throw new Error('NEXUS_API_KEY must be set in production');
+    })(),
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
 
@@ -335,16 +352,22 @@ const productionConfig: BackendEnvironmentConfig = {
   UPLOAD_PATH: '/var/uploads',
 
   // Email (Production - Must be configured)
-  SMTP_HOST: process.env.SMTP_HOST || (() => {
-    throw new Error('SMTP_HOST must be set in production');
-  })(),
+  SMTP_HOST:
+    process.env.SMTP_HOST ||
+    (() => {
+      throw new Error('SMTP_HOST must be set in production');
+    })(),
   SMTP_PORT: parseInt(process.env.SMTP_PORT || '587'),
-  SMTP_USER: process.env.SMTP_USER || (() => {
-    throw new Error('SMTP_USER must be set in production');
-  })(),
-  SMTP_PASS: process.env.SMTP_PASS || (() => {
-    throw new Error('SMTP_PASS must be set in production');
-  })(),
+  SMTP_USER:
+    process.env.SMTP_USER ||
+    (() => {
+      throw new Error('SMTP_USER must be set in production');
+    })(),
+  SMTP_PASS:
+    process.env.SMTP_PASS ||
+    (() => {
+      throw new Error('SMTP_PASS must be set in production');
+    })(),
   EMAIL_FROM: process.env.EMAIL_FROM || 'noreply@synapses.com'
 };
 
@@ -448,7 +471,9 @@ export function validateBackendEnvironment(): void {
   }
 
   if (missing.length > 0) {
-    throw new Error(`Missing required environment variables for ${config.NODE_ENV}: ${missing.join(', ')}`);
+    throw new Error(
+      `Missing required environment variables for ${config.NODE_ENV}: ${missing.join(', ')}`
+    );
   }
 }
 

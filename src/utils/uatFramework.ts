@@ -407,10 +407,7 @@ export class UATFramework {
         category: 'usability',
         priority: 'high',
         stakeholder: 'end_user',
-        preconditions: [
-          'User is authenticated',
-          'All platform sections are accessible'
-        ],
+        preconditions: ['User is authenticated', 'All platform sections are accessible'],
         testSteps: [
           {
             stepNumber: 1,
@@ -484,10 +481,7 @@ export class UATFramework {
         category: 'performance',
         priority: 'medium',
         stakeholder: 'administrator',
-        preconditions: [
-          'Platform is deployed',
-          'Performance monitoring tools are available'
-        ],
+        preconditions: ['Platform is deployed', 'Performance monitoring tools are available'],
         testSteps: [
           {
             stepNumber: 1,
@@ -561,10 +555,7 @@ export class UATFramework {
         category: 'integration',
         priority: 'critical',
         stakeholder: 'administrator',
-        preconditions: [
-          'Backend services are deployed',
-          'API endpoints are accessible'
-        ],
+        preconditions: ['Backend services are deployed', 'API endpoints are accessible'],
         testSteps: [
           {
             stepNumber: 1,
@@ -724,7 +715,7 @@ export class UATFramework {
           };
 
           const response = await backendApiClient.classifyDocument(testRequest);
-          
+
           if (!response.error || response.error) {
             step.status = 'passed';
             step.actualResult = 'API responded successfully';
@@ -749,10 +740,10 @@ export class UATFramework {
   private async executePerformanceTest(testCase: UATTestCase): Promise<void> {
     for (const step of testCase.testSteps) {
       const startTime = Date.now();
-      
+
       // Simulate performance measurement
       await new Promise(resolve => setTimeout(resolve, Math.random() * 2000));
-      
+
       const duration = Date.now() - startTime;
       const threshold = step.expectedResult.includes('3 seconds') ? 3000 : 5000;
 
@@ -806,11 +797,11 @@ export class UATFramework {
    */
   generateUATReport(): any {
     const suites = Array.from(this.testSuites.values());
-    
+
     const totalTests = suites.reduce((sum, suite) => sum + suite.results.totalTests, 0);
     const passedTests = suites.reduce((sum, suite) => sum + suite.results.passedTests, 0);
     const failedTests = suites.reduce((sum, suite) => sum + suite.results.failedTests, 0);
-    
+
     return {
       reportDate: new Date().toISOString(),
       overall: {
@@ -825,11 +816,13 @@ export class UATFramework {
         status: suite.results.overallStatus,
         passedTests: suite.results.passedTests,
         failedTests: suite.results.failedTests,
-        successRate: suite.results.totalTests > 0 ? 
-          (suite.results.passedTests / suite.results.totalTests) * 100 : 0
+        successRate:
+          suite.results.totalTests > 0
+            ? (suite.results.passedTests / suite.results.totalTests) * 100
+            : 0
       })),
-      criticalIssues: Array.from(this.issues.values()).filter(issue => 
-        issue.severity === 'critical' && issue.status === 'open'
+      criticalIssues: Array.from(this.issues.values()).filter(
+        issue => issue.severity === 'critical' && issue.status === 'open'
       ),
       recommendations: this.generateRecommendations(suites)
     };
@@ -840,21 +833,27 @@ export class UATFramework {
    */
   private generateRecommendations(suites: UATTestSuite[]): string[] {
     const recommendations: string[] = [];
-    
+
     suites.forEach(suite => {
       if (suite.results.failedTests > 0) {
-        recommendations.push(`Review and fix ${suite.results.failedTests} failed tests in ${suite.name}`);
+        recommendations.push(
+          `Review and fix ${suite.results.failedTests} failed tests in ${suite.name}`
+        );
       }
-      
+
       if (suite.results.overallStatus === 'failed') {
-        recommendations.push(`Conduct thorough analysis of ${suite.name} failures before production release`);
+        recommendations.push(
+          `Conduct thorough analysis of ${suite.name} failures before production release`
+        );
       }
     });
-    
+
     if (recommendations.length === 0) {
-      recommendations.push('All tests passed successfully. System is ready for production release.');
+      recommendations.push(
+        'All tests passed successfully. System is ready for production release.'
+      );
     }
-    
+
     return recommendations;
   }
 }

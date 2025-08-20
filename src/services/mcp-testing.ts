@@ -95,7 +95,10 @@ export class MCPTestingService {
     }
   }
 
-  private async generateMCPTests(component: string, requirements: string[]): Promise<MCPTestResult[]> {
+  private async generateMCPTests(
+    component: string,
+    requirements: string[]
+  ): Promise<MCPTestResult[]> {
     try {
       const response = await fetch('/api/mcp/generate-tests', {
         method: 'POST',
@@ -117,7 +120,10 @@ export class MCPTestingService {
     return this.generateTraditionalTests(component, requirements);
   }
 
-  private async generateTraditionalTests(component: string, requirements: string[]): Promise<MCPTestResult[]> {
+  private async generateTraditionalTests(
+    component: string,
+    requirements: string[]
+  ): Promise<MCPTestResult[]> {
     return requirements.map((req, index) => ({
       testId: `${component}-test-${index + 1}`,
       testType: 'unit',
@@ -163,18 +169,20 @@ export class MCPTestingService {
   }
 
   private async runTraditionalSecurityTests(component: string): Promise<MCPTestResult[]> {
-    return [{
-      testId: `${component}-security-1`,
-      testType: 'security',
-      status: 'skipped',
-      mcpEnhanced: false,
-      confidence: 0.6,
-      details: {
-        description: 'Security vulnerability scan',
-        expected: 'No vulnerabilities found',
-        actual: 'Security test not implemented'
+    return [
+      {
+        testId: `${component}-security-1`,
+        testType: 'security',
+        status: 'skipped',
+        mcpEnhanced: false,
+        confidence: 0.6,
+        details: {
+          description: 'Security vulnerability scan',
+          expected: 'No vulnerabilities found',
+          actual: 'Security test not implemented'
+        }
       }
-    }];
+    ];
   }
 
   async runComplianceTests(component: string, regulations: string[]): Promise<MCPTestResult[]> {
@@ -185,7 +193,10 @@ export class MCPTestingService {
     }
   }
 
-  private async runMCPComplianceTests(component: string, regulations: string[]): Promise<MCPTestResult[]> {
+  private async runMCPComplianceTests(
+    component: string,
+    regulations: string[]
+  ): Promise<MCPTestResult[]> {
     try {
       const response = await fetch('/api/mcp/compliance', {
         method: 'POST',
@@ -207,7 +218,10 @@ export class MCPTestingService {
     return this.runTraditionalComplianceTests(component, regulations);
   }
 
-  private async runTraditionalComplianceTests(component: string, regulations: string[]): Promise<MCPTestResult[]> {
+  private async runTraditionalComplianceTests(
+    component: string,
+    regulations: string[]
+  ): Promise<MCPTestResult[]> {
     return regulations.map((regulation, index) => ({
       testId: `${component}-compliance-${index + 1}`,
       testType: 'compliance',

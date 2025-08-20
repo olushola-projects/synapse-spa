@@ -6,7 +6,13 @@
 
 import { Request, Response, Router } from 'express';
 import { backendConfig } from '../config/environment.backend';
-import { AuthenticatedRequest, authMiddleware, optionalAuthMiddleware, rateLimit, requireRole } from '../middleware/authMiddleware';
+import {
+  AuthenticatedRequest,
+  authMiddleware,
+  optionalAuthMiddleware,
+  rateLimit,
+  requireRole
+} from '../middleware/authMiddleware';
 import { authService } from '../services/authService';
 import { securityMonitoringService } from '../services/securityMonitoringService';
 import { log } from '../utils/logger';
@@ -20,7 +26,8 @@ const router = Router();
 router.post('/login', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Response) => {
   try {
     const { email, password, rememberMe } = req.body;
-    const ipAddress = req.headers['x-forwarded-for'] as string || req.connection.remoteAddress || 'unknown';
+    const ipAddress =
+      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
     const userAgent = req.headers['user-agent'] || 'unknown';
 
     // Validate input
@@ -69,7 +76,6 @@ router.post('/login', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Re
       },
       message: 'Authentication successful'
     });
-
   } catch (error) {
     log.error('Login error', { error, email: req.body.email });
     res.status(500).json({
@@ -96,7 +102,6 @@ router.post('/logout', authMiddleware, async (req: AuthenticatedRequest, res: Re
       success: true,
       message: 'Logout successful'
     });
-
   } catch (error) {
     log.error('Logout error', { error, userId: req.user?.id });
     res.status(500).json({
@@ -113,7 +118,8 @@ router.post('/logout', authMiddleware, async (req: AuthenticatedRequest, res: Re
 router.post('/refresh', rateLimit(5 * 60 * 1000, 20), async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
-    const ipAddress = req.headers['x-forwarded-for'] as string || req.connection.remoteAddress || 'unknown';
+    const ipAddress =
+      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
 
     if (!refreshToken) {
       return res.status(400).json({
@@ -141,7 +147,6 @@ router.post('/refresh', rateLimit(5 * 60 * 1000, 20), async (req: Request, res: 
       },
       message: 'Token refreshed successfully'
     });
-
   } catch (error) {
     log.error('Token refresh error', { error });
     res.status(500).json({
@@ -181,7 +186,6 @@ router.get('/me', authMiddleware, async (req: AuthenticatedRequest, res: Respons
         lastActivity: req.session.lastActivity
       }
     });
-
   } catch (error) {
     log.error('Get user info error', { error, userId: req.user?.id });
     res.status(500).json({
@@ -198,7 +202,8 @@ router.get('/me', authMiddleware, async (req: AuthenticatedRequest, res: Respons
 router.post('/validate', rateLimit(1 * 60 * 1000, 30), async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
-    const ipAddress = req.headers['x-forwarded-for'] as string || req.connection.remoteAddress || 'unknown';
+    const ipAddress =
+      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
 
     if (!token) {
       return res.status(400).json({
@@ -231,7 +236,6 @@ router.post('/validate', rateLimit(1 * 60 * 1000, 30), async (req: Request, res:
         expiresAt: authResult.session.expiresAt
       }
     });
-
   } catch (error) {
     log.error('Token validation error', { error });
     res.status(500).json({
@@ -245,71 +249,78 @@ router.post('/validate', rateLimit(1 * 60 * 1000, 30), async (req: Request, res:
  * GET /auth/sessions
  * Get active sessions for current user (admin only)
  */
-router.get('/sessions', authMiddleware, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({
-        error: 'User not found',
-        code: 'USER_NOT_FOUND'
+router.get(
+  '/sessions',
+  authMiddleware,
+  requireRole('admin'),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({
+          error: 'User not found',
+          code: 'USER_NOT_FOUND'
+        });
+      }
+
+      const sessions = await authService.getActiveSessions(req.user.id);
+
+      res.json({
+        success: true,
+        sessions: sessions.map(session => ({
+          id: session.id,
+          ipAddress: session.ipAddress,
+          userAgent: session.userAgent,
+          createdAt: session.createdAt,
+          lastActivity: session.lastActivity,
+          expiresAt: session.expiresAt,
+          isActive: session.isActive
+        }))
+      });
+    } catch (error) {
+      log.error('Get sessions error', { error, userId: req.user?.id });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
       });
     }
-
-    const sessions = await authService.getActiveSessions(req.user.id);
-
-    res.json({
-      success: true,
-      sessions: sessions.map(session => ({
-        id: session.id,
-        ipAddress: session.ipAddress,
-        userAgent: session.userAgent,
-        createdAt: session.createdAt,
-        lastActivity: session.lastActivity,
-        expiresAt: session.expiresAt,
-        isActive: session.isActive
-      }))
-    });
-
-  } catch (error) {
-    log.error('Get sessions error', { error, userId: req.user?.id });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
   }
-});
+);
 
 /**
  * DELETE /auth/sessions/:sessionId
  * Invalidate specific session (admin or session owner)
  */
-router.delete('/sessions/:sessionId', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const { sessionId } = req.params;
-    const isAdmin = req.user?.role === 'admin' || req.user?.role === 'super_admin';
-    const isSessionOwner = req.session?.id === sessionId;
+router.delete(
+  '/sessions/:sessionId',
+  authMiddleware,
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const { sessionId } = req.params;
+      const isAdmin = req.user?.role === 'admin' || req.user?.role === 'super_admin';
+      const isSessionOwner = req.session?.id === sessionId;
 
-    if (!isAdmin && !isSessionOwner) {
-      return res.status(403).json({
-        error: 'Insufficient permissions',
-        code: 'INSUFFICIENT_PERMISSIONS'
+      if (!isAdmin && !isSessionOwner) {
+        return res.status(403).json({
+          error: 'Insufficient permissions',
+          code: 'INSUFFICIENT_PERMISSIONS'
+        });
+      }
+
+      await authService.logout(sessionId, req.ipAddress);
+
+      res.json({
+        success: true,
+        message: 'Session invalidated successfully'
+      });
+    } catch (error) {
+      log.error('Invalidate session error', { error, sessionId: req.params.sessionId });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
       });
     }
-
-    await authService.logout(sessionId, req.ipAddress);
-
-    res.json({
-      success: true,
-      message: 'Session invalidated successfully'
-    });
-
-  } catch (error) {
-    log.error('Invalidate session error', { error, sessionId: req.params.sessionId });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
   }
-});
+);
 
 /**
  * POST /auth/mfa/verify
@@ -318,7 +329,8 @@ router.delete('/sessions/:sessionId', authMiddleware, async (req: AuthenticatedR
 router.post('/mfa/verify', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Response) => {
   try {
     const { userId, mfaToken } = req.body;
-    const ipAddress = req.headers['x-forwarded-for'] as string || req.connection.remoteAddress || 'unknown';
+    const ipAddress =
+      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
     const userAgent = req.headers['user-agent'] || 'unknown';
 
     if (!userId || !mfaToken) {
@@ -337,7 +349,6 @@ router.post('/mfa/verify', rateLimit(5 * 60 * 1000, 10), async (req: Request, re
       message: 'MFA verification successful',
       requiresSetup: false
     });
-
   } catch (error) {
     log.error('MFA verification error', { error, userId: req.body.userId });
     res.status(500).json({
@@ -369,7 +380,6 @@ router.post('/mfa/setup', authMiddleware, async (req: AuthenticatedRequest, res:
       setupUrl: 'https://example.com/mfa-setup',
       backupCodes: ['code1', 'code2', 'code3', 'code4', 'code5']
     });
-
   } catch (error) {
     log.error('MFA setup error', { error, userId: req.user?.id });
     res.status(500).json({
@@ -383,205 +393,232 @@ router.post('/mfa/setup', authMiddleware, async (req: AuthenticatedRequest, res:
  * GET /auth/security/stats
  * Get security statistics (admin only)
  */
-router.get('/security/stats', authMiddleware, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const [authStats, securityMetrics] = await Promise.all([
-      authService.getSecurityStats(),
-      securityMonitoringService.getSecurityMetrics()
-    ]);
+router.get(
+  '/security/stats',
+  authMiddleware,
+  requireRole('admin'),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const [authStats, securityMetrics] = await Promise.all([
+        authService.getSecurityStats(),
+        securityMonitoringService.getSecurityMetrics()
+      ]);
 
-    res.json({
-      success: true,
-      authStats,
-      securityMetrics
-    });
-
-  } catch (error) {
-    log.error('Get security stats error', { error });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
+      res.json({
+        success: true,
+        authStats,
+        securityMetrics
+      });
+    } catch (error) {
+      log.error('Get security stats error', { error });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
+      });
+    }
   }
-});
+);
 
 /**
  * GET /auth/security/alerts
  * Get active security alerts (admin only)
  */
-router.get('/security/alerts', authMiddleware, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const alerts = await securityMonitoringService.getActiveAlerts();
+router.get(
+  '/security/alerts',
+  authMiddleware,
+  requireRole('admin'),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const alerts = await securityMonitoringService.getActiveAlerts();
 
-    res.json({
-      success: true,
-      alerts: alerts.map(alert => ({
-        id: alert.id,
-        type: alert.type,
-        severity: alert.severity,
-        title: alert.title,
-        description: alert.description,
-        timestamp: alert.timestamp,
-        status: alert.status,
-        metadata: alert.metadata
-      }))
-    });
-
-  } catch (error) {
-    log.error('Get security alerts error', { error });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
+      res.json({
+        success: true,
+        alerts: alerts.map(alert => ({
+          id: alert.id,
+          type: alert.type,
+          severity: alert.severity,
+          title: alert.title,
+          description: alert.description,
+          timestamp: alert.timestamp,
+          status: alert.status,
+          metadata: alert.metadata
+        }))
+      });
+    } catch (error) {
+      log.error('Get security alerts error', { error });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
+      });
+    }
   }
-});
+);
 
 /**
  * GET /auth/security/indicators
  * Get threat indicators (admin only)
  */
-router.get('/security/indicators', authMiddleware, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const indicators = await securityMonitoringService.getThreatIndicators();
+router.get(
+  '/security/indicators',
+  authMiddleware,
+  requireRole('admin'),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const indicators = await securityMonitoringService.getThreatIndicators();
 
-    res.json({
-      success: true,
-      indicators: indicators.map(indicator => ({
-        type: indicator.type,
-        value: indicator.value,
-        riskScore: indicator.riskScore,
-        confidence: indicator.confidence,
-        firstSeen: indicator.firstSeen,
-        lastSeen: indicator.lastSeen,
-        frequency: indicator.frequency,
-        source: indicator.source,
-        tags: indicator.tags
-      }))
-    });
-
-  } catch (error) {
-    log.error('Get threat indicators error', { error });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
+      res.json({
+        success: true,
+        indicators: indicators.map(indicator => ({
+          type: indicator.type,
+          value: indicator.value,
+          riskScore: indicator.riskScore,
+          confidence: indicator.confidence,
+          firstSeen: indicator.firstSeen,
+          lastSeen: indicator.lastSeen,
+          frequency: indicator.frequency,
+          source: indicator.source,
+          tags: indicator.tags
+        }))
+      });
+    } catch (error) {
+      log.error('Get threat indicators error', { error });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
+      });
+    }
   }
-});
+);
 
 /**
  * POST /auth/security/block-ip
  * Block IP address (admin only)
  */
-router.post('/security/block-ip', authMiddleware, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const { ipAddress, reason } = req.body;
+router.post(
+  '/security/block-ip',
+  authMiddleware,
+  requireRole('admin'),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const { ipAddress, reason } = req.body;
 
-    if (!ipAddress) {
-      return res.status(400).json({
-        error: 'IP address is required',
-        code: 'MISSING_IP_ADDRESS'
+      if (!ipAddress) {
+        return res.status(400).json({
+          error: 'IP address is required',
+          code: 'MISSING_IP_ADDRESS'
+        });
+      }
+
+      await securityMonitoringService.blockIP(ipAddress, reason || 'Manual block by admin');
+
+      res.json({
+        success: true,
+        message: `IP address ${ipAddress} blocked successfully`
+      });
+    } catch (error) {
+      log.error('Block IP error', { error, ipAddress: req.body.ipAddress });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
       });
     }
-
-    await securityMonitoringService.blockIP(ipAddress, reason || 'Manual block by admin');
-
-    res.json({
-      success: true,
-      message: `IP address ${ipAddress} blocked successfully`
-    });
-
-  } catch (error) {
-    log.error('Block IP error', { error, ipAddress: req.body.ipAddress });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
   }
-});
+);
 
 /**
  * POST /auth/security/unblock-ip
  * Unblock IP address (admin only)
  */
-router.post('/security/unblock-ip', authMiddleware, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const { ipAddress, reason } = req.body;
+router.post(
+  '/security/unblock-ip',
+  authMiddleware,
+  requireRole('admin'),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const { ipAddress, reason } = req.body;
 
-    if (!ipAddress) {
-      return res.status(400).json({
-        error: 'IP address is required',
-        code: 'MISSING_IP_ADDRESS'
+      if (!ipAddress) {
+        return res.status(400).json({
+          error: 'IP address is required',
+          code: 'MISSING_IP_ADDRESS'
+        });
+      }
+
+      await securityMonitoringService.unblockIP(ipAddress, reason || 'Manual unblock by admin');
+
+      res.json({
+        success: true,
+        message: `IP address ${ipAddress} unblocked successfully`
+      });
+    } catch (error) {
+      log.error('Unblock IP error', { error, ipAddress: req.body.ipAddress });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
       });
     }
-
-    await securityMonitoringService.unblockIP(ipAddress, reason || 'Manual unblock by admin');
-
-    res.json({
-      success: true,
-      message: `IP address ${ipAddress} unblocked successfully`
-    });
-
-  } catch (error) {
-    log.error('Unblock IP error', { error, ipAddress: req.body.ipAddress });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
   }
-});
+);
 
 /**
  * GET /auth/debug/info
  * Get debug information (development only)
  */
-router.get('/debug/info', optionalAuthMiddleware, async (req: AuthenticatedRequest, res: Response) => {
-  if (backendConfig.NODE_ENV !== 'development') {
-    return res.status(404).json({
-      error: 'Debug endpoint not available in production',
-      code: 'DEBUG_NOT_AVAILABLE'
-    });
+router.get(
+  '/debug/info',
+  optionalAuthMiddleware,
+  async (req: AuthenticatedRequest, res: Response) => {
+    if (backendConfig.NODE_ENV !== 'development') {
+      return res.status(404).json({
+        error: 'Debug endpoint not available in production',
+        code: 'DEBUG_NOT_AVAILABLE'
+      });
+    }
+
+    try {
+      const debugInfo = {
+        environment: backendConfig.NODE_ENV,
+        timestamp: new Date().toISOString(),
+        request: {
+          ipAddress: req.ipAddress,
+          userAgent: req.userAgent,
+          correlationId: req.correlationId,
+          path: req.path,
+          method: req.method
+        },
+        user: req.user
+          ? {
+              id: req.user.id,
+              email: req.user.email,
+              role: req.user.role
+            }
+          : null,
+        session: req.session
+          ? {
+              id: req.session.id,
+              expiresAt: req.session.expiresAt,
+              isActive: req.session.isActive
+            }
+          : null,
+        security: {
+          monitoringEnabled: backendConfig.ENABLE_SECURITY_MONITORING,
+          wazuhEndpoint: backendConfig.WAZUH_ENDPOINT ? 'configured' : 'not configured',
+          falcoEndpoint: backendConfig.FALCO_ENDPOINT ? 'configured' : 'not configured'
+        }
+      };
+
+      res.json({
+        success: true,
+        debugInfo
+      });
+    } catch (error) {
+      log.error('Debug info error', { error });
+      res.status(500).json({
+        error: 'Internal server error',
+        code: 'INTERNAL_ERROR'
+      });
+    }
   }
-
-  try {
-    const debugInfo = {
-      environment: backendConfig.NODE_ENV,
-      timestamp: new Date().toISOString(),
-      request: {
-        ipAddress: req.ipAddress,
-        userAgent: req.userAgent,
-        correlationId: req.correlationId,
-        path: req.path,
-        method: req.method
-      },
-      user: req.user ? {
-        id: req.user.id,
-        email: req.user.email,
-        role: req.user.role
-      } : null,
-      session: req.session ? {
-        id: req.session.id,
-        expiresAt: req.session.expiresAt,
-        isActive: req.session.isActive
-      } : null,
-      security: {
-        monitoringEnabled: backendConfig.ENABLE_SECURITY_MONITORING,
-        wazuhEndpoint: backendConfig.WAZUH_ENDPOINT ? 'configured' : 'not configured',
-        falcoEndpoint: backendConfig.FALCO_ENDPOINT ? 'configured' : 'not configured'
-      }
-    };
-
-    res.json({
-      success: true,
-      debugInfo
-    });
-
-  } catch (error) {
-    log.error('Debug info error', { error });
-    res.status(500).json({
-      error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    });
-  }
-});
+);
 
 export default router;

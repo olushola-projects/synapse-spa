@@ -1,7 +1,85 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Shield, Settings } from 'lucide-react';
 export const CriticalAuthAlert = ({ onConfigure, onDismiss }) => {
-    return (_jsxs(Alert, { className: 'border-red-500 bg-red-50 dark:bg-red-950/20', children: [_jsx(AlertTriangle, { className: 'h-4 w-4 text-red-600' }), _jsx(AlertTitle, { className: 'text-red-800 dark:text-red-200', children: "\uD83D\uDD34 CRITICAL: Authentication Architecture Crisis" }), _jsxs(AlertDescription, { className: 'text-red-700 dark:text-red-300 space-y-3', children: [_jsxs("div", { className: 'space-y-2', children: [_jsx("p", { className: 'font-semibold', children: "IMMEDIATE ACTION REQUIRED:" }), _jsxs("ul", { className: 'list-disc list-inside space-y-1 text-sm', children: [_jsx("li", { children: "Client-side API key exposure detected" }), _jsx("li", { children: "Placeholder values in production environment" }), _jsx("li", { children: "Supabase secrets configuration mismatch" }), _jsx("li", { children: "All LLM functionality currently broken" })] })] }), _jsxs("div", { className: 'bg-red-100 dark:bg-red-900/30 p-3 rounded-md', children: [_jsx("p", { className: 'text-sm font-medium', children: "Security Fixes Implemented:" }), _jsxs("ul", { className: 'text-xs space-y-1 mt-1', children: [_jsx("li", { children: "\u2705 Removed VITE_NEXUS_API_KEY from client-side code" }), _jsx("li", { children: "\u2705 Updated to use secure edge function proxy" }), _jsx("li", { children: "\u2705 Implemented proper authentication flow" }), _jsx("li", { children: "\u2705 Added comprehensive error handling" })] })] }), _jsxs("div", { className: 'flex gap-2 pt-2', children: [onConfigure && (_jsxs(Button, { size: 'sm', variant: 'destructive', onClick: onConfigure, className: 'bg-red-600 hover:bg-red-700', children: [_jsx(Settings, { className: 'h-4 w-4 mr-2' }), "Configure API Keys"] })), onDismiss && (_jsx(Button, { size: 'sm', variant: 'outline', onClick: onDismiss, className: 'border-red-300 text-red-700 hover:bg-red-100', children: "Dismiss" }))] }), _jsxs("div", { className: 'text-xs text-red-600 dark:text-red-400 pt-2 border-t border-red-200 dark:border-red-800', children: [_jsx(Shield, { className: 'h-3 w-3 inline mr-1' }), "Next Steps: Configure NEXUS_API_KEY in Supabase Secrets and deploy edge functions"] })] })] }));
+  return _jsxs(Alert, {
+    className: 'border-red-500 bg-red-50 dark:bg-red-950/20',
+    children: [
+      _jsx(AlertTriangle, { className: 'h-4 w-4 text-red-600' }),
+      _jsx(AlertTitle, {
+        className: 'text-red-800 dark:text-red-200',
+        children: '\uD83D\uDD34 CRITICAL: Authentication Architecture Crisis'
+      }),
+      _jsxs(AlertDescription, {
+        className: 'text-red-700 dark:text-red-300 space-y-3',
+        children: [
+          _jsxs('div', {
+            className: 'space-y-2',
+            children: [
+              _jsx('p', { className: 'font-semibold', children: 'IMMEDIATE ACTION REQUIRED:' }),
+              _jsxs('ul', {
+                className: 'list-disc list-inside space-y-1 text-sm',
+                children: [
+                  _jsx('li', { children: 'Client-side API key exposure detected' }),
+                  _jsx('li', { children: 'Placeholder values in production environment' }),
+                  _jsx('li', { children: 'Supabase secrets configuration mismatch' }),
+                  _jsx('li', { children: 'All LLM functionality currently broken' })
+                ]
+              })
+            ]
+          }),
+          _jsxs('div', {
+            className: 'bg-red-100 dark:bg-red-900/30 p-3 rounded-md',
+            children: [
+              _jsx('p', {
+                className: 'text-sm font-medium',
+                children: 'Security Fixes Implemented:'
+              }),
+              _jsxs('ul', {
+                className: 'text-xs space-y-1 mt-1',
+                children: [
+                  _jsx('li', {
+                    children: '\u2705 Removed VITE_NEXUS_API_KEY from client-side code'
+                  }),
+                  _jsx('li', { children: '\u2705 Updated to use secure edge function proxy' }),
+                  _jsx('li', { children: '\u2705 Implemented proper authentication flow' }),
+                  _jsx('li', { children: '\u2705 Added comprehensive error handling' })
+                ]
+              })
+            ]
+          }),
+          _jsxs('div', {
+            className: 'flex gap-2 pt-2',
+            children: [
+              onConfigure &&
+                _jsxs(Button, {
+                  size: 'sm',
+                  variant: 'destructive',
+                  onClick: onConfigure,
+                  className: 'bg-red-600 hover:bg-red-700',
+                  children: [_jsx(Settings, { className: 'h-4 w-4 mr-2' }), 'Configure API Keys']
+                }),
+              onDismiss &&
+                _jsx(Button, {
+                  size: 'sm',
+                  variant: 'outline',
+                  onClick: onDismiss,
+                  className: 'border-red-300 text-red-700 hover:bg-red-100',
+                  children: 'Dismiss'
+                })
+            ]
+          }),
+          _jsxs('div', {
+            className:
+              'text-xs text-red-600 dark:text-red-400 pt-2 border-t border-red-200 dark:border-red-800',
+            children: [
+              _jsx(Shield, { className: 'h-3 w-3 inline mr-1' }),
+              'Next Steps: Configure NEXUS_API_KEY in Supabase Secrets and deploy edge functions'
+            ]
+          })
+        ]
+      })
+    ]
+  });
 };

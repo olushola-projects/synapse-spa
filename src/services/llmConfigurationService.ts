@@ -291,12 +291,12 @@ export class LLMConfigurationService {
 
         try {
           // Test with a simple classification request
-                      // const testRequest = { // Unused variable removed
-            //   text: 'Test SFDR classification for validation',
-            //   document_type: 'validation_test',
-            //   strategy: strategy.type,
-            //   model: model.model
-            // };
+          // const testRequest = { // Unused variable removed
+          //   text: 'Test SFDR classification for validation',
+          //   document_type: 'validation_test',
+          //   strategy: strategy.type,
+          //   model: model.model
+          // };
 
           // This would integrate with the actual API client
           // For now, we'll simulate a successful test

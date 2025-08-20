@@ -13,70 +13,68 @@ import { ValidationUtils } from '../utils/validation';
  * @returns Validation result with parsed data or errors
  */
 export function validateInput(schema, data) {
-    try {
-        const result = schema.safeParse(data);
-        if (result.success) {
-            return {
-                success: true,
-                data: result.data
-            };
-        }
-        else {
-            return {
-                success: false,
-                errors: result.error.errors.map(err => err.message)
-            };
-        }
+  try {
+    const result = schema.safeParse(data);
+    if (result.success) {
+      return {
+        success: true,
+        data: result.data
+      };
+    } else {
+      return {
+        success: false,
+        errors: result.error.errors.map(err => err.message)
+      };
     }
-    catch (error) {
-        return {
-            success: false,
-            errors: ['Validation failed']
-        };
-    }
+  } catch (error) {
+    return {
+      success: false,
+      errors: ['Validation failed']
+    };
+  }
 }
 /**
  * API-specific validation schemas
  */
 export const apiSchemas = {
-    // Re-export common schemas from utils
-    ...ValidationUtils.schemas,
-    // API-specific schemas
-    organizationId: z.string().uuid('Invalid organization ID'),
-    frameworkId: z.string().uuid('Invalid framework ID').optional(),
-    dateRange: z.object({
-        startDate: z.string().datetime().optional(),
-        endDate: z.string().datetime().optional()
-    }),
-    pagination: z.object({
-        page: z.number().int().min(1).default(1),
-        limit: z.number().int().min(1).max(100).default(20)
-    }),
-    auditTrail: z.object({
-        action: z.string().min(1),
-        resource: z.string().min(1),
-        details: z.record(z.any()).optional()
-    })
+  // Re-export common schemas from utils
+  ...ValidationUtils.schemas,
+  // API-specific schemas
+  organizationId: z.string().uuid('Invalid organization ID'),
+  frameworkId: z.string().uuid('Invalid framework ID').optional(),
+  dateRange: z.object({
+    startDate: z.string().datetime().optional(),
+    endDate: z.string().datetime().optional()
+  }),
+  pagination: z.object({
+    page: z.number().int().min(1).default(1),
+    limit: z.number().int().min(1).max(100).default(20)
+  }),
+  auditTrail: z.object({
+    action: z.string().min(1),
+    resource: z.string().min(1),
+    details: z.record(z.any()).optional()
+  })
 };
 /**
  * Validation middleware helper
  * Creates Express middleware for request validation
  */
 export function createValidationMiddleware(schema) {
-    return (req, res, next) => {
-        const result = validateInput(schema, req.body);
-        if (!result.success) {
-            return res.status(400).json({
-                error: 'Validation failed',
-                details: result.errors
-            });
-        }
-        req.validatedData = result.data;
-        next();
-    };
+  return (req, res, next) => {
+    const result = validateInput(schema, req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: result.errors
+      });
+    }
+    req.validatedData = result.data;
+    next();
+  };
 }
 export default {
-    validateInput,
-    schemas: apiSchemas,
-    createValidationMiddleware
+  validateInput,
+  schemas: apiSchemas,
+  createValidationMiddleware
 };

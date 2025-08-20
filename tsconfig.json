@@ -1,8 +1,5 @@
 {
-  "include": [
-    "src/**/*",
-    "tests/**/*.ts"
-  ],
+  "include": ["src/**/*", "tests/**/*.ts"],
   "files": ["src/main.tsx"],
   "compilerOptions": {
     "baseUrl": ".",

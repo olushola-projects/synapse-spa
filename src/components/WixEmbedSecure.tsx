@@ -30,17 +30,20 @@ export const WixEmbedSecure: React.FC<WixEmbedSecureProps> = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   // Validate URL origin
-  const isValidOrigin = useCallback((url: string) => {
-    try {
-      const urlObj = new URL(url);
-      return allowedOrigins.some(origin => {
-        const pattern = origin.replace(/\*/g, '.*');
-        return new RegExp(`^${pattern}$`).test(urlObj.hostname);
-      });
-    } catch {
-      return false;
-    }
-  }, [allowedOrigins]);
+  const isValidOrigin = useCallback(
+    (url: string) => {
+      try {
+        const urlObj = new URL(url);
+        return allowedOrigins.some(origin => {
+          const pattern = origin.replace(/\*/g, '.*');
+          return new RegExp(`^${pattern}$`).test(urlObj.hostname);
+        });
+      } catch {
+        return false;
+      }
+    },
+    [allowedOrigins]
+  );
 
   // Handle postMessage communication
   useEffect(() => {
@@ -67,8 +70,8 @@ export const WixEmbedSecure: React.FC<WixEmbedSecureProps> = ({
   // Validate source URL
   if (!isValidOrigin(src)) {
     return (
-      <Alert variant="destructive">
-        <AlertTriangle className="h-4 w-4" />
+      <Alert variant='destructive'>
+        <AlertTriangle className='h-4 w-4' />
         <AlertDescription>
           Invalid or untrusted iframe source. Only Wix domains are allowed.
         </AlertDescription>
@@ -93,30 +96,25 @@ export const WixEmbedSecure: React.FC<WixEmbedSecureProps> = ({
 
   return (
     <Card className={cn('overflow-hidden', className)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <Shield className="h-4 w-4 text-green-600" />
+      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+        <CardTitle className='text-sm font-medium flex items-center gap-2'>
+          <Shield className='h-4 w-4 text-green-600' />
           {title}
         </CardTitle>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={openInNewTab}
-          className="h-8 w-8 p-0"
-        >
-          <ExternalLink className="h-3 w-3" />
+        <Button variant='outline' size='sm' onClick={openInNewTab} className='h-8 w-8 p-0'>
+          <ExternalLink className='h-3 w-3' />
         </Button>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className='p-0'>
         {hasError ? (
-          <div className="p-4">
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
+          <div className='p-4'>
+            <Alert variant='destructive'>
+              <AlertTriangle className='h-4 w-4' />
               <AlertDescription>
                 {errorMessage}
                 <Button
-                  variant="link"
-                  className="p-0 h-auto font-normal ml-2"
+                  variant='link'
+                  className='p-0 h-auto font-normal ml-2'
                   onClick={openInNewTab}
                 >
                   Open in new tab
@@ -125,19 +123,19 @@ export const WixEmbedSecure: React.FC<WixEmbedSecureProps> = ({
             </Alert>
           </div>
         ) : (
-          <div className="relative">
+          <div className='relative'>
             {!isLoaded && (
-              <div className="absolute inset-0 bg-muted animate-pulse flex items-center justify-center">
-                <div className="text-muted-foreground text-sm">Loading...</div>
+              <div className='absolute inset-0 bg-muted animate-pulse flex items-center justify-center'>
+                <div className='text-muted-foreground text-sm'>Loading...</div>
               </div>
             )}
             <iframe
               src={src}
               title={title}
-              className="w-full h-96 border-0"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              referrerPolicy="strict-origin-when-cross-origin"
-              loading="lazy"
+              className='w-full h-96 border-0'
+              sandbox='allow-scripts allow-same-origin allow-forms allow-popups'
+              referrerPolicy='strict-origin-when-cross-origin'
+              loading='lazy'
               onLoad={handleLoad}
               onError={handleError}
               style={{
@@ -155,11 +153,14 @@ export const WixEmbedSecure: React.FC<WixEmbedSecureProps> = ({
 
 // Hook for postMessage communication
 export const useWixPostMessage = (targetOrigin: string = '*') => {
-  const sendMessage = useCallback((data: any, iframe?: HTMLIFrameElement) => {
-    if (iframe?.contentWindow) {
-      iframe.contentWindow.postMessage(data, targetOrigin);
-    }
-  }, [targetOrigin]);
+  const sendMessage = useCallback(
+    (data: any, iframe?: HTMLIFrameElement) => {
+      if (iframe?.contentWindow) {
+        iframe.contentWindow.postMessage(data, targetOrigin);
+      }
+    },
+    [targetOrigin]
+  );
 
   return { sendMessage };
 };

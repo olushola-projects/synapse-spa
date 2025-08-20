@@ -275,17 +275,22 @@ class ComplianceReportingService {
   }
 
   private startAlertMonitoring(): void {
-    setInterval(async () => {
-      await this.checkComplianceAlerts();
-    }, 5 * 60 * 1000);
+    setInterval(
+      async () => {
+        await this.checkComplianceAlerts();
+      },
+      5 * 60 * 1000
+    );
     log.info('Compliance alert monitoring started');
   }
 
   private async refreshAllDashboards(): Promise<void> {
     try {
       for (const dashboard of this.dashboards.values()) {
-        if (dashboard.lastRefresh && 
-            Date.now() - dashboard.lastRefresh.getTime() < dashboard.refreshInterval * 1000) {
+        if (
+          dashboard.lastRefresh &&
+          Date.now() - dashboard.lastRefresh.getTime() < dashboard.refreshInterval * 1000
+        ) {
           continue;
         }
 
@@ -358,7 +363,7 @@ class ComplianceReportingService {
     for (let i = days; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
-      
+
       trends.push({
         date: date.toISOString().split('T')[0],
         score: 85 + Math.random() * 15,
@@ -375,9 +380,8 @@ class ComplianceReportingService {
       const checks = await complianceAutomationService.getComplianceChecks();
 
       for (const rule of rules) {
-        const recentChecks = checks.filter(c => 
-          c.ruleId === rule.id && 
-          c.timestamp > new Date(Date.now() - 24 * 60 * 60 * 1000)
+        const recentChecks = checks.filter(
+          c => c.ruleId === rule.id && c.timestamp > new Date(Date.now() - 24 * 60 * 60 * 1000)
         );
 
         const failedChecks = recentChecks.filter(c => c.status === 'fail');
@@ -399,7 +403,9 @@ class ComplianceReportingService {
     }
   }
 
-  async createComplianceDashboard(dashboardData: Partial<ComplianceDashboard>): Promise<ComplianceDashboard> {
+  async createComplianceDashboard(
+    dashboardData: Partial<ComplianceDashboard>
+  ): Promise<ComplianceDashboard> {
     const dashboard: ComplianceDashboard = {
       id: crypto.randomUUID(),
       name: dashboardData.name || 'New Dashboard',
@@ -431,10 +437,11 @@ class ComplianceReportingService {
       const checks = await complianceAutomationService.getComplianceChecks();
 
       const frameworkRules = rules.filter(r => framework === 'all' || r.category === framework);
-      const frameworkChecks = checks.filter(c => 
-        frameworkRules.some(r => r.id === c.ruleId) &&
-        c.timestamp >= period.start &&
-        c.timestamp <= period.end
+      const frameworkChecks = checks.filter(
+        c =>
+          frameworkRules.some(r => r.id === c.ruleId) &&
+          c.timestamp >= period.start &&
+          c.timestamp <= period.end
       );
 
       const totalChecks = frameworkChecks.length;
@@ -566,9 +573,8 @@ class ComplianceReportingService {
       reports = reports.filter(r => r.status === filters.status);
     }
     if (filters?.period) {
-      reports = reports.filter(r => 
-        r.generatedAt >= filters.period!.start && 
-        r.generatedAt <= filters.period!.end
+      reports = reports.filter(
+        r => r.generatedAt >= filters.period!.start && r.generatedAt <= filters.period!.end
       );
     }
 
@@ -607,7 +613,11 @@ class ComplianceReportingService {
     }
   }
 
-  async updateAlertStatus(alertId: string, status: ComplianceAlert['status'], updates?: Partial<ComplianceAlert>): Promise<void> {
+  async updateAlertStatus(
+    alertId: string,
+    status: ComplianceAlert['status'],
+    updates?: Partial<ComplianceAlert>
+  ): Promise<void> {
     const alert = this.alerts.find(a => a.id === alertId);
     if (alert) {
       alert.status = status;

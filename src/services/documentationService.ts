@@ -590,17 +590,20 @@ GDPR
   private startAutoReview(): void {
     if (!this.autoReviewEnabled) return;
 
-    setInterval(async () => {
-      await this.checkDocumentReviews();
-    }, 24 * 60 * 60 * 1000); // Daily check
+    setInterval(
+      async () => {
+        await this.checkDocumentReviews();
+      },
+      24 * 60 * 60 * 1000
+    ); // Daily check
     log.info('Auto-review started for documentation');
   }
 
   private async checkDocumentReviews(): Promise<void> {
     try {
       const now = new Date();
-      const documentsNeedingReview = Array.from(this.documents.values()).filter(doc => 
-        doc.nextReviewDate && doc.nextReviewDate <= now
+      const documentsNeedingReview = Array.from(this.documents.values()).filter(
+        doc => doc.nextReviewDate && doc.nextReviewDate <= now
       );
 
       for (const document of documentsNeedingReview) {
@@ -711,20 +714,22 @@ GDPR
       documents = documents.filter(d => d.author.includes(search.filters.author!));
     }
     if (search.filters.dateRange) {
-      documents = documents.filter(d => 
-        d.updatedAt >= search.filters.dateRange!.start && 
-        d.updatedAt <= search.filters.dateRange!.end
+      documents = documents.filter(
+        d =>
+          d.updatedAt >= search.filters.dateRange!.start &&
+          d.updatedAt <= search.filters.dateRange!.end
       );
     }
 
     // Apply search query
     if (search.query) {
       const query = search.query.toLowerCase();
-      documents = documents.filter(d => 
-        d.title.toLowerCase().includes(query) ||
-        d.description.toLowerCase().includes(query) ||
-        d.content.toLowerCase().includes(query) ||
-        d.tags.some(tag => tag.toLowerCase().includes(query))
+      documents = documents.filter(
+        d =>
+          d.title.toLowerCase().includes(query) ||
+          d.description.toLowerCase().includes(query) ||
+          d.content.toLowerCase().includes(query) ||
+          d.tags.some(tag => tag.toLowerCase().includes(query))
       );
     }
 
@@ -779,8 +784,10 @@ GDPR
         documentsPendingApproval,
         averageReviewTime: 7, // days
         complianceCoverage: 85,
-        lastUpdatedDocument: documents.length > 0 ? 
-          new Date(Math.max(...documents.map(d => d.updatedAt.getTime()))) : now
+        lastUpdatedDocument:
+          documents.length > 0
+            ? new Date(Math.max(...documents.map(d => d.updatedAt.getTime())))
+            : now
       },
       trends: {
         documentGrowth: 'increasing',

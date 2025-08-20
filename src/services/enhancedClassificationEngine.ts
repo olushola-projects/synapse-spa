@@ -208,7 +208,10 @@ export class EnhancedClassificationEngine {
       });
 
       // Step 3: Compliance validation
-      const complianceStep = await this.validateCompliance(data, classificationStep.recommendedArticle);
+      const complianceStep = await this.validateCompliance(
+        data,
+        classificationStep.recommendedArticle
+      );
       processingSteps.push({
         step: 'Compliance Validation',
         status: 'completed',
@@ -427,9 +430,7 @@ export class EnhancedClassificationEngine {
     const recommendations: string[] = [];
 
     // PAI validation
-    const paiScore = this.validatePAIIndicators(
-      data.paiIndicators
-    );
+    const paiScore = this.validatePAIIndicators(data.paiIndicators);
     if (paiScore < 0.8) {
       issues.push({
         id: 'PAI_001',
@@ -441,9 +442,7 @@ export class EnhancedClassificationEngine {
     }
 
     // Taxonomy validation
-    const taxonomyScore = this.validateTaxonomyAlignment(
-      data.taxonomyAlignment
-    );
+    const taxonomyScore = this.validateTaxonomyAlignment(data.taxonomyAlignment);
     if (taxonomyScore < 0.7) {
       issues.push({
         id: 'TAX_001',
@@ -647,11 +646,13 @@ export class EnhancedClassificationEngine {
     return this.preprocessForBERT(data); // Similar preprocessing for now
   }
 
-  private mapClassification(classification: string | undefined): 'Article 6' | 'Article 8' | 'Article 9' {
+  private mapClassification(
+    classification: string | undefined
+  ): 'Article 6' | 'Article 8' | 'Article 9' {
     if (!classification) {
       return 'Article 6'; // Default fallback
     }
-    
+
     if (classification.includes('Article 8')) {
       return 'Article 8';
     }
@@ -711,9 +712,7 @@ export class EnhancedClassificationEngine {
     return 0.5; // Low agreement
   }
 
-  private generateAlternatives(
-    results: ModelContribution[]
-  ): AlternativeClassification[] {
+  private generateAlternatives(results: ModelContribution[]): AlternativeClassification[] {
     const alternatives = results
       .filter(r => r.confidence > 0.6)
       .map(r => ({
@@ -993,9 +992,7 @@ export class EnhancedClassificationEngine {
     return 'high';
   }
 
-  private calculateRegulatoryRisk(
-    classification: any
-  ): 'low' | 'medium' | 'high' {
+  private calculateRegulatoryRisk(classification: any): 'low' | 'medium' | 'high' {
     if (classification.confidence >= 0.8) {
       return 'low';
     }

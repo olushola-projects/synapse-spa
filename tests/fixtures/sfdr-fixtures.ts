@@ -9,7 +9,7 @@ export const test = base.extend({
     await page.fill('[data-testid="password-input"]', 'password123');
     await page.click('[data-testid="login-button"]');
     await page.waitForURL('/dashboard');
-    
+
     await use(page);
   },
 
@@ -17,7 +17,7 @@ export const test = base.extend({
     // Setup SFDR Navigator page
     await page.goto('/nexus-agent');
     await SFDRTestHelpers.waitForPageLoad(page);
-    
+
     await use(page);
   },
 
@@ -40,7 +40,7 @@ export const test = base.extend({
         expectedClassification: 'Article 9'
       }
     };
-    
+
     await use(testData);
   },
 

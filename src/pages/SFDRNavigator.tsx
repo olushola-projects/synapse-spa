@@ -1,30 +1,31 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSFDRClassification } from '@/hooks/useSFDRClassification';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Brain,
-  MessageSquare,
-  Target,
-  FileText,
-  Download,
-  Upload,
-  BarChart3,
-  TrendingUp,
-  Shield,
-  CheckCircle,
-  AlertTriangle,
-  Zap,
-  Sparkles,
-  Globe,
-  Activity
+    Activity,
+    AlertTriangle,
+    BarChart3,
+    Brain,
+    CheckCircle,
+    Download,
+    FileText,
+    Globe,
+    MessageSquare,
+    Shield,
+    Sparkles,
+    Target,
+    TrendingUp,
+    Upload,
+    Zap
 } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // Import existing components
 import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
@@ -115,16 +116,14 @@ const SFDRNavigator: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
 
   // Classification state
-  const [classificationResult, setClassificationResult] =
-    useState<SFDRClassificationResponse | null>(null);
-  const [formData, setFormData] = useState<SFDRClassificationRequest>({
-    fundName: '',
-    description: '',
+  const { classify, loading: classifyLoading, error: classifyError, result: classificationResult } = useSFDRClassification();
+  const [formData, setFormData] = useState({
+    productName: '',
+    productType: 'investment_fund',
     investmentStrategy: '',
-    esgIntegration: '',
-    sustainabilityObjectives: '',
-    principalAdverseImpacts: '',
-    taxonomyAlignment: ''
+    sustainabilityObjectives: [] as string[],
+    riskProfile: 'medium',
+    paiIndicators: {} as Record<string, any>
   });
 
   // Document processing state
@@ -247,8 +246,8 @@ const SFDRNavigator: React.FC = () => {
    * Handle SFDR fund classification with mandatory citations
    */
   const handleClassification = useCallback(async () => {
-    if (!formData.fundName || !formData.description) {
-      addMessage('system', 'Please provide fund name and description for classification.');
+    if (!formData.productName || !formData.investmentStrategy) {
+      addMessage('system', 'Please provide fund name and investment strategy for classification.');
       return;
     }
 
@@ -256,77 +255,68 @@ const SFDRNavigator: React.FC = () => {
     setProcessingProgress(0);
 
     try {
-      // Simulate progressive processing
-      const stages = [
-        'Analyzing fund documentation...',
-        'Applying SFDR criteria...',
-        'Generating regulatory citations...',
-        'Calculating compliance score...'
-      ];
+      // Start classification
+      setProcessingProgress(25);
+      addMessage('system', 'Analyzing fund documentation...');
 
-      for (let i = 0; i < stages.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setProcessingProgress((i + 1) * 25);
-        addMessage('system', stages[i] || 'Processing...');
+      // Call Supabase function
+      const result = await classify(formData);
+      setProcessingProgress(75);
+
+      if (!result) {
+        throw new Error('Classification failed');
       }
 
-      // Generate classification with mandatory regulatory citations
-      const mockResult: SFDRClassificationResponse = {
-        classification: formData.sustainabilityObjectives
-          ? 'Article 9'
-          : formData.esgIntegration
-            ? 'Article 8'
-            : 'Article 6',
-        confidence: Math.random() * 15 + 85, // 85-100%
-        reasoning: `Based on analysis of fund characteristics, investment strategy, and ESG integration approach, this fund aligns with ${formData.sustainabilityObjectives ? 'Article 9 requirements for sustainable investment objectives' : formData.esgIntegration ? 'Article 8 criteria for promoting environmental/social characteristics' : 'Article 6 as a standard fund without specific sustainability claims'}.`,
-        recommendations: [
-          'Enhance ESG integration documentation per SFDR Article 10 requirements',
-          'Develop comprehensive PAI consideration framework under Article 7',
-          'Implement taxonomy alignment assessment per Commission Regulation (EU) 2022/1288'
-        ],
-        issues: [
-          'Limited disclosure on EU Taxonomy alignment percentages',
-          'Insufficient detail on principal adverse impact indicators'
-        ],
-        complianceScore: Math.random() * 10 + 90, // 90-100%
+      // Format result for display
+      const classificationResult: SFDRClassificationResponse = {
+        classification: result.classification as 'Article 6' | 'Article 8' | 'Article 9',
+        confidence: result.confidence * 100,
+        reasoning: result.reasoning,
+        recommendations: result.recommendations,
+        issues: [],
+        complianceScore: result.complianceScore,
         regulatoryCitations: [
           'SFDR Regulation (EU) 2019/2088',
           'Commission Regulation (EU) 2022/1288',
-          'EU Taxonomy Regulation (EU) 2020/852',
-          'ESMA Guidelines on SFDR disclosures'
+          'EU Taxonomy Regulation (EU) 2020/852'
         ],
         classificationId: `SFDR-${Date.now()}`,
-        timestamp: new Date().toISOString()
+        timestamp: result.timestamp
       };
 
-      setClassificationResult(mockResult);
+      setClassificationResult(classificationResult);
+      setProcessingProgress(100);
+
+      // Update analytics
       setAnalyticsData(prev => ({
         ...prev,
         totalFunds: prev.totalFunds + 1,
-        [mockResult.classification.toLowerCase().replace(' ', '') as keyof typeof prev]:
+        [classificationResult.classification.toLowerCase().replace(' ', '') as keyof typeof prev]:
           (prev[
-            mockResult.classification.toLowerCase().replace(' ', '') as keyof typeof prev
+            classificationResult.classification.toLowerCase().replace(' ', '') as keyof typeof prev
           ] as number) + 1,
-        complianceScore: mockResult.complianceScore,
+        complianceScore: classificationResult.complianceScore,
         lastUpdate: new Date()
       }));
 
+      // Add message
       addMessage(
         'agent',
-        `Classification complete: ${mockResult.classification} with ${mockResult.confidence.toFixed(1)}% confidence. Compliance score: ${mockResult.complianceScore.toFixed(1)}%. See detailed analysis in the Classification tab.`,
+        `Classification complete: ${classificationResult.classification} with ${classificationResult.confidence.toFixed(1)}% confidence. Compliance score: ${classificationResult.complianceScore.toFixed(1)}%. See detailed analysis in the Classification tab.`,
         {
-          citations: mockResult.regulatoryCitations,
-          confidence: mockResult.confidence,
-          classification: mockResult.classification
+          citations: classificationResult.regulatoryCitations,
+          confidence: classificationResult.confidence,
+          classification: classificationResult.classification
         }
       );
     } catch (error) {
+      console.error('Classification error:', error);
       addMessage('system', 'Classification failed. Please try again.');
     } finally {
       setIsLoading(false);
       setProcessingProgress(0);
     }
-  }, [formData, addMessage]);
+  }, [formData, classify, addMessage]);
 
   /**
    * Handle document upload and analysis
@@ -419,18 +409,22 @@ const SFDRNavigator: React.FC = () => {
   );
 
   if (error) {
-    return <CriticalErrorAlert 
-      errors={[{
-        id: '1',
-        type: 'system_error',
-        title: 'System Error',
-        message: error,
-        severity: 'critical' as const,
-        timestamp: new Date().toISOString(),
-        actionable: true
-      }]} 
-      onRetry={() => setError(null)} 
-    />;
+    return (
+      <CriticalErrorAlert
+        errors={[
+          {
+            id: '1',
+            type: 'system_error',
+            title: 'System Error',
+            message: error,
+            severity: 'critical' as const,
+            timestamp: new Date().toISOString(),
+            actionable: true
+          }
+        ]}
+        onRetry={() => setError(null)}
+      />
+    );
   }
 
   return (

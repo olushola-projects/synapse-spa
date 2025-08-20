@@ -1,7 +1,7 @@
 /**
  * Secure Error Handler
  * Implements secure error handling for Zero-Trust architecture
- * 
+ *
  * Prevents information disclosure while maintaining audit trail
  */
 
@@ -35,39 +35,39 @@ export const ERROR_CODES = {
   AUTH_INSUFFICIENT_PERMISSIONS: 'AUTH_003',
   AUTH_MFA_REQUIRED: 'AUTH_004',
   AUTH_SESSION_INVALID: 'AUTH_005',
-  
+
   // Authorization errors
   AUTHZ_ACCESS_DENIED: 'AUTHZ_001',
   AUTHZ_RESOURCE_NOT_FOUND: 'AUTHZ_002',
   AUTHZ_INVALID_ROLE: 'AUTHZ_003',
-  
+
   // Validation errors
   VALIDATION_INPUT_INVALID: 'VAL_001',
   VALIDATION_MISSING_REQUIRED: 'VAL_002',
   VALIDATION_FORMAT_INVALID: 'VAL_003',
-  
+
   // API errors
   API_RATE_LIMIT_EXCEEDED: 'API_001',
   API_ENDPOINT_NOT_FOUND: 'API_002',
   API_METHOD_NOT_ALLOWED: 'API_003',
   API_INVALID_REQUEST: 'API_004',
-  
+
   // Database errors
   DB_CONNECTION_FAILED: 'DB_001',
   DB_QUERY_FAILED: 'DB_002',
   DB_TRANSACTION_FAILED: 'DB_003',
-  
+
   // External service errors
   EXTERNAL_SERVICE_UNAVAILABLE: 'EXT_001',
   EXTERNAL_SERVICE_TIMEOUT: 'EXT_002',
   EXTERNAL_SERVICE_ERROR: 'EXT_003',
-  
+
   // Security errors
   SECURITY_INVALID_TOKEN: 'SEC_001',
   SECURITY_CSRF_VIOLATION: 'SEC_002',
   SECURITY_RATE_LIMIT: 'SEC_003',
   SECURITY_SUSPICIOUS_ACTIVITY: 'SEC_004',
-  
+
   // Internal errors
   INTERNAL_SERVER_ERROR: 'INT_001',
   INTERNAL_CONFIGURATION_ERROR: 'INT_002',
@@ -79,7 +79,7 @@ export const ERROR_CODES = {
  */
 export const ERROR_SEVERITY = {
   low: 'low',
-  medium: 'medium', 
+  medium: 'medium',
   high: 'high',
   critical: 'critical'
 } as const;
@@ -89,16 +89,16 @@ export const ERROR_SEVERITY = {
  */
 export class SecureErrorHandler {
   private static instance: SecureErrorHandler;
-  
+
   private constructor() {}
-  
+
   static getInstance(): SecureErrorHandler {
     if (!SecureErrorHandler.instance) {
       SecureErrorHandler.instance = new SecureErrorHandler();
     }
     return SecureErrorHandler.instance;
   }
-  
+
   /**
    * Handle and sanitize errors for user response
    */
@@ -109,7 +109,7 @@ export class SecureErrorHandler {
   ): SecureError {
     const errorMessage = typeof error === 'string' ? error : error.message;
     const errorName = typeof error === 'string' ? 'UnknownError' : error.name;
-    
+
     // Generate secure error response
     const secureError: SecureError = {
       message: this.getSecureMessage(errorName, severity),
@@ -118,13 +118,13 @@ export class SecureErrorHandler {
       requestId: context.requestId,
       severity
     };
-    
+
     // Log detailed error for monitoring (but don't expose to user)
     this.logError(error, context, severity);
-    
+
     return secureError;
   }
-  
+
   /**
    * Get secure error message that doesn't expose sensitive information
    */
@@ -135,67 +135,73 @@ export class SecureErrorHandler {
       high: 'A system error occurred. Please contact support.',
       critical: 'A critical error occurred. Please contact support immediately.'
     };
-    
+
     // Map specific error types to appropriate messages
     if (errorName.includes('Auth') || errorName.includes('Token')) {
       return 'Authentication error. Please log in again.';
     }
-    
+
     if (errorName.includes('Validation') || errorName.includes('Input')) {
       return 'Invalid input provided. Please check your data and try again.';
     }
-    
+
     if (errorName.includes('RateLimit') || errorName.includes('Throttle')) {
       return 'Too many requests. Please wait a moment and try again.';
     }
-    
+
     if (errorName.includes('Permission') || errorName.includes('Access')) {
       return 'Access denied. You do not have permission to perform this action.';
     }
-    
+
     return messages[severity];
   }
-  
+
   /**
    * Get appropriate error code based on error type
    */
   private getErrorCode(errorName: string, errorMessage: string): string {
     // Map error names to error codes
     const errorCodeMap: Record<string, string> = {
-      'AuthenticationError': ERROR_CODES.AUTH_INVALID_CREDENTIALS,
-      'TokenExpiredError': ERROR_CODES.AUTH_TOKEN_EXPIRED,
-      'PermissionError': ERROR_CODES.AUTH_INSUFFICIENT_PERMISSIONS,
-      'MFARequiredError': ERROR_CODES.AUTH_MFA_REQUIRED,
-      'SessionError': ERROR_CODES.AUTH_SESSION_INVALID,
-      'ValidationError': ERROR_CODES.VALIDATION_INPUT_INVALID,
-      'RateLimitError': ERROR_CODES.API_RATE_LIMIT_EXCEEDED,
-      'NotFoundError': ERROR_CODES.AUTHZ_RESOURCE_NOT_FOUND,
-      'DatabaseError': ERROR_CODES.DB_QUERY_FAILED,
-      'ExternalServiceError': ERROR_CODES.EXTERNAL_SERVICE_ERROR,
-      'SecurityError': ERROR_CODES.SECURITY_INVALID_TOKEN
+      AuthenticationError: ERROR_CODES.AUTH_INVALID_CREDENTIALS,
+      TokenExpiredError: ERROR_CODES.AUTH_TOKEN_EXPIRED,
+      PermissionError: ERROR_CODES.AUTH_INSUFFICIENT_PERMISSIONS,
+      MFARequiredError: ERROR_CODES.AUTH_MFA_REQUIRED,
+      SessionError: ERROR_CODES.AUTH_SESSION_INVALID,
+      ValidationError: ERROR_CODES.VALIDATION_INPUT_INVALID,
+      RateLimitError: ERROR_CODES.API_RATE_LIMIT_EXCEEDED,
+      NotFoundError: ERROR_CODES.AUTHZ_RESOURCE_NOT_FOUND,
+      DatabaseError: ERROR_CODES.DB_QUERY_FAILED,
+      ExternalServiceError: ERROR_CODES.EXTERNAL_SERVICE_ERROR,
+      SecurityError: ERROR_CODES.SECURITY_INVALID_TOKEN
     };
-    
+
     // Check for specific error patterns
     if (errorMessage.toLowerCase().includes('rate limit')) {
       return ERROR_CODES.API_RATE_LIMIT_EXCEEDED;
     }
-    
-    if (errorMessage.toLowerCase().includes('permission') || errorMessage.toLowerCase().includes('access')) {
+
+    if (
+      errorMessage.toLowerCase().includes('permission') ||
+      errorMessage.toLowerCase().includes('access')
+    ) {
       return ERROR_CODES.AUTHZ_ACCESS_DENIED;
     }
-    
-    if (errorMessage.toLowerCase().includes('validation') || errorMessage.toLowerCase().includes('invalid')) {
+
+    if (
+      errorMessage.toLowerCase().includes('validation') ||
+      errorMessage.toLowerCase().includes('invalid')
+    ) {
       return ERROR_CODES.VALIDATION_INPUT_INVALID;
     }
-    
+
     if (errorMessage.toLowerCase().includes('not found')) {
       return ERROR_CODES.AUTHZ_RESOURCE_NOT_FOUND;
     }
-    
+
     // Return mapped error code or default
     return errorCodeMap[errorName] || ERROR_CODES.INTERNAL_SERVER_ERROR;
   }
-  
+
   /**
    * Log error details for monitoring and debugging
    */
@@ -212,7 +218,7 @@ export class SecureErrorHandler {
       severity,
       timestamp: new Date().toISOString()
     };
-    
+
     // Log based on severity
     switch (severity) {
       case 'critical':
@@ -228,13 +234,13 @@ export class SecureErrorHandler {
         logger.info('Low severity error occurred', errorDetails);
         break;
     }
-    
+
     // Send to monitoring service for critical and high severity errors
     if (severity === 'critical' || severity === 'high') {
       this.sendToMonitoring(errorDetails);
     }
   }
-  
+
   /**
    * Send error to monitoring service
    */
@@ -249,7 +255,7 @@ export class SecureErrorHandler {
       logger.error('Failed to send error to monitoring service', { monitoringError });
     }
   }
-  
+
   /**
    * Handle async errors
    */
@@ -264,7 +270,7 @@ export class SecureErrorHandler {
       return this.handleError(error as Error, context, severity);
     }
   }
-  
+
   /**
    * Create error handler middleware for Express
    */
@@ -279,15 +285,15 @@ export class SecureErrorHandler {
         method: req.method,
         requestId: req.headers['x-request-id']
       };
-      
+
       const secureError = this.handleError(error, context, 'high');
-      
+
       res.status(this.getHttpStatus(secureError.code)).json({
         error: secureError
       });
     };
   }
-  
+
   /**
    * Get HTTP status code for error code
    */
@@ -322,7 +328,7 @@ export class SecureErrorHandler {
       [ERROR_CODES.INTERNAL_CONFIGURATION_ERROR]: 500,
       [ERROR_CODES.INTERNAL_DEPENDENCY_ERROR]: 500
     };
-    
+
     return statusMap[errorCode] || 500;
   }
 }
@@ -331,10 +337,16 @@ export class SecureErrorHandler {
 export const secureErrorHandler = SecureErrorHandler.getInstance();
 
 // Export convenience functions
-export const handleError = (error: Error | string, context?: ErrorContext, severity?: keyof typeof ERROR_SEVERITY) => 
-  secureErrorHandler.handleError(error, context, severity);
+export const handleError = (
+  error: Error | string,
+  context?: ErrorContext,
+  severity?: keyof typeof ERROR_SEVERITY
+) => secureErrorHandler.handleError(error, context, severity);
 
-export const handleAsyncError = <T>(promise: Promise<T>, context?: ErrorContext, severity?: keyof typeof ERROR_SEVERITY) =>
-  secureErrorHandler.handleAsyncError(promise, context, severity);
+export const handleAsyncError = <T>(
+  promise: Promise<T>,
+  context?: ErrorContext,
+  severity?: keyof typeof ERROR_SEVERITY
+) => secureErrorHandler.handleAsyncError(promise, context, severity);
 
 export default secureErrorHandler;

@@ -4,7 +4,6 @@
  * Provides consistent time formatting and timezone handling across the application
  */
 
-
 /**
  * Time zone configuration
  */
@@ -34,21 +33,21 @@ export const TIME_FORMATS = {
   SHORT_TIME: 'HH:mm',
   SHORT_DATE: 'MMM dd, yyyy',
   SHORT_DATETIME: 'MMM dd, yyyy HH:mm',
-  
+
   // Long formats for detailed display
   LONG_TIME: 'HH:mm:ss',
   LONG_DATE: 'EEEE, MMMM dd, yyyy',
   LONG_DATETIME: 'EEEE, MMMM dd, yyyy HH:mm:ss',
-  
+
   // ISO formats for API and storage
   ISO_DATE: 'yyyy-MM-dd',
-  ISO_DATETIME: 'yyyy-MM-dd\'T\'HH:mm:ss.SSSxxx',
-  ISO_DATETIME_UTC: 'yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'',
-  
+  ISO_DATETIME: "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
+  ISO_DATETIME_UTC: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+
   // Relative time formats
   RELATIVE: 'relative',
   RELATIVE_SHORT: 'relative-short',
-  
+
   // Timestamp formats
   TIMESTAMP: 'timestamp',
   TIMESTAMP_MS: 'timestamp-ms'
@@ -91,23 +90,25 @@ export function formatRelativeTime(date, short = false) {
   const diffMinutes = Math.floor(diffSeconds / 60);
   const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
-  
+
   if (diffSeconds < 60) {
     return short ? 'now' : 'just now';
   }
-  
+
   if (diffMinutes < 60) {
-    return short ? `${diffMinutes}m ago` : `${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} ago`;
+    return short
+      ? `${diffMinutes}m ago`
+      : `${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} ago`;
   }
-  
+
   if (diffHours < 24) {
     return short ? `${diffHours}h ago` : `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
   }
-  
+
   if (diffDays < 7) {
     return short ? `${diffDays}d ago` : `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
   }
-  
+
   // For longer periods, use absolute date
   return formatDateTime(date, short ? 'SHORT_DATE' : 'LONG_DATE');
 }
@@ -125,44 +126,58 @@ export function formatDateTime(
   timezone = TIMEZONE_CONFIG.USER_TIMEZONE
 ) {
   const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
-  
+
   // Handle relative time formats
   if (format === 'RELATIVE' || format === 'RELATIVE_SHORT') {
     return formatRelativeTime(dateObj, format === 'RELATIVE_SHORT');
   }
-  
+
   // Handle timestamp formats
   if (format === 'TIMESTAMP') {
     return dateObj.getTime().toString();
   }
-  
+
   if (format === 'TIMESTAMP_MS') {
     return dateObj.getTime().toString();
   }
-  
+
   // Handle ISO formats
   if (format === 'ISO_DATE') {
     return dateObj.toISOString().split('T')[0];
   }
-  
+
   if (format === 'ISO_DATETIME') {
     return dateObj.toISOString();
   }
-  
+
   if (format === 'ISO_DATETIME_UTC') {
     return dateObj.toISOString();
   }
-  
+
   // Handle standard formats using Intl.DateTimeFormat
   const formatMap = {
     SHORT_TIME: { hour: '2-digit', minute: '2-digit' },
     SHORT_DATE: { month: 'short', day: '2-digit', year: 'numeric' },
-    SHORT_DATETIME: { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' },
+    SHORT_DATETIME: {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    },
     LONG_TIME: { hour: '2-digit', minute: '2-digit', second: '2-digit' },
     LONG_DATE: { weekday: 'long', month: 'long', day: '2-digit', year: 'numeric' },
-    LONG_DATETIME: { weekday: 'long', month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }
+    LONG_DATETIME: {
+      weekday: 'long',
+      month: 'long',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }
   };
-  
+
   const options = formatMap[format];
   if (options) {
     return new Intl.DateTimeFormat('en-US', {
@@ -170,7 +185,7 @@ export function formatDateTime(
       timeZone: timezone
     }).format(dateObj);
   }
-  
+
   // Fallback to default format
   return dateObj.toLocaleString('en-US', { timeZone: timezone });
 }
@@ -181,7 +196,7 @@ export function formatDateTime(
  */
 export function createDocumentTimestamp() {
   const now = getCurrentTime();
-  
+
   return {
     created_at: formatDateTime(now, 'LONG_DATETIME'),
     created_at_iso: formatDateTime(now, 'ISO_DATETIME'),
@@ -196,7 +211,7 @@ export function createDocumentTimestamp() {
  */
 export function createCursorTimestamp() {
   const now = getCurrentTime();
-  
+
   return {
     timestamp: formatDateTime(now, 'SHORT_DATETIME'),
     timestamp_iso: formatDateTime(now, 'ISO_DATETIME'),
@@ -212,7 +227,7 @@ export function createCursorTimestamp() {
  */
 export function createApiTimestamp() {
   const now = getCurrentTime();
-  
+
   return {
     timestamp: formatDateTime(now, 'LONG_DATETIME'),
     timestamp_iso: formatDateTime(now, 'ISO_DATETIME_UTC'),
@@ -227,15 +242,19 @@ export function createApiTimestamp() {
  * @returns {Object} Time difference object
  */
 export function calculateTimeDifference(startDate, endDate = getCurrentTime()) {
-  const start = typeof startDate === 'string' || typeof startDate === 'number' ? new Date(startDate) : startDate;
-  const end = typeof endDate === 'string' || typeof endDate === 'number' ? new Date(endDate) : endDate;
-  
+  const start =
+    typeof startDate === 'string' || typeof startDate === 'number'
+      ? new Date(startDate)
+      : startDate;
+  const end =
+    typeof endDate === 'string' || typeof endDate === 'number' ? new Date(endDate) : endDate;
+
   const diffMs = end.getTime() - start.getTime();
   const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffSeconds / 60);
   const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
-  
+
   let formatted = '';
   if (diffDays > 0) {
     formatted = `${diffDays}d ${diffHours % 24}h ${diffMinutes % 60}m`;
@@ -246,7 +265,7 @@ export function calculateTimeDifference(startDate, endDate = getCurrentTime()) {
   } else {
     formatted = `${diffSeconds}s`;
   }
-  
+
   return {
     milliseconds: diffMs,
     seconds: diffSeconds,
@@ -265,7 +284,7 @@ export function calculateTimeDifference(startDate, endDate = getCurrentTime()) {
 export function isToday(date) {
   const checkDate = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
   const today = getCurrentTime();
-  
+
   return (
     checkDate.getDate() === today.getDate() &&
     checkDate.getMonth() === today.getMonth() &&
@@ -313,12 +332,12 @@ export function getTimezoneOffset(timezone = TIMEZONE_CONFIG.USER_TIMEZONE) {
  */
 export function convertToUserTimezone(date, fromTimezone = 'UTC') {
   const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
-  
+
   // Create a new date object in the user's timezone
   const userTimezoneDate = new Date(
     dateObj.toLocaleString('en-US', { timeZone: TIMEZONE_CONFIG.USER_TIMEZONE })
   );
-  
+
   return userTimezoneDate;
 }
 
@@ -361,7 +380,7 @@ export class PerformanceTimer {
   constructor() {
     this.startTime = getCurrentTimestamp();
   }
-  
+
   /**
    * Stop the timer
    * @returns {PerformanceTimer} Timer instance for chaining
@@ -370,7 +389,7 @@ export class PerformanceTimer {
     this.endTime = getCurrentTimestamp();
     return this;
   }
-  
+
   /**
    * Get elapsed time in milliseconds
    * @returns {number} Elapsed time
@@ -379,7 +398,7 @@ export class PerformanceTimer {
     const end = this.endTime || getCurrentTimestamp();
     return end - this.startTime;
   }
-  
+
   /**
    * Get elapsed time formatted
    * @returns {string} Formatted elapsed time
@@ -396,7 +415,7 @@ export class PerformanceTimer {
       return `${minutes}m ${seconds}s`;
     }
   }
-  
+
   /**
    * Reset the timer
    */

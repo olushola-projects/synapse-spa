@@ -128,7 +128,7 @@ export async function authenticateJWT(
     const authResult = await authService.validateToken(token, req.ipAddress);
 
     if (!authResult.success) {
-      await logAuthEvent(req, 'invalid_token', false, { 
+      await logAuthEvent(req, 'invalid_token', false, {
         reason: authResult.error,
         tokenLength: token.length
       });
@@ -151,11 +151,10 @@ export async function authenticateJWT(
     });
 
     next();
-
   } catch (error) {
     log.error('JWT authentication error', { error, path: req.path });
-    
-    await logAuthEvent(req, 'auth_error', false, { 
+
+    await logAuthEvent(req, 'auth_error', false, {
       error: error instanceof Error ? error.message : 'Unknown error'
     });
 
@@ -214,13 +213,12 @@ export async function optionalAuth(
         sessionId: req.session?.id
       });
     } else {
-      await logAuthEvent(req, 'optional_auth_failed', false, { 
-        reason: authResult.error 
+      await logAuthEvent(req, 'optional_auth_failed', false, {
+        reason: authResult.error
       });
     }
 
     next();
-
   } catch (error) {
     log.error('Optional authentication error', { error, path: req.path });
     next(); // Continue even on error
@@ -244,7 +242,7 @@ export function requireRole(requiredRole: string) {
       }
 
       const userRole = req.user.role || 'user';
-      
+
       if (userRole !== requiredRole && userRole !== 'admin' && userRole !== 'super_admin') {
         logAuthEvent(req, 'insufficient_role', false, {
           requiredRole,
@@ -267,7 +265,6 @@ export function requireRole(requiredRole: string) {
       });
 
       next();
-
     } catch (error) {
       log.error('Role authorization error', { error, path: req.path });
       res.status(500).json({
@@ -296,7 +293,7 @@ export function requirePermission(requiredPermission: string) {
       }
 
       const userPermissions = req.user.permissions || [];
-      
+
       if (!userPermissions.includes(requiredPermission)) {
         logAuthEvent(req, 'insufficient_permission', false, {
           requiredPermission,
@@ -318,7 +315,6 @@ export function requirePermission(requiredPermission: string) {
       });
 
       next();
-
     } catch (error) {
       log.error('Permission authorization error', { error, path: req.path });
       res.status(500).json({
@@ -381,7 +377,6 @@ export function rateLimit(
       });
 
       next();
-
     } catch (error) {
       log.error('Rate limiting error', { error, path: req.path });
       next(); // Continue on error
@@ -427,7 +422,6 @@ export async function validateSession(
     req.session.lastActivity = new Date();
 
     next();
-
   } catch (error) {
     log.error('Session validation error', { error, path: req.path });
     res.status(500).json({
@@ -442,11 +436,7 @@ export async function validateSession(
  * Debug Authentication Middleware
  * Provides detailed authentication information in development
  */
-export function debugAuth(
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): void {
+export function debugAuth(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
   if (backendConfig.NODE_ENV === 'development') {
     // Add debug information to response headers
     res.set({
@@ -488,7 +478,8 @@ export function securityHeaders(
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+    'Content-Security-Policy':
+      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
   });
 
   next();
@@ -498,11 +489,7 @@ export function securityHeaders(
  * Request Logging Middleware
  * Logs all requests for audit purposes
  */
-export function requestLogger(
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): void {
+export function requestLogger(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
   const startTime = Date.now();
 
   // Log request start
@@ -517,9 +504,9 @@ export function requestLogger(
 
   // Override res.end to log response
   const originalEnd = res.end;
-  res.end = function(chunk?: any, encoding?: any) {
+  res.end = function (chunk?: any, encoding?: any) {
     const duration = Date.now() - startTime;
-    
+
     log.info('Request completed', {
       method: req.method,
       path: req.path,
@@ -575,15 +562,6 @@ export const authMiddleware = [
   validateSession
 ];
 
-export const optionalAuthMiddleware = [
-  requestLogger,
-  securityHeaders,
-  debugAuth,
-  optionalAuth
-];
+export const optionalAuthMiddleware = [requestLogger, securityHeaders, debugAuth, optionalAuth];
 
-export const publicMiddleware = [
-  requestLogger,
-  securityHeaders,
-  debugAuth
-];
+export const publicMiddleware = [requestLogger, securityHeaders, debugAuth];

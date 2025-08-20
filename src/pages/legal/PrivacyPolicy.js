@@ -1,8 +1,169 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 // import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 const PrivacyPolicy = () => {
-    return (_jsxs("div", { className: 'min-h-screen flex flex-col', children: [_jsx(Navbar, {}), _jsx("div", { className: 'flex-grow', children: _jsxs("div", { className: 'container mx-auto px-4 py-12 max-w-4xl', children: [_jsx("h1", { className: 'text-3xl font-bold mb-8', children: "Privacy Policy" }), _jsxs("div", { className: 'prose prose-lg max-w-none', children: [_jsx("p", { className: 'text-gray-600 mb-6', children: "Last Updated: April 14, 2025" }), _jsx("h2", { className: 'text-2xl font-semibold mt-8 mb-4', children: "1. Introduction" }), _jsx("p", { children: "At Synapse, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the platform." }), _jsx("h2", { className: 'text-2xl font-semibold mt-8 mb-4', children: "2. Information We Collect" }), _jsx("h3", { className: 'text-xl font-medium mt-6 mb-3', children: "2.1 Personal Data" }), _jsx("p", { children: "We may collect personal identification information, including but not limited to:" }), _jsxs("ul", { className: 'list-disc pl-6 my-4 space-y-2', children: [_jsx("li", { children: "Name and contact details" }), _jsx("li", { children: "Email address" }), _jsx("li", { children: "Company name and job title" }), _jsx("li", { children: "Professional qualifications and certifications" }), _jsx("li", { children: "Payment information (when applicable)" })] }), _jsx("h3", { className: 'text-xl font-medium mt-6 mb-3', children: "2.2 Usage Data" }), _jsx("p", { children: "We may also collect information on how you use our platform, including:" }), _jsxs("ul", { className: 'list-disc pl-6 my-4 space-y-2', children: [_jsx("li", { children: "Log and usage data" }), _jsx("li", { children: "Device and connection information" }), _jsx("li", { children: "Browser and device characteristics" }), _jsx("li", { children: "Operating system" }), _jsx("li", { children: "Language preferences" }), _jsx("li", { children: "Referring URLs" })] }), _jsx("h2", { className: 'text-2xl font-semibold mt-8 mb-4', children: "3. How We Use Your Information" }), _jsx("p", { children: "We may use the information we collect for various purposes, including to:" }), _jsxs("ul", { className: 'list-disc pl-6 my-4 space-y-2', children: [_jsx("li", { children: "Provide, operate, and maintain our platform" }), _jsx("li", { children: "Improve, personalize, and expand our platform" }), _jsx("li", { children: "Understand and analyze how you use our platform" }), _jsx("li", { children: "Develop new products, services, features, and functionality" }), _jsx("li", { children: "Communicate with you about updates, security alerts, and support" }), _jsx("li", { children: "Send you marketing and promotional communications (with your consent)" }), _jsx("li", { children: "Find and prevent fraud" })] }), _jsx("h2", { className: 'text-2xl font-semibold mt-8 mb-4', children: "4. Compliance Status" }), _jsxs("div", { className: 'bg-blue-50 border-l-4 border-blue-500 p-4 mb-6', children: [_jsx("p", { className: 'font-medium', children: "Current compliance framework status: In Progress" }), _jsx("p", { className: 'text-sm mt-2', children: "We are actively working to ensure compliance with global privacy regulations including GDPR, CCPA, and other relevant frameworks." })] }), _jsx("h2", { className: 'text-2xl font-semibold mt-8 mb-4', children: "5. Data Security" }), _jsx("p", { children: "We have implemented appropriate technical and organizational security measures designed to protect the security of any personal information we process. However, despite our safeguards and efforts to secure your information, no electronic transmission over the Internet or information storage technology can be guaranteed to be 100% secure." }), _jsx("h2", { className: 'text-2xl font-semibold mt-8 mb-4', children: "6. Third-Party Disclosure" }), _jsx("p", { children: "We may share your information with third parties in certain situations, including:" }), _jsxs("ul", { className: 'list-disc pl-6 my-4 space-y-2', children: [_jsx("li", { children: "Business partners and service providers who support our business" }), _jsx("li", { children: "In response to a legal request if we believe disclosure is required by law" }), _jsx("li", { children: "To protect and defend our rights and property" }), _jsx("li", { children: "With your consent or at your direction" })] }), _jsx("h2", { className: 'text-2xl font-semibold mt-8 mb-4', children: "7. Contact Us" }), _jsx("p", { children: "If you have any questions about this Privacy Policy, please contact us at:" }), _jsx("p", { className: 'mt-2', children: "Email: privacy@synapse-platform.com" }), _jsx("p", { className: 'mt-1', children: "Address: 123 Compliance Way, Regulatory District, RC 12345" })] })] }) }), _jsx(Footer, {})] }));
+  return _jsxs('div', {
+    className: 'min-h-screen flex flex-col',
+    children: [
+      _jsx(Navbar, {}),
+      _jsx('div', {
+        className: 'flex-grow',
+        children: _jsxs('div', {
+          className: 'container mx-auto px-4 py-12 max-w-4xl',
+          children: [
+            _jsx('h1', { className: 'text-3xl font-bold mb-8', children: 'Privacy Policy' }),
+            _jsxs('div', {
+              className: 'prose prose-lg max-w-none',
+              children: [
+                _jsx('p', {
+                  className: 'text-gray-600 mb-6',
+                  children: 'Last Updated: April 14, 2025'
+                }),
+                _jsx('h2', {
+                  className: 'text-2xl font-semibold mt-8 mb-4',
+                  children: '1. Introduction'
+                }),
+                _jsx('p', {
+                  children:
+                    'At Synapse, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the platform.'
+                }),
+                _jsx('h2', {
+                  className: 'text-2xl font-semibold mt-8 mb-4',
+                  children: '2. Information We Collect'
+                }),
+                _jsx('h3', {
+                  className: 'text-xl font-medium mt-6 mb-3',
+                  children: '2.1 Personal Data'
+                }),
+                _jsx('p', {
+                  children:
+                    'We may collect personal identification information, including but not limited to:'
+                }),
+                _jsxs('ul', {
+                  className: 'list-disc pl-6 my-4 space-y-2',
+                  children: [
+                    _jsx('li', { children: 'Name and contact details' }),
+                    _jsx('li', { children: 'Email address' }),
+                    _jsx('li', { children: 'Company name and job title' }),
+                    _jsx('li', { children: 'Professional qualifications and certifications' }),
+                    _jsx('li', { children: 'Payment information (when applicable)' })
+                  ]
+                }),
+                _jsx('h3', {
+                  className: 'text-xl font-medium mt-6 mb-3',
+                  children: '2.2 Usage Data'
+                }),
+                _jsx('p', {
+                  children:
+                    'We may also collect information on how you use our platform, including:'
+                }),
+                _jsxs('ul', {
+                  className: 'list-disc pl-6 my-4 space-y-2',
+                  children: [
+                    _jsx('li', { children: 'Log and usage data' }),
+                    _jsx('li', { children: 'Device and connection information' }),
+                    _jsx('li', { children: 'Browser and device characteristics' }),
+                    _jsx('li', { children: 'Operating system' }),
+                    _jsx('li', { children: 'Language preferences' }),
+                    _jsx('li', { children: 'Referring URLs' })
+                  ]
+                }),
+                _jsx('h2', {
+                  className: 'text-2xl font-semibold mt-8 mb-4',
+                  children: '3. How We Use Your Information'
+                }),
+                _jsx('p', {
+                  children:
+                    'We may use the information we collect for various purposes, including to:'
+                }),
+                _jsxs('ul', {
+                  className: 'list-disc pl-6 my-4 space-y-2',
+                  children: [
+                    _jsx('li', { children: 'Provide, operate, and maintain our platform' }),
+                    _jsx('li', { children: 'Improve, personalize, and expand our platform' }),
+                    _jsx('li', { children: 'Understand and analyze how you use our platform' }),
+                    _jsx('li', {
+                      children: 'Develop new products, services, features, and functionality'
+                    }),
+                    _jsx('li', {
+                      children: 'Communicate with you about updates, security alerts, and support'
+                    }),
+                    _jsx('li', {
+                      children:
+                        'Send you marketing and promotional communications (with your consent)'
+                    }),
+                    _jsx('li', { children: 'Find and prevent fraud' })
+                  ]
+                }),
+                _jsx('h2', {
+                  className: 'text-2xl font-semibold mt-8 mb-4',
+                  children: '4. Compliance Status'
+                }),
+                _jsxs('div', {
+                  className: 'bg-blue-50 border-l-4 border-blue-500 p-4 mb-6',
+                  children: [
+                    _jsx('p', {
+                      className: 'font-medium',
+                      children: 'Current compliance framework status: In Progress'
+                    }),
+                    _jsx('p', {
+                      className: 'text-sm mt-2',
+                      children:
+                        'We are actively working to ensure compliance with global privacy regulations including GDPR, CCPA, and other relevant frameworks.'
+                    })
+                  ]
+                }),
+                _jsx('h2', {
+                  className: 'text-2xl font-semibold mt-8 mb-4',
+                  children: '5. Data Security'
+                }),
+                _jsx('p', {
+                  children:
+                    'We have implemented appropriate technical and organizational security measures designed to protect the security of any personal information we process. However, despite our safeguards and efforts to secure your information, no electronic transmission over the Internet or information storage technology can be guaranteed to be 100% secure.'
+                }),
+                _jsx('h2', {
+                  className: 'text-2xl font-semibold mt-8 mb-4',
+                  children: '6. Third-Party Disclosure'
+                }),
+                _jsx('p', {
+                  children:
+                    'We may share your information with third parties in certain situations, including:'
+                }),
+                _jsxs('ul', {
+                  className: 'list-disc pl-6 my-4 space-y-2',
+                  children: [
+                    _jsx('li', {
+                      children: 'Business partners and service providers who support our business'
+                    }),
+                    _jsx('li', {
+                      children:
+                        'In response to a legal request if we believe disclosure is required by law'
+                    }),
+                    _jsx('li', { children: 'To protect and defend our rights and property' }),
+                    _jsx('li', { children: 'With your consent or at your direction' })
+                  ]
+                }),
+                _jsx('h2', {
+                  className: 'text-2xl font-semibold mt-8 mb-4',
+                  children: '7. Contact Us'
+                }),
+                _jsx('p', {
+                  children:
+                    'If you have any questions about this Privacy Policy, please contact us at:'
+                }),
+                _jsx('p', { className: 'mt-2', children: 'Email: privacy@synapse-platform.com' }),
+                _jsx('p', {
+                  className: 'mt-1',
+                  children: 'Address: 123 Compliance Way, Regulatory District, RC 12345'
+                })
+              ]
+            })
+          ]
+        })
+      }),
+      _jsx(Footer, {})
+    ]
+  });
 };
 export default PrivacyPolicy;

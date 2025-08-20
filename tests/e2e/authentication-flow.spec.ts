@@ -263,7 +263,7 @@ test.describe('Authentication Flow', () => {
 
       // Access protected routes
       const protectedRoutes = ['/dashboard', '/profile', '/settings'];
-      
+
       for (const route of protectedRoutes) {
         await helper.navigateTo(route);
         await helper.expectNotText(/Please log in to continue/);
@@ -311,12 +311,7 @@ test.describe('Authentication Flow', () => {
     test('should enforce password complexity requirements', async ({ page }) => {
       await helper.navigateTo('/register');
 
-      const weakPasswords = [
-        '123',
-        'password',
-        'abc123',
-        'qwerty'
-      ];
+      const weakPasswords = ['123', 'password', 'abc123', 'qwerty'];
 
       for (const weakPassword of weakPasswords) {
         await helper.fillField('[data-testid="email-input"]', TestData.user.email);
@@ -353,7 +348,7 @@ test.describe('Authentication Flow', () => {
       // Check cookie attributes
       const cookies = await page.context().cookies();
       const sessionCookie = cookies.find(cookie => cookie.name === 'session');
-      
+
       expect(sessionCookie).toBeDefined();
       expect(sessionCookie?.httpOnly).toBe(true);
       expect(sessionCookie?.secure).toBe(true);

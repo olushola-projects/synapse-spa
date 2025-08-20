@@ -6,173 +6,172 @@ import { backendConfig } from '../config/environment.backend';
 import { log } from '../utils/logger';
 import { complianceAutomationService } from './complianceAutomationService';
 class ComplianceReportingService {
-    static instance;
-    dashboards = new Map();
-    reports = [];
-    alerts = [];
-    schedules = [];
-    reportingEnabled;
-    autoRefreshEnabled;
-    constructor() {
-        this.reportingEnabled = backendConfig.ENABLE_COMPLIANCE_REPORTING;
-        this.autoRefreshEnabled = backendConfig.ENABLE_AUTO_REFRESH;
-        if (this.reportingEnabled) {
-            this.initializeComplianceReporting();
-        }
+  static instance;
+  dashboards = new Map();
+  reports = [];
+  alerts = [];
+  schedules = [];
+  reportingEnabled;
+  autoRefreshEnabled;
+  constructor() {
+    this.reportingEnabled = backendConfig.ENABLE_COMPLIANCE_REPORTING;
+    this.autoRefreshEnabled = backendConfig.ENABLE_AUTO_REFRESH;
+    if (this.reportingEnabled) {
+      this.initializeComplianceReporting();
     }
-    static getInstance() {
-        if (!ComplianceReportingService.instance) {
-            ComplianceReportingService.instance = new ComplianceReportingService();
-        }
-        return ComplianceReportingService.instance;
+  }
+  static getInstance() {
+    if (!ComplianceReportingService.instance) {
+      ComplianceReportingService.instance = new ComplianceReportingService();
     }
-    async initializeComplianceReporting() {
-        try {
-            log.info('Initializing compliance reporting service');
-            await this.initializeDefaultDashboards();
-            await this.initializeReportSchedules();
-            this.startAutoRefresh();
-            this.startAlertMonitoring();
-            log.info('Compliance reporting service initialized');
-        }
-        catch (error) {
-            log.error('Failed to initialize compliance reporting service', { error });
-        }
+    return ComplianceReportingService.instance;
+  }
+  async initializeComplianceReporting() {
+    try {
+      log.info('Initializing compliance reporting service');
+      await this.initializeDefaultDashboards();
+      await this.initializeReportSchedules();
+      this.startAutoRefresh();
+      this.startAlertMonitoring();
+      log.info('Compliance reporting service initialized');
+    } catch (error) {
+      log.error('Failed to initialize compliance reporting service', { error });
     }
-    async initializeDefaultDashboards() {
-        const defaultDashboards = [
-            {
-                id: crypto.randomUUID(),
-                name: 'Executive Compliance Overview',
-                description: 'High-level compliance metrics for executive review',
-                type: 'executive',
-                framework: 'all',
-                refreshInterval: 300,
-                widgets: [
-                    {
-                        id: crypto.randomUUID(),
-                        type: 'metric',
-                        title: 'Overall Compliance Score',
-                        description: 'Current compliance score across all frameworks',
-                        dataSource: 'compliance_metrics',
-                        config: {
-                            format: 'percentage',
-                            thresholds: { warning: 80, critical: 60 }
-                        },
-                        position: { x: 0, y: 0, width: 3, height: 2 },
-                        refreshInterval: 300
-                    },
-                    {
-                        id: crypto.randomUUID(),
-                        type: 'chart',
-                        title: 'Compliance Trends',
-                        description: 'Compliance score trends over time',
-                        dataSource: 'compliance_trends',
-                        config: {
-                            chartType: 'line',
-                            timeRange: '30d'
-                        },
-                        position: { x: 3, y: 0, width: 6, height: 3 },
-                        refreshInterval: 600
-                    }
-                ],
-                filters: [
-                    {
-                        id: crypto.randomUUID(),
-                        name: 'Time Range',
-                        type: 'date',
-                        field: 'timeRange',
-                        defaultValue: '30d',
-                        required: true
-                    }
-                ],
-                permissions: ['executive', 'compliance_manager'],
-                isPublic: false,
-                metadata: {}
-            }
-        ];
-        for (const dashboard of defaultDashboards) {
-            this.dashboards.set(dashboard.id, dashboard);
-        }
-        log.info(`Initialized ${defaultDashboards.length} default dashboards`);
+  }
+  async initializeDefaultDashboards() {
+    const defaultDashboards = [
+      {
+        id: crypto.randomUUID(),
+        name: 'Executive Compliance Overview',
+        description: 'High-level compliance metrics for executive review',
+        type: 'executive',
+        framework: 'all',
+        refreshInterval: 300,
+        widgets: [
+          {
+            id: crypto.randomUUID(),
+            type: 'metric',
+            title: 'Overall Compliance Score',
+            description: 'Current compliance score across all frameworks',
+            dataSource: 'compliance_metrics',
+            config: {
+              format: 'percentage',
+              thresholds: { warning: 80, critical: 60 }
+            },
+            position: { x: 0, y: 0, width: 3, height: 2 },
+            refreshInterval: 300
+          },
+          {
+            id: crypto.randomUUID(),
+            type: 'chart',
+            title: 'Compliance Trends',
+            description: 'Compliance score trends over time',
+            dataSource: 'compliance_trends',
+            config: {
+              chartType: 'line',
+              timeRange: '30d'
+            },
+            position: { x: 3, y: 0, width: 6, height: 3 },
+            refreshInterval: 600
+          }
+        ],
+        filters: [
+          {
+            id: crypto.randomUUID(),
+            name: 'Time Range',
+            type: 'date',
+            field: 'timeRange',
+            defaultValue: '30d',
+            required: true
+          }
+        ],
+        permissions: ['executive', 'compliance_manager'],
+        isPublic: false,
+        metadata: {}
+      }
+    ];
+    for (const dashboard of defaultDashboards) {
+      this.dashboards.set(dashboard.id, dashboard);
     }
-    async initializeReportSchedules() {
-        const defaultSchedules = [
-            {
-                id: crypto.randomUUID(),
-                name: 'Weekly Executive Report',
-                description: 'Weekly compliance summary for executive team',
-                framework: 'all',
-                frequency: 'weekly',
-                nextRun: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-                status: 'active',
-                config: {
-                    reportType: 'executive_summary',
-                    recipients: ['executive@company.com'],
-                    format: 'pdf',
-                    includeCharts: true,
-                    includeAttachments: false
-                }
-            }
-        ];
-        this.schedules = defaultSchedules;
-        log.info(`Initialized ${defaultSchedules.length} report schedules`);
-    }
-    startAutoRefresh() {
-        if (!this.autoRefreshEnabled)
-            return;
-        setInterval(async () => {
-            await this.refreshAllDashboards();
-        }, 60 * 1000);
-        log.info('Auto-refresh started for compliance dashboards');
-    }
-    startAlertMonitoring() {
-        setInterval(async () => {
-            await this.checkComplianceAlerts();
-        }, 5 * 60 * 1000);
-        log.info('Compliance alert monitoring started');
-    }
-    async refreshAllDashboards() {
-        try {
-            for (const dashboard of this.dashboards.values()) {
-                if (dashboard.lastRefresh &&
-                    Date.now() - dashboard.lastRefresh.getTime() < dashboard.refreshInterval * 1000) {
-                    continue;
-                }
-                await this.refreshDashboard(dashboard.id);
-            }
+    log.info(`Initialized ${defaultDashboards.length} default dashboards`);
+  }
+  async initializeReportSchedules() {
+    const defaultSchedules = [
+      {
+        id: crypto.randomUUID(),
+        name: 'Weekly Executive Report',
+        description: 'Weekly compliance summary for executive team',
+        framework: 'all',
+        frequency: 'weekly',
+        nextRun: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        status: 'active',
+        config: {
+          reportType: 'executive_summary',
+          recipients: ['executive@company.com'],
+          format: 'pdf',
+          includeCharts: true,
+          includeAttachments: false
         }
-        catch (error) {
-            log.error('Failed to refresh dashboards', { error });
+      }
+    ];
+    this.schedules = defaultSchedules;
+    log.info(`Initialized ${defaultSchedules.length} report schedules`);
+  }
+  startAutoRefresh() {
+    if (!this.autoRefreshEnabled) return;
+    setInterval(async () => {
+      await this.refreshAllDashboards();
+    }, 60 * 1000);
+    log.info('Auto-refresh started for compliance dashboards');
+  }
+  startAlertMonitoring() {
+    setInterval(
+      async () => {
+        await this.checkComplianceAlerts();
+      },
+      5 * 60 * 1000
+    );
+    log.info('Compliance alert monitoring started');
+  }
+  async refreshAllDashboards() {
+    try {
+      for (const dashboard of this.dashboards.values()) {
+        if (
+          dashboard.lastRefresh &&
+          Date.now() - dashboard.lastRefresh.getTime() < dashboard.refreshInterval * 1000
+        ) {
+          continue;
         }
+        await this.refreshDashboard(dashboard.id);
+      }
+    } catch (error) {
+      log.error('Failed to refresh dashboards', { error });
     }
-    async refreshDashboard(dashboardId) {
-        const dashboard = this.dashboards.get(dashboardId);
-        if (!dashboard)
-            return;
-        try {
-            for (const widget of dashboard.widgets) {
-                await this.refreshWidget(widget);
-            }
-            dashboard.lastRefresh = new Date();
-            log.info(`Dashboard refreshed: ${dashboard.name}`);
-        }
-        catch (error) {
-            log.error(`Failed to refresh dashboard ${dashboard.name}`, { error });
-        }
+  }
+  async refreshDashboard(dashboardId) {
+    const dashboard = this.dashboards.get(dashboardId);
+    if (!dashboard) return;
+    try {
+      for (const widget of dashboard.widgets) {
+        await this.refreshWidget(widget);
+      }
+      dashboard.lastRefresh = new Date();
+      log.info(`Dashboard refreshed: ${dashboard.name}`);
+    } catch (error) {
+      log.error(`Failed to refresh dashboard ${dashboard.name}`, { error });
     }
-    async refreshWidget(widget) {
-        try {
-            // const _data = await this.getWidgetData(widget);
-            // TODO: Use data when implementing full widget functionality
-            widget.lastUpdate = new Date();
-            log.debug(`Widget refreshed: ${widget.title}`);
-        }
-        catch (error) {
-            log.error(`Failed to refresh widget ${widget.title}`, { error });
-        }
+  }
+  async refreshWidget(widget) {
+    try {
+      // const _data = await this.getWidgetData(widget);
+      // TODO: Use data when implementing full widget functionality
+      widget.lastUpdate = new Date();
+      log.debug(`Widget refreshed: ${widget.title}`);
+    } catch (error) {
+      log.error(`Failed to refresh widget ${widget.title}`, { error });
     }
-    /*
+  }
+  /*
     private async getComplianceMetrics(): Promise<any> {
       const complianceData = await complianceAutomationService.getComplianceRules();
       const checks = await complianceAutomationService.getComplianceChecks();
@@ -208,214 +207,217 @@ class ComplianceReportingService {
       return trends;
     }
     */
-    async checkComplianceAlerts() {
-        try {
-            const rules = await complianceAutomationService.getComplianceRules();
-            const checks = await complianceAutomationService.getComplianceChecks();
-            for (const rule of rules) {
-                const recentChecks = checks.filter(c => c.ruleId === rule.id &&
-                    c.timestamp > new Date(Date.now() - 24 * 60 * 60 * 1000));
-                const failedChecks = recentChecks.filter(c => c.status === 'fail');
-                if (failedChecks.length > 0) {
-                    await this.createComplianceAlert({
-                        type: 'compliance_violation',
-                        severity: rule.severity,
-                        title: `Compliance Violation: ${rule.name}`,
-                        description: `Rule ${rule.name} has ${failedChecks.length} failed checks in the last 24 hours`,
-                        framework: rule.category,
-                        affectedRules: [rule.id],
-                        detectedAt: new Date()
-                    });
-                }
-            }
+  async checkComplianceAlerts() {
+    try {
+      const rules = await complianceAutomationService.getComplianceRules();
+      const checks = await complianceAutomationService.getComplianceChecks();
+      for (const rule of rules) {
+        const recentChecks = checks.filter(
+          c => c.ruleId === rule.id && c.timestamp > new Date(Date.now() - 24 * 60 * 60 * 1000)
+        );
+        const failedChecks = recentChecks.filter(c => c.status === 'fail');
+        if (failedChecks.length > 0) {
+          await this.createComplianceAlert({
+            type: 'compliance_violation',
+            severity: rule.severity,
+            title: `Compliance Violation: ${rule.name}`,
+            description: `Rule ${rule.name} has ${failedChecks.length} failed checks in the last 24 hours`,
+            framework: rule.category,
+            affectedRules: [rule.id],
+            detectedAt: new Date()
+          });
         }
-        catch (error) {
-            log.error('Failed to check compliance alerts', { error });
-        }
+      }
+    } catch (error) {
+      log.error('Failed to check compliance alerts', { error });
     }
-    async createComplianceDashboard(dashboardData) {
-        const dashboard = {
+  }
+  async createComplianceDashboard(dashboardData) {
+    const dashboard = {
+      id: crypto.randomUUID(),
+      name: dashboardData.name || 'New Dashboard',
+      description: dashboardData.description || '',
+      type: dashboardData.type || 'custom',
+      framework: dashboardData.framework || 'all',
+      refreshInterval: dashboardData.refreshInterval || 300,
+      widgets: dashboardData.widgets || [],
+      filters: dashboardData.filters || [],
+      permissions: dashboardData.permissions || [],
+      isPublic: dashboardData.isPublic || false,
+      metadata: dashboardData.metadata || {}
+    };
+    this.dashboards.set(dashboard.id, dashboard);
+    log.info(`Compliance dashboard created: ${dashboard.name}`);
+    return dashboard;
+  }
+  async generateComplianceReport(framework, period, reportType, generatedBy) {
+    try {
+      const rules = await complianceAutomationService.getComplianceRules();
+      const checks = await complianceAutomationService.getComplianceChecks();
+      const frameworkRules = rules.filter(r => framework === 'all' || r.category === framework);
+      const frameworkChecks = checks.filter(
+        c =>
+          frameworkRules.some(r => r.id === c.ruleId) &&
+          c.timestamp >= period.start &&
+          c.timestamp <= period.end
+      );
+      const totalChecks = frameworkChecks.length;
+      const passedChecks = frameworkChecks.filter(c => c.status === 'pass').length;
+      const complianceScore = totalChecks > 0 ? (passedChecks / totalChecks) * 100 : 100;
+      const report = {
+        id: crypto.randomUUID(),
+        title: `${framework} Compliance Report`,
+        description: `Compliance report for ${framework} framework`,
+        framework: framework,
+        period,
+        generatedAt: new Date(),
+        generatedBy,
+        status: 'draft',
+        sections: [
+          {
             id: crypto.randomUUID(),
-            name: dashboardData.name || 'New Dashboard',
-            description: dashboardData.description || '',
-            type: dashboardData.type || 'custom',
-            framework: dashboardData.framework || 'all',
-            refreshInterval: dashboardData.refreshInterval || 300,
-            widgets: dashboardData.widgets || [],
-            filters: dashboardData.filters || [],
-            permissions: dashboardData.permissions || [],
-            isPublic: dashboardData.isPublic || false,
-            metadata: dashboardData.metadata || {}
-        };
-        this.dashboards.set(dashboard.id, dashboard);
-        log.info(`Compliance dashboard created: ${dashboard.name}`);
-        return dashboard;
-    }
-    async generateComplianceReport(framework, period, reportType, generatedBy) {
-        try {
-            const rules = await complianceAutomationService.getComplianceRules();
-            const checks = await complianceAutomationService.getComplianceChecks();
-            const frameworkRules = rules.filter(r => framework === 'all' || r.category === framework);
-            const frameworkChecks = checks.filter(c => frameworkRules.some(r => r.id === c.ruleId) &&
-                c.timestamp >= period.start &&
-                c.timestamp <= period.end);
-            const totalChecks = frameworkChecks.length;
-            const passedChecks = frameworkChecks.filter(c => c.status === 'pass').length;
-            const complianceScore = totalChecks > 0 ? (passedChecks / totalChecks) * 100 : 100;
-            const report = {
-                id: crypto.randomUUID(),
-                title: `${framework} Compliance Report`,
-                description: `Compliance report for ${framework} framework`,
-                framework: framework,
-                period,
-                generatedAt: new Date(),
-                generatedBy,
-                status: 'draft',
-                sections: [
-                    {
-                        id: crypto.randomUUID(),
-                        title: 'Executive Summary',
-                        type: 'overview',
-                        content: `This report provides a comprehensive overview of ${framework} compliance status for the period ${period.start.toDateString()} to ${period.end.toDateString()}.`,
-                        order: 1
-                    },
-                    {
-                        id: crypto.randomUUID(),
-                        title: 'Compliance Status',
-                        type: 'compliance',
-                        content: `Overall compliance score: ${complianceScore.toFixed(1)}%`,
-                        data: {
-                            totalChecks,
-                            passedChecks,
-                            failedChecks: totalChecks - passedChecks,
-                            complianceScore
-                        },
-                        order: 2
-                    }
-                ],
-                summary: {
-                    overallScore: complianceScore,
-                    complianceRate: complianceScore,
-                    totalChecks,
-                    passedChecks,
-                    failedChecks: totalChecks - passedChecks,
-                    criticalIssues: 0,
-                    highIssues: 0,
-                    mediumIssues: 0,
-                    lowIssues: 0,
-                    trends: {
-                        score: 'stable',
-                        issues: 'stable',
-                        compliance: 'stable'
-                    },
-                    recommendations: [
-                        'Continue monitoring compliance metrics',
-                        'Address failed compliance checks promptly',
-                        'Review and update compliance rules as needed'
-                    ],
-                    nextReviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-                },
-                attachments: [],
-                metadata: {
-                    reportType,
-                    framework,
-                    generatedBy
-                }
-            };
-            this.reports.push(report);
-            log.info(`Compliance report generated: ${report.title}`);
-            return report;
-        }
-        catch (error) {
-            log.error('Failed to generate compliance report', { error });
-            throw error;
-        }
-    }
-    async createComplianceAlert(alertData) {
-        const alert = {
+            title: 'Executive Summary',
+            type: 'overview',
+            content: `This report provides a comprehensive overview of ${framework} compliance status for the period ${period.start.toDateString()} to ${period.end.toDateString()}.`,
+            order: 1
+          },
+          {
             id: crypto.randomUUID(),
-            type: alertData.type || 'compliance_violation',
-            severity: alertData.severity || 'medium',
-            title: alertData.title || 'Compliance Alert',
-            description: alertData.description || '',
-            framework: alertData.framework || '',
-            affectedRules: alertData.affectedRules || [],
-            detectedAt: new Date(),
-            dueDate: alertData.dueDate,
-            status: 'new'
-        };
-        this.alerts.push(alert);
-        log.warn(`Compliance alert created: ${alert.title}`, { alert });
-        return alert;
+            title: 'Compliance Status',
+            type: 'compliance',
+            content: `Overall compliance score: ${complianceScore.toFixed(1)}%`,
+            data: {
+              totalChecks,
+              passedChecks,
+              failedChecks: totalChecks - passedChecks,
+              complianceScore
+            },
+            order: 2
+          }
+        ],
+        summary: {
+          overallScore: complianceScore,
+          complianceRate: complianceScore,
+          totalChecks,
+          passedChecks,
+          failedChecks: totalChecks - passedChecks,
+          criticalIssues: 0,
+          highIssues: 0,
+          mediumIssues: 0,
+          lowIssues: 0,
+          trends: {
+            score: 'stable',
+            issues: 'stable',
+            compliance: 'stable'
+          },
+          recommendations: [
+            'Continue monitoring compliance metrics',
+            'Address failed compliance checks promptly',
+            'Review and update compliance rules as needed'
+          ],
+          nextReviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        },
+        attachments: [],
+        metadata: {
+          reportType,
+          framework,
+          generatedBy
+        }
+      };
+      this.reports.push(report);
+      log.info(`Compliance report generated: ${report.title}`);
+      return report;
+    } catch (error) {
+      log.error('Failed to generate compliance report', { error });
+      throw error;
     }
-    async getComplianceDashboards(filters) {
-        let dashboards = Array.from(this.dashboards.values());
-        if (filters?.type) {
-            dashboards = dashboards.filter(d => d.type === filters.type);
-        }
-        if (filters?.framework) {
-            dashboards = dashboards.filter(d => d.framework === filters.framework);
-        }
-        if (filters?.isPublic !== undefined) {
-            dashboards = dashboards.filter(d => d.isPublic === filters.isPublic);
-        }
-        return dashboards;
+  }
+  async createComplianceAlert(alertData) {
+    const alert = {
+      id: crypto.randomUUID(),
+      type: alertData.type || 'compliance_violation',
+      severity: alertData.severity || 'medium',
+      title: alertData.title || 'Compliance Alert',
+      description: alertData.description || '',
+      framework: alertData.framework || '',
+      affectedRules: alertData.affectedRules || [],
+      detectedAt: new Date(),
+      dueDate: alertData.dueDate,
+      status: 'new'
+    };
+    this.alerts.push(alert);
+    log.warn(`Compliance alert created: ${alert.title}`, { alert });
+    return alert;
+  }
+  async getComplianceDashboards(filters) {
+    let dashboards = Array.from(this.dashboards.values());
+    if (filters?.type) {
+      dashboards = dashboards.filter(d => d.type === filters.type);
     }
-    async getComplianceReports(filters) {
-        let reports = this.reports;
-        if (filters?.framework) {
-            reports = reports.filter(r => r.framework === filters.framework);
-        }
-        if (filters?.status) {
-            reports = reports.filter(r => r.status === filters.status);
-        }
-        if (filters?.period) {
-            reports = reports.filter(r => r.generatedAt >= filters.period.start &&
-                r.generatedAt <= filters.period.end);
-        }
-        return reports.sort((a, b) => b.generatedAt.getTime() - a.generatedAt.getTime());
+    if (filters?.framework) {
+      dashboards = dashboards.filter(d => d.framework === filters.framework);
     }
-    async getComplianceAlerts(filters) {
-        let alerts = this.alerts;
-        if (filters?.type) {
-            alerts = alerts.filter(a => a.type === filters.type);
-        }
-        if (filters?.severity) {
-            alerts = alerts.filter(a => a.severity === filters.severity);
-        }
-        if (filters?.status) {
-            alerts = alerts.filter(a => a.status === filters.status);
-        }
-        return alerts.sort((a, b) => b.detectedAt.getTime() - a.detectedAt.getTime());
+    if (filters?.isPublic !== undefined) {
+      dashboards = dashboards.filter(d => d.isPublic === filters.isPublic);
     }
-    async getReportSchedules() {
-        return this.schedules;
+    return dashboards;
+  }
+  async getComplianceReports(filters) {
+    let reports = this.reports;
+    if (filters?.framework) {
+      reports = reports.filter(r => r.framework === filters.framework);
     }
-    async updateDashboard(dashboardId, updates) {
-        const dashboard = this.dashboards.get(dashboardId);
-        if (dashboard) {
-            Object.assign(dashboard, updates);
-            log.info(`Dashboard updated: ${dashboard.name}`);
-        }
+    if (filters?.status) {
+      reports = reports.filter(r => r.status === filters.status);
     }
-    async updateAlertStatus(alertId, status, updates) {
-        const alert = this.alerts.find(a => a.id === alertId);
-        if (alert) {
-            alert.status = status;
-            if (updates) {
-                Object.assign(alert, updates);
-            }
-            log.info(`Alert status updated: ${alert.title} -> ${status}`);
-        }
+    if (filters?.period) {
+      reports = reports.filter(
+        r => r.generatedAt >= filters.period.start && r.generatedAt <= filters.period.end
+      );
     }
-    async exportReport(reportId, format) {
-        const report = this.reports.find(r => r.id === reportId);
-        if (!report) {
-            throw new Error(`Report not found: ${reportId}`);
-        }
-        const exportUrl = `/api/compliance/reports/${reportId}/export?format=${format}`;
-        log.info(`Report export requested: ${report.title} (${format})`);
-        return exportUrl;
+    return reports.sort((a, b) => b.generatedAt.getTime() - a.generatedAt.getTime());
+  }
+  async getComplianceAlerts(filters) {
+    let alerts = this.alerts;
+    if (filters?.type) {
+      alerts = alerts.filter(a => a.type === filters.type);
     }
+    if (filters?.severity) {
+      alerts = alerts.filter(a => a.severity === filters.severity);
+    }
+    if (filters?.status) {
+      alerts = alerts.filter(a => a.status === filters.status);
+    }
+    return alerts.sort((a, b) => b.detectedAt.getTime() - a.detectedAt.getTime());
+  }
+  async getReportSchedules() {
+    return this.schedules;
+  }
+  async updateDashboard(dashboardId, updates) {
+    const dashboard = this.dashboards.get(dashboardId);
+    if (dashboard) {
+      Object.assign(dashboard, updates);
+      log.info(`Dashboard updated: ${dashboard.name}`);
+    }
+  }
+  async updateAlertStatus(alertId, status, updates) {
+    const alert = this.alerts.find(a => a.id === alertId);
+    if (alert) {
+      alert.status = status;
+      if (updates) {
+        Object.assign(alert, updates);
+      }
+      log.info(`Alert status updated: ${alert.title} -> ${status}`);
+    }
+  }
+  async exportReport(reportId, format) {
+    const report = this.reports.find(r => r.id === reportId);
+    if (!report) {
+      throw new Error(`Report not found: ${reportId}`);
+    }
+    const exportUrl = `/api/compliance/reports/${reportId}/export?format=${format}`;
+    log.info(`Report export requested: ${report.title} (${format})`);
+    return exportUrl;
+  }
 }
 export const complianceReportingService = ComplianceReportingService.getInstance();

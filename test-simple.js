@@ -9,7 +9,7 @@ fetch(`${API_URL}/api/health`)
   })
   .then(text => {
     console.log('Response body preview:', text.substring(0, 200));
-    
+
     try {
       const json = JSON.parse(text);
       console.log('✅ JSON Response:', json);
@@ -21,4 +21,3 @@ fetch(`${API_URL}/api/health`)
     }
   })
   .catch(err => console.error('Request failed:', err));
-

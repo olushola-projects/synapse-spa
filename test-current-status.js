@@ -8,7 +8,7 @@ const API_BASE = 'https://synapse-landing-nexus-hd3ar7ysb-aas-projects-66c93685.
 
 async function testBackendStatus() {
   console.log('🔍 Testing Current Backend Status...\n');
-  
+
   try {
     // Test 1: Health endpoint
     console.log('📋 Testing /api/health...');
@@ -16,7 +16,7 @@ async function testBackendStatus() {
       method: 'GET',
       headers: { 'User-Agent': 'Status-Tester/1.0' }
     });
-    
+
     if (healthResponse.ok) {
       const healthData = await healthResponse.json();
       console.log('✅ Health Check: OK');
@@ -33,27 +33,31 @@ async function testBackendStatus() {
   }
 
   try {
-    // Test 2: Metrics endpoint  
+    // Test 2: Metrics endpoint
     console.log('\n📊 Testing /api/metrics...');
     const metricsResponse = await fetch(`${API_BASE}/api/metrics`, {
-      method: 'GET', 
+      method: 'GET',
       headers: { 'User-Agent': 'Status-Tester/1.0' }
     });
-    
+
     if (metricsResponse.ok) {
       const metricsData = await metricsResponse.json();
       console.log('✅ Metrics: OK');
-      
+
       if (metricsData.api_keys_configured) {
         console.log('   🔑 API Keys Status:');
-        console.log(`     Qwen: ${metricsData.api_keys_configured.qwen ? '✅ Configured' : '❌ Missing'}`);
-        console.log(`     OpenAI: ${metricsData.api_keys_configured.openai ? '✅ Configured' : '❌ Missing'}`);
+        console.log(
+          `     Qwen: ${metricsData.api_keys_configured.qwen ? '✅ Configured' : '❌ Missing'}`
+        );
+        console.log(
+          `     OpenAI: ${metricsData.api_keys_configured.openai ? '✅ Configured' : '❌ Missing'}`
+        );
       }
-      
+
       if (metricsData.capabilities) {
         console.log('   📋 Capabilities:', metricsData.capabilities.join(', '));
       }
-      
+
       if (metricsData.uptime) {
         console.log('   ⏱️  Uptime:', metricsData.uptime);
       }
@@ -69,33 +73,32 @@ async function testBackendStatus() {
     console.log('\n🧪 Testing /api/classify...');
     const classifyResponse = await fetch(`${API_BASE}/api/classify`, {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'Status-Tester/1.0'
       },
       body: JSON.stringify({
-        text: "This fund promotes environmental and social characteristics through ESG integration.",
-        document_type: "fund_prospectus"
+        text: 'This fund promotes environmental and social characteristics through ESG integration.',
+        document_type: 'fund_prospectus'
       })
     });
-    
+
     if (classifyResponse.ok) {
       const classifyData = await classifyResponse.json();
       console.log('✅ Classification: OK');
       console.log('   Classification:', classifyData.classification || 'Unknown');
       console.log('   Confidence:', classifyData.confidence || 'Unknown');
       console.log('   Processing Time:', classifyData.processing_time || 'Unknown');
-      
+
       // Check for enhanced features
       const hasAuditTrail = classifyData.audit_trail && classifyData.audit_trail.classification_id;
       const hasRegBasis = classifyData.regulatory_basis && classifyData.regulatory_basis.length > 0;
       const hasExplainability = typeof classifyData.explainability_score === 'number';
-      
+
       console.log('   📋 Enhanced Features:');
       console.log(`     Audit Trail: ${hasAuditTrail ? '✅' : '❌'}`);
       console.log(`     Regulatory Citations: ${hasRegBasis ? '✅' : '❌'}`);
       console.log(`     Explainability: ${hasExplainability ? '✅' : '❌'}`);
-      
     } else {
       console.log('❌ Classification: Failed', classifyResponse.status);
     }
@@ -114,4 +117,3 @@ async function testBackendStatus() {
 
 // Run the test
 testBackendStatus().catch(console.error);
-

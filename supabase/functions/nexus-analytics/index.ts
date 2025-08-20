@@ -5,7 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
 };
 
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -19,7 +19,10 @@ Deno.serve(async (req) => {
     // Get user from JWT
     const authHeader = req.headers.get('Authorization')!;
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
@@ -32,10 +35,7 @@ Deno.serve(async (req) => {
     const filters = Object.fromEntries(url.searchParams);
 
     // Get user's compliance assessments for analytics
-    let query = supabase
-      .from('compliance_assessments')
-      .select('*')
-      .eq('user_id', user.id);
+    let query = supabase.from('compliance_assessments').select('*').eq('user_id', user.id);
 
     // Apply filters
     if (filters.article) {
@@ -76,7 +76,7 @@ function generateAnalytics(assessments: any[]) {
     'Article 8': 0,
     'Article 9': 0
   };
-  
+
   let totalScore = 0;
   const riskDistribution = { Low: 0, Medium: 0, High: 0 };
   const monthlyTrends: Record<string, number> = {};
@@ -129,7 +129,7 @@ function generateInsights(assessments: any[]) {
   }
 
   const avgScore = assessments.reduce((sum, a) => sum + (a.compliance_score || 0), 0) / total;
-  
+
   if (avgScore >= 85) {
     insights.push('Excellent compliance performance across assessments');
   } else if (avgScore >= 70) {
@@ -138,10 +138,10 @@ function generateInsights(assessments: any[]) {
     insights.push('Compliance scores indicate need for focused improvement');
   }
 
-  const recentAssessments = assessments.filter(a => 
-    new Date(a.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  const recentAssessments = assessments.filter(
+    a => new Date(a.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   );
-  
+
   if (recentAssessments.length > 0) {
     insights.push(`${recentAssessments.length} assessments completed in the last 30 days`);
   }

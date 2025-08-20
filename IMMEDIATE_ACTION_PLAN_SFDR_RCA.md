@@ -14,16 +14,19 @@
 **Action**: Revise `SFDR_FUND_CLASSIFICATION_AUDIT_REPORT.md`
 
 **Changes Required**:
+
 ```markdown
 # CRITICAL UPDATES NEEDED
 
 ## Current System Analysis (REVISED)
+
 - **Actual Architecture**: Supabase Edge Functions + External Nexus API
 - **Deployed Backend**: https://nexus-qx4pvibj3-aas-projects-66c93685.vercel.app
 - **Classification Engine**: Basic rule-based + Loveable AI integration
 - **Confidence Scoring**: Static (0.85) - needs dynamic implementation
 
 ## Realistic Enhancement Recommendations
+
 1. **Phase 1**: Enhance existing Loveable AI integration
 2. **Phase 2**: Implement dynamic confidence scoring
 3. **Phase 3**: Add comprehensive PAI validation
@@ -31,6 +34,7 @@
 ```
 
 **Files to Update**:
+
 - `SFDR_FUND_CLASSIFICATION_AUDIT_REPORT.md` - Major revision
 - `BACKEND_INTEGRATION_REPORT.md` - Minor updates
 - `DEPLOYMENT.md` - Verify accuracy
@@ -40,10 +44,12 @@
 **Action**: Create single source of truth
 
 **New File**: `SYSTEM_ARCHITECTURE.md`
+
 ```markdown
 # SFDR Navigator - System Architecture
 
 ## Current Deployed System
+
 - **Frontend**: React/Vite on Vercel
 - **Backend**: Supabase Edge Functions
 - **External API**: https://api.joinsynapses.com
@@ -51,12 +57,14 @@
 - **Database**: Supabase PostgreSQL
 
 ## API Endpoints
+
 - Health: `/functions/v1/nexus-health`
 - Classification: `/functions/v1/nexus-classify`
 - Analytics: `/functions/v1/nexus-analytics`
 - Proxy: `/functions/v1/nexus-proxy`
 
 ## Security
+
 - JWT authentication for protected endpoints
 - API keys stored in Supabase secrets
 - CORS properly configured
@@ -67,6 +75,7 @@
 **Action**: Test all deployed components
 
 **Test Script**:
+
 ```bash
 # Test Vercel deployment
 curl -s "https://nexus-qx4pvibj3-aas-projects-66c93685.vercel.app" | head -10
@@ -91,6 +100,7 @@ curl -X POST "https://api.joinsynapses.com/api/health" \
 **File**: `supabase/functions/nexus-classify/index.ts`
 
 **Current Code**:
+
 ```typescript
 // BASIC CLASSIFICATION (CURRENT)
 async function performSFDRClassification(data: ClassificationRequest) {
@@ -103,6 +113,7 @@ async function performSFDRClassification(data: ClassificationRequest) {
 ```
 
 **Enhanced Code**:
+
 ```typescript
 // ENHANCED CLASSIFICATION (IMMEDIATE IMPROVEMENT)
 async function performEnhancedClassification(data: ClassificationRequest) {
@@ -112,25 +123,25 @@ async function performEnhancedClassification(data: ClassificationRequest) {
     social: ['social', 'governance', 'diversity', 'inclusion', 'human rights'],
     impact: ['impact', 'positive', 'change', 'betterment', 'improvement']
   };
-  
+
   // 2. Multi-factor classification
   let classification = 'Article 6';
   let confidence = 0.6;
   let reasoning = [];
-  
+
   // Check for sustainability objectives
   if (data.sustainabilityObjectives?.length > 0) {
     classification = 'Article 8';
     confidence += 0.2;
     reasoning.push('Has sustainability objectives');
   }
-  
+
   // Check investment strategy
   const strategy = data.investmentStrategy?.toLowerCase() || '';
   const sustainableKeywords = keywords.sustainable.some(k => strategy.includes(k));
   const socialKeywords = keywords.social.some(k => strategy.includes(k));
   const impactKeywords = keywords.impact.some(k => strategy.includes(k));
-  
+
   if (sustainableKeywords && impactKeywords) {
     classification = 'Article 9';
     confidence += 0.3;
@@ -140,10 +151,10 @@ async function performEnhancedClassification(data: ClassificationRequest) {
     confidence += 0.2;
     reasoning.push('ESG characteristics identified');
   }
-  
+
   // 3. Dynamic confidence calculation
   confidence = Math.min(0.95, Math.max(0.5, confidence));
-  
+
   return {
     classification,
     confidence,
@@ -166,21 +177,21 @@ interface PAIValidation {
       'GHG_emissions', 'carbon_footprint', 'biodiversity', 'water', 'waste',
       'social_and_employee_matters', 'anti_corruption', 'anti_bribery'
     ];
-    
+
     const validation = {
       mandatory: this.validateMandatory(indicators, mandatoryIndicators),
       optional: this.validateOptional(indicators),
       dataQuality: this.assessDataQuality(indicators),
       score: 0
     };
-    
+
     // Calculate validation score
     validation.score = (
       validation.mandatory.score * 0.5 +
       validation.optional.score * 0.3 +
       validation.dataQuality.score * 0.2
     );
-    
+
     return {
       isValid: validation.score >= 0.7,
       score: validation.score,
@@ -199,7 +210,7 @@ interface PAIValidation {
 
 ```typescript
 // ENHANCED HEALTH CHECK
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   const healthCheck = {
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -215,16 +226,22 @@ Deno.serve(async (req) => {
       memory_usage: process.memoryUsage()
     }
   };
-  
-  const overallStatus = Object.values(healthCheck.services)
-    .every(service => service.status === 'healthy') ? 'healthy' : 'degraded';
-  
-  return new Response(JSON.stringify({
-    ...healthCheck,
-    status: overallStatus
-  }), {
-    headers: { 'Content-Type': 'application/json' }
-  });
+
+  const overallStatus = Object.values(healthCheck.services).every(
+    service => service.status === 'healthy'
+  )
+    ? 'healthy'
+    : 'degraded';
+
+  return new Response(
+    JSON.stringify({
+      ...healthCheck,
+      status: overallStatus
+    }),
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  );
 });
 ```
 
@@ -250,12 +267,12 @@ async function performAIClassification(data: ClassificationRequest) {
       Risk Profile: ${data.riskProfile}
       Target Article: ${data.targetArticle}
     `;
-    
+
     // 2. Call Loveable AI
     const loveableResponse = await fetch('https://api.lovable.ai/classify', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('LOVEABLE_API_KEY')}`,
+        Authorization: `Bearer ${Deno.env.get('LOVEABLE_API_KEY')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -269,16 +286,16 @@ async function performAIClassification(data: ClassificationRequest) {
         }
       })
     });
-    
+
     if (!loveableResponse.ok) {
       throw new Error(`Loveable AI error: ${loveableResponse.status}`);
     }
-    
+
     const aiResult = await loveableResponse.json();
-    
+
     // 3. Combine AI result with rule-based validation
     const finalClassification = combineResults(aiResult, data);
-    
+
     return finalClassification;
   } catch (error) {
     console.error('AI classification failed:', error);
@@ -304,50 +321,50 @@ export class ConfidenceCalculator {
     const factors = {
       // Data quality factor (0-1)
       dataQuality: this.assessDataQuality(data),
-      
+
       // AI confidence factor (0-1)
       aiConfidence: aiResult?.confidence || 0.5,
-      
+
       // Regulatory alignment factor (0-1)
       regulatoryAlignment: this.checkRegulatoryAlignment(data),
-      
+
       // Historical accuracy factor (0-1)
       historicalAccuracy: this.getHistoricalAccuracy(historicalData),
-      
+
       // Completeness factor (0-1)
       completeness: this.assessCompleteness(data)
     };
-    
+
     // Weighted average calculation
     const weights = {
       dataQuality: 0.25,
-      aiConfidence: 0.30,
-      regulatoryAlignment: 0.20,
+      aiConfidence: 0.3,
+      regulatoryAlignment: 0.2,
       historicalAccuracy: 0.15,
-      completeness: 0.10
+      completeness: 0.1
     };
-    
+
     const weightedSum = Object.entries(factors).reduce(
-      (sum, [key, value]) => sum + (value * weights[key as keyof typeof weights]),
+      (sum, [key, value]) => sum + value * weights[key as keyof typeof weights],
       0
     );
-    
+
     return Math.min(0.95, Math.max(0.5, weightedSum));
   }
-  
+
   private static assessDataQuality(data: ClassificationRequest): number {
     let score = 0.5;
-    
+
     // Check required fields
     if (data.productName) score += 0.1;
     if (data.investmentStrategy) score += 0.1;
     if (data.sustainabilityObjectives?.length > 0) score += 0.1;
     if (data.riskProfile) score += 0.1;
     if (data.targetArticle) score += 0.1;
-    
+
     return Math.min(1.0, score);
   }
-  
+
   private static checkRegulatoryAlignment(data: ClassificationRequest): number {
     // Check if classification aligns with SFDR requirements
     const alignment = {
@@ -355,21 +372,21 @@ export class ConfidenceCalculator {
       article8: data.targetArticle === 'Article 8' ? 1.0 : 0.5,
       article9: data.targetArticle === 'Article 9' ? 1.0 : 0.5
     };
-    
+
     return Math.max(...Object.values(alignment));
   }
-  
+
   private static getHistoricalAccuracy(historicalData: any[]): number {
     if (historicalData.length === 0) return 0.7; // Default for new system
-    
-    const recentAccuracy = historicalData
-      .slice(-10) // Last 10 classifications
-      .filter(item => item.accuracy_verified)
-      .length / Math.min(10, historicalData.length);
-    
+
+    const recentAccuracy =
+      historicalData
+        .slice(-10) // Last 10 classifications
+        .filter(item => item.accuracy_verified).length / Math.min(10, historicalData.length);
+
     return recentAccuracy;
   }
-  
+
   private static assessCompleteness(data: ClassificationRequest): number {
     const requiredFields = [
       'productName',
@@ -377,11 +394,11 @@ export class ConfidenceCalculator {
       'sustainabilityObjectives',
       'riskProfile'
     ];
-    
-    const providedFields = requiredFields.filter(field => 
-      data[field as keyof ClassificationRequest]
+
+    const providedFields = requiredFields.filter(
+      field => data[field as keyof ClassificationRequest]
     ).length;
-    
+
     return providedFields / requiredFields.length;
   }
 }
@@ -396,40 +413,40 @@ export class ConfidenceCalculator {
 ```typescript
 export class PerformanceMonitor {
   private static metrics: Map<string, any[]> = new Map();
-  
+
   static startTimer(operation: string): string {
     const timerId = `${operation}_${Date.now()}`;
     this.metrics.set(timerId, [Date.now()]);
     return timerId;
   }
-  
+
   static endTimer(timerId: string, metadata?: any): number {
     const startTime = this.metrics.get(timerId)?.[0];
     if (!startTime) return 0;
-    
+
     const duration = Date.now() - startTime;
     this.metrics.set(timerId, [startTime, duration, metadata]);
-    
+
     // Log performance metrics
     console.log(`Performance: ${timerId} took ${duration}ms`, metadata);
-    
+
     return duration;
   }
-  
+
   static getAverageResponseTime(operation: string): number {
     const timers = Array.from(this.metrics.keys())
       .filter(key => key.startsWith(operation))
       .map(key => this.metrics.get(key)?.[1])
       .filter(Boolean);
-    
+
     if (timers.length === 0) return 0;
-    
+
     return timers.reduce((sum, time) => sum + time, 0) / timers.length;
   }
-  
+
   static generatePerformanceReport(): any {
     const operations = ['classification', 'validation', 'health_check'];
-    
+
     return {
       timestamp: new Date().toISOString(),
       operations: operations.map(op => ({
@@ -443,11 +460,9 @@ export class PerformanceMonitor {
       }
     };
   }
-  
+
   private static getTotalRequests(operation: string): number {
-    return Array.from(this.metrics.keys())
-      .filter(key => key.startsWith(operation))
-      .length;
+    return Array.from(this.metrics.keys()).filter(key => key.startsWith(operation)).length;
   }
 }
 ```

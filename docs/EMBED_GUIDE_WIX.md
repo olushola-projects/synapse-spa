@@ -7,11 +7,13 @@ This guide explains how to securely embed Synapse components in Wix websites usi
 ## Security Features
 
 ### Content Security Policy (CSP)
+
 - Frame ancestors restricted to Wix domains
 - Script sources validated and sanitized
 - XSS protection enabled
 
 ### PostMessage Security
+
 - Origin validation for all communications
 - Message sanitization and validation
 - Error handling and logging
@@ -21,13 +23,14 @@ This guide explains how to securely embed Synapse components in Wix websites usi
 ### 1. Basic Embedding
 
 ```html
-<iframe 
+<iframe
   src="https://your-synapse-domain.vercel.app/embed/component"
-  width="100%" 
+  width="100%"
   height="600"
   frameborder="0"
   sandbox="allow-scripts allow-same-origin allow-forms"
-  referrerpolicy="strict-origin-when-cross-origin">
+  referrerpolicy="strict-origin-when-cross-origin"
+>
 </iframe>
 ```
 
@@ -37,12 +40,12 @@ This guide explains how to securely embed Synapse components in Wix websites usi
 import { WixEmbedSecure } from '@/components/WixEmbedSecure';
 
 <WixEmbedSecure
-  src="https://your-wix-content.wixsite.com/widget"
-  title="Synapse Integration"
+  src='https://your-wix-content.wixsite.com/widget'
+  title='Synapse Integration'
   allowedOrigins={['*.wix.com', '*.wixsite.com']}
-  onMessage={(data) => console.log('Received:', data)}
-  onError={(error) => console.error('Error:', error)}
-/>
+  onMessage={data => console.log('Received:', data)}
+  onError={error => console.error('Error:', error)}
+/>;
 ```
 
 ## PostMessage Communication
@@ -51,21 +54,26 @@ import { WixEmbedSecure } from '@/components/WixEmbedSecure';
 
 ```javascript
 // In your Wix website
-window.parent.postMessage({
-  type: 'SYNAPSE_ACTION',
-  action: 'UPDATE_DATA',
-  data: { /* your data */ }
-}, 'https://your-synapse-domain.vercel.app');
+window.parent.postMessage(
+  {
+    type: 'SYNAPSE_ACTION',
+    action: 'UPDATE_DATA',
+    data: {
+      /* your data */
+    }
+  },
+  'https://your-synapse-domain.vercel.app'
+);
 ```
 
 ### Receiving Messages in Synapse
 
 ```javascript
 // In Synapse application
-window.addEventListener('message', (event) => {
+window.addEventListener('message', event => {
   // Verify origin
   if (!event.origin.includes('wix.com')) return;
-  
+
   // Process message
   if (event.data.type === 'WIX_UPDATE') {
     handleWixUpdate(event.data);
@@ -100,6 +108,7 @@ Our Vercel deployment includes these security headers:
 ## Best Practices
 
 ### 1. Origin Validation
+
 Always validate the origin of postMessage communications:
 
 ```javascript
@@ -111,6 +120,7 @@ function isValidOrigin(origin) {
 ```
 
 ### 2. Data Sanitization
+
 Sanitize all data received via postMessage:
 
 ```javascript
@@ -122,6 +132,7 @@ function sanitizeData(data) {
 ```
 
 ### 3. Error Handling
+
 Implement comprehensive error handling:
 
 ```javascript
@@ -131,16 +142,20 @@ try {
 } catch (error) {
   console.error('Message processing error:', error);
   // Send error back to parent
-  event.source.postMessage({
-    type: 'ERROR',
-    message: 'Invalid message format'
-  }, event.origin);
+  event.source.postMessage(
+    {
+      type: 'ERROR',
+      message: 'Invalid message format'
+    },
+    event.origin
+  );
 }
 ```
 
 ## Testing
 
 ### 1. Local Testing
+
 For local development, use ngrok to test iframe embedding:
 
 ```bash
@@ -149,19 +164,25 @@ ngrok http 8080
 ```
 
 ### 2. CSP Testing
+
 Verify CSP headers using browser developer tools:
+
 - Check Network tab for CSP violations
 - Monitor Console for security warnings
 
 ### 3. PostMessage Testing
+
 Test communication between parent and iframe:
 
 ```javascript
 // Test message sending
-iframe.contentWindow.postMessage({
-  type: 'TEST',
-  timestamp: Date.now()
-}, '*');
+iframe.contentWindow.postMessage(
+  {
+    type: 'TEST',
+    timestamp: Date.now()
+  },
+  '*'
+);
 ```
 
 ## Troubleshooting
@@ -198,10 +219,11 @@ if (DEBUG_MODE) {
 ## Performance Optimization
 
 ### 1. Lazy Loading
+
 Use intersection observer for iframe lazy loading:
 
 ```javascript
-const observer = new IntersectionObserver((entries) => {
+const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       loadIframe(entry.target);
@@ -211,15 +233,17 @@ const observer = new IntersectionObserver((entries) => {
 ```
 
 ### 2. Preloading
+
 Preload critical iframe content:
 
 ```html
-<link rel="preload" href="iframe-content.html" as="document">
+<link rel="preload" href="iframe-content.html" as="document" />
 ```
 
 ## Support
 
 For embedding support:
+
 - Email: support@synapse-grc.com
 - Documentation: https://docs.synapse-grc.com
 - GitHub Issues: https://github.com/synapse-grc/platform

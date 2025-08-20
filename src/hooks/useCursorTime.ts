@@ -5,20 +5,20 @@
  */
 
 import {
-    CursorTimeConfig,
-    DEFAULT_CURSOR_TIME_CONFIG,
-    getCursorTimeManager
+  CursorTimeConfig,
+  DEFAULT_CURSOR_TIME_CONFIG,
+  getCursorTimeManager
 } from '@/config/cursorTimeConfig';
 import {
-    createApiTimestamp,
-    createCursorTimestamp,
-    createDocumentTimestamp,
-    formatDateTime,
-    formatRelativeTime,
-    getCurrentTime,
-    getCurrentTimestamp,
-    TIME_FORMATS,
-    TIMEZONE_CONFIG
+  createApiTimestamp,
+  createCursorTimestamp,
+  createDocumentTimestamp,
+  formatDateTime,
+  formatRelativeTime,
+  getCurrentTime,
+  getCurrentTimestamp,
+  TIME_FORMATS,
+  TIMEZONE_CONFIG
 } from '@/utils/timeUtils';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -30,28 +30,28 @@ export interface UseCursorTimeReturn {
   currentTime: Date;
   currentTimestamp: number;
   formattedTime: string;
-  
+
   // Timestamp creation functions
   createCursorTimestamp: () => ReturnType<typeof createCursorTimestamp>;
   createDocumentTimestamp: () => ReturnType<typeof createDocumentTimestamp>;
   createApiTimestamp: () => ReturnType<typeof createApiTimestamp>;
-  
+
   // Formatting functions
   formatTime: (date: Date | string | number, format?: keyof typeof TIME_FORMATS) => string;
   formatRelativeTime: (date: Date | string | number, short?: boolean) => string;
-  
+
   // Configuration
   config: CursorTimeConfig;
   updateConfig: (newConfig: Partial<CursorTimeConfig>) => void;
-  
+
   // Activity tracking
   logActivity: (type: string, data?: any) => void;
   getActivityLog: () => Array<{ id: string; type: string; timestamp: string; data?: any }>;
-  
+
   // Timezone information
   userTimezone: string;
   supportedTimezones: string[];
-  
+
   // Performance utilities
   startTimer: () => void;
   getElapsedTime: () => number;
@@ -64,13 +64,13 @@ export interface UseCursorTimeReturn {
 export interface UseCursorTimeOptions {
   // Update interval in milliseconds (default: 1000ms)
   updateInterval?: number;
-  
+
   // Initial configuration
   config?: Partial<CursorTimeConfig>;
-  
+
   // Whether to enable activity tracking
   enableActivityTracking?: boolean;
-  
+
   // Whether to enable performance timing
   enablePerformanceTiming?: boolean;
 }
@@ -126,7 +126,7 @@ export function useCursorTime(options: UseCursorTimeOptions = {}): UseCursorTime
     const now = getCurrentTime();
     const timestamp = getCurrentTimestamp();
     const formatted = formatDateTime(now, timeManager.getConfig().timeSettings.format);
-    
+
     setCurrentTime(now);
     setCurrentTimestamp(timestamp);
     setFormattedTime(formatted);
@@ -160,70 +160,76 @@ export function useCursorTime(options: UseCursorTimeOptions = {}): UseCursorTime
   // Create cursor timestamp
   const createCursorTimestampFn = useCallback(() => {
     const timestamp = createCursorTimestamp();
-    
+
     // Log activity if enabled
     if (enableActivityTracking) {
       timeManager.logActivity('cursor_timestamp_created', { timestamp });
     }
-    
+
     return timestamp;
   }, [timeManager, enableActivityTracking]);
 
   // Create document timestamp
   const createDocumentTimestampFn = useCallback(() => {
     const timestamp = createDocumentTimestamp();
-    
+
     // Log activity if enabled
     if (enableActivityTracking) {
       timeManager.logActivity('document_timestamp_created', { timestamp });
     }
-    
+
     return timestamp;
   }, [timeManager, enableActivityTracking]);
 
   // Create API timestamp
   const createApiTimestampFn = useCallback(() => {
     const timestamp = createApiTimestamp();
-    
+
     // Log activity if enabled
     if (enableActivityTracking) {
       timeManager.logActivity('api_timestamp_created', { timestamp });
     }
-    
+
     return timestamp;
   }, [timeManager, enableActivityTracking]);
 
   // Format time
-  const formatTimeFn = useCallback((
-    date: Date | string | number, 
-    format?: keyof typeof TIME_FORMATS
-  ) => {
-    return formatDateTime(date, format || timeManager.getConfig().timeSettings.format);
-  }, [timeManager]);
+  const formatTimeFn = useCallback(
+    (date: Date | string | number, format?: keyof typeof TIME_FORMATS) => {
+      return formatDateTime(date, format || timeManager.getConfig().timeSettings.format);
+    },
+    [timeManager]
+  );
 
   // Format relative time
-  const formatRelativeTimeFn = useCallback((
-    date: Date | string | number, 
-    short: boolean = false
-  ) => {
-    return formatRelativeTime(
-      typeof date === 'string' || typeof date === 'number' ? new Date(date) : date,
-      short
-    );
-  }, []);
+  const formatRelativeTimeFn = useCallback(
+    (date: Date | string | number, short: boolean = false) => {
+      return formatRelativeTime(
+        typeof date === 'string' || typeof date === 'number' ? new Date(date) : date,
+        short
+      );
+    },
+    []
+  );
 
   // Update configuration
-  const updateConfigFn = useCallback((newConfig: Partial<CursorTimeConfig>) => {
-    timeManager.updateConfig(newConfig);
-    updateTimeState();
-  }, [timeManager, updateTimeState]);
+  const updateConfigFn = useCallback(
+    (newConfig: Partial<CursorTimeConfig>) => {
+      timeManager.updateConfig(newConfig);
+      updateTimeState();
+    },
+    [timeManager, updateTimeState]
+  );
 
   // Log activity
-  const logActivityFn = useCallback((type: string, data?: any) => {
-    if (enableActivityTracking) {
-      timeManager.logActivity(type, data);
-    }
-  }, [timeManager, enableActivityTracking]);
+  const logActivityFn = useCallback(
+    (type: string, data?: any) => {
+      if (enableActivityTracking) {
+        timeManager.logActivity(type, data);
+      }
+    },
+    [timeManager, enableActivityTracking]
+  );
 
   // Get activity log
   const getActivityLogFn = useCallback(() => {
@@ -242,7 +248,7 @@ export function useCursorTime(options: UseCursorTimeOptions = {}): UseCursorTime
   // Get elapsed time
   const getElapsedTimeFn = useCallback(() => {
     if (!enablePerformanceTiming) return 0;
-    
+
     const endTime = timerRef.current.endTime || getCurrentTimestamp();
     return endTime - timerRef.current.startTime;
   }, [enablePerformanceTiming]);
@@ -266,28 +272,28 @@ export function useCursorTime(options: UseCursorTimeOptions = {}): UseCursorTime
     currentTime,
     currentTimestamp,
     formattedTime,
-    
+
     // Timestamp creation functions
     createCursorTimestamp: createCursorTimestampFn,
     createDocumentTimestamp: createDocumentTimestampFn,
     createApiTimestamp: createApiTimestampFn,
-    
+
     // Formatting functions
     formatTime: formatTimeFn,
     formatRelativeTime: formatRelativeTimeFn,
-    
+
     // Configuration
     config: timeManager.getConfig(),
     updateConfig: updateConfigFn,
-    
+
     // Activity tracking
     logActivity: logActivityFn,
     getActivityLog: getActivityLogFn,
-    
+
     // Timezone information
     userTimezone: TIMEZONE_CONFIG.USER_TIMEZONE,
     supportedTimezones: TIMEZONE_CONFIG.SUPPORTED_TIMEZONES,
-    
+
     // Performance utilities
     startTimer: startTimerFn,
     getElapsedTime: getElapsedTimeFn,
@@ -319,7 +325,7 @@ export function useCurrentTime() {
     currentTime,
     formattedTime,
     timestamp: currentTime.getTime(),
-    formatTime: (date: Date | string | number, format?: keyof typeof TIME_FORMATS) => 
+    formatTime: (date: Date | string | number, format?: keyof typeof TIME_FORMATS) =>
       formatDateTime(date, format || 'SHORT_DATETIME')
   };
 }

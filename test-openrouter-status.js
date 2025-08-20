@@ -13,7 +13,7 @@ async function validateOpenRouterIntegration() {
     // Test 1: Health Check
     console.log('\n🏥 HEALTH CHECK:');
     const healthResponse = await fetch(`${API_BASE}/api/health`);
-    
+
     if (healthResponse.ok) {
       const healthData = await healthResponse.json();
       console.log('✅ Status:', healthData.status);
@@ -28,16 +28,25 @@ async function validateOpenRouterIntegration() {
     // Test 2: API Keys Configuration
     console.log('\n🔑 API KEYS STATUS:');
     const metricsResponse = await fetch(`${API_BASE}/api/metrics`);
-    
+
     if (metricsResponse.ok) {
       const metricsData = await metricsResponse.json();
-      
+
       if (metricsData.api_keys_configured) {
-        console.log('✅ Qwen API Key:', metricsData.api_keys_configured.qwen ? 'CONFIGURED' : 'MISSING');
-        console.log('✅ OpenAI API Key:', metricsData.api_keys_configured.openai ? 'CONFIGURED' : 'MISSING');
-        console.log('✅ OpenRouter Ready:', metricsData.api_keys_configured.openrouter ? 'YES' : 'NO');
+        console.log(
+          '✅ Qwen API Key:',
+          metricsData.api_keys_configured.qwen ? 'CONFIGURED' : 'MISSING'
+        );
+        console.log(
+          '✅ OpenAI API Key:',
+          metricsData.api_keys_configured.openai ? 'CONFIGURED' : 'MISSING'
+        );
+        console.log(
+          '✅ OpenRouter Ready:',
+          metricsData.api_keys_configured.openrouter ? 'YES' : 'NO'
+        );
       }
-      
+
       if (metricsData.capabilities) {
         console.log('\n📋 SYSTEM CAPABILITIES:');
         metricsData.capabilities.forEach(cap => console.log(`   - ${cap}`));
@@ -46,7 +55,7 @@ async function validateOpenRouterIntegration() {
 
     // Test 3: Enhanced AI Classification
     console.log('\n🧪 AI CLASSIFICATION TESTS:');
-    
+
     const testCases = [
       {
         name: 'Article 8 Test',
@@ -62,7 +71,7 @@ async function validateOpenRouterIntegration() {
 
     for (const testCase of testCases) {
       console.log(`\n   🔬 ${testCase.name}:`);
-      
+
       const classifyResponse = await fetch(`${API_BASE}/api/classify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -71,15 +80,15 @@ async function validateOpenRouterIntegration() {
           document_type: 'fund_prospectus'
         })
       });
-      
+
       if (classifyResponse.ok) {
         const result = await classifyResponse.json();
-        
+
         console.log(`     📊 Classification: ${result.classification}`);
         console.log(`     🎯 Confidence: ${result.confidence}`);
         console.log(`     ⏱️  Processing Time: ${result.processing_time}ms`);
         console.log(`     🧠 AI Model: ${result.ai_model_used || 'Enhanced simulation'}`);
-        
+
         // Enhanced features validation
         const features = {
           'Audit Trail': !!result.audit_trail?.classification_id,
@@ -88,16 +97,15 @@ async function validateOpenRouterIntegration() {
           'Benchmark Comparison': !!result.benchmark_comparison?.percentile_rank,
           'Sustainability Score': typeof result.sustainability_score === 'number'
         };
-        
+
         console.log('     🌟 Enhanced Features:');
         Object.entries(features).forEach(([feature, enabled]) => {
           console.log(`       ${enabled ? '✅' : '❌'} ${feature}`);
         });
-        
+
         if (result.regulatory_basis?.length > 0) {
           console.log(`     ⚖️  Regulatory Citations: ${result.regulatory_basis.length} found`);
         }
-        
       } else {
         console.log(`     ❌ Classification failed: ${classifyResponse.status}`);
       }
@@ -115,7 +123,6 @@ async function validateOpenRouterIntegration() {
     console.log('✅ Regulatory Compliance: Enabled');
     console.log('✅ OpenRouter Ready: Full capabilities unlocked');
     console.log('='.repeat(60));
-
   } catch (error) {
     console.error('❌ Test Error:', error.message);
   }

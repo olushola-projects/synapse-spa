@@ -91,6 +91,7 @@ npm run test:ci
 ### Browser Support
 
 The tests run on multiple browsers:
+
 - **Chromium** - Primary browser for most tests
 - **Firefox** - Cross-browser compatibility
 - **WebKit** - Safari compatibility
@@ -140,16 +141,16 @@ export const Selectors = {
   // Navigation
   navigation: '[data-testid="navigation"]',
   menuButton: '[data-testid="menu-button"]',
-  
+
   // Forms
   fundNameInput: '[data-testid="fund-name-input"]',
   fundDescriptionInput: '[data-testid="fund-description-input"]',
   classifyButton: '[data-testid="classify-button"]',
-  
+
   // Results
   classificationResult: '[data-testid="classification-result"]',
   loadingSpinner: '[data-testid="loading-spinner"]',
-  
+
   // Alerts
   successAlert: '[data-testid="success-alert"]',
   errorAlert: '[data-testid="error-alert"]',
@@ -187,21 +188,27 @@ await helper.takeScreenshot(name);
 ## Test Categories
 
 ### 1. Smoke Tests (@smoke)
+
 Critical functionality that must work for basic application operation:
+
 - User login/logout
 - Basic navigation
 - SFDR classification workflow
 - Dashboard loading
 
 ### 2. Regression Tests (@regression)
+
 Comprehensive tests to ensure no regressions:
+
 - All form validations
 - API integrations
 - Error handling
 - Data persistence
 
 ### 3. Critical Tests (@critical)
+
 High-priority tests for business-critical features:
+
 - SFDR classification accuracy
 - Authentication security
 - Data export functionality

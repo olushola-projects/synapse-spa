@@ -58,7 +58,13 @@ export interface AuthResult {
 }
 
 export interface SecurityEvent {
-  type: 'login_success' | 'login_failure' | 'logout' | 'session_expired' | 'suspicious_activity' | 'brute_force_attempt';
+  type:
+    | 'login_success'
+    | 'login_failure'
+    | 'logout'
+    | 'session_expired'
+    | 'suspicious_activity'
+    | 'brute_force_attempt';
   severity: 'low' | 'medium' | 'high' | 'critical';
   userId?: string;
   ipAddress: string;
@@ -70,7 +76,8 @@ export interface SecurityEvent {
 class AuthService {
   private static instance: AuthService;
   private activeSessions: Map<string, UserSession> = new Map();
-  private failedAttempts: Map<string, { count: number; lastAttempt: Date; blockedUntil?: Date }> = new Map();
+  private failedAttempts: Map<string, { count: number; lastAttempt: Date; blockedUntil?: Date }> =
+    new Map();
 
   static getInstance(): AuthService {
     if (!AuthService.instance) {
@@ -82,7 +89,12 @@ class AuthService {
   /**
    * Authenticate user with email and password
    */
-  async authenticateUser(email: string, password: string, ipAddress: string, userAgent: string): Promise<AuthResult> {
+  async authenticateUser(
+    email: string,
+    password: string,
+    ipAddress: string,
+    userAgent: string
+  ): Promise<AuthResult> {
     try {
       // Check if IP is blocked
       if (this.isIPBlocked(ipAddress)) {
@@ -98,7 +110,10 @@ class AuthService {
       }
 
       // Authenticate with Supabase
-      const { data: { user }, error } = await supabase.auth.signInWithPassword({
+      const {
+        data: { user },
+        error
+      } = await supabase.auth.signInWithPassword({
         email,
         password
       });
@@ -135,7 +150,7 @@ class AuthService {
 
       // Create session
       const session = await this.createSession(user.id, ipAddress, userAgent);
-      
+
       // Log successful login
       await this.logSecurityEvent({
         type: 'login_success',
@@ -151,7 +166,6 @@ class AuthService {
       this.clearFailedAttempts(ipAddress);
 
       return { success: true, user, session };
-
     } catch (error) {
       log.error('Authentication error', { error, email, ipAddress });
       return { success: false, error: 'Internal authentication error' };
@@ -164,30 +178,30 @@ class AuthService {
   async createSession(userId: string, ipAddress: string, userAgent: string): Promise<UserSession> {
     const sessionId = crypto.randomUUID();
     const token = jwt.sign(
-      { 
-        userId, 
-        sessionId, 
+      {
+        userId,
+        sessionId,
         type: 'access',
         iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (60 * 60) // 1 hour
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 // 1 hour
       },
       JWT_CONFIG.secret,
-      { 
+      {
         issuer: JWT_CONFIG.issuer,
         audience: JWT_CONFIG.audience
       }
     );
 
     const refreshToken = jwt.sign(
-      { 
-        userId, 
-        sessionId, 
+      {
+        userId,
+        sessionId,
         type: 'refresh',
         iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) // 7 days
+        exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60 // 7 days
       },
       JWT_CONFIG.secret,
-      { 
+      {
         issuer: JWT_CONFIG.issuer,
         audience: JWT_CONFIG.audience
       }
@@ -238,7 +252,7 @@ class AuthService {
       }) as any;
 
       const session = this.activeSessions.get(decoded.sessionId);
-      
+
       if (!session || !session.isActive) {
         await this.logSecurityEvent({
           type: 'session_expired',
@@ -270,7 +284,6 @@ class AuthService {
         .single();
 
       return { success: true, user, session };
-
     } catch (error) {
       log.error('Token validation error', { error, ipAddress });
       return { success: false, error: 'Invalid token' };
@@ -292,22 +305,22 @@ class AuthService {
       }
 
       const session = this.activeSessions.get(decoded.sessionId);
-      
+
       if (!session || !session.isActive) {
         return { success: false, error: 'Invalid session' };
       }
 
       // Create new access token
       const newToken = jwt.sign(
-        { 
-          userId: decoded.userId, 
-          sessionId: decoded.sessionId, 
+        {
+          userId: decoded.userId,
+          sessionId: decoded.sessionId,
           type: 'access',
           iat: Math.floor(Date.now() / 1000),
-          exp: Math.floor(Date.now() / 1000) + (60 * 60) // 1 hour
+          exp: Math.floor(Date.now() / 1000) + 60 * 60 // 1 hour
         },
         JWT_CONFIG.secret,
-        { 
+        {
           issuer: JWT_CONFIG.issuer,
           audience: JWT_CONFIG.audience
         }
@@ -319,7 +332,6 @@ class AuthService {
       this.activeSessions.set(decoded.sessionId, session);
 
       return { success: true, session };
-
     } catch (error) {
       log.error('Token refresh error', { error, ipAddress });
       return { success: false, error: 'Invalid refresh token' };
@@ -332,7 +344,7 @@ class AuthService {
   async logout(sessionId: string, ipAddress: string): Promise<void> {
     try {
       await this.invalidateSession(sessionId);
-      
+
       await this.logSecurityEvent({
         type: 'logout',
         severity: 'low',
@@ -354,33 +366,35 @@ class AuthService {
     this.activeSessions.delete(sessionId);
 
     // Update database
-    await supabase
-      .from('user_sessions')
-      .update({ is_active: false })
-      .eq('id', sessionId);
+    await supabase.from('user_sessions').update({ is_active: false }).eq('id', sessionId);
   }
 
   /**
    * Handle failed login attempts
    */
-  private async handleFailedLogin(email: string, ipAddress: string, userAgent: string, reason: string): Promise<void> {
+  private async handleFailedLogin(
+    email: string,
+    ipAddress: string,
+    userAgent: string,
+    reason: string
+  ): Promise<void> {
     const key = `${ipAddress}:${email}`;
     const attempts = this.failedAttempts.get(key) || { count: 0, lastAttempt: new Date() };
-    
+
     attempts.count++;
     attempts.lastAttempt = new Date();
 
     // Block IP if threshold exceeded
     if (attempts.count >= SECURITY_MONITORING.blockThreshold) {
       attempts.blockedUntil = new Date(Date.now() + SECURITY_MONITORING.blockDuration);
-      
+
       await this.logSecurityEvent({
         type: 'brute_force_attempt',
         severity: 'critical',
         ipAddress,
         userAgent,
         timestamp: new Date(),
-        details: { 
+        details: {
           email,
           attempts: attempts.count,
           blockedUntil: attempts.blockedUntil
@@ -398,7 +412,7 @@ class AuthService {
         ipAddress,
         userAgent,
         timestamp: new Date(),
-        details: { 
+        details: {
           email,
           attempts: attempts.count,
           reason
@@ -412,7 +426,11 @@ class AuthService {
    */
   private isIPBlocked(ipAddress: string): boolean {
     for (const [key, attempts] of this.failedAttempts.entries()) {
-      if (key.startsWith(ipAddress) && attempts.blockedUntil && attempts.blockedUntil > new Date()) {
+      if (
+        key.startsWith(ipAddress) &&
+        attempts.blockedUntil &&
+        attempts.blockedUntil > new Date()
+      ) {
         return true;
       }
     }
@@ -475,7 +493,6 @@ class AuthService {
 
       // Log locally
       log.info('Security event logged', { event });
-
     } catch (error) {
       log.error('Failed to log security event', { error, event });
     }
@@ -545,7 +562,7 @@ class AuthService {
       }
 
       // Cleanup old failed attempts
-      const cleanupTime = new Date(Date.now() - (24 * 60 * 60 * 1000)); // 24 hours
+      const cleanupTime = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 hours
       for (const [key, attempts] of this.failedAttempts.entries()) {
         if (attempts.lastAttempt < cleanupTime && !attempts.blockedUntil) {
           this.failedAttempts.delete(key);
@@ -560,8 +577,9 @@ class AuthService {
    * Get active sessions for user (debug/admin only)
    */
   async getActiveSessions(userId: string): Promise<UserSession[]> {
-    return Array.from(this.activeSessions.values())
-      .filter(session => session.userId === userId && session.isActive);
+    return Array.from(this.activeSessions.values()).filter(
+      session => session.userId === userId && session.isActive
+    );
   }
 
   /**
@@ -572,8 +590,9 @@ class AuthService {
     failedAttempts: number;
     blockedIPs: number;
   }> {
-    const blockedIPs = Array.from(this.failedAttempts.values())
-      .filter(attempts => attempts.blockedUntil && attempts.blockedUntil > new Date()).length;
+    const blockedIPs = Array.from(this.failedAttempts.values()).filter(
+      attempts => attempts.blockedUntil && attempts.blockedUntil > new Date()
+    ).length;
 
     return {
       activeSessions: this.activeSessions.size,

@@ -50,7 +50,7 @@ jobs:
           if grep -r "TabsContent" src/ | grep -v "Tabs>" | head -5; then
             echo "⚠️ Potential TabsContent usage outside Tabs context detected"
           fi
-          
+
           # Check for missing key props in lists
           if grep -r "\.map(" src/ | grep -v "key=" | head -3; then
             echo "⚠️ Potential missing key props in list rendering"

@@ -275,19 +275,15 @@ export const handlers = [
 export const server = setupServer(...handlers);
 
 // Export individual handlers for testing
-export const authHandlers = handlers.filter(handler => 
-  handler.info.header.includes('/auth/')
-);
+export const authHandlers = handlers.filter(handler => handler.info.header.includes('/auth/'));
 
-export const sfdrHandlers = handlers.filter(handler => 
-  handler.info.header.includes('/sfdr/')
-);
+export const sfdrHandlers = handlers.filter(handler => handler.info.header.includes('/sfdr/'));
 
-export const complianceHandlers = handlers.filter(handler => 
+export const complianceHandlers = handlers.filter(handler =>
   handler.info.header.includes('/compliance/')
 );
 
-export const dashboardHandlers = handlers.filter(handler => 
+export const dashboardHandlers = handlers.filter(handler =>
   handler.info.header.includes('/dashboard/')
 );
 
@@ -330,11 +326,7 @@ export const mockApiResponses = {
   delayed: (endpoint: string, data: any, delay: number = 1000) => {
     server.use(
       rest.all(endpoint, (req, res, ctx) => {
-        return res(
-          ctx.delay(delay),
-          ctx.status(200),
-          ctx.json(data)
-        );
+        return res(ctx.delay(delay), ctx.status(200), ctx.json(data));
       })
     );
   }

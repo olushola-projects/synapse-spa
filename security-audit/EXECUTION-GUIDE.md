@@ -5,6 +5,7 @@
 ### Prerequisites Installation
 
 #### 1. Install OWASP ZAP
+
 ```bash
 # Download OWASP ZAP from official website
 # https://www.zaproxy.org/download/
@@ -22,6 +23,7 @@ sudo apt-get install zaproxy
 ```
 
 #### 2. Install Python Dependencies
+
 ```bash
 # Install required Python packages
 pip3 install requests json logging argparse
@@ -31,6 +33,7 @@ pip3 install -r security-audit/requirements.txt
 ```
 
 #### 3. Verify Installation
+
 ```bash
 # Check OWASP ZAP installation
 zap.sh --version
@@ -49,6 +52,7 @@ python3 -c "import requests, json, logging; print('All packages installed succes
 ### Method 1: Automated Script (Recommended)
 
 #### Windows (PowerShell)
+
 ```powershell
 # Navigate to project directory
 cd C:\Users\User\Documents\Maycode\Synapses\.vscode\synapse-landing-nexus
@@ -61,6 +65,7 @@ bash security-audit/run-security-audit.sh https://synapses-platform.com
 ```
 
 #### Linux/macOS
+
 ```bash
 # Make script executable
 chmod +x security-audit/run-security-audit.sh
@@ -72,24 +77,28 @@ chmod +x security-audit/run-security-audit.sh
 ### Method 2: Manual OWASP ZAP Execution
 
 #### Step 1: Start OWASP ZAP
+
 ```bash
 # Start ZAP daemon
 zap.sh -daemon -port 8080 -config api.disablekey=true
 ```
 
 #### Step 2: Run Spider Scan
+
 ```bash
 # Spider scan for reconnaissance
 zap-baseline.py -t https://synapses-platform.com -J spider-scan-results.json
 ```
 
 #### Step 3: Run Full Scan
+
 ```bash
 # Full vulnerability scan
 zap-full-scan.py -t https://synapses-platform.com -m 10 -J full-scan-results.json
 ```
 
 #### Step 4: Run API Scan
+
 ```bash
 # API security scan (if OpenAPI spec available)
 zap-api-scan.py -t https://synapses-platform.com -f openapi.json -J api-scan-results.json
@@ -98,6 +107,7 @@ zap-api-scan.py -t https://synapses-platform.com -f openapi.json -J api-scan-res
 ### Method 3: Python Script Execution
 
 #### Run Custom Security Tests
+
 ```bash
 # Navigate to security audit directory
 cd security-audit
@@ -113,12 +123,14 @@ python3 owasp-zap-automation.py --target https://synapses-platform.com --output 
 ### Security Score: 95/100 ✅ EXCELLENT
 
 ### Vulnerability Distribution
+
 - **Critical Vulnerabilities**: 0 ✅
 - **High Vulnerabilities**: 0 ✅
 - **Medium Vulnerabilities**: 2 ⚠️
 - **Low Vulnerabilities**: 5 ℹ️
 
 ### Compliance Status
+
 - **SOC 2 Type II**: ✅ FULLY COMPLIANT
 - **GDPR**: ✅ FULLY COMPLIANT
 - **SFDR**: ✅ FULLY COMPLIANT
@@ -151,6 +163,7 @@ security-audit-results/
 ### Common Issues and Solutions
 
 #### 1. OWASP ZAP Not Found
+
 ```bash
 # Error: zap.sh: command not found
 # Solution: Add ZAP to PATH or use full path
@@ -163,6 +176,7 @@ export PATH=$PATH:/opt/zaproxy
 ```
 
 #### 2. Python Dependencies Missing
+
 ```bash
 # Error: ModuleNotFoundError: No module named 'requests'
 # Solution: Install missing packages
@@ -171,6 +185,7 @@ pip3 install requests json logging argparse
 ```
 
 #### 3. Permission Denied
+
 ```bash
 # Error: Permission denied when running script
 # Solution: Make script executable
@@ -179,6 +194,7 @@ chmod +x security-audit/run-security-audit.sh
 ```
 
 #### 4. Port Already in Use
+
 ```bash
 # Error: Port 8080 already in use
 # Solution: Use different port or kill existing process
@@ -191,6 +207,7 @@ zap.sh -daemon -port 8081
 ```
 
 #### 5. Network Connectivity Issues
+
 ```bash
 # Error: Connection refused
 # Solution: Check network connectivity and firewall settings
@@ -211,6 +228,7 @@ curl -I https://synapses-platform.com
 ### Authentication Security Tests
 
 #### MFA Bypass Testing
+
 ```bash
 # Test MFA enforcement
 curl -X POST https://synapses-platform.com/auth/login \
@@ -219,6 +237,7 @@ curl -X POST https://synapses-platform.com/auth/login \
 ```
 
 #### JWT Token Testing
+
 ```bash
 # Test JWT algorithm confusion
 curl -X GET https://synapses-platform.com/api/user/profile \
@@ -228,6 +247,7 @@ curl -X GET https://synapses-platform.com/api/user/profile \
 ### Authorization Security Tests
 
 #### Privilege Escalation Testing
+
 ```bash
 # Test privilege escalation
 curl -X POST https://synapses-platform.com/api/admin/users \
@@ -237,6 +257,7 @@ curl -X POST https://synapses-platform.com/api/admin/users \
 ```
 
 #### IDOR Vulnerability Testing
+
 ```bash
 # Test cross-user data access
 curl -X GET https://synapses-platform.com/api/user/123/funds \
@@ -246,6 +267,7 @@ curl -X GET https://synapses-platform.com/api/user/123/funds \
 ### Input Validation Tests
 
 #### SQL Injection Testing
+
 ```bash
 # Test SQL injection
 curl -X POST https://synapses-platform.com/api/search \
@@ -254,6 +276,7 @@ curl -X POST https://synapses-platform.com/api/search \
 ```
 
 #### XSS Testing
+
 ```bash
 # Test XSS vulnerability
 curl -X POST https://synapses-platform.com/api/feedback \
@@ -266,6 +289,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 ## 🚨 Critical Security Checks
 
 ### Pre-Audit Checklist
+
 - [ ] OWASP ZAP installed and configured
 - [ ] Python dependencies installed
 - [ ] Target URL accessible
@@ -274,6 +298,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 - [ ] Backup of current system created
 
 ### Post-Audit Checklist
+
 - [ ] All scan results reviewed
 - [ ] Vulnerabilities documented
 - [ ] Remediation plan created
@@ -286,6 +311,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 ## 📈 Performance Monitoring
 
 ### Expected Scan Times
+
 - **Spider Scan**: 5-15 minutes
 - **Full Scan**: 30-60 minutes
 - **API Scan**: 10-20 minutes
@@ -293,6 +319,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 - **Total Time**: 50-105 minutes
 
 ### Resource Requirements
+
 - **CPU**: 2+ cores recommended
 - **Memory**: 4GB+ RAM recommended
 - **Storage**: 1GB+ free space
@@ -303,6 +330,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 ## 🎯 Success Criteria
 
 ### Security Audit Success
+
 - ✅ Zero critical vulnerabilities
 - ✅ Zero high vulnerabilities
 - ✅ Security score ≥ 90/100
@@ -310,6 +338,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 - ✅ Production readiness confirmed
 
 ### Compliance Success
+
 - ✅ SOC 2 Type II controls validated
 - ✅ GDPR requirements met
 - ✅ SFDR compliance verified
@@ -321,12 +350,14 @@ curl -X POST https://synapses-platform.com/api/feedback \
 ## 📞 Support and Escalation
 
 ### Technical Support
+
 - **Documentation**: Check this guide and README files
 - **Logs**: Review generated log files for errors
 - **Community**: OWASP ZAP community forums
 - **Professional**: Contact security audit team
 
 ### Emergency Contacts
+
 - **Security Team**: security@synapses.com
 - **DevOps Team**: devops@synapses.com
 - **Compliance Team**: compliance@synapses.com
@@ -336,6 +367,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 ## 🎉 Completion Checklist
 
 ### Final Verification
+
 - [ ] All scans completed successfully
 - [ ] Security score calculated (95/100)
 - [ ] Compliance status verified
@@ -344,6 +376,7 @@ curl -X POST https://synapses-platform.com/api/feedback \
 - [ ] Production readiness confirmed
 
 ### Next Steps
+
 1. **Review Results**: Analyze all generated reports
 2. **Implement Fixes**: Address identified vulnerabilities
 3. **Update Documentation**: Maintain security documentation

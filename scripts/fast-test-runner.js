@@ -23,7 +23,7 @@ class FastTestRunner {
       testResults: [],
       startTime: Date.now()
     };
-    
+
     this.devServer = null;
     this.testProcess = null;
   }
@@ -35,10 +35,10 @@ class FastTestRunner {
   }
 
   async checkPort(port) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       import('net').then(({ default: net }) => {
         const socket = new net.Socket();
-        
+
         socket.setTimeout(1000);
         socket.on('connect', () => {
           socket.destroy();
@@ -51,7 +51,7 @@ class FastTestRunner {
         socket.on('error', () => {
           resolve(false);
         });
-        
+
         socket.connect(port, 'localhost');
       });
     });
@@ -59,7 +59,7 @@ class FastTestRunner {
 
   async startDevServer() {
     this.log('Starting development server...');
-    
+
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Dev server startup timeout'));
@@ -71,7 +71,7 @@ class FastTestRunner {
         cwd: process.cwd()
       });
 
-      this.devServer.stdout.on('data', (data) => {
+      this.devServer.stdout.on('data', data => {
         const output = data.toString();
         if (output.includes('Local:') || output.includes('ready in')) {
           clearTimeout(timeout);
@@ -80,11 +80,11 @@ class FastTestRunner {
         }
       });
 
-      this.devServer.stderr.on('data', (data) => {
+      this.devServer.stderr.on('data', data => {
         this.log(`Dev server stderr: ${data.toString()}`, 'error');
       });
 
-      this.devServer.on('error', (error) => {
+      this.devServer.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -93,38 +93,44 @@ class FastTestRunner {
 
   async waitForServer() {
     this.log('Waiting for server to be ready...');
-    
-    for (let i = 0; i < 30; i++) { // Wait up to 30 seconds
+
+    for (let i = 0; i < 30; i++) {
+      // Wait up to 30 seconds
       if (await this.checkPort(5173)) {
         this.log('Server is ready', 'success');
         return true;
       }
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
-    
+
     throw new Error('Server not ready after 30 seconds');
   }
 
   async runValidationTests() {
     this.log('Running validation tests...');
-    
+
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Validation tests timeout'));
       }, this.config.testTimeout);
 
-      this.testProcess = spawn('npx', [
-        'playwright', 'test', 
-        'tests/e2e/setup-validation.spec.ts',
-        '--project=chromium',
-        '--reporter=list'
-      ], {
-        stdio: 'inherit',
-        shell: true,
-        cwd: process.cwd()
-      });
+      this.testProcess = spawn(
+        'npx',
+        [
+          'playwright',
+          'test',
+          'tests/e2e/setup-validation.spec.ts',
+          '--project=chromium',
+          '--reporter=list'
+        ],
+        {
+          stdio: 'inherit',
+          shell: true,
+          cwd: process.cwd()
+        }
+      );
 
-      this.testProcess.on('close', (code) => {
+      this.testProcess.on('close', code => {
         clearTimeout(timeout);
         if (code === 0) {
           this.log('Validation tests passed', 'success');
@@ -134,7 +140,7 @@ class FastTestRunner {
         }
       });
 
-      this.testProcess.on('error', (error) => {
+      this.testProcess.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -143,25 +149,30 @@ class FastTestRunner {
 
   async runSFDRTests() {
     this.log('Running SFDR Navigator tests...');
-    
+
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('SFDR tests timeout'));
       }, this.config.testTimeout);
 
-      this.testProcess = spawn('npx', [
-        'playwright', 'test', 
-        'tests/e2e/sfdr-navigator-fast.spec.ts',
-        '--project=chromium',
-        '--headed',
-        '--reporter=list'
-      ], {
-        stdio: 'inherit',
-        shell: true,
-        cwd: process.cwd()
-      });
+      this.testProcess = spawn(
+        'npx',
+        [
+          'playwright',
+          'test',
+          'tests/e2e/sfdr-navigator-fast.spec.ts',
+          '--project=chromium',
+          '--headed',
+          '--reporter=list'
+        ],
+        {
+          stdio: 'inherit',
+          shell: true,
+          cwd: process.cwd()
+        }
+      );
 
-      this.testProcess.on('close', (code) => {
+      this.testProcess.on('close', code => {
         clearTimeout(timeout);
         if (code === 0) {
           this.log('SFDR Navigator tests passed', 'success');
@@ -172,7 +183,7 @@ class FastTestRunner {
         }
       });
 
-      this.testProcess.on('error', (error) => {
+      this.testProcess.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -181,11 +192,11 @@ class FastTestRunner {
 
   async generateReports() {
     this.log('Generating test reports...');
-    
+
     try {
-      execSync('npx playwright show-report', { 
+      execSync('npx playwright show-report', {
         stdio: 'inherit',
-        timeout: 30000 
+        timeout: 30000
       });
       this.log('Reports generated successfully', 'success');
     } catch (error) {
@@ -195,11 +206,11 @@ class FastTestRunner {
 
   async cleanup() {
     this.log('Cleaning up...');
-    
+
     if (this.devServer) {
       this.devServer.kill('SIGTERM');
     }
-    
+
     if (this.testProcess) {
       this.testProcess.kill('SIGTERM');
     }
@@ -207,38 +218,37 @@ class FastTestRunner {
 
   async run() {
     const startTime = Date.now();
-    
+
     try {
       this.log('🚀 Starting Fast Test Runner');
       this.log(`⏱️  Maximum timeout: ${this.config.maxTimeout / 1000}s`);
-      
+
       // Start dev server
       await this.startDevServer();
       await this.waitForServer();
-      
+
       // Run validation tests
       await this.runValidationTests();
-      
+
       // Run SFDR tests
       await this.runSFDRTests();
-      
+
       // Generate reports
       await this.generateReports();
-      
+
       const duration = Date.now() - startTime;
       this.log(`✅ All tests completed in ${duration / 1000}s`, 'success');
-      
     } catch (error) {
       const duration = Date.now() - startTime;
       this.log(`❌ Test execution failed after ${duration / 1000}s: ${error.message}`, 'error');
-      
+
       // Generate reports even on failure
       try {
         await this.generateReports();
       } catch (reportError) {
         this.log(`Report generation failed: ${reportError.message}`, 'error');
       }
-      
+
       process.exit(1);
     } finally {
       await this.cleanup();

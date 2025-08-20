@@ -7,6 +7,7 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ## 🚀 New LLM Models
 
 ### 1. Qwen3 235B A22B
+
 - **Provider**: Qwen
 - **Model ID**: `Qwen3_235B_A22B`
 - **API Key**: `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`
@@ -16,6 +17,7 @@ This document describes the comprehensive multi-strategy LLM integration system 
 - **Cost per Token**: $0.0001
 
 ### 2. OpenAI GPT-OSS-20B
+
 - **Provider**: OpenAI
 - **Model ID**: `gpt-oss-20b`
 - **API Key**: `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`
@@ -29,18 +31,21 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ### Strategy Types
 
 #### 1. Primary Strategy (Qwen3)
+
 - **Purpose**: High-performance primary SFDR classification
 - **Model**: Qwen3 235B A22B
 - **Fallback**: Secondary Strategy
 - **Use Case**: Main classification requests
 
 #### 2. Secondary Strategy (OpenAI)
+
 - **Purpose**: Validation and alternative analysis
 - **Model**: OpenAI GPT-OSS-20B
 - **Fallback**: Hybrid Strategy
 - **Use Case**: Validation and cross-checking
 
 #### 3. Hybrid Strategy (Consensus)
+
 - **Purpose**: Consensus-based routing between models
 - **Models**: Both Qwen3 and OpenAI
 - **Use Case**: High-confidence classification with consensus
@@ -48,6 +53,7 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ## 🔧 Configuration Files
 
 ### 1. LLM Configuration Service
+
 **File**: `src/services/llmConfigurationService.ts`
 
 ```typescript
@@ -60,6 +66,7 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ```
 
 ### 2. LLM Integration Service
+
 **File**: `src/services/llmIntegrationService.ts`
 
 ```typescript
@@ -72,6 +79,7 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ```
 
 ### 3. LLM Validation Service
+
 **File**: `src/services/llmValidationService.ts`
 
 ```typescript
@@ -85,12 +93,15 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ## 🧪 Testing
 
 ### Test Component
+
 **File**: `src/components/testing/LLMStrategyTest.tsx`
 
 ### Test Page
+
 **URL**: `/llm-strategy-test`
 
 ### Test Features
+
 - ✅ Configuration validation
 - ✅ Connectivity testing
 - ✅ Strategy validation
@@ -101,11 +112,13 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ## 🔒 Security
 
 ### API Key Management
+
 - **Client-side**: No API keys exposed
 - **Server-side**: Keys stored in Supabase Edge Function secrets
 - **Proxy**: All requests routed through secure edge functions
 
 ### Edge Function Configuration
+
 **File**: `supabase/functions/nexus-proxy/index.ts`
 
 ```typescript
@@ -120,11 +133,13 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ## 📊 Monitoring
 
 ### Health Status
+
 - **Qwen3**: Response time, availability, error rate
 - **OpenAI**: Response time, availability, error rate
 - **Overall**: Combined system health
 
 ### Metrics
+
 - Response times
 - Success rates
 - Cost tracking
@@ -134,6 +149,7 @@ This document describes the comprehensive multi-strategy LLM integration system 
 ## 🚀 Usage
 
 ### Basic Classification
+
 ```typescript
 import { llmIntegrationService } from '@/services/llmIntegrationService';
 
@@ -146,6 +162,7 @@ const response = await llmIntegrationService.classifyDocument({
 ```
 
 ### Consensus Classification
+
 ```typescript
 const response = await llmIntegrationService.classifyDocument({
   text: 'Fund classification text...',
@@ -156,6 +173,7 @@ const response = await llmIntegrationService.classifyDocument({
 ```
 
 ### Provider-Specific Classification
+
 ```typescript
 const response = await llmIntegrationService.classifyDocument({
   text: 'Fund classification text...',
@@ -167,11 +185,13 @@ const response = await llmIntegrationService.classifyDocument({
 ## 🔄 Fallback Mechanisms
 
 ### Strategy Fallback
+
 1. **Primary** → **Secondary** → **Hybrid**
 2. Automatic fallback on failure
 3. Error logging and monitoring
 
 ### Model Fallback
+
 1. **Qwen3** → **OpenAI** (within strategy)
 2. Performance-based routing
 3. Health-based selection
@@ -179,11 +199,13 @@ const response = await llmIntegrationService.classifyDocument({
 ## 📈 Performance Optimization
 
 ### Response Time Targets
+
 - **Qwen3**: < 10 seconds
 - **OpenAI**: < 8 seconds
 - **Consensus**: < 15 seconds
 
 ### Caching Strategy
+
 - Model responses cached
 - Strategy results cached
 - Configuration cached
@@ -191,6 +213,7 @@ const response = await llmIntegrationService.classifyDocument({
 ## 🛠️ Deployment
 
 ### Environment Variables
+
 ```bash
 # Supabase Secrets (Edge Functions)
 NEXUS_API_KEY=your_nexus_api_key
@@ -199,6 +222,7 @@ OPENAI_API_KEY=sk-or-v1-5c5f42205d07a00addda4cf452fe2289ce28370d4f323dc3bf418f78
 ```
 
 ### Deployment Steps
+
 1. Configure Supabase secrets
 2. Deploy edge functions
 3. Update environment configuration
@@ -210,6 +234,7 @@ OPENAI_API_KEY=sk-or-v1-5c5f42205d07a00addda4cf452fe2289ce28370d4f323dc3bf418f78
 ### Common Issues
 
 #### 1. API Key Errors
+
 ```bash
 # Check Supabase secrets
 supabase secrets list
@@ -221,18 +246,21 @@ supabase secrets set OPENAI_API_KEY=your_key
 ```
 
 #### 2. Model Not Available
+
 - Check model configuration
 - Verify API keys
 - Test connectivity
 - Check rate limits
 
 #### 3. High Response Times
+
 - Monitor model performance
 - Check network connectivity
 - Review model configuration
 - Consider fallback strategies
 
 ### Debug Commands
+
 ```bash
 # Test configuration
 npm run test:llm
@@ -247,6 +275,7 @@ npm run health:llm
 ## 📋 Validation Checklist
 
 ### Pre-Deployment
+
 - [ ] API keys configured in Supabase
 - [ ] Edge functions deployed
 - [ ] Configuration validated
@@ -254,6 +283,7 @@ npm run health:llm
 - [ ] Health monitoring active
 
 ### Post-Deployment
+
 - [ ] All strategies working
 - [ ] Fallback mechanisms tested
 - [ ] Performance within targets
@@ -263,6 +293,7 @@ npm run health:llm
 ## 🔮 Future Enhancements
 
 ### Planned Features
+
 - **Model Fine-tuning**: Custom model training
 - **Advanced Routing**: ML-based model selection
 - **Cost Optimization**: Intelligent cost management
@@ -270,6 +301,7 @@ npm run health:llm
 - **Auto-scaling**: Dynamic resource allocation
 
 ### Integration Opportunities
+
 - **Additional Models**: Claude, Gemini, etc.
 - **Specialized Models**: Domain-specific fine-tuning
 - **Multi-modal**: Image and document processing
@@ -278,16 +310,19 @@ npm run health:llm
 ## 📞 Support
 
 ### Documentation
+
 - [API Documentation](./docs/api.md)
 - [Configuration Guide](./docs/configuration.md)
 - [Troubleshooting Guide](./docs/troubleshooting.md)
 
 ### Testing
+
 - [Test Suite](./src/components/testing/LLMStrategyTest.tsx)
 - [Validation Service](./src/services/llmValidationService.ts)
 - [Health Monitoring](./src/services/llmIntegrationService.ts)
 
 ### Monitoring
+
 - [Health Dashboard](./src/components/testing/BackendHealthDashboard.tsx)
 - [API Connectivity Test](./src/components/testing/EnhancedApiConnectivityTest.tsx)
 - [Real-time Monitoring](./src/components/monitoring/RealTimeMonitoringDashboard.tsx)

@@ -3,7 +3,7 @@ import https from 'https';
 
 async function testAPI() {
   console.log('🧪 Testing API Connection...');
-  
+
   const options = {
     hostname: 'api.joinsynapses.com',
     port: 443,
@@ -13,15 +13,15 @@ async function testAPI() {
   };
 
   return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
+    const req = https.request(options, res => {
       console.log(`📡 Status: ${res.statusCode}`);
       console.log(`📡 Headers:`, res.headers);
-      
+
       let data = '';
-      res.on('data', (chunk) => {
+      res.on('data', chunk => {
         data += chunk;
       });
-      
+
       res.on('end', () => {
         try {
           const jsonData = JSON.parse(data);
@@ -34,7 +34,7 @@ async function testAPI() {
       });
     });
 
-    req.on('error', (error) => {
+    req.on('error', error => {
       console.error('❌ API Error:', error.message);
       reject(error);
     });
@@ -52,7 +52,7 @@ async function testAPI() {
 // Test classification endpoint
 async function testClassification() {
   console.log('\n🧪 Testing Classification Endpoint...');
-  
+
   const postData = JSON.stringify({
     text: 'Sustainable investment fund with ESG focus',
     document_type: 'sfdr_classification'
@@ -71,14 +71,14 @@ async function testClassification() {
   };
 
   return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
+    const req = https.request(options, res => {
       console.log(`📡 Status: ${res.statusCode}`);
-      
+
       let data = '';
-      res.on('data', (chunk) => {
+      res.on('data', chunk => {
         data += chunk;
       });
-      
+
       res.on('end', () => {
         try {
           const jsonData = JSON.parse(data);
@@ -91,7 +91,7 @@ async function testClassification() {
       });
     });
 
-    req.on('error', (error) => {
+    req.on('error', error => {
       console.error('❌ Classification Error:', error.message);
       reject(error);
     });

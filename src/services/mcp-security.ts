@@ -138,26 +138,31 @@ export class MCPSecurityService {
   }
 
   private async runTraditionalVulnerabilityScan(target: string): Promise<SecurityTestResult[]> {
-    return [{
-      testId: `vuln-scan-${Date.now()}`,
-      testType: 'vulnerability',
-      status: 'skipped',
-      severity: 'low',
-      mcpEnhanced: false,
-      confidence: 0.5,
-      details: {
-        description: `Vulnerability scan for ${target}`,
-        recommendation: 'Configure vulnerability scanning tool'
-      },
-      metadata: {
-        timestamp: new Date().toISOString(),
-        scanner: 'traditional',
-        version: '1.0.0'
+    return [
+      {
+        testId: `vuln-scan-${Date.now()}`,
+        testType: 'vulnerability',
+        status: 'skipped',
+        severity: 'low',
+        mcpEnhanced: false,
+        confidence: 0.5,
+        details: {
+          description: `Vulnerability scan for ${target}`,
+          recommendation: 'Configure vulnerability scanning tool'
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          scanner: 'traditional',
+          version: '1.0.0'
+        }
       }
-    }];
+    ];
   }
 
-  async runComplianceValidation(framework: string, requirements: string[]): Promise<SecurityTestResult[]> {
+  async runComplianceValidation(
+    framework: string,
+    requirements: string[]
+  ): Promise<SecurityTestResult[]> {
     if (this.isConnected && this.capabilities.complianceValidation) {
       return this.runMCPComplianceValidation(framework, requirements);
     } else {
@@ -165,7 +170,10 @@ export class MCPSecurityService {
     }
   }
 
-  private async runMCPComplianceValidation(framework: string, requirements: string[]): Promise<SecurityTestResult[]> {
+  private async runMCPComplianceValidation(
+    framework: string,
+    requirements: string[]
+  ): Promise<SecurityTestResult[]> {
     try {
       const response = await fetch('/api/mcp/security/compliance', {
         method: 'POST',
@@ -192,7 +200,10 @@ export class MCPSecurityService {
     return this.runTraditionalComplianceValidation(framework, requirements);
   }
 
-  private async runTraditionalComplianceValidation(framework: string, requirements: string[]): Promise<SecurityTestResult[]> {
+  private async runTraditionalComplianceValidation(
+    framework: string,
+    requirements: string[]
+  ): Promise<SecurityTestResult[]> {
     return requirements.map((req, index) => ({
       testId: `compliance-${framework}-${index + 1}`,
       testType: 'compliance',
@@ -221,7 +232,10 @@ export class MCPSecurityService {
     }
   }
 
-  private async runMCPPenetrationTest(target: string, scope: string[]): Promise<SecurityTestResult[]> {
+  private async runMCPPenetrationTest(
+    target: string,
+    scope: string[]
+  ): Promise<SecurityTestResult[]> {
     try {
       const response = await fetch('/api/mcp/security/penetration', {
         method: 'POST',
@@ -248,24 +262,29 @@ export class MCPSecurityService {
     return this.runTraditionalPenetrationTest(target, scope);
   }
 
-  private async runTraditionalPenetrationTest(target: string, scope: string[]): Promise<SecurityTestResult[]> {
-    return [{
-      testId: `pentest-${Date.now()}`,
-      testType: 'penetration',
-      status: 'skipped',
-      severity: 'high',
-      mcpEnhanced: false,
-      confidence: 0.4,
-      details: {
-        description: `Penetration test for ${target}`,
-        recommendation: 'Configure penetration testing tool'
-      },
-      metadata: {
-        timestamp: new Date().toISOString(),
-        scanner: 'traditional',
-        version: '1.0.0'
+  private async runTraditionalPenetrationTest(
+    target: string,
+    scope: string[]
+  ): Promise<SecurityTestResult[]> {
+    return [
+      {
+        testId: `pentest-${Date.now()}`,
+        testType: 'penetration',
+        status: 'skipped',
+        severity: 'high',
+        mcpEnhanced: false,
+        confidence: 0.4,
+        details: {
+          description: `Penetration test for ${target}`,
+          recommendation: 'Configure penetration testing tool'
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          scanner: 'traditional',
+          version: '1.0.0'
+        }
       }
-    }];
+    ];
   }
 
   async runCodeAnalysis(codebase: string): Promise<SecurityTestResult[]> {
@@ -303,23 +322,25 @@ export class MCPSecurityService {
   }
 
   private async runTraditionalCodeAnalysis(codebase: string): Promise<SecurityTestResult[]> {
-    return [{
-      testId: `code-analysis-${Date.now()}`,
-      testType: 'code-analysis',
-      status: 'skipped',
-      severity: 'medium',
-      mcpEnhanced: false,
-      confidence: 0.5,
-      details: {
-        description: `Code analysis for ${codebase}`,
-        recommendation: 'Configure static code analysis tool'
-      },
-      metadata: {
-        timestamp: new Date().toISOString(),
-        scanner: 'traditional',
-        version: '1.0.0'
+    return [
+      {
+        testId: `code-analysis-${Date.now()}`,
+        testType: 'code-analysis',
+        status: 'skipped',
+        severity: 'medium',
+        mcpEnhanced: false,
+        confidence: 0.5,
+        details: {
+          description: `Code analysis for ${codebase}`,
+          recommendation: 'Configure static code analysis tool'
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          scanner: 'traditional',
+          version: '1.0.0'
+        }
       }
-    }];
+    ];
   }
 
   getStatus() {

@@ -24,7 +24,12 @@ export interface SecurityEvent {
 export interface SecurityAlert {
   id: string;
   eventId: string;
-  type: 'brute_force' | 'data_exfiltration' | 'privilege_escalation' | 'suspicious_activity' | 'system_compromise';
+  type:
+    | 'brute_force'
+    | 'data_exfiltration'
+    | 'privilege_escalation'
+    | 'suspicious_activity'
+    | 'system_compromise';
   severity: 'low' | 'medium' | 'high' | 'critical';
   status: 'open' | 'investigating' | 'resolved' | 'false_positive';
   title: string;
@@ -130,13 +135,13 @@ class SecurityMonitoringService {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
+
       const response = await fetch(`${this.wazuhEndpoint}/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -156,13 +161,13 @@ class SecurityMonitoringService {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
+
       const response = await fetch(`${this.falcoEndpoint}/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -207,7 +212,6 @@ class SecurityMonitoringService {
 
       // Log locally
       log.info('Security event logged', { event: securityEvent });
-
     } catch (error) {
       log.error('Failed to log security event', { error, event });
     }
@@ -233,14 +237,14 @@ class SecurityMonitoringService {
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
-      
+
       const response = await fetch(`${this.wazuhEndpoint}/events`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(wazuhEvent),
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -272,14 +276,14 @@ class SecurityMonitoringService {
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
-      
+
       const response = await fetch(`${this.falcoEndpoint}/events`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(falcoEvent),
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -312,7 +316,6 @@ class SecurityMonitoringService {
 
       // Check for suspicious patterns
       await this.analyzeSuspiciousPatterns(event);
-
     } catch (error) {
       log.error('Failed to analyze threats', { error, event });
     }
@@ -323,11 +326,12 @@ class SecurityMonitoringService {
    */
   private async analyzeBruteForceAttempt(event: SecurityEvent): Promise<void> {
     const key = `${event.ipAddress}:${event.userId || 'unknown'}`;
-    const recentEvents = this.events.filter(e => 
-      e.ipAddress === event.ipAddress && 
-      e.type === 'authentication' &&
-      e.details.action === 'login_failure' &&
-      e.timestamp > new Date(Date.now() - 5 * 60 * 1000) // Last 5 minutes
+    const recentEvents = this.events.filter(
+      e =>
+        e.ipAddress === event.ipAddress &&
+        e.type === 'authentication' &&
+        e.details.action === 'login_failure' &&
+        e.timestamp > new Date(Date.now() - 5 * 60 * 1000) // Last 5 minutes
     );
 
     if (recentEvents.length >= 5) {
@@ -370,15 +374,17 @@ class SecurityMonitoringService {
   private async analyzeDataExfiltration(event: SecurityEvent): Promise<void> {
     const key = `${event.userId}:data_access`;
     // TODO: Use key when implementing full data access monitoring
-    const recentEvents = this.events.filter(e => 
-      e.userId === event.userId && 
-      e.type === 'data_access' &&
-      e.timestamp > new Date(Date.now() - 60 * 60 * 1000) // Last hour
+    const recentEvents = this.events.filter(
+      e =>
+        e.userId === event.userId &&
+        e.type === 'data_access' &&
+        e.timestamp > new Date(Date.now() - 60 * 60 * 1000) // Last hour
     );
 
     const totalVolume = recentEvents.reduce((sum, e) => sum + (e.details.volume || 0), 0);
 
-    if (totalVolume > 10000) { // 10MB threshold
+    if (totalVolume > 10000) {
+      // 10MB threshold
       await this.createAlert({
         type: 'data_exfiltration',
         severity: 'high',
@@ -399,11 +405,12 @@ class SecurityMonitoringService {
   private async analyzePrivilegeEscalation(event: SecurityEvent): Promise<void> {
     const key = `${event.userId}:privilege_escalation`;
     // TODO: Use key when implementing full privilege escalation monitoring
-    const recentEvents = this.events.filter(e => 
-      e.userId === event.userId && 
-      e.type === 'authorization' &&
-      e.details.action === 'permission_denied' &&
-      e.timestamp > new Date(Date.now() - 30 * 60 * 1000) // Last 30 minutes
+    const recentEvents = this.events.filter(
+      e =>
+        e.userId === event.userId &&
+        e.type === 'authorization' &&
+        e.details.action === 'permission_denied' &&
+        e.timestamp > new Date(Date.now() - 30 * 60 * 1000) // Last 30 minutes
     );
 
     if (recentEvents.length >= 3) {
@@ -442,9 +449,8 @@ class SecurityMonitoringService {
     }
 
     // Check for rapid successive actions
-    const recentEvents = this.events.filter(e => 
-      e.userId === event.userId && 
-      e.timestamp > new Date(Date.now() - 60 * 1000) // Last minute
+    const recentEvents = this.events.filter(
+      e => e.userId === event.userId && e.timestamp > new Date(Date.now() - 60 * 1000) // Last minute
     );
 
     if (recentEvents.length > 20) {
@@ -492,7 +498,9 @@ class SecurityMonitoringService {
   /**
    * Create security alert
    */
-  async createAlert(alertData: Omit<SecurityAlert, 'id' | 'eventId' | 'status' | 'timestamp'>): Promise<void> {
+  async createAlert(
+    alertData: Omit<SecurityAlert, 'id' | 'eventId' | 'status' | 'timestamp'>
+  ): Promise<void> {
     try {
       const alert: SecurityAlert = {
         ...alertData,
@@ -508,7 +516,6 @@ class SecurityMonitoringService {
       await this.sendAlertNotifications(alert);
 
       log.info('Security alert created', { alert });
-
     } catch (error) {
       log.error('Failed to create security alert', { error, alertData });
     }
@@ -528,7 +535,6 @@ class SecurityMonitoringService {
       if (this.alertWebhook && (alert.severity === 'high' || alert.severity === 'critical')) {
         await this.sendWebhookAlert(alert);
       }
-
     } catch (error) {
       log.error('Failed to send alert notifications', { error, alert });
     }
@@ -554,7 +560,6 @@ class SecurityMonitoringService {
       // Send email using configured SMTP
       // Implementation depends on your email service
       log.info('Email alert sent', { emailContent });
-
     } catch (error) {
       log.error('Failed to send email alert', { error, alert });
     }
@@ -567,7 +572,7 @@ class SecurityMonitoringService {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
-      
+
       const response = await fetch(this.alertWebhook!, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -582,7 +587,7 @@ class SecurityMonitoringService {
         }),
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -590,7 +595,6 @@ class SecurityMonitoringService {
       }
 
       log.info('Webhook alert sent', { alert });
-
     } catch (error) {
       log.error('Failed to send webhook alert', { error, alert });
     }
@@ -601,19 +605,28 @@ class SecurityMonitoringService {
    */
   private startMonitoringIntervals(): void {
     // Cleanup old events every hour
-    setInterval(() => {
-      this.cleanupOldEvents();
-    }, 60 * 60 * 1000);
+    setInterval(
+      () => {
+        this.cleanupOldEvents();
+      },
+      60 * 60 * 1000
+    );
 
     // Update threat indicators every 30 minutes
-    setInterval(() => {
-      this.updateThreatIndicators();
-    }, 30 * 60 * 1000);
+    setInterval(
+      () => {
+        this.updateThreatIndicators();
+      },
+      30 * 60 * 1000
+    );
 
     // Generate security metrics every 15 minutes
-    setInterval(() => {
-      this.generateSecurityMetrics();
-    }, 15 * 60 * 1000);
+    setInterval(
+      () => {
+        this.generateSecurityMetrics();
+      },
+      15 * 60 * 1000
+    );
   }
 
   /**
@@ -630,9 +643,10 @@ class SecurityMonitoringService {
   private updateThreatIndicators(): void {
     for (const [, indicator] of this.threatIndicators.entries()) {
       // Update frequency based on recent events
-      const recentEvents = this.events.filter(e => 
-        e.timestamp > new Date(Date.now() - 60 * 60 * 1000) && // Last hour
-        (e.ipAddress === indicator.value || e.userId === indicator.value)
+      const recentEvents = this.events.filter(
+        e =>
+          e.timestamp > new Date(Date.now() - 60 * 60 * 1000) && // Last hour
+          (e.ipAddress === indicator.value || e.userId === indicator.value)
       );
 
       indicator.frequency = recentEvents.length;
@@ -676,7 +690,6 @@ class SecurityMonitoringService {
       // Store metrics for dashboard
       // Implementation depends on your metrics storage
       log.info('Security metrics generated', { metrics });
-
     } catch (error) {
       log.error('Failed to generate security metrics', { error });
     }
@@ -742,7 +755,7 @@ class SecurityMonitoringService {
    */
   async blockIP(ipAddress: string, reason: string): Promise<void> {
     this.blockedIPs.add(ipAddress);
-    
+
     await this.logSecurityEvent({
       type: 'system',
       severity: 'high',
@@ -760,7 +773,7 @@ class SecurityMonitoringService {
    */
   async unblockIP(ipAddress: string, reason: string): Promise<void> {
     this.blockedIPs.delete(ipAddress);
-    
+
     await this.logSecurityEvent({
       type: 'system',
       severity: 'low',

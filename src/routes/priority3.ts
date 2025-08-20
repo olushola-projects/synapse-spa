@@ -12,8 +12,8 @@ const router = Router();
 // Advanced Security Routes
 router.get('/security/threat-intelligence', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: [],
       message: 'Threat intelligence endpoint - service not fully implemented'
     });
@@ -25,8 +25,8 @@ router.get('/security/threat-intelligence', authenticateJWT, async (req, res) =>
 
 router.get('/security/anomalies', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: [],
       message: 'Security anomalies endpoint - service not fully implemented'
     });
@@ -38,8 +38,8 @@ router.get('/security/anomalies', authenticateJWT, async (req, res) => {
 
 router.get('/security/incidents', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: [],
       message: 'Security incidents endpoint - service not fully implemented'
     });
@@ -51,8 +51,8 @@ router.get('/security/incidents', authenticateJWT, async (req, res) => {
 
 router.get('/security/metrics', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: {
         totalThreats: 0,
         activeIncidents: 0,
@@ -74,8 +74,8 @@ router.get('/security/metrics', authenticateJWT, async (req, res) => {
 // Compliance Reporting Routes
 router.get('/compliance/dashboards', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: [],
       message: 'Compliance dashboards endpoint - service not fully implemented'
     });
@@ -87,8 +87,8 @@ router.get('/compliance/dashboards', authenticateJWT, async (req, res) => {
 
 router.get('/compliance/reports', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: [],
       message: 'Compliance reports endpoint - service not fully implemented'
     });
@@ -100,8 +100,8 @@ router.get('/compliance/reports', authenticateJWT, async (req, res) => {
 
 router.get('/compliance/alerts', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: [],
       message: 'Compliance alerts endpoint - service not fully implemented'
     });
@@ -114,8 +114,8 @@ router.get('/compliance/alerts', authenticateJWT, async (req, res) => {
 // Documentation Routes
 router.get('/documentation', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: {
         documents: [],
         total: 0,
@@ -132,8 +132,8 @@ router.get('/documentation', authenticateJWT, async (req, res) => {
 
 router.get('/documentation/templates', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: [],
       message: 'Documentation templates endpoint - service not fully implemented'
     });
@@ -145,8 +145,8 @@ router.get('/documentation/templates', authenticateJWT, async (req, res) => {
 
 router.get('/documentation/metrics', authenticateJWT, async (req, res) => {
   try {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: {
         totalDocuments: 0,
         activeDocuments: 0,

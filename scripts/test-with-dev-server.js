@@ -26,7 +26,7 @@ class SimpleTestRunner {
 
   async startDevServer() {
     this.log('Starting development server...');
-    
+
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Dev server startup timeout'));
@@ -38,7 +38,7 @@ class SimpleTestRunner {
         cwd: process.cwd()
       });
 
-      this.devServer.stdout.on('data', (data) => {
+      this.devServer.stdout.on('data', data => {
         const output = data.toString();
         if (output.includes('Local:') || output.includes('ready in') || output.includes('8080')) {
           clearTimeout(timeout);
@@ -47,11 +47,11 @@ class SimpleTestRunner {
         }
       });
 
-      this.devServer.stderr.on('data', (data) => {
+      this.devServer.stderr.on('data', data => {
         this.log(`Dev server stderr: ${data.toString()}`, 'error');
       });
 
-      this.devServer.on('error', (error) => {
+      this.devServer.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -60,7 +60,7 @@ class SimpleTestRunner {
 
   async waitForServer() {
     this.log('Waiting for server to be ready...');
-    
+
     // Simple wait - in production you'd check port availability
     await new Promise(resolve => setTimeout(resolve, 5000));
     this.log('Server should be ready', 'success');
@@ -68,24 +68,23 @@ class SimpleTestRunner {
 
   async runTests() {
     this.log('Running smoke tests...');
-    
+
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Tests timeout'));
       }, 60000);
 
-      this.testProcess = spawn('npx', [
-        'playwright', 'test', 
-        'tests/e2e/smoke.spec.ts',
-        '--project=chromium',
-        '--reporter=list'
-      ], {
-        stdio: 'inherit',
-        shell: true,
-        cwd: process.cwd()
-      });
+      this.testProcess = spawn(
+        'npx',
+        ['playwright', 'test', 'tests/e2e/smoke.spec.ts', '--project=chromium', '--reporter=list'],
+        {
+          stdio: 'inherit',
+          shell: true,
+          cwd: process.cwd()
+        }
+      );
 
-      this.testProcess.on('close', (code) => {
+      this.testProcess.on('close', code => {
         clearTimeout(timeout);
         if (code === 0) {
           this.log('Tests passed', 'success');
@@ -96,7 +95,7 @@ class SimpleTestRunner {
         }
       });
 
-      this.testProcess.on('error', (error) => {
+      this.testProcess.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -105,11 +104,11 @@ class SimpleTestRunner {
 
   async cleanup() {
     this.log('Cleaning up...');
-    
+
     if (this.devServer) {
       this.devServer.kill('SIGTERM');
     }
-    
+
     if (this.testProcess) {
       this.testProcess.kill('SIGTERM');
     }
@@ -117,20 +116,19 @@ class SimpleTestRunner {
 
   async run() {
     const startTime = Date.now();
-    
+
     try {
       this.log('🚀 Starting Simple Test Runner');
-      
+
       // Start dev server
       await this.startDevServer();
       await this.waitForServer();
-      
+
       // Run tests
       await this.runTests();
-      
+
       const duration = Date.now() - startTime;
       this.log(`✅ All tests completed in ${duration / 1000}s`, 'success');
-      
     } catch (error) {
       const duration = Date.now() - startTime;
       this.log(`❌ Test execution failed after ${duration / 1000}s: ${error.message}`, 'error');

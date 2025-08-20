@@ -15,7 +15,7 @@ interface ClassificationRequest {
   paiIndicators?: Record<string, any>;
 }
 
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -29,7 +29,10 @@ Deno.serve(async (req) => {
     // Get user from JWT
     const authHeader = req.headers.get('Authorization')!;
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
@@ -111,7 +114,9 @@ async function performSFDRClassification(data: ClassificationRequest) {
     recommendations.push('Consider implementing ESG characteristics to qualify for Article 8');
   }
   if (classification === 'Article 8') {
-    recommendations.push('Ensure clear documentation of promoted environmental/social characteristics');
+    recommendations.push(
+      'Ensure clear documentation of promoted environmental/social characteristics'
+    );
     recommendations.push('Implement robust PAI consideration process');
   }
   if (classification === 'Article 9') {

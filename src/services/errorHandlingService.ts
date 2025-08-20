@@ -217,9 +217,12 @@ class ErrorHandlingService {
     }, 60 * 1000);
 
     // Cleanup old error events every hour
-    setInterval(async () => {
-      this.cleanupOldErrorEvents();
-    }, 60 * 60 * 1000);
+    setInterval(
+      async () => {
+        this.cleanupOldErrorEvents();
+      },
+      60 * 60 * 1000
+    );
   }
 
   /**
@@ -231,58 +234,74 @@ class ErrorHandlingService {
     config?: Partial<CircuitBreakerConfig>
   ): Promise<T> {
     const circuitBreaker = this.getOrCreateCircuitBreaker(name, config);
-    
+
     // Check if circuit is open
     if (circuitBreaker.status === 'open') {
       if (circuitBreaker.nextAttemptTime && new Date() < circuitBreaker.nextAttemptTime) {
-        throw new Error(`Circuit breaker '${name}' is open. Retry after ${circuitBreaker.nextAttemptTime}`);
+        throw new Error(
+          `Circuit breaker '${name}' is open. Retry after ${circuitBreaker.nextAttemptTime}`
+        );
       }
-      
+
       // Try to transition to half-open
       circuitBreaker.status = 'half_open';
       log.info(`Circuit breaker '${name}' transitioning to half-open`);
     }
 
     const startTime = Date.now();
-    
+
     try {
       const result = await operation();
-      
+
       // Success - close circuit if it was half-open
       if (circuitBreaker.status === 'half_open') {
         circuitBreaker.status = 'closed';
         circuitBreaker.failureCount = 0;
         log.info(`Circuit breaker '${name}' closed after successful operation`);
       }
-      
+
       // Update success metrics
       circuitBreaker.lastSuccessTime = new Date();
       circuitBreaker.totalRequests++;
-      circuitBreaker.successRate = (circuitBreaker.totalRequests - circuitBreaker.totalFailures) / circuitBreaker.totalRequests;
-      circuitBreaker.averageResponseTime = this.calculateAverageResponseTime(circuitBreaker, Date.now() - startTime);
-      
+      circuitBreaker.successRate =
+        (circuitBreaker.totalRequests - circuitBreaker.totalFailures) /
+        circuitBreaker.totalRequests;
+      circuitBreaker.averageResponseTime = this.calculateAverageResponseTime(
+        circuitBreaker,
+        Date.now() - startTime
+      );
+
       return result;
-      
     } catch (error) {
       // Failure - update failure metrics
       circuitBreaker.lastFailureTime = new Date();
       circuitBreaker.failureCount++;
       circuitBreaker.totalFailures++;
       circuitBreaker.totalRequests++;
-      circuitBreaker.successRate = (circuitBreaker.totalRequests - circuitBreaker.totalFailures) / circuitBreaker.totalRequests;
-      
+      circuitBreaker.successRate =
+        (circuitBreaker.totalRequests - circuitBreaker.totalFailures) /
+        circuitBreaker.totalRequests;
+
       // Check if circuit should open
-      if (circuitBreaker.failureCount >= (config?.failureThreshold || this.defaultCircuitBreakerConfig.failureThreshold)) {
+      if (
+        circuitBreaker.failureCount >=
+        (config?.failureThreshold || this.defaultCircuitBreakerConfig.failureThreshold)
+      ) {
         circuitBreaker.status = 'open';
-        circuitBreaker.nextAttemptTime = new Date(Date.now() + (config?.recoveryTimeout || this.defaultCircuitBreakerConfig.recoveryTimeout));
+        circuitBreaker.nextAttemptTime = new Date(
+          Date.now() + (config?.recoveryTimeout || this.defaultCircuitBreakerConfig.recoveryTimeout)
+        );
         log.warn(`Circuit breaker '${name}' opened due to ${circuitBreaker.failureCount} failures`);
       }
-      
+
       throw error;
     }
   }
 
-  private getOrCreateCircuitBreaker(name: string, _config?: Partial<CircuitBreakerConfig>): CircuitBreakerState {
+  private getOrCreateCircuitBreaker(
+    name: string,
+    _config?: Partial<CircuitBreakerConfig>
+  ): CircuitBreakerState {
     if (!this.circuitBreakers.has(name)) {
       const circuitBreaker: CircuitBreakerState = {
         name,
@@ -295,18 +314,21 @@ class ErrorHandlingService {
       };
       this.circuitBreakers.set(name, circuitBreaker);
     }
-    
+
     return this.circuitBreakers.get(name)!;
   }
 
-  private calculateAverageResponseTime(circuitBreaker: CircuitBreakerState, newResponseTime: number): number {
+  private calculateAverageResponseTime(
+    circuitBreaker: CircuitBreakerState,
+    newResponseTime: number
+  ): number {
     const totalRequests = circuitBreaker.totalRequests;
     const currentAvg = circuitBreaker.averageResponseTime;
-    
+
     if (totalRequests === 1) {
       return newResponseTime;
     }
-    
+
     return (currentAvg * (totalRequests - 1) + newResponseTime) / totalRequests;
   }
 
@@ -320,40 +342,44 @@ class ErrorHandlingService {
   ): Promise<T> {
     const retryConfig = { ...this.defaultRetryConfig, ...config };
     let lastError: Error;
-    
+
     for (let attempt = 1; attempt <= retryConfig.maxAttempts; attempt++) {
       try {
         return await operation();
       } catch (error) {
         lastError = error as Error;
-        
+
         // Check if error is retryable
         if (!this.isRetryableError(error as Error, retryConfig.retryableErrors)) {
           throw error;
         }
-        
+
         // If this is the last attempt, throw the error
         if (attempt === retryConfig.maxAttempts) {
           log.error(`Operation '${name}' failed after ${attempt} attempts`, { error: lastError });
           throw lastError;
         }
-        
+
         // Calculate delay for next attempt
         const delay = this.calculateRetryDelay(attempt, retryConfig);
-        log.warn(`Operation '${name}' failed (attempt ${attempt}/${retryConfig.maxAttempts}), retrying in ${delay}ms`, { error: lastError });
-        
+        log.warn(
+          `Operation '${name}' failed (attempt ${attempt}/${retryConfig.maxAttempts}), retrying in ${delay}ms`,
+          { error: lastError }
+        );
+
         await this.sleep(delay);
       }
     }
-    
+
     throw lastError!;
   }
 
   private isRetryableError(error: Error, retryableErrors: string[]): boolean {
-    return retryableErrors.some(errorType => 
-      error.name === errorType || 
-      error.message.includes(errorType) ||
-      (error as any).code === errorType
+    return retryableErrors.some(
+      errorType =>
+        error.name === errorType ||
+        error.message.includes(errorType) ||
+        (error as any).code === errorType
     );
   }
 
@@ -393,7 +419,9 @@ class ErrorHandlingService {
     };
 
     this.errorEvents.push(errorEvent);
-    log.error(`Error recorded: ${errorEvent.error.type} in ${service}.${operation}`, { errorEvent });
+    log.error(`Error recorded: ${errorEvent.error.type} in ${service}.${operation}`, {
+      errorEvent
+    });
 
     // Check if degradation strategies should be triggered
     await this.checkDegradationStrategies(errorEvent);
@@ -404,42 +432,47 @@ class ErrorHandlingService {
       if (!strategy.enabled) continue;
 
       const shouldTrigger = await this.evaluateDegradationTrigger(strategy, errorEvent);
-      
+
       if (shouldTrigger) {
         await this.executeDegradationStrategy(strategy, errorEvent);
       }
     }
   }
 
-  private async evaluateDegradationTrigger(strategy: DegradationStrategy, errorEvent: ErrorEvent): Promise<boolean> {
+  private async evaluateDegradationTrigger(
+    strategy: DegradationStrategy,
+    errorEvent: ErrorEvent
+  ): Promise<boolean> {
     const now = new Date();
     const windowStart = new Date(now.getTime() - strategy.trigger.duration);
-    
+
     switch (strategy.trigger.type) {
       case 'error_rate':
-        const recentErrors = this.errorEvents.filter(e => 
-          e.timestamp >= windowStart && 
-          e.service === errorEvent.service
+        const recentErrors = this.errorEvents.filter(
+          e => e.timestamp >= windowStart && e.service === errorEvent.service
         );
         const errorRate = recentErrors.length / Math.max(1, recentErrors.length);
         return errorRate >= strategy.trigger.threshold;
-        
+
       case 'response_time':
         // This would be evaluated based on performance metrics
         return false;
-        
+
       case 'circuit_open':
         const circuitBreaker = this.circuitBreakers.get(errorEvent.service);
         return circuitBreaker?.status === 'open';
-        
+
       default:
         return false;
     }
   }
 
-  private async executeDegradationStrategy(strategy: DegradationStrategy, errorEvent: ErrorEvent): Promise<void> {
+  private async executeDegradationStrategy(
+    strategy: DegradationStrategy,
+    errorEvent: ErrorEvent
+  ): Promise<void> {
     log.info(`Executing degradation strategy: ${strategy.name}`, { strategy, errorEvent });
-    
+
     for (const action of strategy.actions) {
       try {
         switch (action.type) {
@@ -460,32 +493,51 @@ class ErrorHandlingService {
             break;
         }
       } catch (error) {
-        log.error(`Failed to execute degradation action: ${action.type}`, { error, action, errorEvent });
+        log.error(`Failed to execute degradation action: ${action.type}`, {
+          error,
+          action,
+          errorEvent
+        });
       }
     }
   }
 
-  private async executeFallbackAction(action: DegradationAction, errorEvent: ErrorEvent): Promise<void> {
+  private async executeFallbackAction(
+    action: DegradationAction,
+    errorEvent: ErrorEvent
+  ): Promise<void> {
     log.info(`Executing fallback action: ${action.target}`, { action, errorEvent });
     // Implementation would use cached or alternative data
   }
 
-  private async executeCacheAction(action: DegradationAction, errorEvent: ErrorEvent): Promise<void> {
+  private async executeCacheAction(
+    action: DegradationAction,
+    errorEvent: ErrorEvent
+  ): Promise<void> {
     log.info(`Executing cache action: ${action.target}`, { action, errorEvent });
     // Implementation would serve cached data
   }
 
-  private async executeTimeoutAction(action: DegradationAction, errorEvent: ErrorEvent): Promise<void> {
+  private async executeTimeoutAction(
+    action: DegradationAction,
+    errorEvent: ErrorEvent
+  ): Promise<void> {
     log.info(`Executing timeout action: ${action.target}`, { action, errorEvent });
     // Implementation would reduce timeout values
   }
 
-  private async executeRedirectAction(action: DegradationAction, errorEvent: ErrorEvent): Promise<void> {
+  private async executeRedirectAction(
+    action: DegradationAction,
+    errorEvent: ErrorEvent
+  ): Promise<void> {
     log.info(`Executing redirect action: ${action.target}`, { action, errorEvent });
     // Implementation would redirect to alternative service
   }
 
-  private async executeCustomAction(action: DegradationAction, errorEvent: ErrorEvent): Promise<void> {
+  private async executeCustomAction(
+    action: DegradationAction,
+    errorEvent: ErrorEvent
+  ): Promise<void> {
     log.info(`Executing custom action: ${action.target}`, { action, errorEvent });
     // Implementation would execute custom degradation logic
   }
@@ -497,14 +549,15 @@ class ErrorHandlingService {
     try {
       const now = new Date();
       const last5Minutes = new Date(now.getTime() - 5 * 60 * 1000);
-      
+
       const recentErrors = this.errorEvents.filter(e => e.timestamp >= last5Minutes);
       const totalRequests = recentErrors.length; // Simplified - in production would track total requests
-      
+
       if (totalRequests > 0) {
         const errorRate = recentErrors.length / totalRequests;
-        
-        if (errorRate > 0.1) { // 10% error rate
+
+        if (errorRate > 0.1) {
+          // 10% error rate
           log.warn(`High error rate detected: ${(errorRate * 100).toFixed(2)}%`, {
             totalRequests,
             errorCount: recentErrors.length,
@@ -522,8 +575,8 @@ class ErrorHandlingService {
    */
   async generateErrorReport(period: { start: Date; end: Date }): Promise<ErrorReport> {
     try {
-      const errorsInPeriod = this.errorEvents.filter(e => 
-        e.timestamp >= period.start && e.timestamp <= period.end
+      const errorsInPeriod = this.errorEvents.filter(
+        e => e.timestamp >= period.start && e.timestamp <= period.end
       );
 
       const totalErrors = errorsInPeriod.length;
@@ -535,9 +588,13 @@ class ErrorHandlingService {
 
       // Calculate average resolution time
       const resolvedErrorsWithTime = errorsInPeriod.filter(e => e.handled);
-      const averageResolutionTime = resolvedErrorsWithTime.length > 0 
-        ? resolvedErrorsWithTime.reduce((acc, e) => acc + (e.timestamp.getTime() - period.start.getTime()), 0) / resolvedErrorsWithTime.length
-        : 0;
+      const averageResolutionTime =
+        resolvedErrorsWithTime.length > 0
+          ? resolvedErrorsWithTime.reduce(
+              (acc, e) => acc + (e.timestamp.getTime() - period.start.getTime()),
+              0
+            ) / resolvedErrorsWithTime.length
+          : 0;
 
       // Get top errors
       const errorCounts = new Map<string, number>();
@@ -572,7 +629,6 @@ class ErrorHandlingService {
 
       log.info('Error report generated', { report: report.summary });
       return report;
-
     } catch (error) {
       log.error('Failed to generate error report', { error });
       throw error;

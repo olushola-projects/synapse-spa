@@ -1,4 +1,4 @@
-import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
+import { jsx as _jsx, Fragment as _Fragment } from 'react/jsx-runtime';
 /**
  * ProtectedRoute Component
  *
@@ -19,24 +19,24 @@ import SecurityUtils from '../utils/security';
  * @returns The protected route component
  */
 const ProtectedRoute = ({ children, requireAuth = true }) => {
-    const { isAuthenticated } = useAuth();
-    const location = useLocation();
-    // Store the attempted URL for redirecting after login
-    useEffect(() => {
-        if (!isAuthenticated && requireAuth) {
-            // Save the current path to redirect back after login
-            SecurityUtils.storage.set('redirectPath', location.pathname);
-        }
-    }, [isAuthenticated, location.pathname, requireAuth]);
-    // If authentication is required but user is not authenticated, redirect to login
-    if (requireAuth && !isAuthenticated) {
-        return _jsx(Navigate, { to: '/login', state: { from: location }, replace: true });
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  // Store the attempted URL for redirecting after login
+  useEffect(() => {
+    if (!isAuthenticated && requireAuth) {
+      // Save the current path to redirect back after login
+      SecurityUtils.storage.set('redirectPath', location.pathname);
     }
-    // If user is authenticated but this is a non-auth route (like login/register), redirect to dashboard
-    if (!requireAuth && isAuthenticated) {
-        return _jsx(Navigate, { to: '/dashboard', replace: true });
-    }
-    // If all checks pass, render the children
-    return _jsx(_Fragment, { children: children });
+  }, [isAuthenticated, location.pathname, requireAuth]);
+  // If authentication is required but user is not authenticated, redirect to login
+  if (requireAuth && !isAuthenticated) {
+    return _jsx(Navigate, { to: '/login', state: { from: location }, replace: true });
+  }
+  // If user is authenticated but this is a non-auth route (like login/register), redirect to dashboard
+  if (!requireAuth && isAuthenticated) {
+    return _jsx(Navigate, { to: '/dashboard', replace: true });
+  }
+  // If all checks pass, render the children
+  return _jsx(_Fragment, { children: children });
 };
 export default ProtectedRoute;
