@@ -1,0 +1,11 @@
+# Page snapshot
+
+```yaml
+- text: "[plugin:vite:import-analysis] Failed to resolve import \"recharts\" from \"src/components/widgets/ComplianceStatusWidget.js\". Does the file exist? C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/src/components/widgets/ComplianceStatusWidget.js:5:66 23 | import { Shield, AlertCircle, CheckCircle2, XCircle } from 'lucide-react'; 24 | import { Progress } from '@/components/ui/progress'; 25 | import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'; | ^ 26 | import { useIsMobile } from '@/hooks/use-mobile'; 27 | // Sample compliance data at TransformPluginContext._formatError (file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:49258:41) at TransformPluginContext.error (file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:49253:16) at normalizeUrl (file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:64291:23) at async file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:64423:39 at async Promise.all (index 6) at async TransformPluginContext.transform (file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:64350:7) at async PluginContainer.transform (file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:49099:18) at async loadAndTransform (file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:51977:27) at async viteTransformMiddleware (file:///C:/Users/User/Documents/Maycode/Synapses/.vscode/synapse-landing-nexus/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:62105:24 Click outside, press Esc key, or fix the code to dismiss. You can also disable this overlay by setting"
+- code: server.hmr.overlay
+- text: to
+- code: "false"
+- text: in
+- code: vite.config.ts
+- text: .
+```

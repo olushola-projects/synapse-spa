@@ -1,0 +1,231 @@
+{
+  "timestamp": "2025-08-19T02:23:16.084Z",
+  "target": "http://localhost:3000",
+  "summary": {
+    "overallScore": 0,
+    "grade": "F",
+    "totalTests": 22,
+    "passed": 0,
+    "failed": 22
+  },
+  "results": {
+    "authentication": {
+      "passed": 0,
+      "failed": 5,
+      "tests": [
+        {
+          "name": "JWT Token Validation",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.052Z"
+        },
+        {
+          "name": "Session Management",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.085Z"
+        },
+        {
+          "name": "MFA Implementation",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.102Z"
+        },
+        {
+          "name": "Password Policy",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.120Z"
+        },
+        {
+          "name": "Brute Force Protection",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.230Z"
+        }
+      ]
+    },
+    "authorization": {
+      "passed": 0,
+      "failed": 4,
+      "tests": [
+        {
+          "name": "Role-Based Access Control",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.263Z"
+        },
+        {
+          "name": "Privilege Escalation Prevention",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.266Z"
+        },
+        {
+          "name": "API Endpoint Protection",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.269Z"
+        },
+        {
+          "name": "Resource Access Control",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.316Z"
+        }
+      ]
+    },
+    "inputValidation": {
+      "passed": 0,
+      "failed": 5,
+      "tests": [
+        {
+          "name": "SQL Injection Prevention",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.337Z"
+        },
+        {
+          "name": "XSS Prevention",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.383Z"
+        },
+        {
+          "name": "NoSQL Injection Prevention",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.453Z"
+        },
+        {
+          "name": "Command Injection Prevention",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.486Z"
+        },
+        {
+          "name": "Path Traversal Prevention",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.515Z"
+        }
+      ]
+    },
+    "apiSecurity": {
+      "passed": 0,
+      "failed": 4,
+      "tests": [
+        {
+          "name": "Rate Limiting",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:15.985Z"
+        },
+        {
+          "name": "API Authentication",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:16.029Z"
+        },
+        {
+          "name": "CORS Configuration",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:16.037Z"
+        },
+        {
+          "name": "Request Validation",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:16.044Z"
+        }
+      ]
+    },
+    "dataProtection": {
+      "passed": 0,
+      "failed": 4,
+      "tests": [
+        {
+          "name": "Data Encryption",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:16.059Z"
+        },
+        {
+          "name": "Secure Communication",
+          "result": {
+            "passed": false,
+            "reason": "Insecure communication detected"
+          },
+          "timestamp": "2025-08-19T02:23:16.063Z"
+        },
+        {
+          "name": "Data Leakage Prevention",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:16.075Z"
+        },
+        {
+          "name": "Key Management",
+          "result": {
+            "passed": false,
+            "reason": ""
+          },
+          "timestamp": "2025-08-19T02:23:16.082Z"
+        }
+      ]
+    },
+    "overall": {
+      "score": 0,
+      "grade": "F",
+      "vulnerabilities": []
+    }
+  },
+  "recommendations": [
+    "Implement stronger authentication mechanisms",
+    "Strengthen authorization controls",
+    "Enhance input validation and sanitization",
+    "Improve API security measures",
+    "Enhance data protection and encryption"
+  ]
+}
