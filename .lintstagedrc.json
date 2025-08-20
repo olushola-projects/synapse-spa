@@ -1,4 +1,22 @@
 {
-  "*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix", "git add"],
-  "*.{json,md,css,scss}": ["prettier --write", "git add"]
+  "*.{js,jsx,ts,tsx}": [
+    "prettier --write",
+    "eslint --fix --max-warnings=0",
+    "vitest related --run --coverage=false"
+  ],
+  "*.{json,md,css,scss}": [
+    "prettier --write"
+  ],
+  "package.json": [
+    "npx sort-package-json"
+  ],
+  "ignore": [
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/node_modules/**"
+  ],
+  "concurrent": true,
+  "chunkSize": 20,
+  "maxArgLength": 1000
 }
