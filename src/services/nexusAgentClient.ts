@@ -1,5 +1,5 @@
-// Nexus Agent Client - Using External Backend API
-import { backendApiClient } from './backendApiClient';
+// Nexus Agent Client - Updated with user's API configuration
+import { NEXUS_CONFIG } from '../config/nexus';
 
 export interface NexusClassificationRequest {
   productName: string;
@@ -9,8 +9,6 @@ export interface NexusClassificationRequest {
   riskProfile?: string;
   targetArticle?: string;
   paiIndicators?: Record<string, any>;
-  // AI routing strategy from backend (two LLMs)
-  modelStrategy?: 'primary' | 'secondary' | 'hybrid';
 }
 
 export interface NexusClassificationResponse {
@@ -34,99 +32,55 @@ export interface NexusHealthResponse {
 }
 
 export class NexusAgentClient {
+  private baseUrl: string;
+  private apiKey?: string;
+  private timeout: number;
+
+  constructor(config?: { baseUrl?: string; apiKey?: string; timeout?: number }) {
+    this.baseUrl = config?.baseUrl || NEXUS_CONFIG.apiBaseUrl;
+    this.apiKey = config?.apiKey;
+    this.timeout = config?.timeout || NEXUS_CONFIG.timeout;
+  }
+
   async classifyProduct(
     productData: NexusClassificationRequest
   ): Promise<NexusClassificationResponse> {
-    const response = await backendApiClient.classifyProduct(productData);
+    const response = await fetch(`${this.baseUrl}/api/classify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.apiKey}`
+      },
+      body: JSON.stringify(productData),
+      signal: AbortSignal.timeout(this.timeout)
+    });
 
-    if (response.error) {
-      throw new Error(`SFDR Classification Error: ${response.error}`);
+    if (!response.ok) {
+      throw new Error(`SFDR API Error: ${response.status}`);
     }
 
-    // Transform backend response to expected format
-    const backendData = response.data;
-    return {
-      classification: backendData?.classification || 'Article 6',
-      complianceScore: Math.round((backendData?.confidence || 0.5) * 100),
-      riskLevel: this.mapConfidenceToRiskLevel(backendData?.confidence || 0.5),
-      recommendations: this.generateRecommendations(backendData?.classification || 'Article 6'),
-      timestamp: new Date().toISOString(),
-      confidence: backendData?.confidence || 0.5,
-      reasoning: `Classified as ${backendData?.classification || 'Article 6'} based on AI analysis`,
-      validation: {
-        isValid: (backendData?.confidence || 0) > 0.7,
-        issues: (backendData?.confidence || 0) < 0.7 ? ['Low confidence classification'] : []
-      }
-    };
-  }
-
-  private mapConfidenceToRiskLevel(confidence: number): string {
-    if (confidence >= 0.8) {
-      return 'Low';
-    }
-    if (confidence >= 0.6) {
-      return 'Medium';
-    }
-    return 'High';
-  }
-
-  private generateRecommendations(classification: string): string[] {
-    const recommendations = [
-      'Review fund documentation for accuracy',
-      'Ensure all required disclosures are complete'
-    ];
-
-    switch (classification) {
-      case 'Article 8':
-        recommendations.push('Verify sustainability characteristics are clearly defined');
-        break;
-      case 'Article 9':
-        recommendations.push('Confirm sustainable investment objective is met');
-        break;
-      default:
-        recommendations.push('Consider if fund could qualify for Article 8 or 9');
-    }
-
-    return recommendations;
+    return response.json();
   }
 
   async getComplianceStatus(): Promise<any> {
-    const response = await backendApiClient.getMetrics();
-
-    if (response.error) {
-      throw new Error(`Compliance status error: ${response.error}`);
-    }
-
-    return {
-      metrics: response.data,
-      status: 'operational',
-      lastUpdated: new Date().toISOString()
-    };
+    const response = await fetch(`${this.baseUrl}/api/compliance/status`);
+    return response.json();
   }
 
-  async getAnalytics(_filters: Record<string, any> = {}): Promise<any> {
-    const response = await backendApiClient.getAnalytics();
-
-    if (response.error) {
-      throw new Error(`Analytics error: ${response.error}`);
-    }
-
-    return response.data;
+  async getAnalytics(filters: Record<string, any> = {}): Promise<any> {
+    const params = new URLSearchParams(filters);
+    const response = await fetch(`${this.baseUrl}/api/analytics?${params}`);
+    return response.json();
   }
 
   async getHealth(): Promise<NexusHealthResponse> {
-    const response = await backendApiClient.healthCheck();
+    const response = await fetch(`${this.baseUrl}/api/health`);
 
-    if (response.error) {
-      throw new Error(`Health check failed: ${response.error}`);
+    if (!response.ok) {
+      throw new Error(`Health check failed: ${response.status}`);
     }
 
-    const healthData = response.data;
-    return {
-      status: healthData?.status === 'healthy' ? 'healthy' : 'degraded',
-      version: healthData?.version || '1.0.0',
-      uptime: healthData?.uptime || 0
-    };
+    return response.json();
   }
 
   // Legacy method for backwards compatibility

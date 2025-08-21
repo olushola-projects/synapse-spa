@@ -1,71 +1,132 @@
-import { createClient } from '@supabase/supabase-js';
 import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import type {
+  NexusClassificationRequest,
+  NexusClassificationResponse
+} from '@/services/nexusAgentClient';
+import { NexusAgentClient } from '@/services/nexusAgentClient';
+import { useAuth } from '@/contexts/AuthContext';
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-interface ClassificationRequest {
-  productName: string;
-  productType: string;
-  sustainabilityObjectives?: string[];
-  investmentStrategy?: string;
-  riskProfile?: string;
-  targetArticle?: string;
-  paiIndicators?: Record<string, any>;
+interface SFDRClassificationHookResult {
+  classify: (productData: NexusClassificationRequest) => Promise<NexusClassificationResponse>;
+  loading: boolean;
+  result: NexusClassificationResponse | null;
+  error: string | null;
+  clearResult: () => void;
 }
 
-interface ClassificationResponse {
-  classification: string;
-  complianceScore: number;
-  riskLevel: string;
-  recommendations: string[];
-  timestamp: string;
-  confidence: number;
-  reasoning: string;
-  validation: {
-    isValid: boolean;
-    issues: string[];
-  };
-}
-
-export function useSFDRClassification() {
+export const useSFDRClassification = (): SFDRClassificationHookResult => {
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<NexusClassificationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<ClassificationResponse | null>(null);
+  const { user } = useAuth();
 
-  const classify = async (data: ClassificationRequest) => {
+  const saveClassificationToSupabase = async (
+    productData: NexusClassificationRequest,
+    classification: NexusClassificationResponse
+  ) => {
+    if (!user) {
+      throw new Error('User must be authenticated to save classifications');
+    }
+
+    try {
+      // Save to compliance_assessments table
+      const assessmentData = {
+        user_id: user.id,
+        entity_id: `product_${Date.now()}`,
+        fund_name: productData.productName,
+        target_article: productData.targetArticle || classification.classification,
+        assessment_data: JSON.parse(
+          JSON.stringify({
+            productData,
+            classification,
+            timestamp: new Date().toISOString()
+          })
+        ),
+        validation_results: JSON.parse(JSON.stringify(classification.validation || {})),
+        compliance_score: Math.round(classification.complianceScore),
+        status: 'completed'
+      };
+
+      const { data: assessment, error: assessmentError } = await supabase
+        .from('compliance_assessments')
+        .insert(assessmentData)
+        .select()
+        .single();
+
+      if (assessmentError) {
+        console.error('Error saving assessment:', assessmentError);
+        throw assessmentError;
+      }
+
+      // Save detailed report to compliance_reports table
+      const reportData = {
+        user_id: user.id,
+        assessment_id: assessment.id,
+        report_type: 'SFDR_CLASSIFICATION',
+        report_data: JSON.parse(
+          JSON.stringify({
+            classification,
+            productData,
+            generatedAt: new Date().toISOString(),
+            riskLevel: classification.riskLevel,
+            recommendations: classification.recommendations
+          })
+        )
+      };
+
+      const { error: reportError } = await supabase.from('compliance_reports').insert(reportData);
+
+      if (reportError) {
+        console.error('Error saving report:', reportError);
+        // Don't throw here as assessment was saved successfully
+      }
+
+      return assessment;
+    } catch (err) {
+      console.error('Error saving to Supabase:', err);
+      throw err;
+    }
+  };
+
+  const classify = async (
+    productData: NexusClassificationRequest
+  ): Promise<NexusClassificationResponse> => {
     setLoading(true);
     setError(null);
 
     try {
-      const { data: functionData, error: functionError } = await supabase.functions.invoke(
-        'nexus-classify',
-        {
-          body: JSON.stringify(data)
-        }
-      );
+      // Get API key from Supabase secrets
+      const client = new NexusAgentClient({
+        apiKey: process.env.LOVEABLE_API_KEY // Set via Supabase secrets
+      });
 
-      if (functionError) {
-        throw new Error(functionError.message);
-      }
+      const classification = await client.classifyProduct(productData);
+      setResult(classification);
 
-      setResult(functionData);
-      return functionData;
+      // Save to Supabase for chat history and compliance tracking
+      await saveClassificationToSupabase(productData, classification);
+
+      return classification;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Classification failed';
-      setError(message);
+      const errorMessage = err instanceof Error ? err.message : 'Classification failed';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
+  const clearResult = () => {
+    setResult(null);
+    setError(null);
+  };
+
   return {
     classify,
     loading,
+    result,
     error,
-    result
+    clearResult
   };
-}
+};

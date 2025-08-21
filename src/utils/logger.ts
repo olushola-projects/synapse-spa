@@ -47,14 +47,10 @@ class Logger {
   private maxHistorySize = 1000;
 
   constructor(config: Partial<LoggerConfig> = {}) {
-    // Determine if we're in production mode
-    const isProduction =
-      typeof process !== 'undefined' && process.env ? process.env.NODE_ENV === 'production' : false;
-
     this.config = {
       level: this.getEnvironmentLogLevel(),
-      enableConsole: !isProduction,
-      enableRemote: isProduction,
+      enableConsole: import.meta.env.MODE !== 'production',
+      enableRemote: import.meta.env.MODE === 'production',
       prefix: 'Synapse',
       ...config
     };
@@ -64,21 +60,9 @@ class Logger {
    * Determine log level based on environment
    */
   private getEnvironmentLogLevel(): LogLevel {
-    // Use process.env for Node.js backend, fallback to import.meta.env for frontend
-    let envLevel: string | undefined;
+    const envLevel = import.meta.env.VITE_LOG_LEVEL?.toUpperCase();
 
-    if (typeof process !== 'undefined' && process.env) {
-      envLevel = process.env.LOG_LEVEL || process.env.VITE_LOG_LEVEL;
-    } else if (
-      typeof (globalThis as any).window !== 'undefined' &&
-      (globalThis as any).process?.env
-    ) {
-      envLevel = (globalThis as any).import.meta.env.VITE_LOG_LEVEL;
-    }
-
-    const level = envLevel?.toUpperCase();
-
-    switch (level) {
+    switch (envLevel) {
       case 'ERROR':
         return LogLevel.ERROR;
       case 'WARN':
@@ -88,10 +72,7 @@ class Logger {
       case 'DEBUG':
         return LogLevel.DEBUG;
       default:
-        // Use NODE_ENV for Node.js, fallback to development mode
-        const mode =
-          typeof process !== 'undefined' && process.env ? process.env.NODE_ENV : 'development';
-        return mode === 'production' ? LogLevel.WARN : LogLevel.DEBUG;
+        return import.meta.env.MODE === 'production' ? LogLevel.WARN : LogLevel.DEBUG;
     }
   }
 

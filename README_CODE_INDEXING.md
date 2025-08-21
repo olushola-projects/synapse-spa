@@ -64,8 +64,8 @@ CodeIndexEngine indexEngine = new CodeIndexEngine();
 // Index a document
 String javaCode = "public class UserService { ... }";
 boolean success = indexEngine.indexDocument(
-    "UserService.java",
-    javaCode,
+    "UserService.java", 
+    javaCode, 
     CodeIndexEngine.StorageTier.HOT
 );
 
@@ -102,8 +102,8 @@ Map<String, Set<String>> semanticTokens = CodeTokenizer.extractSemanticTokens(co
 ```java
 // Index compliance documents
 indexEngine.indexDocument(
-    "audit-policy.md",
-    complianceContent,
+    "audit-policy.md", 
+    complianceContent, 
     CodeIndexEngine.StorageTier.COLD
 );
 
@@ -122,18 +122,18 @@ for (SearchMatch match : complianceResults) {
 ```java
 // Record indexing metrics
 metrics.recordIndexing(
-    CodeIndexEngine.StorageTier.HOT,
-    processingTime,
-    documentSize,
+    CodeIndexEngine.StorageTier.HOT, 
+    processingTime, 
+    documentSize, 
     isCompliance
 );
 
 // Record query metrics
 metrics.recordQuery(
-    query,
-    executionTime,
-    resultCount,
-    cacheHit,
+    query, 
+    executionTime, 
+    resultCount, 
+    cacheHit, 
     isCompliance
 );
 
@@ -234,13 +234,13 @@ if (errorRate > 0.05) {
 ```java
 @Service
 public class CodeSearchService {
-
+    
     @Autowired
     private CodeIndexEngine indexEngine;
-
+    
     @Autowired
     private IndexMetrics metrics;
-
+    
     public List<SearchMatch> searchCode(String query) {
         return indexEngine.search(query);
     }
@@ -253,7 +253,7 @@ public class CodeSearchService {
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
-
+    
     @PostMapping("/index")
     public ResponseEntity<String> indexDocument(@RequestBody IndexRequest request) {
         boolean success = indexEngine.indexDocument(
@@ -263,7 +263,7 @@ public class SearchController {
         );
         return success ? ResponseEntity.ok("Indexed") : ResponseEntity.badRequest().build();
     }
-
+    
     @GetMapping("/search")
     public List<SearchMatch> search(@RequestParam String query) {
         return indexEngine.search(query);
@@ -351,4 +351,4 @@ This code indexing system is designed for enterprise use and incorporates patter
 
 **Built with patterns from GitHub, Google, Sourcegraph, and RegTech leaders**
 
-_For questions or support, please refer to the comprehensive demo and documentation provided in the codebase._
+*For questions or support, please refer to the comprehensive demo and documentation provided in the codebase.*

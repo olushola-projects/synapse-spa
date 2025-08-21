@@ -14,23 +14,41 @@ import type {
   ClassificationResult
 } from '@/types/nexus';
 
-// Service Configuration - Updated for External API
+// Service Configuration
 const NEXUS_CONFIG = {
-  baseUrl: 'https://api.joinsynapses.com',
+  baseUrl: 'https://nexus-82zwpw7xt-aas-projects-66c93685.vercel.app',
   endpoints: {
-    health: 'api/health',
-    validate: 'api/classify',
-    classify: 'api/classify',
-    chat: 'api/classify',
-    capabilities: 'api/metrics'
+    health: '/api/health',
+    validate: '/api/analyze',
+    classify: '/api/classify',
+    chat: '/api/chat',
+    capabilities: '/api/capabilities'
   },
   timeout: 30000,
   retries: 3
 };
 
 class NexusAgentService {
+  private apiKey: string | null = null;
+  private baseUrl: string;
+
   constructor() {
-    // Configuration handled by NEXUS_CONFIG constant
+    this.baseUrl = NEXUS_CONFIG.baseUrl;
+    this.initializeApiKey();
+  }
+
+  private async initializeApiKey() {
+    try {
+      // In production, API keys should be fetched from secure backend endpoints
+      // For demo purposes, we'll use a placeholder key
+      this.apiKey = 'demo-key-placeholder';
+      
+      // TODO: Implement secure API key retrieval from backend
+      // Example: const apiKey = await this.fetchAPIKeyFromBackend();
+    } catch (error) {
+      console.warn('Failed to initialize API key, using demo key:', error);
+      this.apiKey = 'demo-key';
+    }
   }
 
   /**
@@ -80,37 +98,80 @@ class NexusAgentService {
   /**
    * Upload document for analysis
    */
-  async uploadDocument(file: File): Promise<any> {
-    // Use backendApiClient for consistency
-    const { backendApiClient } = await import('./backendApiClient');
-    return await backendApiClient.uploadDocument(file);
+  async uploadDocument(file: File, documentType: string): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('documentType', documentType);
+
+    const response = await fetch(
+      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/upload-document',
+      {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`
+        }
+      }
+    );
+
+    return await response.json();
   }
 
   /**
    * Check compliance
    */
   async checkCompliance(data: any): Promise<any> {
-    // Use backendApiClient for consistency
-    const { backendApiClient } = await import('./backendApiClient');
-    return await backendApiClient.checkCompliance(data);
+    const response = await fetch(
+      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/check-compliance',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify(data)
+      }
+    );
+
+    return await response.json();
   }
 
   /**
    * Generate compliance report
    */
   async generateReport(assessmentId: string, reportType = 'full_compliance'): Promise<any> {
-    // Use backendApiClient for consistency
-    const { backendApiClient } = await import('./backendApiClient');
-    return await backendApiClient.generateReport({ assessmentId, reportType });
+    const response = await fetch(
+      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/generate-report',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({ assessmentId, reportType })
+      }
+    );
+
+    return await response.json();
   }
 
   /**
    * Perform risk assessment
    */
   async performRiskAssessment(assessmentId: string): Promise<any> {
-    // Use backendApiClient for consistency
-    const { backendApiClient } = await import('./backendApiClient');
-    return await backendApiClient.riskAssessment({ assessmentId });
+    const response = await fetch(
+      'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/risk-assessment',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({ assessmentId })
+      }
+    );
+
+    return await response.json();
   }
 
   /**
@@ -118,90 +179,40 @@ class NexusAgentService {
    */
   async classifyFund(request: SFDRClassificationRequest): Promise<ClassificationResult> {
     try {
-      // Use backendApiClient for consistency
-      const { backendApiClient } = await import('./backendApiClient');
-      const response = await backendApiClient.classifyProduct(request);
-
-      if (response.error) {
-        throw new Error(response.error);
-      }
-
-      const classificationResult = response.data?.classification || 'Article6';
-      const validClassification = ['Article6', 'Article8', 'Article9'].includes(
-        classificationResult
-      )
-        ? (classificationResult as 'Article6' | 'Article8' | 'Article9')
-        : this.determineRecommendedArticle(request);
-
-      return {
-        recommendedArticle: validClassification,
-        confidence: response.data?.confidence || 0.85,
-        reasoning: this.generateReasoning(request, request.fundProfile.targetArticleClassification),
-        alternativeClassifications: this.generateAlternatives(
-          request,
-          request.fundProfile.targetArticleClassification
-        )
-      };
+      const response = await this.makeRequest('POST', NEXUS_CONFIG.endpoints.classify, request);
+      return response.classification;
     } catch (_error) {
       return this.generateMockClassification(request);
     }
   }
 
   /**
-   * Make HTTP request to Nexus API with secure edge function proxy
+   * Make HTTP request to Nexus API
    */
   private async makeRequest(method: string, endpoint: string, data?: any): Promise<any> {
-    // SECURITY FIX: Use edge function proxy instead of direct API calls
-    const url = 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/nexus-proxy';
+    const url = `${this.baseUrl}${endpoint}`;
 
-    // SECURITY FIX: Remove direct API key usage - edge function handles authentication
     const config: RequestInit = {
-      method: 'POST', // Edge function expects POST with payload
+      method,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'Synapse-SFDR-Navigator/1.0',
-        'X-Client-Version': '1.0.0'
+        Authorization: `Bearer ${this.apiKey}`,
+        'User-Agent': 'Synapse-SFDR-Navigator/1.0'
       },
       signal: AbortSignal.timeout(NEXUS_CONFIG.timeout)
     };
 
-    // SECURITY FIX: Send request through edge function proxy
-    const proxyPayload = {
-      method,
-      endpoint,
-      data,
-      userId: 'nexus-agent-request'
-    };
-
-    config.body = JSON.stringify(proxyPayload);
-
-    logger.info(`Making secure request through edge function proxy`, { method, endpoint });
-
-    try {
-      const response = await fetch(url, config);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        logger.error(`Nexus API Error: ${response.status} ${response.statusText}`, {
-          url,
-          status: response.status,
-          error: errorText
-        });
-        throw new Error(
-          `Nexus API Error: ${response.status} ${response.statusText} - ${errorText}`
-        );
-      }
-
-      const result = await response.json();
-      logger.info(`Nexus API Success`, { endpoint, responseSize: JSON.stringify(result).length });
-      return result;
-    } catch (error) {
-      logger.error(`Nexus API Request Failed`, {
-        url,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-      throw error;
+    if (data) {
+      config.body = JSON.stringify(data);
     }
+
+    const response = await fetch(url, config);
+
+    if (!response.ok) {
+      throw new Error(`Nexus API Error: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
   }
 
   /**

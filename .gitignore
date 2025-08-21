@@ -28,21 +28,3 @@ dist-ssr
 
 # CDD-Agent directory (separate repository)
 CDD-Agent/
-
-# Debug artifacts and test screenshots
-*.png
-debug-*.js
-error-screenshot.png
-basic-mounting-error.png
-server-response-error.png
-missing-content.png
-
-# Test results and reports
-test-results/
-playwright-report/
-*.webm
-
-# Temporary files
-*.tmp
-*.temp
-.temp/

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
-import * as matchers from '@testing-library/jest-dom/matchers';
+import { expect, afterEach, beforeEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach, beforeEach, expect, vi } from 'vitest';
+import * as matchers from '@testing-library/jest-dom/matchers';
 
 // Extend Vitest's expect with jest-dom matchers
 expect.extend(matchers);
@@ -69,7 +69,7 @@ Object.defineProperty(window, 'sessionStorage', {
 });
 
 // Mock fetch
-global.fetch = vi.fn() as any;
+global.fetch = vi.fn();
 
 // Mock URL.createObjectURL
 Object.defineProperty(URL, 'createObjectURL', {

@@ -5,7 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle2, Brain, Users, LineChart, ShieldCheck, Layers, Database } from 'lucide-react';
+import {
+  CheckCircle2,
+  Brain,
+  Users,
+  LineChart,
+  ShieldCheck,
+  Layers,
+  Database
+} from 'lucide-react';
 
 const Features = () => {
   return (

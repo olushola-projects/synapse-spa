@@ -16,7 +16,7 @@ interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({
-  title = 'SFDR Navigator - CDD Agent',
+  title = 'Synapse - GRC Intelligence Platform',
   description = 'Empower your GRC career with Synapse - the intelligence platform where compliance professionals connect, grow, and shape the future.',
   canonicalUrl = 'https://www.joinsynapses.com',
   ogImage = '/lovable-uploads/f88a2e71-50de-4711-83ef-4788c6f169fa.png',

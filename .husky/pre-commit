@@ -1,7 +1,4 @@
 #!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
-# Max buffer size for large file sets
-export NODE_OPTIONS="--max-old-space-size=8192"
-
-# Run lint-staged with custom configuration
-npx lint-staged --config .lintstagedrc.json
+npx lint-staged

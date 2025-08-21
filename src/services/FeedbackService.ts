@@ -44,7 +44,7 @@ class FeedbackService {
 
   constructor(config: Partial<FeedbackConfig> = {}) {
     this.config = {
-      apiEndpoint: 'https://hnwwykttyzfvflmcswjk.supabase.co/functions/v1/feedback',
+      apiEndpoint: '/api/feedback',
       enableAnalytics: true,
       enableHotjar: false,
       enableGoogleAnalytics: true,
@@ -390,7 +390,7 @@ class FeedbackService {
 
     // Group by date using Map for better TypeScript support
     const groupedByDate = new Map<string, FeedbackData[]>();
-
+    
     recentFeedback.forEach(f => {
       const dateStr = new Date(f.timestamp).toISOString().split('T')[0];
       if (dateStr && !groupedByDate.has(dateStr)) {

@@ -316,19 +316,7 @@ const BlogArticleDetails: React.FC = () => {
                             })
                             .join(''),
                           {
-                            ALLOWED_TAGS: [
-                              'h1',
-                              'h2',
-                              'h3',
-                              'p',
-                              'br',
-                              'li',
-                              'ul',
-                              'ol',
-                              'strong',
-                              'em',
-                              'a'
-                            ],
+                            ALLOWED_TAGS: ['h1', 'h2', 'h3', 'p', 'br', 'li', 'ul', 'ol', 'strong', 'em', 'a'],
                             ALLOWED_ATTR: ['class', 'href', 'target'],
                             ALLOW_DATA_ATTR: false
                           }

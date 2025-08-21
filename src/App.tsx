@@ -1,12 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { AuthProvider } from './contexts/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import { ErrorBoundary } from './components/ErrorBoundary';
-
-// Pages
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import Partners from './pages/Partners';
@@ -17,10 +13,12 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import { AuthProvider } from './contexts/AuthContext';
 import UseCases from './pages/UseCases';
-import SFDRNavigator from './pages/SFDRNavigator';
+import NexusAgent from './pages/NexusAgent';
 import AgentsPage from './pages/AgentsPage';
 import CDDAgentPage from './pages/CDDAgentPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Legal pages
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
@@ -52,108 +50,110 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <BrowserRouter>
-            <Routes>
-              <Route path='/' element={<Index />} />
-              <Route path='/partners' element={<Partners />} />
-              <Route
-                path='/dashboard'
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path='/ask-dara'
-                element={
-                  <ProtectedRoute>
-                    <AskDara />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path='/login'
-                element={
-                  <ProtectedRoute requireAuth={false}>
-                    <Login />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path='/register'
-                element={
-                  <ProtectedRoute requireAuth={false}>
-                    <Register />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path='/forgot-password'
-                element={
-                  <ProtectedRoute requireAuth={false}>
-                    <ForgotPassword />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path='/reset-password'
-                element={
-                  <ProtectedRoute requireAuth={false}>
-                    <ResetPassword />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path='/profile'
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path='/use-cases' element={<UseCases />} />
-              <Route path='/agents' element={<AgentsPage />} />
-              <Route path='/agents/cdd-agent' element={<CDDAgentPage />} />
-              {/* Unified SFDR Navigator - All regulatory compliance features */}
-              <Route path='/sfdr-navigator' element={<SFDRNavigator />} />
-              {/* Legacy route redirects */}
-              <Route path='/nexus-agent' element={<SFDRNavigator />} />
-              <Route path='/sfdr-gem' element={<SFDRNavigator />} />
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Index />} />
+            <Route path='/partners' element={<Partners />} />
+            <Route
+              path='/dashboard'
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/ask-dara'
+              element={
+                <ProtectedRoute>
+                  <AskDara />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/login'
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/register'
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <Register />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/forgot-password'
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <ForgotPassword />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/reset-password'
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <ResetPassword />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/profile'
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route path='/use-cases' element={<UseCases />} />
+            <Route path='/agents' element={<AgentsPage />} />
+            <Route path='/agents/cdd-agent' element={<CDDAgentPage />} />
+            <Route
+              path='/nexus-agent'
+              element={
+                <ProtectedRoute>
+                  <NexusAgent />
+                </ProtectedRoute>
+              }
+            />
 
-              {/* Legal Routes */}
-              <Route path='/legal/privacy' element={<PrivacyPolicy />} />
-              <Route path='/legal/terms' element={<TermsOfService />} />
-              <Route path='/legal/security' element={<SecurityPolicy />} />
-              <Route path='/legal/cookies' element={<CookiePolicy />} />
+            {/* Legal Routes */}
+            <Route path='/legal/privacy' element={<PrivacyPolicy />} />
+            <Route path='/legal/terms' element={<TermsOfService />} />
+            <Route path='/legal/security' element={<SecurityPolicy />} />
+            <Route path='/legal/cookies' element={<CookiePolicy />} />
 
-              {/* Resources Routes */}
-              <Route path='/resources/blog' element={<Blog />} />
-              <Route path='/resources/blog/:id' element={<BlogArticleDetails />} />
-              <Route path='/resources/documentation' element={<Documentation />} />
-              <Route path='/resources/faq' element={<FAQ />} />
+            {/* Resources Routes */}
+            <Route path='/resources/blog' element={<Blog />} />
+            <Route path='/resources/blog/:id' element={<BlogArticleDetails />} />
+            <Route path='/resources/documentation' element={<Documentation />} />
+            <Route path='/resources/faq' element={<FAQ />} />
 
-              {/* Company Routes */}
-              <Route path='/company/about' element={<About />} />
-              <Route path='/company/contact' element={<Contact />} />
+            {/* Company Routes */}
+            <Route path='/company/about' element={<About />} />
+            <Route path='/company/contact' element={<Contact />} />
 
-              {/* Platform Routes */}
-              <Route path='/platform/features' element={<Features />} />
-              <Route path='/platform/solutions' element={<Solutions />} />
+            {/* Platform Routes */}
+            <Route path='/platform/features' element={<Features />} />
+            <Route path='/platform/solutions' element={<Solutions />} />
 
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path='*' element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
 );
 
 export default App;

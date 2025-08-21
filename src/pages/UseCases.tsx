@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardContent
+} from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -43,7 +46,7 @@ import {
   Eye,
   Gauge,
   ShoppingBag,
-  DollarSign
+  DollarSign,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -277,9 +280,11 @@ const UseCases = () => {
     // In a real implementation, you would send this data to your backend
     // This is a placeholder for actual form submission
     try {
-      // Example API call using Supabase Edge Function
-      // await supabase.functions.invoke('contact', {
-      //   body: {
+      // Example API call
+      // await fetch('/api/contact', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
       //     useCaseId: selectedUseCase.id,
       //     email: contactEmail,
       //     message: contactMessage

@@ -325,12 +325,7 @@
         "type": "Corporate",
         "riskLevel": "High",
         "jurisdiction": "Non-EU",
-        "requiredDocuments": [
-          "Certificate of Incorporation",
-          "Board Resolution",
-          "UBO Declaration",
-          "Financial Statements"
-        ]
+        "requiredDocuments": ["Certificate of Incorporation", "Board Resolution", "UBO Declaration", "Financial Statements"]
       }
     ]
   }

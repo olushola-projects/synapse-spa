@@ -5,11 +5,9 @@
 ### Pre-Deployment Requirements
 
 #### 1. Environment Variables Setup
-
 Configure the following environment variables in Vercel Dashboard:
 
 **Required Variables:**
-
 - `VITE_SUPABASE_URL` - Your Supabase project URL
 - `VITE_SUPABASE_ANON_KEY` - Supabase anonymous key
 - `VITE_POSTHOG_KEY` - PostHog analytics key
@@ -18,7 +16,6 @@ Configure the following environment variables in Vercel Dashboard:
 - `VITE_NEXUS_API_KEY` - Nexus API key
 
 **Optional Variables:**
-
 - `VITE_APP_ENV=production`
 - `VITE_APP_URL` - Your production domain
 - `VITE_API_BASE_URL` - API base URL
@@ -28,7 +25,6 @@ Configure the following environment variables in Vercel Dashboard:
 #### 2. Security Configuration
 
 ✅ **Security Headers Configured** (via vercel.json)
-
 - X-Content-Type-Options: nosniff
 - X-Frame-Options: DENY
 - X-XSS-Protection: 1; mode=block
@@ -36,21 +32,18 @@ Configure the following environment variables in Vercel Dashboard:
 - Permissions-Policy: camera=(), microphone=(), geolocation=()
 
 ✅ **Asset Caching Optimized**
-
 - Static assets cached for 1 year
 - Immutable cache headers for versioned assets
 
 #### 3. Performance Optimizations
 
 ✅ **Build Optimizations**
-
 - Code splitting enabled
 - Tree shaking configured
 - Asset optimization with proper naming
 - Bundle analysis available via `npm run build:analyze`
 
 ✅ **Chunk Strategy**
-
 - Vendor chunks (React, React DOM)
 - UI components chunk (Radix UI)
 - Router chunk (React Router)
@@ -65,19 +58,16 @@ Configure the following environment variables in Vercel Dashboard:
 #### Option 1: Vercel CLI Deployment
 
 1. **Install Vercel CLI**
-
    ```bash
    npm i -g vercel
    ```
 
 2. **Login to Vercel**
-
    ```bash
    vercel login
    ```
 
 3. **Deploy to Preview**
-
    ```bash
    npm run deploy:preview
    ```
@@ -107,7 +97,6 @@ Configure the following environment variables in Vercel Dashboard:
 ### Post-Deployment Verification
 
 #### 1. Functional Testing
-
 - [ ] Homepage loads correctly
 - [ ] All routes work (SPA routing)
 - [ ] Authentication flow works
@@ -116,7 +105,6 @@ Configure the following environment variables in Vercel Dashboard:
 - [ ] Analytics tracking active
 
 #### 2. Performance Testing
-
 - [ ] Lighthouse score > 90
 - [ ] Core Web Vitals pass
 - [ ] Bundle size < 1MB
@@ -124,7 +112,6 @@ Configure the following environment variables in Vercel Dashboard:
 - [ ] Time to Interactive < 3s
 
 #### 3. Security Testing
-
 - [ ] HTTPS enforced
 - [ ] Security headers present
 - [ ] No console errors in production
@@ -134,13 +121,11 @@ Configure the following environment variables in Vercel Dashboard:
 ### Monitoring & Maintenance
 
 #### 1. Analytics Setup
-
 - PostHog analytics configured
 - Error tracking enabled
 - Performance monitoring active
 
 #### 2. Regular Maintenance
-
 - Monitor bundle size growth
 - Update dependencies monthly
 - Review security headers quarterly
@@ -151,7 +136,6 @@ Configure the following environment variables in Vercel Dashboard:
 #### Common Issues
 
 **1. Build Failures**
-
 ```bash
 # Check build locally
 npm run build:prod
@@ -161,17 +145,14 @@ npm run quality:check
 ```
 
 **2. Routing Issues**
-
 - Ensure `vercel.json` has correct SPA routing configuration
 - Check for case-sensitive route issues
 
 **3. Environment Variables**
-
-- Verify all VITE\_ prefixed variables are set
+- Verify all VITE_ prefixed variables are set
 - Check variable names match exactly
 
 **4. Performance Issues**
-
 ```bash
 # Analyze bundle
 npm run build:analyze
@@ -190,7 +171,6 @@ npm run preview:prod
 ### Support
 
 For deployment issues:
-
 1. Check Vercel build logs
 2. Review this deployment guide
 3. Check environment variable configuration

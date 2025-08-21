@@ -19,11 +19,11 @@ interface InvitationRequest {
 // Simple HTML escaping function for email templates
 function escapeHtml(unsafe: string): string {
   return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -45,9 +45,7 @@ const handler = async (req: Request): Promise<Response> => {
       message: escapeHtml(message.trim())
     };
 
-    console.log(
-      `Processing invitation from ${sanitizedData.senderEmail} to ${sanitizedData.inviteeEmail}`
-    );
+    console.log(`Processing invitation from ${sanitizedData.senderEmail} to ${sanitizedData.inviteeEmail}`);
 
     // Send invitation to invitee
     const inviteeEmailResponse = await resend.emails.send({
@@ -74,12 +72,7 @@ const handler = async (req: Request): Promise<Response> => {
       from: 'Synapses <invites@joinsynapses.com>',
       to: [sanitizedData.adminEmail],
       subject: 'New Synapses Invitation',
-      html: getAdminNotificationHTML(
-        sanitizedData.senderName,
-        sanitizedData.senderEmail,
-        sanitizedData.inviteeEmail,
-        sanitizedData.message
-      )
+      html: getAdminNotificationHTML(sanitizedData.senderName, sanitizedData.senderEmail, sanitizedData.inviteeEmail, sanitizedData.message)
     });
 
     console.log('Admin notification email sent:', adminEmailResponse);

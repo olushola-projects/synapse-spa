@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSFDRClassify, useHealthCheck } from '@/hooks/useSupabaseApi';
+import { useSFDRClassification } from '@/hooks/useSFDRClassification';
 import type { NexusClassificationRequest } from '@/services/nexusAgentClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,8 +18,7 @@ interface SFDRChatMessage {
 const SFDRChatIntegration = () => {
   const [messages, setMessages] = useState<SFDRChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const { classify, loading, data: result } = useSFDRClassify();
-  const { checkHealth } = useHealthCheck();
+  const { classify, loading, result } = useSFDRClassification();
   const [apiHealth, setApiHealth] = useState<'checking' | 'healthy' | 'error'>('checking');
 
   useEffect(() => {
@@ -41,8 +40,8 @@ const SFDRChatIntegration = () => {
 
   const checkApiHealth = async () => {
     try {
-      const healthStatus = await checkHealth();
-      setApiHealth(healthStatus ? 'healthy' : 'error');
+      // For now, assume healthy - in production, implement proper health check
+      setApiHealth('healthy');
     } catch (error) {
       setApiHealth('error');
       console.error('SFDR API health check failed:', error);
@@ -76,52 +75,16 @@ const SFDRChatIntegration = () => {
   };
 
   const formatChatResponse = (classification: any): string => {
-    const sustainabilityScore = classification.sustainability_score
-      ? `🌱 **Sustainability Score**: ${(classification.sustainability_score * 100).toFixed(1)}%\n`
-      : '';
-
-    const explainabilityScore = classification.explainability_score
-      ? `🔍 **Explainability Score**: ${(classification.explainability_score * 100).toFixed(1)}%\n`
-      : '';
-
-    const regulatoryBasis =
-      classification.regulatory_basis && classification.regulatory_basis.length > 0
-        ? `\n⚖️ **Regulatory Basis**:\n${classification.regulatory_basis.map((citation: string) => `• ${citation}`).join('\n')}\n`
-        : '';
-
-    const benchmarkInfo = classification.benchmark_comparison
-      ? `\n📊 **Industry Benchmark**:\n• Baseline: ${(classification.benchmark_comparison.industry_baseline * 100).toFixed(1)}%\n• Performance vs Baseline: ${classification.benchmark_comparison.performance_vs_baseline > 0 ? '+' : ''}${(classification.benchmark_comparison.performance_vs_baseline * 100).toFixed(1)}%\n• Percentile Rank: ${classification.benchmark_comparison.percentile_rank}th\n`
-      : '';
-
-    const keyIndicators =
-      classification.key_indicators && classification.key_indicators.length > 0
-        ? `\n🎯 **Key ESG Indicators**: ${classification.key_indicators.join(', ')}\n`
-        : '';
-
-    const riskFactors =
-      classification.risk_factors && classification.risk_factors.length > 0
-        ? `\n⚠️ **Risk Factors**:\n${classification.risk_factors.map((risk: string) => `• ${risk}`).join('\n')}\n`
-        : '';
-
-    const auditInfo = classification.audit_trail
-      ? `\n🔒 **Audit Trail**: ID ${classification.audit_trail.classification_id?.slice(-8)} | Engine v${classification.audit_trail.engine_version}`
-      : '';
-
-    const processingTime = classification.processing_time
-      ? ` | Processing: ${classification.processing_time.toFixed(3)}s`
-      : '';
-
-    return `Based on my enhanced SFDR analysis:
+    return `Based on my SFDR analysis:
 
 📊 **Classification**: ${classification.classification}
-📈 **Confidence**: ${classification.confidence}%
-${sustainabilityScore}${explainabilityScore}${regulatoryBasis}${benchmarkInfo}${keyIndicators}${riskFactors}
-**Reasoning**: ${classification.reasoning}
+📈 **Compliance Score**: ${classification.complianceScore}%
+⚠️ **Risk Level**: ${classification.riskLevel}
 
 **Recommendations**:
 ${classification.recommendations?.map((rec: string, index: number) => `${index + 1}. ${rec}`).join('\n') || 'No specific recommendations at this time.'}
 
-${auditInfo}${processingTime}`;
+*Analysis completed at ${classification.timestamp}*`;
   };
 
   const handleSFDRQuery = async (userMessage: string) => {
