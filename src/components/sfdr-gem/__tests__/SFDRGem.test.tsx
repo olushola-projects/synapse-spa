@@ -21,7 +21,7 @@ vi.mock('framer-motion', () => ({
 }));
 
 describe('SFDRGem Component', () => {
-  const mockUser = {
+  const _mockUser = {
     id: 'test-user-id',
     name: 'Test User',
     email: 'test@example.com',

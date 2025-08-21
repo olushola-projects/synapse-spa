@@ -58,6 +58,7 @@ const NexusAgent = () => {
   const [retryCount, setRetryCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState<'chat' | 'overview' | 'testing'>('chat');
   const [complianceData, setComplianceData] = useState<{
     status: 'pre-validated' | 'needs-review';
     esmaReference: string;
@@ -152,7 +153,6 @@ const NexusAgent = () => {
     };
   }, [retryCount]);
 
-  const [activeTab, setActiveTab] = useState<'chat' | 'overview' | 'testing'>('chat');
   const chatRef = useRef<any>(null);
 
   // Global industry metrics
@@ -511,51 +511,54 @@ const NexusAgent = () => {
             }}
           />
         </div>
-        <Tabs value={activeTab} onValueChange={handleTabChange}>
-          <TabsList className='grid w-full grid-cols-3 mb-6'>
-            <TabsTrigger
-              value='chat'
-              className='flex items-center space-x-2'
-              disabled={isLoadingTab}
-            >
-              {isLoadingTab && activeTab === 'chat' ? (
-                <Loader2 className='w-4 h-4 animate-spin' />
-              ) : (
-                <img
-                  src='/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png'
-                  alt='Sophia'
-                  className='w-4 h-4 rounded-full object-cover'
-                />
-              )}
-              <span>Chat</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value='overview'
-              className='flex items-center space-x-2'
-              disabled={isLoadingTab}
-            >
-              {isLoadingTab && activeTab === 'overview' ? (
-                <Loader2 className='w-4 h-4 animate-spin' />
-              ) : (
-                <BarChart3 className='w-4 h-4' />
-              )}
-              <span>Compliance Overview</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value='testing'
-              className='flex items-center space-x-2'
-              disabled={isLoadingTab}
-            >
-              {isLoadingTab && activeTab === 'testing' ? (
-                <Loader2 className='w-4 h-4 animate-spin' />
-              ) : (
-                <Target className='w-4 h-4' />
-              )}
-              <span>UAT Testing</span>
-            </TabsTrigger>
-          </TabsList>
+        
+        {/* Only render tabs when fully initialized */}
+        {!isInitializing && !error && (
+          <Tabs value={activeTab} onValueChange={handleTabChange}>
+            <TabsList className='grid w-full grid-cols-3 mb-6'>
+              <TabsTrigger
+                value='chat'
+                className='flex items-center space-x-2'
+                disabled={isLoadingTab}
+              >
+                {isLoadingTab && activeTab === 'chat' ? (
+                  <Loader2 className='w-4 h-4 animate-spin' />
+                ) : (
+                  <img
+                    src='/lovable-uploads/794c2751-9650-4079-ab13-82bacd5914db.png'
+                    alt='Sophia'
+                    className='w-4 h-4 rounded-full object-cover'
+                  />
+                )}
+                <span>Chat</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value='overview'
+                className='flex items-center space-x-2'
+                disabled={isLoadingTab}
+              >
+                {isLoadingTab && activeTab === 'overview' ? (
+                  <Loader2 className='w-4 h-4 animate-spin' />
+                ) : (
+                  <BarChart3 className='w-4 h-4' />
+                )}
+                <span>Compliance Overview</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value='testing'
+                className='flex items-center space-x-2'
+                disabled={isLoadingTab}
+              >
+                {isLoadingTab && activeTab === 'testing' ? (
+                  <Loader2 className='w-4 h-4 animate-spin' />
+                ) : (
+                  <Target className='w-4 h-4' />
+                )}
+                <span>UAT Testing</span>
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value='chat'>
+            <TabsContent value='chat'>
             {isLoadingTab ? (
               <TabContentSkeleton type='chat' />
             ) : (
@@ -777,8 +780,9 @@ const NexusAgent = () => {
                 </div>
               </div>
             )}
-          </TabsContent>
-        </Tabs>
+            </TabsContent>
+          </Tabs>
+        )}
       </main>
 
       {/* API Key Configuration Dialog */}

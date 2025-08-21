@@ -47,19 +47,8 @@ import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
  * - Multi-format export capabilities
  */
 
-interface SFDRClassificationRequest {
-  productName: string;
-  productType: string;
-  investmentStrategy: string;
-  sustainabilityObjectives: string[];
-  riskProfile: string;
-  paiIndicators: Record<string, any>;
-  fundName: string;
-  description: string;
-  esgIntegration: string;
-  principalAdverseImpacts?: string;
-  taxonomyAlignment?: string;
-}
+// Remove unused interface
+// interface SFDRClassificationRequest {}
 
 interface SFDRClassificationResponse {
   classification: 'Article 6' | 'Article 8' | 'Article 9';
