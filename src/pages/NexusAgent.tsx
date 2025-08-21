@@ -24,10 +24,9 @@ import type { QuickActionType } from '@/types/nexus';
 // Use the shared Supabase client
 import { supabase } from '@/integrations/supabase/client';
 const NexusAgent = () => {
-  // Enhanced state management with loading states
+  // Simplified state management
   const [isInitializing, setIsInitializing] = useState(true);
   const [isLoadingTab, setIsLoadingTab] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const [systemStatus, setSystemStatus] = useState<'online' | 'offline' | 'checking'>('checking');
   const [initError, setInitError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -39,7 +38,7 @@ const NexusAgent = () => {
     esmaReference: '2024/1357'
   });
   
-   // Enhanced initialization with progressive loading and error handling
+   // Optimized initialization - removed artificial delays
    useEffect(() => {
      let authListener: any = null;
      let mounted = true;
@@ -47,59 +46,36 @@ const NexusAgent = () => {
      const initializeApp = async () => {
        setInitError(null);
        setSystemStatus('checking');
-       setLoadingProgress(0);
        
        try {
-         // Stage 1: System health check
-         if (mounted) setLoadingProgress(20);
-         await new Promise(resolve => setTimeout(resolve, 300));
-         
-         // Stage 2: Authentication setup
+         // Authentication setup
          if (mounted) {
-           setLoadingProgress(40);
            const { data } = supabase.auth.onAuthStateChange(async (_, session) => {
              logger.info('Auth state changed:', session?.user?.id);
            });
            authListener = data;
          }
 
-         // Stage 3: Analytics initialization (non-blocking)
+         // Analytics initialization (non-blocking)
          if (mounted) {
-           setLoadingProgress(60);
-           setTimeout(() => {
-             try {
-               const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
-               const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
-               if (posthogKey && posthogHost) {
-                 posthog.init(posthogKey, {
-                   api_host: posthogHost
-                 });
-               } else {
-                 logger.warn('PostHog key or host not provided. Analytics will be disabled.');
-               }
-             } catch (error) {
-               logger.error('Failed to initialize PostHog:', error);
-             }
-           }, 100);
-         }
-
-         // Stage 4: API connectivity check
-         if (mounted) {
-           setLoadingProgress(80);
            try {
-             // Simulated API health check - replace with actual endpoint
-             await new Promise(resolve => setTimeout(resolve, 500));
-             setSystemStatus('online');
-           } catch (apiError) {
-             logger.warn('API check failed, using offline mode');
-             setSystemStatus('offline');
+             const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
+             const posthogHost = import.meta.env.VITE_POSTHOG_HOST;
+             if (posthogKey && posthogHost) {
+               posthog.init(posthogKey, {
+                 api_host: posthogHost
+               });
+             } else {
+               logger.warn('PostHog key or host not provided. Analytics will be disabled.');
+             }
+           } catch (error) {
+             logger.error('Failed to initialize PostHog:', error);
            }
          }
 
-         // Stage 5: Finalization
+         // Set system status
          if (mounted) {
-           setLoadingProgress(100);
-           await new Promise(resolve => setTimeout(resolve, 200));
+           setSystemStatus('online');
          }
          
        } catch (error) {
@@ -199,40 +175,25 @@ const NexusAgent = () => {
     // Find the action details
     const action = quickActions.find(a => a.type === actionType);
 
-    // Add a small delay to ensure tab switch completes
-    setTimeout(() => {
-      if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
-        chatRef.current.sendMessage(action?.message || 'How can you help me today?');
-      }
+    // Send message immediately
+    if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
+      chatRef.current.sendMessage(action?.message || 'How can you help me today?');
+    }
 
-      // Update compliance data based on action
-      setComplianceData(prev => ({
-        ...prev,
-        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
-      }));
-      
-      setIsLoadingTab(false);
-    }, 150);
+    // Update compliance data based on action
+    setComplianceData(prev => ({
+      ...prev,
+      status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
+    }));
+    
+    setIsLoadingTab(false);
   }, [quickActions, activeTab]);
 
   const handleTabChange = useCallback((value: string) => {
     if (isLoadingTab) return; // Prevent rapid tab switching
     
-    setIsLoadingTab(true);
     setActiveTab(value as 'chat' | 'overview' | 'testing');
-    
-    // Progressive tab loading with appropriate delays based on tab complexity
-    const delays = {
-      chat: 400,      // Chat requires chat history and context loading
-      overview: 300,  // Overview requires analytics data
-      testing: 350    // Testing requires test suite initialization
-    };
-    
-    const delay = delays[value as keyof typeof delays] || 300;
-    
-    setTimeout(() => {
-      setIsLoadingTab(false);
-    }, delay);
+    setIsLoadingTab(false); // Remove artificial delay
   }, [isLoadingTab]);
   // Enhanced loading screen with progressive indicators and error handling
   if (isInitializing) {
@@ -293,29 +254,16 @@ const NexusAgent = () => {
                 </p>
               </div>
               
-              <div className='space-y-3'>
-                <div className='flex justify-between text-xs text-muted-foreground'>
-                  <span>Loading progress</span>
-                  <span>{loadingProgress}%</span>
-                </div>
-                <div className='w-full bg-muted rounded-full h-2 overflow-hidden'>
-                  <div 
-                    className='h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-500 ease-out'
-                    style={{ width: `${loadingProgress}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className='flex items-center justify-center space-x-4 text-xs text-muted-foreground'>
-                <div className='flex items-center space-x-1'>
-                  {systemStatus === 'online' ? <Wifi className='w-3 h-3' /> : <WifiOff className='w-3 h-3' />}
-                  <span className='capitalize'>{systemStatus}</span>
-                </div>
-                <div className='flex items-center space-x-1'>
-                  <Shield className='w-3 h-3' />
-                  <span>Secure</span>
-                </div>
-              </div>
+               <div className='flex items-center justify-center space-x-4 text-xs text-muted-foreground'>
+                 <div className='flex items-center space-x-1'>
+                   {systemStatus === 'online' ? <Wifi className='w-3 h-3' /> : <WifiOff className='w-3 h-3' />}
+                   <span className='capitalize'>{systemStatus}</span>
+                 </div>
+                 <div className='flex items-center space-x-1'>
+                   <Shield className='w-3 h-3' />
+                   <span>Secure</span>
+                 </div>
+               </div>
             </div>
           )}
         </div>

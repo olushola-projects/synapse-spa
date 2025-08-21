@@ -18,7 +18,6 @@ import { ProcessingStages } from '@/components/ui/processing-stages';
 import { Loader2, AlertCircle, Shield, Settings } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { nexusAgent } from '@/services/nexusAgent';
-import { TIME_CONSTANTS } from '@/utils/constants';
 import { type SFDRClassificationRequest, type NexusValidationResponse, type NexusMessage } from '@/types/nexus';
 
 // Extended NexusMessage interface to include additional chat features
@@ -230,42 +229,25 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
   };
 
   /**
-   * Simulate processing stages for complex queries
+   * Optimized processing stages - removed artificial delays
    */
   const simulateProcessingStages = async () => {
     const stages = [{
       name: 'Understanding request',
-      status: 'active' as const,
+      status: 'completed' as const,
       description: 'Analyzing your query...'
     }, {
       name: 'Searching regulations',
-      status: 'pending' as const
+      status: 'completed' as const
     }, {
       name: 'Analyzing compliance',
-      status: 'pending' as const
+      status: 'completed' as const
     }, {
       name: 'Generating response',
-      status: 'pending' as const
+      status: 'active' as const
     }];
     setProcessingStages(stages);
-
-    // Simulate stage progression
-    for (let i = 0; i < stages.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, TIME_CONSTANTS.PROCESSING_STAGE_DELAY_MS));
-      setProcessingStages(prev => prev.map((stage, index) => ({
-        ...stage,
-        status: index < i ? 'completed' : index === i ? 'active' : 'pending'
-      })));
-
-      // Update processing type based on stage
-      if (i === 1) {
-        setProcessingType('searching');
-      } else if (i === 2) {
-        setProcessingType('analyzing');
-      } else if (i === 3) {
-        setProcessingType('generating');
-      }
-    }
+    setProcessingType('generating');
   };
 
   /**
@@ -337,7 +319,6 @@ export const NexusAgentChat = forwardRef<any, NexusAgentChatProps>(({
         await simulateProcessingStages();
       } else {
         setProcessingType('thinking');
-        await new Promise(resolve => setTimeout(resolve, TIME_CONSTANTS.SIMPLE_PROCESSING_DELAY_MS));
       }
       const response = await routeMessageToHandler(sanitizedMessage);
       updateMessage(loadingId, {
