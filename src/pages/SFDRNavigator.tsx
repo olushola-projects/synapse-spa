@@ -729,9 +729,9 @@ const SFDRNavigator: React.FC = () => {
                           <CardTitle className='flex items-center space-x-2 text-green-800'>
                             <CheckCircle className='h-5 w-5' />
                             <span>Classification Result</span>
-                            <Badge variant='outline' className='bg-white'>
-                              ID: {classificationResult.classificationId}
-                            </Badge>
+                             <Badge variant='outline' className='bg-white'>
+                               ID: {classificationResult.classification}
+                             </Badge>
                           </CardTitle>
                         </CardHeader>
                         <CardContent className='space-y-4'>
@@ -787,38 +787,38 @@ const SFDRNavigator: React.FC = () => {
                                 <Shield className='h-4 w-4 mr-1' />
                                 Regulatory Citations:
                               </h4>
-                              <div className='flex flex-wrap gap-2'>
-                                {classificationResult.regulatoryCitations.map((citation, index) => (
-                                  <Badge
-                                    key={index}
-                                    variant='secondary'
-                                    className='bg-blue-100 text-blue-800'
-                                  >
-                                    {citation}
-                                  </Badge>
-                                ))}
-                              </div>
+                               <div className='flex flex-wrap gap-2'>
+                                 {(classificationResult as any).regulatoryCitations?.map((citation: string, index: number) => (
+                                   <Badge
+                                     key={index}
+                                     variant='secondary'
+                                     className='bg-blue-100 text-blue-800'
+                                   >
+                                     {citation}
+                                   </Badge>
+                                 )) || <span className="text-sm text-muted-foreground">No citations available</span>}
+                               </div>
                             </div>
 
-                            {classificationResult.issues.length > 0 && (
-                              <div>
-                                <h4 className='font-semibold mb-2 flex items-center'>
-                                  <AlertTriangle className='h-4 w-4 mr-1 text-yellow-500' />
-                                  Issues to Address:
-                                </h4>
-                                <ul className='text-sm space-y-2'>
-                                  {classificationResult.issues.map((issue, index) => (
-                                    <li
-                                      key={index}
-                                      className='flex items-start bg-yellow-50 p-2 rounded border border-yellow-200'
-                                    >
-                                      <AlertTriangle className='h-3 w-3 text-yellow-500 mr-2 mt-1 flex-shrink-0' />
-                                      {issue}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
+                             {(classificationResult as any).issues?.length > 0 && (
+                               <div>
+                                 <h4 className='font-semibold mb-2 flex items-center'>
+                                   <AlertTriangle className='h-4 w-4 mr-1 text-yellow-500' />
+                                   Issues to Address:
+                                 </h4>
+                                 <ul className='text-sm space-y-2'>
+                                   {(classificationResult as any).issues.map((issue: string, index: number) => (
+                                     <li
+                                       key={index}
+                                       className='flex items-start bg-yellow-50 p-2 rounded border border-yellow-200'
+                                     >
+                                       <AlertTriangle className='h-3 w-3 text-yellow-500 mr-2 mt-1 flex-shrink-0' />
+                                       {issue}
+                                     </li>
+                                   ))}
+                                 </ul>
+                               </div>
+                             )}
                           </div>
                         </CardContent>
                       </Card>

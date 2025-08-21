@@ -8,8 +8,8 @@ import { Request, Response, Router } from 'express';
 import { backendConfig } from '../config/environment.backend';
 import {
   AuthenticatedRequest,
-  authMiddleware,
-  optionalAuthMiddleware,
+  authenticateJWT,
+  optionalAuth,
   rateLimit,
   requireRole
 } from '../middleware/authMiddleware';
@@ -23,30 +23,32 @@ const router = Router();
  * POST /auth/login
  * Authenticate user with email and password
  */
-router.post('/login', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Response) => {
+router.post('/login', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password, rememberMe } = req.body;
     const ipAddress =
-      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
+      (req.headers['x-forwarded-for'] as string) || req.connection?.remoteAddress || 'unknown';
     const userAgent = req.headers['user-agent'] || 'unknown';
 
     // Validate input
     if (!email || !password) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Email and password are required',
         code: 'MISSING_CREDENTIALS'
       });
+      return;
     }
 
     // Authenticate user
     const authResult = await authService.authenticateUser(email, password, ipAddress, userAgent);
 
     if (!authResult.success) {
-      return res.status(401).json({
+      res.status(401).json({
         error: authResult.error || 'Authentication failed',
         code: 'AUTHENTICATION_FAILED',
         requiresMFA: authResult.requiresMFA
       });
+      return;
     }
 
     // Set cookies if remember me is enabled
@@ -63,16 +65,16 @@ router.post('/login', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Re
     res.json({
       success: true,
       user: {
-        id: authResult.user.id,
-        email: authResult.user.email,
-        name: authResult.user.name,
-        role: authResult.user.role,
-        permissions: authResult.user.permissions
+        id: authResult.user!.id,
+        email: authResult.user!.email,
+        name: authResult.user!.name,
+        role: authResult.user!.role,
+        permissions: authResult.user!.permissions
       },
       session: {
-        id: authResult.session.id,
-        expiresAt: authResult.session.expiresAt,
-        token: authResult.session.token
+        id: authResult.session!.id,
+        expiresAt: authResult.session!.expiresAt,
+        token: authResult.session!.token
       },
       message: 'Authentication successful'
     });
@@ -89,10 +91,11 @@ router.post('/login', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Re
  * POST /auth/logout
  * Logout user and invalidate session
  */
-router.post('/logout', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/logout', authenticateJWT, async (req: Request, res: Response): Promise<void> => {
   try {
-    if (req.session) {
-      await authService.logout(req.session.id, req.ipAddress);
+    const authenticatedReq = req as AuthenticatedRequest;
+    if (authenticatedReq.session) {
+      await authService.logout(authenticatedReq.session.id, authenticatedReq.ipAddress);
     }
 
     // Clear cookies
@@ -103,7 +106,7 @@ router.post('/logout', authMiddleware, async (req: AuthenticatedRequest, res: Re
       message: 'Logout successful'
     });
   } catch (error) {
-    log.error('Logout error', { error, userId: req.user?.id });
+    log.error('Logout error', { error, userId: (req as AuthenticatedRequest).user?.id });
     res.status(500).json({
       error: 'Internal server error',
       code: 'INTERNAL_ERROR'
@@ -115,35 +118,37 @@ router.post('/logout', authMiddleware, async (req: AuthenticatedRequest, res: Re
  * POST /auth/refresh
  * Refresh JWT token using refresh token
  */
-router.post('/refresh', rateLimit(5 * 60 * 1000, 20), async (req: Request, res: Response) => {
+router.post('/refresh', rateLimit(5 * 60 * 1000, 20), async (req: Request, res: Response): Promise<void> => {
   try {
     const { refreshToken } = req.body;
     const ipAddress =
-      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
+      (req.headers['x-forwarded-for'] as string) || req.connection?.remoteAddress || 'unknown';
 
     if (!refreshToken) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Refresh token is required',
         code: 'MISSING_REFRESH_TOKEN'
       });
+      return;
     }
 
     // Refresh token
     const authResult = await authService.refreshToken(refreshToken, ipAddress);
 
     if (!authResult.success) {
-      return res.status(401).json({
+      res.status(401).json({
         error: authResult.error || 'Token refresh failed',
         code: 'REFRESH_FAILED'
       });
+      return;
     }
 
     res.json({
       success: true,
       session: {
-        id: authResult.session.id,
-        expiresAt: authResult.session.expiresAt,
-        token: authResult.session.token
+        id: authResult.session!.id,
+        expiresAt: authResult.session!.expiresAt,
+        token: authResult.session!.token
       },
       message: 'Token refreshed successfully'
     });
@@ -160,34 +165,36 @@ router.post('/refresh', rateLimit(5 * 60 * 1000, 20), async (req: Request, res: 
  * GET /auth/me
  * Get current user information
  */
-router.get('/me', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+router.get('/me', authenticateJWT, async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user) {
-      return res.status(401).json({
+    const authenticatedReq = req as AuthenticatedRequest;
+    if (!authenticatedReq.user) {
+      res.status(401).json({
         error: 'User not found',
         code: 'USER_NOT_FOUND'
       });
+      return;
     }
 
     res.json({
       success: true,
       user: {
-        id: req.user.id,
-        email: req.user.email,
-        name: req.user.name,
-        role: req.user.role,
-        permissions: req.user.permissions,
-        avatar_url: req.user.avatar_url,
-        jurisdiction: req.user.jurisdiction
+        id: authenticatedReq.user.id,
+        email: authenticatedReq.user.email,
+        name: authenticatedReq.user.name,
+        role: authenticatedReq.user.role,
+        permissions: authenticatedReq.user.permissions,
+        avatar_url: authenticatedReq.user.avatar_url,
+        jurisdiction: authenticatedReq.user.jurisdiction
       },
       session: {
-        id: req.session.id,
-        expiresAt: req.session.expiresAt,
-        lastActivity: req.session.lastActivity
+        id: authenticatedReq.session?.id,
+        expiresAt: authenticatedReq.session?.expiresAt,
+        lastActivity: authenticatedReq.session?.lastActivity
       }
     });
   } catch (error) {
-    log.error('Get user info error', { error, userId: req.user?.id });
+    log.error('Get user info error', { error, userId: (req as AuthenticatedRequest).user?.id });
     res.status(500).json({
       error: 'Internal server error',
       code: 'INTERNAL_ERROR'
@@ -199,41 +206,43 @@ router.get('/me', authMiddleware, async (req: AuthenticatedRequest, res: Respons
  * POST /auth/validate
  * Validate JWT token without requiring authentication middleware
  */
-router.post('/validate', rateLimit(1 * 60 * 1000, 30), async (req: Request, res: Response) => {
+router.post('/validate', rateLimit(1 * 60 * 1000, 30), async (req: Request, res: Response): Promise<void> => {
   try {
     const { token } = req.body;
     const ipAddress =
-      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
+      (req.headers['x-forwarded-for'] as string) || req.connection?.remoteAddress || 'unknown';
 
     if (!token) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Token is required',
         code: 'MISSING_TOKEN'
       });
+      return;
     }
 
     // Validate token
     const authResult = await authService.validateToken(token, ipAddress);
 
     if (!authResult.success) {
-      return res.status(401).json({
+      res.status(401).json({
         error: authResult.error || 'Token validation failed',
         code: 'VALIDATION_FAILED'
       });
+      return;
     }
 
     res.json({
       success: true,
       valid: true,
       user: {
-        id: authResult.user.id,
-        email: authResult.user.email,
-        name: authResult.user.name,
-        role: authResult.user.role
+        id: authResult.user!.id,
+        email: authResult.user!.email,
+        name: authResult.user!.name,
+        role: authResult.user!.role
       },
       session: {
-        id: authResult.session.id,
-        expiresAt: authResult.session.expiresAt
+        id: authResult.session!.id,
+        expiresAt: authResult.session!.expiresAt
       }
     });
   } catch (error) {
@@ -251,18 +260,20 @@ router.post('/validate', rateLimit(1 * 60 * 1000, 30), async (req: Request, res:
  */
 router.get(
   '/sessions',
-  authMiddleware,
+  authenticateJWT,
   requireRole('admin'),
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     try {
-      if (!req.user) {
-        return res.status(401).json({
+      const authenticatedReq = req as AuthenticatedRequest;
+      if (!authenticatedReq.user) {
+        res.status(401).json({
           error: 'User not found',
           code: 'USER_NOT_FOUND'
         });
+        return;
       }
 
-      const sessions = await authService.getActiveSessions(req.user.id);
+      const sessions = await authService.getActiveSessions(authenticatedReq.user.id);
 
       res.json({
         success: true,
@@ -277,7 +288,7 @@ router.get(
         }))
       });
     } catch (error) {
-      log.error('Get sessions error', { error, userId: req.user?.id });
+      log.error('Get sessions error', { error, userId: (req as AuthenticatedRequest).user?.id });
       res.status(500).json({
         error: 'Internal server error',
         code: 'INTERNAL_ERROR'
@@ -292,21 +303,23 @@ router.get(
  */
 router.delete(
   '/sessions/:sessionId',
-  authMiddleware,
-  async (req: AuthenticatedRequest, res: Response) => {
+  authenticateJWT,
+  async (req: Request, res: Response): Promise<void> => {
     try {
+      const authenticatedReq = req as AuthenticatedRequest;
       const { sessionId } = req.params;
-      const isAdmin = req.user?.role === 'admin' || req.user?.role === 'super_admin';
-      const isSessionOwner = req.session?.id === sessionId;
+      const isAdmin = authenticatedReq.user?.role === 'admin' || authenticatedReq.user?.role === 'super_admin';
+      const isSessionOwner = authenticatedReq.session?.id === sessionId;
 
       if (!isAdmin && !isSessionOwner) {
-        return res.status(403).json({
+        res.status(403).json({
           error: 'Insufficient permissions',
           code: 'INSUFFICIENT_PERMISSIONS'
         });
+        return;
       }
 
-      await authService.logout(sessionId, req.ipAddress);
+      await authService.logout(sessionId, authenticatedReq.ipAddress);
 
       res.json({
         success: true,
@@ -326,18 +339,16 @@ router.delete(
  * POST /auth/mfa/verify
  * Verify MFA token
  */
-router.post('/mfa/verify', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Response) => {
+router.post('/mfa/verify', rateLimit(5 * 60 * 1000, 10), async (req: Request, res: Response): Promise<void> => {
   try {
     const { userId, mfaToken } = req.body;
-    const ipAddress =
-      (req.headers['x-forwarded-for'] as string) || req.connection.remoteAddress || 'unknown';
-    const userAgent = req.headers['user-agent'] || 'unknown';
 
     if (!userId || !mfaToken) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'User ID and MFA token are required',
         code: 'MISSING_MFA_CREDENTIALS'
       });
+      return;
     }
 
     // TODO: Implement MFA verification logic
@@ -362,13 +373,15 @@ router.post('/mfa/verify', rateLimit(5 * 60 * 1000, 10), async (req: Request, re
  * POST /auth/mfa/setup
  * Setup MFA for user
  */
-router.post('/mfa/setup', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/mfa/setup', authenticateJWT, async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user) {
-      return res.status(401).json({
+    const authenticatedReq = req as AuthenticatedRequest;
+    if (!authenticatedReq.user) {
+      res.status(401).json({
         error: 'User not found',
         code: 'USER_NOT_FOUND'
       });
+      return;
     }
 
     // TODO: Implement MFA setup logic
@@ -381,7 +394,7 @@ router.post('/mfa/setup', authMiddleware, async (req: AuthenticatedRequest, res:
       backupCodes: ['code1', 'code2', 'code3', 'code4', 'code5']
     });
   } catch (error) {
-    log.error('MFA setup error', { error, userId: req.user?.id });
+    log.error('MFA setup error', { error, userId: (req as AuthenticatedRequest).user?.id });
     res.status(500).json({
       error: 'Internal server error',
       code: 'INTERNAL_ERROR'
@@ -395,9 +408,9 @@ router.post('/mfa/setup', authMiddleware, async (req: AuthenticatedRequest, res:
  */
 router.get(
   '/security/stats',
-  authMiddleware,
+  authenticateJWT,
   requireRole('admin'),
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (_req: Request, res: Response): Promise<void> => {
     try {
       const [authStats, securityMetrics] = await Promise.all([
         authService.getSecurityStats(),
@@ -425,9 +438,9 @@ router.get(
  */
 router.get(
   '/security/alerts',
-  authMiddleware,
+  authenticateJWT,
   requireRole('admin'),
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (_req: Request, res: Response): Promise<void> => {
     try {
       const alerts = await securityMonitoringService.getActiveAlerts();
 
@@ -460,9 +473,9 @@ router.get(
  */
 router.get(
   '/security/indicators',
-  authMiddleware,
+  authenticateJWT,
   requireRole('admin'),
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (_req: Request, res: Response): Promise<void> => {
     try {
       const indicators = await securityMonitoringService.getThreatIndicators();
 
@@ -496,17 +509,18 @@ router.get(
  */
 router.post(
   '/security/block-ip',
-  authMiddleware,
+  authenticateJWT,
   requireRole('admin'),
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     try {
       const { ipAddress, reason } = req.body;
 
       if (!ipAddress) {
-        return res.status(400).json({
+        res.status(400).json({
           error: 'IP address is required',
           code: 'MISSING_IP_ADDRESS'
         });
+        return;
       }
 
       await securityMonitoringService.blockIP(ipAddress, reason || 'Manual block by admin');
@@ -531,17 +545,18 @@ router.post(
  */
 router.post(
   '/security/unblock-ip',
-  authMiddleware,
+  authenticateJWT,
   requireRole('admin'),
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     try {
       const { ipAddress, reason } = req.body;
 
       if (!ipAddress) {
-        return res.status(400).json({
+        res.status(400).json({
           error: 'IP address is required',
           code: 'MISSING_IP_ADDRESS'
         });
+        return;
       }
 
       await securityMonitoringService.unblockIP(ipAddress, reason || 'Manual unblock by admin');
@@ -566,13 +581,16 @@ router.post(
  */
 router.get(
   '/debug/info',
-  optionalAuthMiddleware,
-  async (req: AuthenticatedRequest, res: Response) => {
+  optionalAuth,
+  async (req: Request, res: Response): Promise<void> => {
+    const authenticatedReq = req as AuthenticatedRequest;
+    
     if (backendConfig.NODE_ENV !== 'development') {
-      return res.status(404).json({
+      res.status(404).json({
         error: 'Debug endpoint not available in production',
         code: 'DEBUG_NOT_AVAILABLE'
       });
+      return;
     }
 
     try {
@@ -580,24 +598,24 @@ router.get(
         environment: backendConfig.NODE_ENV,
         timestamp: new Date().toISOString(),
         request: {
-          ipAddress: req.ipAddress,
-          userAgent: req.userAgent,
-          correlationId: req.correlationId,
+          ipAddress: authenticatedReq.ipAddress,
+          userAgent: authenticatedReq.userAgent,
+          correlationId: authenticatedReq.correlationId,
           path: req.path,
           method: req.method
         },
-        user: req.user
+        user: authenticatedReq.user
           ? {
-              id: req.user.id,
-              email: req.user.email,
-              role: req.user.role
+              id: authenticatedReq.user.id,
+              email: authenticatedReq.user.email,
+              role: authenticatedReq.user.role
             }
           : null,
-        session: req.session
+        session: authenticatedReq.session
           ? {
-              id: req.session.id,
-              expiresAt: req.session.expiresAt,
-              isActive: req.session.isActive
+              id: authenticatedReq.session.id,
+              expiresAt: authenticatedReq.session.expiresAt,
+              isActive: authenticatedReq.session.isActive
             }
           : null,
         security: {

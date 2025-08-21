@@ -26,17 +26,21 @@ function getClientIP(req: Request): string {
   const forwardedFor = req.headers['x-forwarded-for'];
   if (forwardedFor) {
     const ips = Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor;
-    return (ips || '').split(',')[0].trim();
+    if (ips) {
+      const firstIp = ips.split(',')[0].trim();
+      return firstIp || 'unknown';
+    }
   }
 
   // Check for real IP header
   const realIP = req.headers['x-real-ip'];
   if (realIP) {
-    return Array.isArray(realIP) ? realIP[0] : (realIP || 'unknown');
+    const ipValue = Array.isArray(realIP) ? realIP[0] : realIP;
+    return ipValue || 'unknown';
   }
 
   // Fallback to connection remote address
-  return req.connection.remoteAddress || req.socket.remoteAddress || 'unknown';
+  return req.connection?.remoteAddress || req.socket?.remoteAddress || 'unknown';
 }
 
 /**
@@ -89,23 +93,24 @@ async function logAuthEvent(
  * Validates JWT tokens and attaches user/session to request
  */
 export async function authenticateJWT(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    // Extract IP and user agent
-    req.ipAddress = getClientIP(req);
-    req.userAgent = getUserAgent(req);
-    req.correlationId = generateCorrelationId();
+    // Cast to AuthenticatedRequest and assign required properties
+    const authenticatedReq = req as AuthenticatedRequest;
+    authenticatedReq.ipAddress = getClientIP(req);
+    authenticatedReq.userAgent = getUserAgent(req);
+    authenticatedReq.correlationId = generateCorrelationId();
 
     // Check if IP is blocked
-    if (securityMonitoringService.isIPBlocked(req.ipAddress)) {
-      await logAuthEvent(req, 'blocked_ip_access', false, { reason: 'IP blocked' });
+    if (securityMonitoringService.isIPBlocked(authenticatedReq.ipAddress)) {
+      await logAuthEvent(authenticatedReq, 'blocked_ip_access', false, { reason: 'IP blocked' });
       res.status(403).json({
         error: 'Access denied',
         code: 'IP_BLOCKED',
-        correlationId: req.correlationId
+        correlationId: authenticatedReq.correlationId
       });
       return;
     }
@@ -113,11 +118,11 @@ export async function authenticateJWT(
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      await logAuthEvent(req, 'missing_token', false, { reason: 'No authorization header' });
+      await logAuthEvent(authenticatedReq, 'missing_token', false, { reason: 'No authorization header' });
       res.status(401).json({
         error: 'Authentication required',
         code: 'MISSING_TOKEN',
-        correlationId: req.correlationId
+        correlationId: authenticatedReq.correlationId
       });
       return;
     }
@@ -125,43 +130,46 @@ export async function authenticateJWT(
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
 
     // Validate token
-    const authResult = await authService.validateToken(token, req.ipAddress);
+    const authResult = await authService.validateToken(token, authenticatedReq.ipAddress);
 
     if (!authResult.success) {
-      await logAuthEvent(req, 'invalid_token', false, {
+      await logAuthEvent(authenticatedReq, 'invalid_token', false, {
         reason: authResult.error,
         tokenLength: token.length
       });
       res.status(401).json({
         error: 'Invalid or expired token',
         code: 'INVALID_TOKEN',
-        correlationId: req.correlationId
+        correlationId: authenticatedReq.correlationId
       });
       return;
     }
 
     // Attach user and session to request
-    req.user = authResult.user;
-    req.session = authResult.session;
+    authenticatedReq.user = authResult.user;
+    authenticatedReq.session = authResult.session;
 
     // Log successful authentication
-    await logAuthEvent(req, 'token_validated', true, {
-      userId: req.user?.id,
-      sessionId: req.session?.id
+    await logAuthEvent(authenticatedReq, 'token_validated', true, {
+      userId: authenticatedReq.user?.id,
+      sessionId: authenticatedReq.session?.id
     });
 
     next();
   } catch (error) {
     log.error('JWT authentication error', { error, path: req.path });
 
-    await logAuthEvent(req, 'auth_error', false, {
-      error: error instanceof Error ? error.message : 'Unknown error'
-    });
+    const authenticatedReq = req as AuthenticatedRequest;
+    if (authenticatedReq.ipAddress && authenticatedReq.correlationId) {
+      await logAuthEvent(authenticatedReq, 'auth_error', false, {
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
 
     res.status(500).json({
       error: 'Authentication service error',
       code: 'AUTH_SERVICE_ERROR',
-      correlationId: req.correlationId
+      correlationId: authenticatedReq.correlationId || 'unknown'
     });
   }
 }
@@ -171,23 +179,24 @@ export async function authenticateJWT(
  * Attempts to authenticate but doesn't fail if no token provided
  */
 export async function optionalAuth(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    // Extract IP and user agent
-    req.ipAddress = getClientIP(req);
-    req.userAgent = getUserAgent(req);
-    req.correlationId = generateCorrelationId();
+    // Cast to AuthenticatedRequest and assign required properties
+    const authenticatedReq = req as AuthenticatedRequest;
+    authenticatedReq.ipAddress = getClientIP(req);
+    authenticatedReq.userAgent = getUserAgent(req);
+    authenticatedReq.correlationId = generateCorrelationId();
 
     // Check if IP is blocked
-    if (securityMonitoringService.isIPBlocked(req.ipAddress)) {
-      await logAuthEvent(req, 'blocked_ip_access', false, { reason: 'IP blocked' });
+    if (securityMonitoringService.isIPBlocked(authenticatedReq.ipAddress)) {
+      await logAuthEvent(authenticatedReq, 'blocked_ip_access', false, { reason: 'IP blocked' });
       res.status(403).json({
         error: 'Access denied',
         code: 'IP_BLOCKED',
-        correlationId: req.correlationId
+        correlationId: authenticatedReq.correlationId
       });
       return;
     }
@@ -203,17 +212,17 @@ export async function optionalAuth(
     const token = authHeader.substring(7);
 
     // Validate token
-    const authResult = await authService.validateToken(token, req.ipAddress);
+    const authResult = await authService.validateToken(token, authenticatedReq.ipAddress);
 
     if (authResult.success) {
-      req.user = authResult.user;
-      req.session = authResult.session;
-      await logAuthEvent(req, 'optional_auth_success', true, {
-        userId: req.user?.id,
-        sessionId: req.session?.id
+      authenticatedReq.user = authResult.user;
+      authenticatedReq.session = authResult.session;
+      await logAuthEvent(authenticatedReq, 'optional_auth_success', true, {
+        userId: authenticatedReq.user?.id,
+        sessionId: authenticatedReq.session?.id
       });
     } else {
-      await logAuthEvent(req, 'optional_auth_failed', false, {
+      await logAuthEvent(authenticatedReq, 'optional_auth_failed', false, {
         reason: authResult.error
       });
     }
@@ -230,38 +239,40 @@ export async function optionalAuth(
  * Checks if user has required role
  */
 export function requireRole(requiredRole: string) {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     try {
-      if (!req.user) {
+      const authenticatedReq = req as AuthenticatedRequest;
+      
+      if (!authenticatedReq.user) {
         res.status(401).json({
           error: 'Authentication required',
           code: 'AUTHENTICATION_REQUIRED',
-          correlationId: req.correlationId
+          correlationId: authenticatedReq.correlationId || 'unknown'
         });
         return;
       }
 
-      const userRole = req.user.role || 'user';
+      const userRole = authenticatedReq.user.role || 'user';
 
       if (userRole !== requiredRole && userRole !== 'admin' && userRole !== 'super_admin') {
-        logAuthEvent(req, 'insufficient_role', false, {
+        logAuthEvent(authenticatedReq, 'insufficient_role', false, {
           requiredRole,
           userRole,
-          userId: req.user.id
+          userId: authenticatedReq.user.id
         });
 
         res.status(403).json({
           error: 'Insufficient permissions',
           code: 'INSUFFICIENT_ROLE',
-          correlationId: req.correlationId
+          correlationId: authenticatedReq.correlationId
         });
         return;
       }
 
-      logAuthEvent(req, 'role_authorized', true, {
+      logAuthEvent(authenticatedReq, 'role_authorized', true, {
         requiredRole,
         userRole,
-        userId: req.user.id
+        userId: authenticatedReq.user.id
       });
 
       next();
@@ -270,7 +281,7 @@ export function requireRole(requiredRole: string) {
       res.status(500).json({
         error: 'Authorization service error',
         code: 'AUTHZ_SERVICE_ERROR',
-        correlationId: req.correlationId
+        correlationId: (req as AuthenticatedRequest).correlationId || 'unknown'
       });
     }
   };
@@ -281,37 +292,39 @@ export function requireRole(requiredRole: string) {
  * Checks if user has required permission
  */
 export function requirePermission(requiredPermission: string) {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     try {
-      if (!req.user) {
+      const authenticatedReq = req as AuthenticatedRequest;
+      
+      if (!authenticatedReq.user) {
         res.status(401).json({
           error: 'Authentication required',
           code: 'AUTHENTICATION_REQUIRED',
-          correlationId: req.correlationId
+          correlationId: authenticatedReq.correlationId || 'unknown'
         });
         return;
       }
 
-      const userPermissions = req.user.permissions || [];
+      const userPermissions = authenticatedReq.user.permissions || [];
 
       if (!userPermissions.includes(requiredPermission)) {
-        logAuthEvent(req, 'insufficient_permission', false, {
+        logAuthEvent(authenticatedReq, 'insufficient_permission', false, {
           requiredPermission,
           userPermissions,
-          userId: req.user.id
+          userId: authenticatedReq.user.id
         });
 
         res.status(403).json({
           error: 'Insufficient permissions',
           code: 'INSUFFICIENT_PERMISSION',
-          correlationId: req.correlationId
+          correlationId: authenticatedReq.correlationId
         });
         return;
       }
 
-      logAuthEvent(req, 'permission_authorized', true, {
+      logAuthEvent(authenticatedReq, 'permission_authorized', true, {
         requiredPermission,
-        userId: req.user.id
+        userId: authenticatedReq.user.id
       });
 
       next();
@@ -320,7 +333,7 @@ export function requirePermission(requiredPermission: string) {
       res.status(500).json({
         error: 'Authorization service error',
         code: 'AUTHZ_SERVICE_ERROR',
-        correlationId: req.correlationId
+        correlationId: (req as AuthenticatedRequest).correlationId || 'unknown'
       });
     }
   };
@@ -336,9 +349,10 @@ export function rateLimit(
 ) {
   const requestCounts = new Map<string, { count: number; resetTime: number }>();
 
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     try {
-      const key = req.user?.id || req.ipAddress;
+      const authenticatedReq = req as AuthenticatedRequest;
+      const key = authenticatedReq.user?.id || authenticatedReq.ipAddress;
       const now = Date.now();
 
       // Get or create request count for this key
@@ -353,7 +367,7 @@ export function rateLimit(
 
       // Check if rate limit exceeded
       if (requestCount.count > maxRequests) {
-        logAuthEvent(req, 'rate_limit_exceeded', false, {
+        logAuthEvent(authenticatedReq, 'rate_limit_exceeded', false, {
           key,
           count: requestCount.count,
           maxRequests,
@@ -364,7 +378,7 @@ export function rateLimit(
           error: 'Rate limit exceeded',
           code: 'RATE_LIMIT_EXCEEDED',
           retryAfter: Math.ceil((requestCount.resetTime - now) / 1000),
-          correlationId: req.correlationId
+          correlationId: authenticatedReq.correlationId
         });
         return;
       }
@@ -389,37 +403,39 @@ export function rateLimit(
  * Ensures session is still valid and active
  */
 export async function validateSession(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    if (!req.session) {
+    const authenticatedReq = req as AuthenticatedRequest;
+    
+    if (!authenticatedReq.session) {
       res.status(401).json({
         error: 'No active session',
         code: 'NO_SESSION',
-        correlationId: req.correlationId
+        correlationId: authenticatedReq.correlationId || 'unknown'
       });
       return;
     }
 
     // Check if session is still active
-    if (!req.session.isActive || req.session.expiresAt < new Date()) {
-      await logAuthEvent(req, 'session_expired', false, {
-        sessionId: req.session.id,
-        userId: req.user?.id
+    if (!authenticatedReq.session.isActive || authenticatedReq.session.expiresAt < new Date()) {
+      await logAuthEvent(authenticatedReq, 'session_expired', false, {
+        sessionId: authenticatedReq.session.id,
+        userId: authenticatedReq.user?.id
       });
 
       res.status(401).json({
         error: 'Session expired',
         code: 'SESSION_EXPIRED',
-        correlationId: req.correlationId
+        correlationId: authenticatedReq.correlationId
       });
       return;
     }
 
     // Update session activity
-    req.session.lastActivity = new Date();
+    authenticatedReq.session.lastActivity = new Date();
 
     next();
   } catch (error) {
@@ -427,7 +443,7 @@ export async function validateSession(
     res.status(500).json({
       error: 'Session validation error',
       code: 'SESSION_VALIDATION_ERROR',
-      correlationId: req.correlationId
+      correlationId: (req as AuthenticatedRequest).correlationId || 'unknown'
     });
   }
 }
@@ -436,25 +452,27 @@ export async function validateSession(
  * Debug Authentication Middleware
  * Provides detailed authentication information in development
  */
-export function debugAuth(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+export function debugAuth(req: Request, res: Response, next: NextFunction): void {
+  const authenticatedReq = req as AuthenticatedRequest;
+  
   if (backendConfig.NODE_ENV === 'development') {
     // Add debug information to response headers
     res.set({
-      'X-Debug-Auth-User': req.user ? 'authenticated' : 'anonymous',
-      'X-Debug-Auth-Session': req.session ? 'active' : 'none',
-      'X-Debug-Auth-IP': req.ipAddress,
-      'X-Debug-Auth-Correlation': req.correlationId
+      'X-Debug-Auth-User': authenticatedReq.user ? 'authenticated' : 'anonymous',
+      'X-Debug-Auth-Session': authenticatedReq.session ? 'active' : 'none',
+      'X-Debug-Auth-IP': authenticatedReq.ipAddress || 'unknown',
+      'X-Debug-Auth-Correlation': authenticatedReq.correlationId || 'unknown'
     });
 
     // Log debug information
     log.debug('Authentication debug info', {
       path: req.path,
       method: req.method,
-      user: req.user?.id,
-      session: req.session?.id,
-      ipAddress: req.ipAddress,
-      userAgent: req.userAgent,
-      correlationId: req.correlationId
+      user: authenticatedReq.user?.id,
+      session: authenticatedReq.session?.id,
+      ipAddress: authenticatedReq.ipAddress,
+      userAgent: authenticatedReq.userAgent,
+      correlationId: authenticatedReq.correlationId
     });
   }
 
@@ -466,7 +484,7 @@ export function debugAuth(req: AuthenticatedRequest, res: Response, next: NextFu
  * Adds security headers to responses
  */
 export function securityHeaders(
-  _req: AuthenticatedRequest,
+  _req: Request,
   res: Response,
   next: NextFunction
 ): void {
@@ -489,17 +507,18 @@ export function securityHeaders(
  * Request Logging Middleware
  * Logs all requests for audit purposes
  */
-export function requestLogger(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+export function requestLogger(req: Request, res: Response, next: NextFunction): void {
+  const authenticatedReq = req as AuthenticatedRequest;
   const startTime = Date.now();
 
   // Log request start
   log.info('Request started', {
     method: req.method,
     path: req.path,
-    ipAddress: req.ipAddress,
-    userAgent: req.userAgent,
-    correlationId: req.correlationId,
-    userId: req.user?.id
+    ipAddress: authenticatedReq.ipAddress || 'unknown',
+    userAgent: authenticatedReq.userAgent || 'unknown',
+    correlationId: authenticatedReq.correlationId || 'unknown',
+    userId: authenticatedReq.user?.id
   });
 
   // Override res.end to log response
@@ -512,13 +531,13 @@ export function requestLogger(req: AuthenticatedRequest, res: Response, next: Ne
       path: req.path,
       statusCode: res.statusCode,
       duration,
-      ipAddress: req.ipAddress,
-      correlationId: req.correlationId,
-      userId: req.user?.id
+      ipAddress: authenticatedReq.ipAddress || 'unknown',
+      correlationId: authenticatedReq.correlationId || 'unknown',
+      userId: authenticatedReq.user?.id
     });
 
-    originalEnd.call(this, chunk, encoding);
-  };
+    return originalEnd.call(res, chunk, encoding);
+  } as any;
 
   next();
 }
@@ -529,19 +548,21 @@ export function requestLogger(req: AuthenticatedRequest, res: Response, next: Ne
  */
 export function authErrorHandler(
   error: Error,
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): void {
+  const authenticatedReq = req as AuthenticatedRequest;
+  
   log.error('Authentication error', {
     error: error.message,
     stack: error.stack,
     path: req.path,
-    correlationId: req.correlationId
+    correlationId: authenticatedReq.correlationId || 'unknown'
   });
 
   // Log security event
-  logAuthEvent(req, 'auth_error', false, {
+  logAuthEvent(authenticatedReq, 'auth_error', false, {
     error: error.message,
     stack: error.stack
   });
@@ -549,7 +570,7 @@ export function authErrorHandler(
   res.status(500).json({
     error: 'Authentication service error',
     code: 'AUTH_SERVICE_ERROR',
-    correlationId: req.correlationId
+    correlationId: authenticatedReq.correlationId || 'unknown'
   });
 }
 

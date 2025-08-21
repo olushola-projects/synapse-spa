@@ -21,13 +21,6 @@ vi.mock('framer-motion', () => ({
 }));
 
 describe('SFDRGem Component', () => {
-  const _mockUser = {
-    id: 'test-user-id',
-    name: 'Test User',
-    email: 'test@example.com',
-    role: 'user'
-  };
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
