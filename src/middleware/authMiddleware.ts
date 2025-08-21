@@ -10,7 +10,7 @@ import { authService } from '../services/authService';
 import { securityMonitoringService } from '../services/securityMonitoringService';
 import { log } from '../utils/logger';
 
-export interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Omit<Request, 'session'> {
   user?: any;
   session?: any;
   ipAddress: string;
@@ -26,13 +26,13 @@ function getClientIP(req: Request): string {
   const forwardedFor = req.headers['x-forwarded-for'];
   if (forwardedFor) {
     const ips = Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor;
-    return ips.split(',')[0].trim();
+    return (ips || '').split(',')[0].trim();
   }
 
   // Check for real IP header
   const realIP = req.headers['x-real-ip'];
   if (realIP) {
-    return Array.isArray(realIP) ? realIP[0] : realIP;
+    return Array.isArray(realIP) ? realIP[0] : (realIP || 'unknown');
   }
 
   // Fallback to connection remote address
@@ -466,7 +466,7 @@ export function debugAuth(req: AuthenticatedRequest, res: Response, next: NextFu
  * Adds security headers to responses
  */
 export function securityHeaders(
-  req: AuthenticatedRequest,
+  _req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): void {

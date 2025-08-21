@@ -3,6 +3,19 @@
  * Defines interfaces for the monitoring dashboard and metrics
  */
 
+export interface SecurityTestResult {
+  testId: string;
+  testType: string;
+  status: 'passed' | 'failed' | 'skipped' | 'error' | 'warning';
+  mcpEnhanced: boolean;
+  confidence: number;
+  details: {
+    description: string;
+    expected: string;
+    actual: string;
+  };
+}
+
 export interface SystemAlert {
   id: string;
   title: string;

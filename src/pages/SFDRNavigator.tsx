@@ -48,11 +48,15 @@ import { CriticalErrorAlert } from '@/components/alerts/CriticalErrorAlert';
  */
 
 interface SFDRClassificationRequest {
+  productName: string;
+  productType: string;
+  investmentStrategy: string;
+  sustainabilityObjectives: string[];
+  riskProfile: string;
+  paiIndicators: Record<string, any>;
   fundName: string;
   description: string;
-  investmentStrategy: string;
   esgIntegration: string;
-  sustainabilityObjectives?: string;
   principalAdverseImpacts?: string;
   taxonomyAlignment?: string;
 }
@@ -116,15 +120,21 @@ const SFDRNavigator: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
 
   // Classification state
-  const { classify, loading: classifyLoading, error: classifyError, result: classificationResult } = useSFDRClassification();
+  const { classify, loading: _classifyLoading, error: _classifyError, result: classificationResult } = useSFDRClassification();
   const [formData, setFormData] = useState({
     productName: '',
     productType: 'investment_fund',
     investmentStrategy: '',
     sustainabilityObjectives: [] as string[],
     riskProfile: 'medium',
-    paiIndicators: {} as Record<string, any>
+    paiIndicators: {} as Record<string, any>,
+    fundName: '',
+    description: '',
+    esgIntegration: '',
+    principalAdverseImpacts: '',
+    taxonomyAlignment: ''
   });
+  const [classificationResultState, setClassificationResultState] = useState<SFDRClassificationResponse | null>(null);
 
   // Document processing state
   const [uploadedDocuments, setUploadedDocuments] = useState<DocumentAnalysis[]>([]);
@@ -284,7 +294,7 @@ const SFDRNavigator: React.FC = () => {
         timestamp: result.timestamp
       };
 
-      setClassificationResult(classificationResult);
+      setClassificationResultState(classificationResult);
       setProcessingProgress(100);
 
       // Update analytics
@@ -380,7 +390,7 @@ const SFDRNavigator: React.FC = () => {
   const handleExport = useCallback(
     (format: 'pdf' | 'excel' | 'json') => {
       const exportData = {
-        classification: classificationResult,
+        classification: classificationResultState,
         documents: uploadedDocuments,
         chatHistory: messages,
         analytics: analyticsData,
@@ -405,7 +415,7 @@ const SFDRNavigator: React.FC = () => {
         `Analysis exported as ${format.toUpperCase()} with complete regulatory citations.`
       );
     },
-    [classificationResult, uploadedDocuments, messages, analyticsData, addMessage]
+    [classificationResultState, uploadedDocuments, messages, analyticsData, addMessage]
   );
 
   if (error) {
@@ -662,13 +672,13 @@ const SFDRNavigator: React.FC = () => {
                       </h3>
                       <Input
                         placeholder='Sustainability Objectives (Article 9)'
-                        value={formData.sustainabilityObjectives}
-                        onChange={e =>
-                          setFormData(prev => ({
-                            ...prev,
-                            sustainabilityObjectives: e.target.value
-                          }))
-                        }
+                         value={Array.isArray(formData.sustainabilityObjectives) ? formData.sustainabilityObjectives.join(', ') : ''}
+                         onChange={e =>
+                           setFormData(prev => ({
+                             ...prev,
+                             sustainabilityObjectives: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+                           }))
+                         }
                       />
                       <Input
                         placeholder='Principal Adverse Impacts Consideration'

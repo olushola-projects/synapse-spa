@@ -26,7 +26,7 @@ import React, { useEffect, useState } from 'react';
 interface TestResult {
   testId: string;
   testType: string;
-  status: 'passed' | 'failed' | 'skipped' | 'error';
+  status: 'passed' | 'failed' | 'skipped' | 'error' | 'warning';
   mcpEnhanced: boolean;
   confidence: number;
   details: {
@@ -168,7 +168,26 @@ export const Phase1TestingDashboard: React.FC = () => {
         'PAI indicators validation'
       ]);
 
-      const allTests = [...vulnerabilityTests, ...complianceTests];
+      // Convert SecurityTestResult to TestResult format
+      const convertedVulnerabilityTests = vulnerabilityTests.map(test => ({
+        ...test,
+        details: {
+          description: test.details.description,
+          expected: test.details.vulnerability || 'No vulnerabilities',
+          actual: test.details.recommendation || 'Security check completed'
+        }
+      }));
+
+      const convertedComplianceTests = complianceTests.map(test => ({
+        ...test,
+        details: {
+          description: test.details.description,
+          expected: test.details.complianceFramework || 'SFDR compliance',
+          actual: test.details.recommendation || 'Compliance check completed'
+        }
+      }));
+
+      const allTests = [...convertedVulnerabilityTests, ...convertedComplianceTests];
       updateSuiteTests('security-tests', allTests);
       updateSuiteStatus('security-tests', 'completed', 100);
     } catch (error) {
@@ -232,7 +251,17 @@ export const Phase1TestingDashboard: React.FC = () => {
         'Data protection compliance'
       ]);
 
-      updateSuiteTests('compliance-tests', tests);
+      // Convert SecurityTestResult to TestResult format
+      const convertedTests = tests.map(test => ({
+        ...test,
+        details: {
+          description: test.details.description,
+          expected: test.details.complianceFramework || 'SFDR compliance',
+          actual: test.details.recommendation || 'Compliance check completed'
+        }
+      }));
+
+      updateSuiteTests('compliance-tests', convertedTests);
       updateSuiteStatus('compliance-tests', 'completed', 100);
     } catch (error) {
       updateSuiteStatus('compliance-tests', 'failed', 0);
@@ -433,7 +462,7 @@ export const Phase1TestingDashboard: React.FC = () => {
         </TabsContent>
 
         {testSuites.map(suite => (
-          <TabsContent key={suite.id} value={suite.id.split('-')[0]} className='space-y-4'>
+          <TabsContent key={suite.id} value={suite.id.split('-')[0] || 'default'} className='space-y-4'>
             <Card>
               <CardHeader>
                 <CardTitle>{suite.name} - Test Results</CardTitle>

@@ -58,6 +58,7 @@ export const MemoryEfficientLoader: React.FC<MemoryEfficientLoaderProps> = ({
         console.error('MemoryEfficientLoader: Error during loading:', err);
       }
       cleanup();
+      return cleanup;
     }
   }, [delay, timeout]);
 
