@@ -255,46 +255,14 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
               </Button>
             )}
           </div>
-          <div className={`text-sm text-gray-700 ${showFullSummary ? '' : 'max-h-16 overflow-hidden'} relative`}>
+          <div
+            className={`text-sm text-gray-700 ${showFullSummary ? '' : 'max-h-16 overflow-hidden'} relative`}
+          >
             {analysis.summary ? (
-              <div className='prose prose-sm max-w-none'>
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    p: ({ children }) => (
-                      <p className='text-sm text-gray-700 leading-relaxed mb-1 last:mb-0'>{children}</p>
-                    ),
-                    strong: ({ children }) => (
-                      <strong className='font-semibold text-gray-900'>{children}</strong>
-                    ),
-                    em: ({ children }) => <em className='italic text-gray-700'>{children}</em>,
-                    // Keep headings but make them smaller for summary
-                    h1: ({ children }) => (
-                      <h4 className='text-sm font-semibold text-gray-900 mb-1'>{children}</h4>
-                    ),
-                    h2: ({ children }) => (
-                      <h4 className='text-sm font-semibold text-gray-900 mb-1'>{children}</h4>
-                    ),
-                    h3: ({ children }) => (
-                      <h4 className='text-sm font-semibold text-gray-900 mb-1'>{children}</h4>
-                    ),
-                    ul: ({ children }) => (
-                      <ul className='list-disc list-inside text-sm text-gray-700 mb-1 space-y-0'>
-                        {children}
-                      </ul>
-                    ),
-                    ol: ({ children }) => (
-                      <ol className='list-decimal list-inside text-sm text-gray-700 mb-1 space-y-0'>
-                        {children}
-                      </ol>
-                    ),
-                    li: ({ children }) => <li className='text-sm text-gray-700'>{children}</li>,
-                    div: ({ children }) => <div className='text-sm text-gray-700'>{children}</div>
-                  }}
-                >
-                  {cleanTextContent(analysis.summary)}
-                </ReactMarkdown>
+              <div 
+                className='text-sm text-gray-700 leading-relaxed whitespace-pre-line'
+              >
+                {cleanTextContent(analysis.summary)}
               </div>
             ) : (
               <span className='text-gray-500 italic'>No summary available</span>
