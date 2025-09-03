@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EnhancedSkeleton } from '@/components/ui/enhanced-skeleton';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog';
 import { useDocumentAnalysis } from '@/hooks/useDocumentAnalysis';
 import {
   FileText,
@@ -17,7 +25,8 @@ import {
   RefreshCw,
   List,
   Eye,
-  EyeOff
+  EyeOff,
+  ExternalLink
 } from 'lucide-react';
 import type { StoredDocumentAnalysis } from '@/types/document-analysis';
 import { formatDistanceToNow } from 'date-fns';
@@ -30,6 +39,116 @@ const PREVIEW_KEY_POINTS_COUNT = 2;
 interface DocumentAnalysisItemProps {
   analysis: StoredDocumentAnalysis;
 }
+
+const AIAnalysisDialog: React.FC<{ analysis: StoredDocumentAnalysis }> = ({ analysis }) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant='outline' size='sm' className='flex items-center space-x-1'>
+          <MessageSquare className='w-4 h-4' />
+          <span>View AI Analysis</span>
+          <ExternalLink className='w-3 h-3' />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className='max-w-4xl max-h-[80vh] overflow-hidden'>
+        <DialogHeader>
+          <DialogTitle className='flex items-center space-x-2'>
+            <MessageSquare className='w-5 h-5 text-green-600' />
+            <span>AI Analysis - {analysis.documentName}</span>
+          </DialogTitle>
+        </DialogHeader>
+        <ScrollArea className='max-h-[60vh] pr-4'>
+          <div className='prose prose-sm max-w-none'>
+            {analysis.aiResponse ? (
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  // Custom styling for better readability
+                  h1: ({ children }) => (
+                    <h1 className='text-xl font-bold text-gray-900 mb-4 mt-6 first:mt-0'>
+                      {children}
+                    </h1>
+                  ),
+                  h2: ({ children }) => (
+                    <h2 className='text-lg font-semibold text-gray-800 mb-3 mt-5'>{children}</h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className='text-base font-medium text-gray-700 mb-2 mt-4'>{children}</h3>
+                  ),
+                  p: ({ children }) => (
+                    <p className='text-sm text-gray-700 mb-3 leading-relaxed'>{children}</p>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className='list-disc list-inside text-sm text-gray-700 mb-3 space-y-1 ml-4'>
+                      {children}
+                    </ul>
+                  ),
+                  ol: ({ children }) => (
+                    <ol className='list-decimal list-inside text-sm text-gray-700 mb-3 space-y-1 ml-4'>
+                      {children}
+                    </ol>
+                  ),
+                  li: ({ children }) => (
+                    <li className='text-sm text-gray-700 leading-relaxed'>{children}</li>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className='font-semibold text-gray-900'>{children}</strong>
+                  ),
+                  em: ({ children }) => <em className='italic text-gray-700'>{children}</em>,
+                  code: ({ children }) => (
+                    <code className='bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-mono'>
+                      {children}
+                    </code>
+                  ),
+                  pre: ({ children }) => (
+                    <pre className='bg-gray-100 p-4 rounded-lg text-xs font-mono overflow-x-auto mb-4'>
+                      {children}
+                    </pre>
+                  ),
+                  blockquote: ({ children }) => (
+                    <blockquote className='border-l-4 border-blue-500 pl-4 italic text-gray-600 mb-4 bg-blue-50 py-2'>
+                      {children}
+                    </blockquote>
+                  ),
+                  a: ({ href, children }) => (
+                    <a
+                      href={href}
+                      className='text-blue-600 hover:text-blue-800 underline'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      {children}
+                    </a>
+                  ),
+                  // Handle HTML divs (like confidence boxes)
+                  div: ({ children, ...props }) => {
+                    const style = props.style as string | undefined;
+                    if (style && style.includes('background-color')) {
+                      return (
+                        <div className='bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4'>
+                          <div className='font-semibold text-orange-800'>{children}</div>
+                        </div>
+                      );
+                    }
+                    return <div {...props}>{children}</div>;
+                  }
+                }}
+              >
+                {analysis.aiResponse}
+              </ReactMarkdown>
+            ) : (
+              <div className='text-center py-8 text-gray-500'>
+                <MessageSquare className='w-12 h-12 mx-auto mb-3 text-gray-300' />
+                <p>No AI analysis available for this document.</p>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -173,36 +292,16 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
           )}
 
         {/* Document Metadata */}
-        <div className='flex items-center space-x-4 text-xs text-gray-500 mb-3'>
-          <span>{analysis.metadata?.wordCount || 0} words</span>
-          {analysis.metadata?.pageCount && <span>{analysis.metadata.pageCount} pages</span>}
-          {analysis.metadata?.fileSize && (
-            <span>{Math.round(analysis.metadata.fileSize / BYTES_TO_KB)} KB</span>
-          )}
-        </div>
-
-        {/* Expanded AI Response */}
-        {isExpanded && (
-          <div className='mt-4 pt-4 border-t border-gray-200'>
-            <div className='flex items-center space-x-1 mb-3'>
-              <MessageSquare className='w-4 h-4 text-green-600' />
-              <span className='text-xs font-medium text-gray-600'>AI Analysis</span>
-            </div>
-            <ScrollArea className='max-h-96 w-full'>
-              <div className='prose prose-sm prose-gray max-w-none'>
-                {analysis.aiResponse ? (
-                                  <div className='prose prose-sm prose-gray max-w-none text-sm text-gray-700 leading-relaxed'>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {analysis.aiResponse}
-                  </ReactMarkdown>
-                </div>
-                ) : (
-                  <div className='text-sm text-gray-500 italic'>No AI response available</div>
-                )}
-              </div>
-            </ScrollArea>
+        <div className='flex items-center justify-between mb-3'>
+          <div className='flex items-center space-x-4 text-xs text-gray-500'>
+            <span>{analysis.metadata?.wordCount || 0} words</span>
+            {analysis.metadata?.pageCount && <span>{analysis.metadata.pageCount} pages</span>}
+            {analysis.metadata?.fileSize && (
+              <span>{Math.round(analysis.metadata.fileSize / BYTES_TO_KB)} KB</span>
+            )}
           </div>
-        )}
+          <AIAnalysisDialog analysis={analysis} />
+        </div>
       </CardContent>
     </Card>
   );
@@ -330,8 +429,8 @@ export const DocumentAnalysisList: React.FC<DocumentAnalysisListProps> = ({ clas
           </Button>
         </div>
 
-        <ScrollArea className='h-96'>
-          <div className='space-y-4 pr-4'>
+        <ScrollArea className='min-h-full'>
+          <div className='space-y-4'>
             {safeAnalyses.map(analysis => (
               <DocumentAnalysisItem key={analysis.id} analysis={analysis} />
             ))}
