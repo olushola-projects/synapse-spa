@@ -3,7 +3,7 @@ import {
   StoredDocumentAnalysis,
   DocumentAnalysisSearchQuery,
   DocumentAnalysisSearchResult,
-  DocumentAnalysisSummary,
+  DocumentAnalysisSummary
 } from '@/types/document-analysis';
 
 export class DocumentAnalysisAPI {
@@ -28,7 +28,7 @@ export class DocumentAnalysisAPI {
   ): Promise<DocumentAnalysisSearchResult> {
     try {
       const params = new URLSearchParams();
-      
+
       if (query.threadId) params.append('threadId', query.threadId);
       if (query.documentType) params.append('documentType', query.documentType);
       if (query.startDate) params.append('startDate', query.startDate);

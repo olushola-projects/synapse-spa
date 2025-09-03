@@ -163,7 +163,10 @@ interface DocumentAnalysisListProps {
 export const DocumentAnalysisList: React.FC<DocumentAnalysisListProps> = ({ className = '' }) => {
   const { analyses, summary, loading, error, refresh } = useDocumentAnalysis();
 
-  if (loading && !analyses.length) {
+  // Ensure analyses is always an array to prevent undefined errors
+  const safeAnalyses = analyses || [];
+
+  if (loading && !safeAnalyses.length) {
     return (
       <div className={`space-y-4 ${className}`}>
         <EnhancedSkeleton className='h-8 w-48' />
@@ -199,7 +202,7 @@ export const DocumentAnalysisList: React.FC<DocumentAnalysisListProps> = ({ clas
     );
   }
 
-  if (!analyses.length) {
+  if (!safeAnalyses.length) {
     return (
       <div className={`space-y-4 ${className}`}>
         <Card className='border-gray-200'>
@@ -266,7 +269,7 @@ export const DocumentAnalysisList: React.FC<DocumentAnalysisListProps> = ({ clas
 
         <ScrollArea className='h-96'>
           <div className='space-y-4 pr-4'>
-            {analyses.map(analysis => (
+            {safeAnalyses.map(analysis => (
               <DocumentAnalysisItem key={analysis.id} analysis={analysis} />
             ))}
           </div>
