@@ -49,11 +49,9 @@ export class DocumentAnalysisAPI {
    */
   static async getRecentDocumentAnalyses(limit = 10): Promise<StoredDocumentAnalysis[]> {
     try {
-      console.log('Making API call to:', `/api/document-analysis/recent/list?limit=${limit}`);
       const response = await apiClient.get(`/api/document-analysis/recent/list?limit=${limit}`);
-      console.log('Raw API response:', response);
-      console.log('Response data:', response.data);
-      return response.data;
+      // The API client returns the data directly, not wrapped in response.data
+      return response;
     } catch (error) {
       console.error('Error fetching recent document analyses:', error);
 
