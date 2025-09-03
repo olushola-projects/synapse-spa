@@ -122,7 +122,7 @@ const config: Config = {
       }
     }
   },
-  plugins: ['tailwindcss-animate']
+  plugins: ['tailwindcss-animate', require('@tailwindcss/typography')]
 };
 
 export default config;

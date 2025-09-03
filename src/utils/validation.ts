@@ -79,7 +79,7 @@ export const registerSchema = z
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string().min(1, { message: 'Please confirm your password' }),
-    terms: z.boolean().refine(val => val === true, {
+    acceptTerms: z.boolean().refine(val => val === true, {
       message: 'You must accept the terms and conditions'
     })
   })

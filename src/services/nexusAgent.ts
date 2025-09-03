@@ -16,7 +16,7 @@ import type {
 
 // Service Configuration
 const NEXUS_CONFIG = {
-  baseUrl: 'https://nexus-82zwpw7xt-aas-projects-66c93685.vercel.app',
+  baseUrl: 'http://localhost:8080',
   endpoints: {
     health: '/api/health',
     validate: '/api/analyze',
@@ -42,7 +42,7 @@ class NexusAgentService {
       // In production, API keys should be fetched from secure backend endpoints
       // For demo purposes, we'll use a placeholder key
       this.apiKey = 'demo-key-placeholder';
-      
+
       // TODO: Implement secure API key retrieval from backend
       // Example: const apiKey = await this.fetchAPIKeyFromBackend();
     } catch (error) {

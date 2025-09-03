@@ -197,13 +197,14 @@ export const sanitizeInput = (input: string): string => {
  */
 const getEncryptionKey = (): string => {
   // In a real application, this would use more sophisticated methods
-  // For demo purposes, we're using a simple approach
-  let key = secureStore.get<string>('encryptionKey');
+  // For demo purposes, we're using a simple approach with localStorage directly
+  const keyName = `${SECURITY_CONFIG.token.storagePrefix}encryptionKey`;
+  let key = localStorage.getItem(keyName);
 
   if (!key) {
     // Generate a new key
     key = CryptoJS.lib.WordArray.random(SECURITY_CONSTANTS.ENCRYPTION.KEY_LENGTH).toString();
-    secureStore.set('encryptionKey', key);
+    localStorage.setItem(keyName, key);
   }
 
   return key;

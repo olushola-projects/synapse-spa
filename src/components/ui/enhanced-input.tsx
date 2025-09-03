@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Send, Mic, MicOff, Paperclip, X, FileText, Image, Sparkles, Loader2 } from 'lucide-react';
+import { Send, Mic, MicOff, Paperclip, X, FileText, Image, Sparkles, Square } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -63,6 +63,7 @@ interface EnhancedInputProps {
   maxLength?: number;
   suggestions?: string[];
   onVoiceInput?: (transcript: string) => void;
+  onStop?: () => void;
   supportedFileTypes?: string[];
   maxFileSize?: number; // in MB
 }
@@ -87,7 +88,41 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
   maxLength = 2000,
   suggestions = [],
   onVoiceInput,
-  supportedFileTypes = ['.pdf', '.docx', '.xlsx', '.csv', '.txt'],
+  onStop,
+  supportedFileTypes = [
+    // Documents
+    '.pdf',
+    '.doc',
+    '.docx',
+    '.txt',
+    '.rtf',
+    '.odt',
+    // Spreadsheets
+    '.xlsx',
+    '.xls',
+    '.csv',
+    '.ods',
+    // Presentations
+    '.pptx',
+    '.ppt',
+    '.odp',
+    // Images
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.bmp',
+    '.svg',
+    '.webp',
+    '.tiff',
+    // Other formats
+    '.json',
+    '.xml',
+    '.html',
+    '.md',
+    '.zip',
+    '.rar'
+  ],
   maxFileSize = 10
 }) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -310,9 +345,13 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
    */
   const getFileIcon = (fileName: string) => {
     const extension = fileName.split('.').pop()?.toLowerCase();
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension || '')) {
+
+    // Images
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'tiff'].includes(extension || '')) {
       return <Image className='h-4 w-4' />;
     }
+
+    // All other file types use document icon
     return <FileText className='h-4 w-4' />;
   };
 
@@ -406,7 +445,7 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
           disabled={disabled || isLoading}
           maxLength={maxLength}
           className={cn(
-            'min-h-[60px] max-h-[200px] resize-none pr-24',
+            'min-h-[80px] max-h-[200px] resize-none pr-24',
             'focus:ring-2 focus:ring-blue-500 focus:border-transparent',
             isRecording && 'border-red-300 bg-red-50'
           )}
@@ -457,18 +496,14 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
 
           <Separator orientation='vertical' className='h-6' />
 
-          {/* Send button */}
+          {/* Send/Stop button */}
           <Button
-            onClick={handleSubmit}
-            disabled={!value.trim() || disabled || isLoading}
+            onClick={isLoading ? onStop : handleSubmit}
+            disabled={(!value.trim() && !isLoading) || disabled}
             size='sm'
-            className='h-8 w-8 p-0'
+            className={cn('h-8 w-8 p-0', isLoading && 'bg-red-600 hover:bg-red-700 text-white')}
           >
-            {isLoading ? (
-              <Loader2 className='h-4 w-4 animate-spin' />
-            ) : (
-              <Send className='h-4 w-4' />
-            )}
+            {isLoading ? <Square className='h-4 w-4' /> : <Send className='h-4 w-4' />}
           </Button>
         </div>
       </div>
@@ -482,29 +517,6 @@ export const EnhancedInput: React.FC<EnhancedInputProps> = ({
         onChange={handleFileSelect}
         className='hidden'
       />
-
-      {/* Keyboard shortcuts hint */}
-      <div className='mt-2 flex items-center justify-between text-xs text-muted-foreground'>
-        <div className='flex items-center space-x-4'>
-          <span className='flex items-center space-x-1'>
-            <kbd className='px-1 py-0.5 bg-muted rounded text-xs'>Enter</kbd>
-            <span>to send</span>
-          </span>
-          <span className='flex items-center space-x-1'>
-            <kbd className='px-1 py-0.5 bg-muted rounded text-xs'>Shift+Enter</kbd>
-            <span>for new line</span>
-          </span>
-          {showSuggestions && (
-            <span className='flex items-center space-x-1'>
-              <kbd className='px-1 py-0.5 bg-muted rounded text-xs'>Tab</kbd>
-              <span>to accept suggestion</span>
-            </span>
-          )}
-        </div>
-        <div className='text-xs'>
-          Supported: {supportedFileTypes.join(', ')} (max {maxFileSize}MB)
-        </div>
-      </div>
     </div>
   );
 };

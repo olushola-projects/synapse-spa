@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Widget } from '../dashboard/WidgetGrid';
+import { Widget } from '../features/dashboard/WidgetGrid';
 import {
   Line,
   LineChart,
@@ -16,7 +16,6 @@ import {
   ComposedChart
 } from 'recharts';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
 
 // Sample data for the charts
 const euData = [

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import DashboardLayout from '@/components/features/dashboard/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -22,8 +22,8 @@ import {
   /* BarChart3, Activity, */ AlertCircle
 } from 'lucide-react';
 // BarChart3 and Activity imports removed - not used in this component
-import type { WidgetType } from '@/components/dashboard/WidgetGrid';
-import { WidgetGrid, DashboardContextProvider } from '@/components/dashboard/WidgetGrid';
+import type { WidgetType } from '@/components/features/dashboard/WidgetGrid';
+import { WidgetGrid, DashboardContextProvider } from '@/components/features/dashboard/WidgetGrid';
 import RegulationTrendWidget from '@/components/widgets/RegulationTrendWidget';
 import ForumPreviewWidget from '@/components/widgets/ForumPreviewWidget';
 import GamificationWidget from '@/components/widgets/GamificationWidget';
@@ -150,10 +150,12 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className='container py-8'>
+      <div className='w-full'>
         <div className='flex flex-col md:flex-row md:items-center md:justify-between mb-6'>
           <div>
-            <h1 className='text-3xl font-bold'>Welcome, {user.name}</h1>
+            <h1 className='text-3xl font-bold'>
+              Welcome, {user.displayName || user.firstName || user.username}
+            </h1>
             <p className='text-gray-500 mt-1'>Here's an overview of your GRC activities</p>
           </div>
 
@@ -172,16 +174,20 @@ const Dashboard = () => {
                 </DialogHeader>
                 <div className='grid gap-4 py-4'>
                   {availableWidgets.map(widget => (
-                    <div
+                    <button
                       key={widget.id}
-                      className={`flex items-center p-3 border rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors ${
-                        widgets.includes(widget.id) ? 'opacity-50 cursor-not-allowed' : ''
+                      className={`flex items-center p-3 border rounded-lg w-full text-left hover:border-blue-400 hover:bg-blue-50 transition-colors ${
+                        widgets.includes(widget.id)
+                          ? 'opacity-50 cursor-not-allowed'
+                          : 'cursor-pointer'
                       }`}
                       onClick={() => {
                         if (!widgets.includes(widget.id)) {
                           addWidget(widget.id);
                         }
                       }}
+                      disabled={widgets.includes(widget.id)}
+                      aria-label={`Add ${widget.name} widget to dashboard`}
                     >
                       <div className='mr-4 bg-blue-100 p-2 rounded-full'>
                         <widget.icon className='h-5 w-5 text-blue-600' />
@@ -193,7 +199,7 @@ const Dashboard = () => {
                       {widgets.includes(widget.id) && (
                         <span className='text-xs text-gray-500 ml-2'>Added</span>
                       )}
-                    </div>
+                    </button>
                   ))}
                 </div>
                 <DialogFooter>

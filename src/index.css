@@ -1,41 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700;800&display=swap');
-
+@import 'highlight.js/styles/github-dark.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
     --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 226 70% 55%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 160 84% 39%;
     --accent-foreground: 0 0% 98%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221 83% 53%;
-
     --radius: 0.5rem;
-
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -45,7 +34,6 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-
   body {
     @apply bg-background text-foreground;
     font-family: 'Work Sans', 'Inter', sans-serif;
@@ -62,7 +50,6 @@
   * {
     @apply border-border;
   }
-
   html {
     scroll-behavior: smooth;
   }
@@ -72,62 +59,51 @@
   .hover-scale {
     @apply transition-all duration-300 hover:scale-105;
   }
-
   .feature-card {
     @apply bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100;
   }
-
   .glass-card {
     @apply bg-white/20 backdrop-blur-sm rounded-xl shadow-lg border border-white/30;
   }
-
   /* Stripe-inspired components */
   .stripe-card {
     @apply bg-gradient-to-b from-white to-gray-50 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-300;
   }
-
   /* Enhanced text styling */
   .heading-xl {
     @apply font-bold text-4xl md:text-5xl lg:text-[3.25rem] leading-tight tracking-tight text-gray-900;
-    font-family: 'Work Sans', theme('fontFamily.sans');
+    font-family: 'Work Sans', sans-serif;
     letter-spacing: -0.02em;
   }
-
   .heading-lg {
     @apply font-semibold text-3xl md:text-4xl leading-tight tracking-tight text-gray-900;
-    font-family: 'Work Sans', theme('fontFamily.sans');
+    font-family: 'Work Sans', sans-serif;
     letter-spacing: -0.01em;
   }
-
   .body-text {
     @apply text-base font-normal text-gray-700 leading-relaxed;
   }
-
   /* Enhanced animations */
   .fade-up {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.6s ease-out forwards;
   }
-
   .fade-in-right {
     opacity: 0;
     transform: translateX(-20px);
     animation: fadeInRight 0.5s ease-out forwards;
   }
-
   .fade-in {
     opacity: 0;
     animation: fadeIn 0.8s ease-out forwards;
   }
-
   /* Glassmorphism effect */
   .glass-effect {
     backdrop-filter: blur(16px) saturate(180%);
     background-color: rgba(255, 255, 255, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.125);
   }
-
   /* Enhanced loading animations for enterprise UX */
   @keyframes shimmer {
     0% {
@@ -137,7 +113,6 @@
       transform: translateX(100%);
     }
   }
-
   @keyframes progressive-load {
     0% {
       opacity: 0;
@@ -148,43 +123,36 @@
       transform: translateY(0) scale(1);
     }
   }
-
   @keyframes skeleton-pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
       opacity: 0.5;
     }
   }
-
   .animate-shimmer {
     animation: shimmer 2s infinite;
   }
-
   .animate-progressive-load {
     animation: progressive-load 0.4s ease-out;
   }
-
   .animate-skeleton-pulse {
     animation: skeleton-pulse 2s ease-in-out infinite;
   }
-
   /* Micro-interaction enhancements */
   .micro-hover {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
   .micro-hover:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   }
-
   .reveal-gradient {
     position: relative;
     overflow: hidden;
   }
-
   .reveal-gradient::before {
     content: '';
     position: absolute;
@@ -196,11 +164,9 @@
     transform: translateX(-100%);
     transition: transform 0.5s ease-out;
   }
-
   .reveal-gradient:hover::before {
     transform: translateX(100%);
   }
-
   /* Animation keyframes */
   @keyframes fadeUp {
     to {
@@ -208,63 +174,52 @@
       transform: translateY(0);
     }
   }
-
   @keyframes fadeInRight {
     to {
       opacity: 1;
       transform: translateX(0);
     }
   }
-
   @keyframes fadeIn {
     to {
       opacity: 1;
     }
   }
-
   /* Enhanced hover effects */
   .hover-lift {
     transition:
       transform 0.3s ease,
       box-shadow 0.3s ease;
   }
-
   .hover-lift:hover {
     transform: translateY(-3px);
     box-shadow:
       0 20px 40px -10px rgba(37, 99, 235, 0.15),
       0 10px 20px -5px rgba(0, 0, 0, 0.05);
   }
-
   /* Professional gradient backgrounds */
   .gradient-bg-primary {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   }
-
   .gradient-bg-secondary {
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   }
-
   /* Enhanced text shadows for better readability */
   .text-shadow-sm {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
-
   .text-shadow-md {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-
   /* Smooth backdrop blur for modern glass effect */
   .backdrop-blur-glass {
     backdrop-filter: blur(12px) saturate(180%);
     background-color: rgba(255, 255, 255, 0.85);
   }
-
   /* Enhanced button styles */
   .btn-primary-enhanced {
     @apply bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1;
   }
-
   .btn-secondary-enhanced {
     @apply bg-white border-2 border-blue-200 hover:border-blue-300 text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-300;
   }

@@ -1,4 +1,4 @@
-import { Widget } from '../dashboard/WidgetGrid';
+import { Widget } from '../features/dashboard/WidgetGrid';
 import { Shield, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';

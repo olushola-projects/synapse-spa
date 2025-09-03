@@ -26,7 +26,8 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import { toast } from '@/hooks/use-toast';
+import DashboardLayout from '@/components/features/dashboard/DashboardLayout';
 
 // Define the jurisdictions available
 const jurisdictions = [
@@ -40,9 +41,11 @@ const jurisdictions = [
 ];
 
 const profileFormSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  firstName: z.string().min(1, { message: 'First name is required.' }),
+  lastName: z.string().min(1, { message: 'Last name is required.' }),
+  username: z.string().min(2, { message: 'Username must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
-  jurisdiction: z.array(z.string()).optional()
+  jurisdictions: z.array(z.string()).optional()
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -61,9 +64,11 @@ const Profile = () => {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: user?.name || '',
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      username: user?.username || '',
       email: user?.email || '',
-      jurisdiction: user?.jurisdiction || []
+      jurisdictions: user?.preferences?.jurisdictions || []
     }
   });
 
@@ -71,18 +76,38 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       form.reset({
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
         email: user.email,
-        jurisdiction: user.jurisdiction || []
+        jurisdictions: user.preferences?.jurisdictions || []
       });
     }
   }, [user, form]);
 
   const onSubmit = async (data: ProfileFormValues) => {
     try {
-      await updateProfile(data);
+      const updateData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        username: data.username,
+        preferences: {
+          ...user?.preferences,
+          jurisdictions: data.jurisdictions
+        }
+      };
+      await updateProfile(updateData);
+      toast({
+        title: 'Profile updated',
+        description: 'Your profile has been updated successfully'
+      });
     } catch (error) {
       console.error('Profile update failed:', error);
+      toast({
+        title: 'Update failed',
+        description: 'Failed to update profile. Please try again.',
+        variant: 'destructive'
+      });
     }
   };
 
@@ -106,21 +131,40 @@ const Profile = () => {
             <Card>
               <CardHeader className='text-center'>
                 <Avatar className='w-24 h-24 mx-auto mb-4'>
-                  <AvatarImage src={user.avatar_url || '/placeholder.svg'} alt={user.name} />
-                  <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                  <AvatarImage
+                    src={user.avatar_url || '/placeholder.svg'}
+                    alt={user.displayName || `${user.firstName} ${user.lastName}` || user.username}
+                  />
+                  <AvatarFallback>
+                    {(user.displayName || user.firstName || user.username).charAt(0).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
-                <CardTitle>{user.name}</CardTitle>
+                <CardTitle>
+                  {user.displayName || `${user.firstName} ${user.lastName}` || user.username}
+                </CardTitle>
                 <CardDescription>{user.email}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className='text-sm text-muted-foreground'>
                   <div className='flex justify-between mb-2'>
                     <span>Member since:</span>
-                    <span>April 2023</span>
+                    <span>{new Date(user.createdAt).toLocaleDateString()}</span>
                   </div>
                   <div className='flex justify-between'>
                     <span>Last login:</span>
-                    <span>Today</span>
+                    <span>
+                      {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString() : 'Never'}
+                    </span>
+                  </div>
+                  <div className='flex justify-between mt-2'>
+                    <span>Email verified:</span>
+                    <span className={user.emailVerified ? 'text-green-600' : 'text-orange-600'}>
+                      {user.emailVerified ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className='flex justify-between mt-2'>
+                    <span>Role:</span>
+                    <span className='capitalize'>{user.role}</span>
                   </div>
                 </div>
               </CardContent>
@@ -141,15 +185,46 @@ const Profile = () => {
               <CardContent>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                      <FormField
+                        control={form.control}
+                        name='firstName'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name='lastName'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                     <FormField
                       control={form.control}
-                      name='name'
+                      name='username'
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Full Name</FormLabel>
+                          <FormLabel>Username</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
+                          <FormDescription>This is your unique username</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -181,7 +256,7 @@ const Profile = () => {
 
                       <FormField
                         control={form.control}
-                        name='jurisdiction'
+                        name='jurisdictions'
                         render={() => (
                           <FormItem>
                             <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -189,7 +264,7 @@ const Profile = () => {
                                 <FormField
                                   key={item.id}
                                   control={form.control}
-                                  name='jurisdiction'
+                                  name='jurisdictions'
                                   render={({ field }) => {
                                     return (
                                       <FormItem

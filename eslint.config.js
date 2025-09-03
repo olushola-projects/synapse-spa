@@ -111,8 +111,15 @@ export default tseslint.config(
       // Complexity rules
       complexity: ['warn', 10],
       'max-depth': ['warn', 4],
-      'max-lines-per-function': ['warn', 50],
+      'max-lines-per-function': 'off',
       'max-params': ['warn', 4]
+    }
+  },
+  {
+    // Specific rules for TSX files only
+    files: ['**/*.tsx'],
+    rules: {
+      complexity: 'off'
     }
   },
   {

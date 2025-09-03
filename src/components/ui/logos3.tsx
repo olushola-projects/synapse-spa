@@ -8,6 +8,6 @@ interface Logos3Props {
   heading?: string;
   logos: Logo[];
 }
-export const Logos3 = ({ }: Logos3Props) => {
+export const Logos3 = ({}: Logos3Props) => {
   return <div></div>;
 };

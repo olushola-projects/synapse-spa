@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+// Supabase removed for pure React app
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ComplianceAssessment {

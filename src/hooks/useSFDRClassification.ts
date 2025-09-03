@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+// Supabase removed for pure React app
 import type {
   NexusClassificationRequest,
   NexusClassificationResponse

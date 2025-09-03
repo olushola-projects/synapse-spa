@@ -15,10 +15,14 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import { AuthProvider } from './contexts/AuthContext';
 import UseCases from './pages/UseCases';
-import NexusAgent from './pages/NexusAgent';
 import AgentsPage from './pages/AgentsPage';
 import CDDAgentPage from './pages/CDDAgentPage';
-import ProtectedRoute from './components/ProtectedRoute';
+import ChatDemo from './pages/ChatDemo';
+import AuthDemo from './pages/AuthDemo';
+import UserManagementDemo from './pages/UserManagementDemo';
+import AdminDashboard from './pages/AdminDashboard';
+import ProtectedRoute, { PublicRoute, VerifiedUserRoute } from './components/ProtectedRoute';
+import NexusAgent from './pages/NexusAgent';
 
 // Legal pages
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
@@ -51,11 +55,11 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route path='/' element={<Index />} />
             <Route path='/partners' element={<Partners />} />
@@ -78,33 +82,33 @@ const App = () => (
             <Route
               path='/login'
               element={
-                <ProtectedRoute requireAuth={false}>
+                <PublicRoute>
                   <Login />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route
               path='/register'
               element={
-                <ProtectedRoute requireAuth={false}>
+                <PublicRoute>
                   <Register />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route
               path='/forgot-password'
               element={
-                <ProtectedRoute requireAuth={false}>
+                <PublicRoute>
                   <ForgotPassword />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route
               path='/reset-password'
               element={
-                <ProtectedRoute requireAuth={false}>
+                <PublicRoute>
                   <ResetPassword />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route
@@ -112,6 +116,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/admin'
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
                 </ProtectedRoute>
               }
             />
@@ -126,6 +138,9 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route path='/chat-demo' element={<ChatDemo />} />
+            <Route path='/auth-demo' element={<AuthDemo />} />
+            <Route path='/user-management' element={<UserManagementDemo />} />
 
             {/* Legal Routes */}
             <Route path='/legal/privacy' element={<PrivacyPolicy />} />
@@ -150,9 +165,9 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path='*' element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 

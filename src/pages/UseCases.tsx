@@ -2,10 +2,7 @@ import { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -46,14 +43,14 @@ import {
   Eye,
   Gauge,
   ShoppingBag,
-  DollarSign,
+  DollarSign
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 
 // For analytics implementation
-// import { supabase } from '@/integrations/supabase/client';
+// Supabase integration removed for pure React app
 
 // Import types and data
 import type { UseCase, SortOption } from '@/types/useCases';

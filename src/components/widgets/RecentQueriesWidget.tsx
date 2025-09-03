@@ -1,4 +1,4 @@
-import { Widget } from '../dashboard/WidgetGrid';
+import { Widget } from '../features/dashboard/WidgetGrid';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

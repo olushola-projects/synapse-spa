@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Widget } from '../dashboard/WidgetGrid';
+import { Widget } from '../features/dashboard/WidgetGrid';
 import { Button } from '@/components/ui/button';
 import { Award, Trophy, Medal, Star } from 'lucide-react';
 import {

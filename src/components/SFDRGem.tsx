@@ -384,29 +384,29 @@ const SFDRGem: React.FC = () => {
           className='w-full'
         >
           <TabsList className='grid w-full grid-cols-4 mb-6'>
-            <TabsTrigger 
-              value='chat' 
+            <TabsTrigger
+              value='chat'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <Bot className='w-4 h-4' />
               AI Chat
             </TabsTrigger>
-            <TabsTrigger 
-              value='classify' 
+            <TabsTrigger
+              value='classify'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <Target className='w-4 h-4' />
               Classify
             </TabsTrigger>
-            <TabsTrigger 
-              value='documents' 
+            <TabsTrigger
+              value='documents'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <FileText className='w-4 h-4' />
               Documents
             </TabsTrigger>
-            <TabsTrigger 
-              value='export' 
+            <TabsTrigger
+              value='export'
               className='flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground'
             >
               <Download className='w-4 h-4' />

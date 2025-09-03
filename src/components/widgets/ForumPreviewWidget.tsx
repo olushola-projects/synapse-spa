@@ -1,4 +1,4 @@
-import { Widget } from '../dashboard/WidgetGrid';
+import { Widget } from '../features/dashboard/WidgetGrid';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

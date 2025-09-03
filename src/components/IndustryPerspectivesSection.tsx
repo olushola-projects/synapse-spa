@@ -24,7 +24,7 @@ const IndustryPerspectivesSection = () => {
     align: 'start',
     slidesToScroll: 1
   });
-  
+
   const [autoplayInterval, setAutoplayInterval] = useState<NodeJS.Timeout | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPerspective, setSelectedPerspective] = useState<IndustryPerspective | null>(null);
@@ -33,12 +33,15 @@ const IndustryPerspectivesSection = () => {
   const sortedPerspectives = getSortedPerspectives();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const scrollTo = useCallback((index: number) => {
-    if (!emblaApi) {
-      return;
-    }
-    emblaApi.scrollTo(index);
-  }, [emblaApi, sortedPerspectives.length]);
+  const scrollTo = useCallback(
+    (index: number) => {
+      if (!emblaApi) {
+        return;
+      }
+      emblaApi.scrollTo(index);
+    },
+    [emblaApi, sortedPerspectives.length]
+  );
 
   // Setup autoplay with slower speed for better readability
   const startAutoplay = useCallback(() => {
@@ -161,16 +164,16 @@ const IndustryPerspectivesSection = () => {
           </div>
 
           {/* Carousel Controls */}
-          <div className="flex justify-center gap-4 mt-8">
-            <button 
+          <div className='flex justify-center gap-4 mt-8'>
+            <button
               onClick={() => scrollTo(selectedIndex - 1)}
-              className="p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors"
+              className='p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors'
             >
               ←
             </button>
-            <button 
+            <button
               onClick={() => scrollTo(selectedIndex + 1)}
-              className="p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors"
+              className='p-2 rounded-full bg-white border border-gray-200 hover:border-primary/50 transition-colors'
             >
               →
             </button>
