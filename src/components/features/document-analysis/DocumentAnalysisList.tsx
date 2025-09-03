@@ -259,9 +259,7 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
             className={`text-sm text-gray-700 ${showFullSummary ? '' : 'max-h-16 overflow-hidden'} relative`}
           >
             {analysis.summary ? (
-              <div 
-                className='text-sm text-gray-700 leading-relaxed whitespace-pre-line'
-              >
+              <div className='text-sm text-gray-700 leading-relaxed whitespace-pre-line'>
                 {cleanTextContent(analysis.summary)}
               </div>
             ) : (

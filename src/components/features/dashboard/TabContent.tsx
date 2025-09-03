@@ -12,9 +12,9 @@ interface TabContentProps {
 export const TabContent = ({ activeTab, chatRef }: TabContentProps) => {
   if (activeTab === 'chat') {
     return (
-      <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
-        {/* Chat Interface */}
-        <div className='lg:col-span-3 nexus-agent-container' data-testid='nexus-chat'>
+      <div className='w-full'>
+        {/* Chat Interface - Full Width */}
+        <div className='nexus-agent-container' data-testid='nexus-chat'>
           <Suspense fallback={<EnhancedSkeleton className='h-96 w-full' />}>
             <NexusAgentChatStreamlined className='shadow-lg' ref={chatRef} />
           </Suspense>

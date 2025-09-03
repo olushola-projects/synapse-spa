@@ -209,32 +209,6 @@ const NexusAgent = () => {
         .map(action => action.message),
     [quickActions]
   );
-  const handleQuickAction = useCallback(
-    (actionType: QuickActionType) => {
-      // Switch to chat mode if not already active
-      if (activeTab !== 'chat') {
-        setIsLoadingTab(true);
-        setActiveTab('chat');
-      }
-
-      // Find the action details
-      const action = quickActions.find(a => a.type === actionType);
-
-      // Send message immediately
-      if (chatRef.current && typeof chatRef.current.sendMessage === 'function') {
-        chatRef.current.sendMessage(action?.message || 'How can you help me today?');
-      }
-
-      // Update compliance data based on action
-      setComplianceData(prev => ({
-        ...prev,
-        status: actionType === 'check-compliance' ? 'pre-validated' : 'needs-review'
-      }));
-
-      setIsLoadingTab(false);
-    },
-    [quickActions, activeTab]
-  );
 
   const handleTabChange = useCallback(
     (value: string) => {
@@ -442,9 +416,9 @@ const NexusAgent = () => {
             {isLoadingTab ? (
               <TabContentSkeleton type='chat' />
             ) : (
-              <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
-                {/* Chat Interface */}
-                <div className='lg:col-span-3 nexus-agent-container' data-testid='nexus-chat'>
+              <div className='w-full'>
+                {/* Chat Interface - Full Width */}
+                <div className='nexus-agent-container' data-testid='nexus-chat'>
                   <Suspense fallback={<EnhancedSkeleton className='h-96 w-full' />}>
                     <NexusAgentChatStreamlined
                       className='shadow-lg'
