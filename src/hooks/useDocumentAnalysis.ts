@@ -72,8 +72,11 @@ export function useDocumentAnalysis(): UseDocumentAnalysisReturn {
 
       try {
         const recentAnalyses = await DocumentAnalysisAPI.getRecentDocumentAnalyses(limit);
+        console.log('API Response - Recent Analyses:', recentAnalyses);
+        console.log('Type:', typeof recentAnalyses, 'Is Array:', Array.isArray(recentAnalyses));
         setAnalyses(recentAnalyses || []);
       } catch (err) {
+        console.error('API Error in loadRecentAnalyses:', err);
         handleError(err, 'Failed to load recent document analyses');
         setAnalyses([]); // Reset to empty array on error
       } finally {

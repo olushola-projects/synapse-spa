@@ -49,11 +49,20 @@ export class DocumentAnalysisAPI {
    */
   static async getRecentDocumentAnalyses(limit = 10): Promise<StoredDocumentAnalysis[]> {
     try {
+      console.log('Making API call to:', `/api/document-analysis/recent/list?limit=${limit}`);
       const response = await apiClient.get(`/api/document-analysis/recent/list?limit=${limit}`);
+      console.log('Raw API response:', response);
+      console.log('Response data:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching recent document analyses:', error);
-      throw new Error('Failed to fetch recent document analyses');
+      
+      // Check if it's an authentication error
+      if ((error as any)?.status === 401) {
+        throw new Error('Authentication required. Please log in to view document analyses.');
+      }
+      
+      throw new Error(`Failed to fetch recent document analyses: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
