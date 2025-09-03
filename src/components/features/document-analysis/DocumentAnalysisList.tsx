@@ -168,6 +168,7 @@ const AIAnalysisDialog: React.FC<{ analysis: StoredDocumentAnalysis }> = ({ anal
 const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showAllKeyPoints, setShowAllKeyPoints] = useState(false);
+  const [showFullSummary, setShowFullSummary] = useState(false);
 
   const formatDate = (dateString: string) => {
     try {
@@ -231,30 +232,76 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
       <CardContent className='pt-0'>
         {/* Summary */}
         <div className='mb-3'>
-          <div className='text-sm text-gray-700 line-clamp-3'>
-            {analysis.summary ? (
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
-                components={{
-                  p: ({ children }) => <span className='text-sm text-gray-700 leading-relaxed'>{children}</span>,
-                  strong: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
-                  em: ({ children }) => <em className='italic text-gray-700'>{children}</em>,
-                  br: () => <span className='block h-1' />,
-                  // Convert other elements to inline spans for summary
-                  h1: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
-                  h2: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
-                  h3: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
-                  ul: ({ children }) => <span>{children}</span>,
-                  ol: ({ children }) => <span>{children}</span>,
-                  li: ({ children }) => <span>{children} </span>,
-                  div: ({ children }) => <span>{children}</span>
-                }}
+          <div className='flex items-start justify-between mb-1'>
+            <span className='text-xs font-medium text-gray-600'>Summary</span>
+            {analysis.summary && analysis.summary.length > 200 && (
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() => setShowFullSummary(!showFullSummary)}
+                className='text-xs h-5 px-1 -mt-1'
               >
-                {cleanTextContent(analysis.summary)}
-              </ReactMarkdown>
+                {showFullSummary ? (
+                  <>
+                    <ChevronUp className='w-3 h-3 mr-1' />
+                    Less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className='w-3 h-3 mr-1' />
+                    More
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+          <div className={`text-sm text-gray-700 ${showFullSummary ? '' : 'max-h-16 overflow-hidden'} relative`}>
+            {analysis.summary ? (
+              <div className='prose prose-sm max-w-none'>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    p: ({ children }) => (
+                      <p className='text-sm text-gray-700 leading-relaxed mb-1 last:mb-0'>{children}</p>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className='font-semibold text-gray-900'>{children}</strong>
+                    ),
+                    em: ({ children }) => <em className='italic text-gray-700'>{children}</em>,
+                    // Keep headings but make them smaller for summary
+                    h1: ({ children }) => (
+                      <h4 className='text-sm font-semibold text-gray-900 mb-1'>{children}</h4>
+                    ),
+                    h2: ({ children }) => (
+                      <h4 className='text-sm font-semibold text-gray-900 mb-1'>{children}</h4>
+                    ),
+                    h3: ({ children }) => (
+                      <h4 className='text-sm font-semibold text-gray-900 mb-1'>{children}</h4>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className='list-disc list-inside text-sm text-gray-700 mb-1 space-y-0'>
+                        {children}
+                      </ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className='list-decimal list-inside text-sm text-gray-700 mb-1 space-y-0'>
+                        {children}
+                      </ol>
+                    ),
+                    li: ({ children }) => <li className='text-sm text-gray-700'>{children}</li>,
+                    div: ({ children }) => <div className='text-sm text-gray-700'>{children}</div>
+                  }}
+                >
+                  {cleanTextContent(analysis.summary)}
+                </ReactMarkdown>
+              </div>
             ) : (
               <span className='text-gray-500 italic'>No summary available</span>
+            )}
+            {/* Fade out gradient for overflow when collapsed */}
+            {!showFullSummary && analysis.summary && analysis.summary.length > 200 && (
+              <div className='absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-t from-white to-transparent pointer-events-none' />
             )}
           </div>
         </div>
