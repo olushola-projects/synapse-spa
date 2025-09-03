@@ -166,17 +166,19 @@ export const DocumentAnalysisList: React.FC<DocumentAnalysisListProps> = ({ clas
   // Ensure analyses is always an array to prevent undefined errors
   const safeAnalyses = analyses || [];
 
-  // Debug logging
-  console.log('DocumentAnalysisList State:', {
-    analyses,
-    safeAnalyses,
-    safeAnalysesLength: safeAnalyses.length,
-    loading,
-    error,
-    summary
-  });
+  // Debug logging - remove in production
+  if (process.env.NODE_ENV === 'development') {
+    console.log('DocumentAnalysisList State:', {
+      analyses,
+      safeAnalyses,
+      safeAnalysesLength: safeAnalyses.length,
+      loading,
+      error,
+      summary
+    });
+  }
 
-  if (loading && !safeAnalyses.length) {
+  if (loading) {
     return (
       <div className={`space-y-4 ${className}`}>
         <EnhancedSkeleton className='h-8 w-48' />
@@ -191,19 +193,20 @@ export const DocumentAnalysisList: React.FC<DocumentAnalysisListProps> = ({ clas
     const isAuthError = error.includes('Authentication required');
     return (
       <div className={`space-y-4 ${className}`}>
-        <Card className={isAuthError ? 'border-yellow-200 bg-yellow-50' : 'border-red-200 bg-red-50'}>
+        <Card
+          className={isAuthError ? 'border-yellow-200 bg-yellow-50' : 'border-red-200 bg-red-50'}
+        >
           <CardContent className='pt-6'>
-            <div className={`flex items-center space-x-2 ${isAuthError ? 'text-yellow-700' : 'text-red-700'}`}>
+            <div
+              className={`flex items-center space-x-2 ${isAuthError ? 'text-yellow-700' : 'text-red-700'}`}
+            >
               <AlertCircle className='w-5 h-5' />
               <span className='font-medium'>
                 {isAuthError ? 'Authentication Required' : 'Error loading document analyses'}
               </span>
             </div>
             <p className={`text-sm mt-1 ${isAuthError ? 'text-yellow-600' : 'text-red-600'}`}>
-              {isAuthError 
-                ? 'Please log in to view your document analysis history.' 
-                : error
-              }
+              {isAuthError ? 'Please log in to view your document analysis history.' : error}
             </p>
             {!isAuthError && (
               <Button

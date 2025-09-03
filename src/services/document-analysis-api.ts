@@ -56,13 +56,15 @@ export class DocumentAnalysisAPI {
       return response.data;
     } catch (error) {
       console.error('Error fetching recent document analyses:', error);
-      
+
       // Check if it's an authentication error
       if ((error as any)?.status === 401) {
         throw new Error('Authentication required. Please log in to view document analyses.');
       }
-      
-      throw new Error(`Failed to fetch recent document analyses: ${error instanceof Error ? error.message : 'Unknown error'}`);
+
+      throw new Error(
+        `Failed to fetch recent document analyses: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 

@@ -51,39 +51,51 @@ export function useDocumentAnalysis(): UseDocumentAnalysisReturn {
     [handleError]
   );
 
-  const loadSummary = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-
+  // Internal functions without loading state management
+  const loadSummaryInternal = useCallback(async () => {
     try {
       const summaryData = await DocumentAnalysisAPI.getUserDocumentAnalysesSummary();
       setSummary(summaryData);
     } catch (err) {
       handleError(err, 'Failed to load document analysis summary');
+    }
+  }, [handleError]);
+
+  const loadRecentAnalysesInternal = useCallback(async (limit = 10) => {
+    try {
+      const recentAnalyses = await DocumentAnalysisAPI.getRecentDocumentAnalyses(limit);
+      console.log('API Response - Recent Analyses:', recentAnalyses);
+      console.log('Type:', typeof recentAnalyses, 'Is Array:', Array.isArray(recentAnalyses));
+      setAnalyses(recentAnalyses || []);
+    } catch (err) {
+      console.error('API Error in loadRecentAnalyses:', err);
+      handleError(err, 'Failed to load recent document analyses');
+      setAnalyses([]); // Reset to empty array on error
+    }
+  }, [handleError]);
+
+  // Public functions with loading state management
+  const loadSummary = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await loadSummaryInternal();
     } finally {
       setLoading(false);
     }
-  }, [handleError]);
+  }, [loadSummaryInternal]);
 
   const loadRecentAnalyses = useCallback(
     async (limit = 10) => {
       setLoading(true);
       setError(null);
-
       try {
-        const recentAnalyses = await DocumentAnalysisAPI.getRecentDocumentAnalyses(limit);
-        console.log('API Response - Recent Analyses:', recentAnalyses);
-        console.log('Type:', typeof recentAnalyses, 'Is Array:', Array.isArray(recentAnalyses));
-        setAnalyses(recentAnalyses || []);
-      } catch (err) {
-        console.error('API Error in loadRecentAnalyses:', err);
-        handleError(err, 'Failed to load recent document analyses');
-        setAnalyses([]); // Reset to empty array on error
+        await loadRecentAnalysesInternal(limit);
       } finally {
         setLoading(false);
       }
     },
-    [handleError]
+    [loadRecentAnalysesInternal]
   );
 
   const loadThreadAnalyses = useCallback(
@@ -117,13 +129,23 @@ export function useDocumentAnalysis(): UseDocumentAnalysisReturn {
   );
 
   const refresh = useCallback(async () => {
-    await Promise.all([loadSummary(), loadRecentAnalyses()]);
-  }, [loadSummary, loadRecentAnalyses]);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await Promise.all([loadSummaryInternal(), loadRecentAnalysesInternal()]);
+    } catch (err) {
+      // Errors are already handled by individual functions
+      console.error('Error in refresh:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [loadSummaryInternal, loadRecentAnalysesInternal]);
 
   // Load initial data
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
   return {
     analyses,
