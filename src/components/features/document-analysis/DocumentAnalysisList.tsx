@@ -123,8 +123,12 @@ const AIAnalysisDialog: React.FC<{ analysis: StoredDocumentAnalysis }> = ({ anal
                   ),
                   // Handle HTML divs (like confidence boxes)
                   div: ({ children, ...props }) => {
-                    const style = props.style as string | undefined;
-                    if (style && style.includes('background-color')) {
+                    // Check if this div has background styling (confidence boxes, etc.)
+                    const style = props.style as React.CSSProperties | undefined;
+                    const hasBackgroundColor = style?.backgroundColor || 
+                      (typeof props.style === 'string' && props.style.includes('background-color'));
+                    
+                    if (hasBackgroundColor) {
                       return (
                         <div className='bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4'>
                           <div className='font-semibold text-orange-800'>{children}</div>
