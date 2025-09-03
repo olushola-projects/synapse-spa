@@ -36,6 +36,16 @@ const MAX_POINT_LENGTH = 40;
 const BYTES_TO_KB = 1024;
 const PREVIEW_KEY_POINTS_COUNT = 2;
 
+// Utility function to clean up text content
+const cleanTextContent = (text: string): string => {
+  if (!text) return '';
+  return text
+    .replace(/\\n/g, '\n') // Convert escaped newlines to actual newlines
+    .replace(/■/g, '•') // Replace special box character with bullet
+    .replace(/\n{3,}/g, '\n\n') // Limit consecutive newlines to max 2
+    .trim();
+};
+
 interface DocumentAnalysisItemProps {
   analysis: StoredDocumentAnalysis;
 }
@@ -125,9 +135,10 @@ const AIAnalysisDialog: React.FC<{ analysis: StoredDocumentAnalysis }> = ({ anal
                   div: ({ children, ...props }) => {
                     // Check if this div has background styling (confidence boxes, etc.)
                     const style = props.style as React.CSSProperties | undefined;
-                    const hasBackgroundColor = style?.backgroundColor || 
+                    const hasBackgroundColor =
+                      style?.backgroundColor ||
                       (typeof props.style === 'string' && props.style.includes('background-color'));
-                    
+
                     if (hasBackgroundColor) {
                       return (
                         <div className='bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4'>
@@ -139,7 +150,7 @@ const AIAnalysisDialog: React.FC<{ analysis: StoredDocumentAnalysis }> = ({ anal
                   }
                 }}
               >
-                {analysis.aiResponse}
+                {cleanTextContent(analysis.aiResponse)}
               </ReactMarkdown>
             ) : (
               <div className='text-center py-8 text-gray-500'>
@@ -220,9 +231,32 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
       <CardContent className='pt-0'>
         {/* Summary */}
         <div className='mb-3'>
-          <p className='text-sm text-gray-700 line-clamp-2'>
-            {analysis.summary || 'No summary available'}
-          </p>
+          <div className='text-sm text-gray-700 line-clamp-3'>
+            {analysis.summary ? (
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  p: ({ children }) => <span className='text-sm text-gray-700 leading-relaxed'>{children}</span>,
+                  strong: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
+                  em: ({ children }) => <em className='italic text-gray-700'>{children}</em>,
+                  br: () => <span className='block h-1' />,
+                  // Convert other elements to inline spans for summary
+                  h1: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
+                  h2: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
+                  h3: ({ children }) => <strong className='font-semibold text-gray-900'>{children}</strong>,
+                  ul: ({ children }) => <span>{children}</span>,
+                  ol: ({ children }) => <span>{children}</span>,
+                  li: ({ children }) => <span>{children} </span>,
+                  div: ({ children }) => <span>{children}</span>
+                }}
+              >
+                {cleanTextContent(analysis.summary)}
+              </ReactMarkdown>
+            ) : (
+              <span className='text-gray-500 italic'>No summary available</span>
+            )}
+          </div>
         </div>
 
         {/* Key Points Section */}
