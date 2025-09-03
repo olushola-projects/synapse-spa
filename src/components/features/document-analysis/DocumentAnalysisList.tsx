@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,7 +14,10 @@ import {
   ChevronDown,
   ChevronUp,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  List,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import type { StoredDocumentAnalysis } from '@/types/document-analysis';
 import { formatDistanceToNow } from 'date-fns';
@@ -28,6 +33,7 @@ interface DocumentAnalysisItemProps {
 
 const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showAllKeyPoints, setShowAllKeyPoints] = useState(false);
 
   const formatDate = (dateString: string) => {
     try {
@@ -96,19 +102,58 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
           </p>
         </div>
 
-        {/* Key Points Preview */}
+        {/* Key Points Section */}
         {analysis.keyPoints &&
           Array.isArray(analysis.keyPoints) &&
           analysis.keyPoints.length > 0 && (
             <div className='mb-3'>
-              <div className='flex items-center space-x-1 mb-2'>
-                <MessageSquare className='w-4 h-4 text-orange-600' />
-                <span className='text-xs font-medium text-gray-600'>Key Points</span>
+              <div className='flex items-center justify-between mb-2'>
+                <div className='flex items-center space-x-1'>
+                  <List className='w-4 h-4 text-orange-600' />
+                  <span className='text-xs font-medium text-gray-600'>
+                    Key Points ({analysis.keyPoints.length})
+                  </span>
+                </div>
+                {analysis.keyPoints.length > PREVIEW_KEY_POINTS_COUNT && (
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={() => setShowAllKeyPoints(!showAllKeyPoints)}
+                    className='text-xs h-6 px-2'
+                  >
+                    {showAllKeyPoints ? (
+                      <>
+                        <EyeOff className='w-3 h-3 mr-1' />
+                        Show Less
+                      </>
+                    ) : (
+                      <>
+                        <Eye className='w-3 h-3 mr-1' />
+                        Show All
+                      </>
+                    )}
+                  </Button>
+                )}
               </div>
-              <div className='flex flex-wrap gap-1'>
-                {analysis.keyPoints
-                  .slice(0, isExpanded ? undefined : PREVIEW_KEY_POINTS_COUNT)
-                  .map((point, index) => (
+
+              {/* Key Points Display */}
+              {showAllKeyPoints || analysis.keyPoints.length <= PREVIEW_KEY_POINTS_COUNT ? (
+                <div className='space-y-2'>
+                  {analysis.keyPoints.map((point, index) => (
+                    <div
+                      key={`${analysis.id}-${index}-${point?.substring(0, 10) || 'point'}`}
+                      className='flex items-start space-x-2 text-sm'
+                    >
+                      <span className='flex-shrink-0 w-5 h-5 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center text-xs font-medium mt-0.5'>
+                        {index + 1}
+                      </span>
+                      <span className='text-gray-700 leading-relaxed'>{point || 'Key point'}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className='flex flex-wrap gap-1'>
+                  {analysis.keyPoints.slice(0, PREVIEW_KEY_POINTS_COUNT).map((point, index) => (
                     <Badge
                       key={`${analysis.id}-${index}-${point?.substring(0, 10) || 'point'}`}
                       variant='outline'
@@ -119,12 +164,11 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
                         : point || 'Key point'}
                     </Badge>
                   ))}
-                {!isExpanded && analysis.keyPoints.length > PREVIEW_KEY_POINTS_COUNT && (
-                  <Badge variant='outline' className='text-xs'>
+                  <Badge variant='outline' className='text-xs text-orange-600'>
                     +{analysis.keyPoints.length - PREVIEW_KEY_POINTS_COUNT} more
                   </Badge>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -140,13 +184,21 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
         {/* Expanded AI Response */}
         {isExpanded && (
           <div className='mt-4 pt-4 border-t border-gray-200'>
-            <div className='flex items-center space-x-1 mb-2'>
+            <div className='flex items-center space-x-1 mb-3'>
               <MessageSquare className='w-4 h-4 text-green-600' />
               <span className='text-xs font-medium text-gray-600'>AI Analysis</span>
             </div>
-            <ScrollArea className='h-32 w-full'>
-              <div className='text-sm text-gray-700 whitespace-pre-wrap'>
-                {analysis.aiResponse || 'No AI response available'}
+            <ScrollArea className='max-h-96 w-full'>
+              <div className='prose prose-sm prose-gray max-w-none'>
+                {analysis.aiResponse ? (
+                                  <div className='prose prose-sm prose-gray max-w-none text-sm text-gray-700 leading-relaxed'>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {analysis.aiResponse}
+                  </ReactMarkdown>
+                </div>
+                ) : (
+                  <div className='text-sm text-gray-500 italic'>No AI response available</div>
+                )}
               </div>
             </ScrollArea>
           </div>
@@ -165,18 +217,6 @@ export const DocumentAnalysisList: React.FC<DocumentAnalysisListProps> = ({ clas
 
   // Ensure analyses is always an array to prevent undefined errors
   const safeAnalyses = analyses || [];
-
-  // Debug logging - remove in production
-  if (process.env.NODE_ENV === 'development') {
-    console.log('DocumentAnalysisList State:', {
-      analyses,
-      safeAnalyses,
-      safeAnalysesLength: safeAnalyses.length,
-      loading,
-      error,
-      summary
-    });
-  }
 
   if (loading) {
     return (
