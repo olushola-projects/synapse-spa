@@ -46,9 +46,6 @@ For each environment (dev, staging, prod), create SSM parameters:
 aws ssm put-parameter --name "/synapse/dev/api-base-url" --value "https://dev-api.example.com" --type "String"
 aws ssm put-parameter --name "/synapse/dev/api-timeout" --value "30000" --type "String"
 
-# Staging
-aws ssm put-parameter --name "/synapse/staging/api-base-url" --value "https://staging-api.example.com" --type "String"
-aws ssm put-parameter --name "/synapse/staging/api-timeout" --value "30000" --type "String"
 
 # Production
 aws ssm put-parameter --name "/synapse/prod/api-base-url" --value "https://api.example.com" --type "String"
@@ -72,8 +69,6 @@ npx cdk bootstrap
 # Deploy to development environment
 npm run deploy:dev
 
-# Deploy to staging environment
-npm run deploy:staging
 
 # Deploy to production environment
 npm run deploy:prod
@@ -85,7 +80,7 @@ The repository includes GitHub Actions workflows for automated deployment:
 
 - **Pull Request**: Runs tests and security scans
 - **Development Branch**: Deploys to dev environment
-- **Main Branch**: Deploys to staging and production environments
+- **Main Branch**: Deploys directly to production environment
 
 #### Required GitHub Secrets
 
@@ -104,7 +99,6 @@ AWS_ACCOUNT_ID_PROD
 
 # Environment Variables
 VITE_API_BASE_URL_DEV
-VITE_API_BASE_URL_STAGING
 VITE_API_BASE_URL_PROD
 VITE_API_TIMEOUT
 ```

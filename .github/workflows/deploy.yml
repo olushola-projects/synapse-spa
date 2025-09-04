@@ -39,7 +39,7 @@ jobs:
       - name: Build application
         run: npm run build
         env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL_DEV }}
+          VITE_API_BASE_URL: ${{ github.ref == 'refs/heads/main' && secrets.VITE_API_BASE_URL_PROD || secrets.VITE_API_BASE_URL_DEV }}
           VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT }}
 
   deploy-dev:
@@ -95,62 +95,9 @@ jobs:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
           CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
 
-  deploy-staging:
-    name: Deploy to Staging
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    environment: staging
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
-
-      - name: Install CDK
-        run: npm install -g aws-cdk@${{ env.CDK_VERSION }}
-
-      - name: Install application dependencies
-        run: npm ci
-
-      - name: Install infrastructure dependencies
-        run: |
-          cd infrastructure
-          npm ci
-
-      - name: Set up SSM parameters
-        run: |
-          aws ssm put-parameter --name "/synapse/staging/api-base-url" --value "${{ secrets.VITE_API_BASE_URL_STAGING }}" --type "String" --overwrite
-          aws ssm put-parameter --name "/synapse/staging/api-timeout" --value "${{ secrets.VITE_API_TIMEOUT }}" --type "String" --overwrite
-
-      - name: Build application
-        run: npm run build
-        env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL_STAGING }}
-          VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT }}
-
-      - name: Deploy CDK stack
-        run: |
-          cd infrastructure
-          npm run deploy:staging
-        env:
-          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
-          CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
-
   deploy-production:
     name: Deploy to Production
-    needs: deploy-staging
+    needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     environment: production
