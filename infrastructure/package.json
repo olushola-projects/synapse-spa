@@ -9,14 +9,14 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "deploy": "cdk deploy",
+    "deploy": "cdk deploy --require-approval never",
     "destroy": "cdk destroy",
     "synth": "cdk synth",
     "diff": "cdk diff",
     "bootstrap": "cdk bootstrap",
-    "deploy:dev": "cdk deploy --context environment=dev",
-    "deploy:staging": "cdk deploy --context environment=staging",
-    "deploy:prod": "cdk deploy --context environment=prod"
+    "deploy:dev": "cdk deploy --context environment=dev --require-approval never",
+    "deploy:staging": "cdk deploy --context environment=staging --require-approval never",
+    "deploy:prod": "cdk deploy --context environment=prod --require-approval never"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",

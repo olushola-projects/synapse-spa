@@ -103,7 +103,7 @@ jobs:
         run: |
           cd infrastructure
           # Check if CDK is already bootstrapped, if not bootstrap it
-          npx cdk bootstrap --region ${{ vars.AWS_REGION || 'us-east-1' }} || echo "Bootstrap may have already been done"
+          npx cdk bootstrap --region ${{ vars.AWS_REGION || 'us-east-1' }} --require-approval never || echo "Bootstrap may have already been done"
 
       - name: Set up SSM parameters
         run: |
@@ -172,7 +172,7 @@ jobs:
         run: |
           cd infrastructure
           # Check if CDK is already bootstrapped, if not bootstrap it
-          npx cdk bootstrap --region ${{ vars.AWS_REGION || 'us-east-1' }} || echo "Bootstrap may have already been done"
+          npx cdk bootstrap --region ${{ vars.AWS_REGION || 'us-east-1' }} --require-approval never || echo "Bootstrap may have already been done"
 
       - name: Set up SSM parameters
         run: |
