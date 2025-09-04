@@ -26,5 +26,18 @@ dist-ssr
 # Vercel
 .vercel/
 
+# AWS CDK
+infrastructure/node_modules/
+infrastructure/cdk.out/
+infrastructure/*.d.ts
+infrastructure/*.js
+infrastructure/*.js.map
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
 # CDD-Agent directory (separate repository)
 CDD-Agent/

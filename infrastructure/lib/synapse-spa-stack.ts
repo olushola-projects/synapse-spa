@@ -28,14 +28,14 @@ export class SynapseSpaStack extends cdk.Stack {
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       versioned: true,
-      encryption: s3.BucketEncryption.S3_MANAGED,
+      encryption: s3.BucketEncryption.S3_MANAGED
     });
 
     // Origin Access Control for CloudFront
     const originAccessControl = new cloudfront.OriginAccessControl(this, 'OriginAccessControl', {
       description: `OAC for Synapse SPA ${environment}`,
       originAccessControlOriginType: cloudfront.OriginAccessControlOriginType.S3,
-      signing: cloudfront.Signing.SIGV4_ALWAYS,
+      signing: cloudfront.Signing.SIGV4_ALWAYS
     });
 
     // CloudFront Distribution
@@ -48,7 +48,7 @@ export class SynapseSpaStack extends cdk.Stack {
         compress: true,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
         originRequestPolicy: cloudfront.OriginRequestPolicy.CORS_S3_ORIGIN,
-        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS
       },
       defaultRootObject: 'index.html',
       errorResponses: [
@@ -56,18 +56,18 @@ export class SynapseSpaStack extends cdk.Stack {
           httpStatus: 404,
           responseHttpStatus: 200,
           responsePagePath: '/index.html',
-          ttl: cdk.Duration.minutes(30),
+          ttl: cdk.Duration.minutes(30)
         },
         {
           httpStatus: 403,
           responseHttpStatus: 200,
           responsePagePath: '/index.html',
-          ttl: cdk.Duration.minutes(30),
-        },
+          ttl: cdk.Duration.minutes(30)
+        }
       ],
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
       enabled: true,
-      comment: `Synapse SPA CloudFront Distribution - ${environment}`,
+      comment: `Synapse SPA CloudFront Distribution - ${environment}`
     });
 
     // Update bucket policy to allow CloudFront OAC access
@@ -80,9 +80,9 @@ export class SynapseSpaStack extends cdk.Stack {
         resources: [this.bucket.arnForObjects('*')],
         conditions: {
           StringEquals: {
-            'AWS:SourceArn': `arn:aws:cloudfront::${this.account}:distribution/${this.distribution.distributionId}`,
-          },
-        },
+            'AWS:SourceArn': `arn:aws:cloudfront::${this.account}:distribution/${this.distribution.distributionId}`
+          }
+        }
       })
     );
 
@@ -97,73 +97,77 @@ export class SynapseSpaStack extends cdk.Stack {
       `/synapse/${environment}/api-timeout`
     );
 
-    // Build and deploy the SPA with environment variables
+    // Deploy the pre-built SPA
     const deployment = new s3deploy.BucketDeployment(this, 'SynapseSpaDeployment', {
-      sources: [
-        s3deploy.Source.asset('../dist', {
-          bundling: {
-            image: cdk.DockerImage.fromRegistry('node:18-alpine'),
-            command: [
-              'sh',
-              '-c',
-              [
-                'npm ci',
-                `VITE_API_BASE_URL=${apiBaseUrl} VITE_API_TIMEOUT=${apiTimeout} npm run build`,
-                'cp -r /asset-input/dist/* /asset-output/',
-              ].join(' && '),
-            ],
-            workingDirectory: '/asset-input',
-          },
-        }),
-      ],
+      sources: [s3deploy.Source.asset('../dist')],
       destinationBucket: this.bucket,
       distribution: this.distribution,
       distributionPaths: ['/*'],
       prune: true,
+      metadata: {
+        'Cache-Control': 'max-age=31536000' // 1 year for assets
+      },
+      exclude: ['index.html']
+    });
+
+    // Deploy index.html with shorter cache time
+    new s3deploy.BucketDeployment(this, 'SynapseSpaIndexDeployment', {
+      sources: [
+        s3deploy.Source.asset('../dist', {
+          exclude: ['*', '!index.html']
+        })
+      ],
+      destinationBucket: this.bucket,
+      distribution: this.distribution,
+      distributionPaths: ['/index.html'],
+      prune: false,
+      metadata: {
+        'Cache-Control': 'max-age=300' // 5 minutes for index.html
+      }
     });
 
     // Store outputs in SSM parameters for other stacks or applications
     new ssm.StringParameter(this, 'CloudFrontDomainNameParameter', {
       parameterName: `/synapse/${environment}/cloudfront-domain-name`,
       stringValue: this.distribution.distributionDomainName,
-      description: `CloudFront domain name for Synapse SPA ${environment}`,
+      description: `CloudFront domain name for Synapse SPA ${environment}`
     });
 
     new ssm.StringParameter(this, 'S3BucketNameParameter', {
       parameterName: `/synapse/${environment}/s3-bucket-name`,
       stringValue: this.bucket.bucketName,
-      description: `S3 bucket name for Synapse SPA ${environment}`,
+      description: `S3 bucket name for Synapse SPA ${environment}`
     });
 
     new ssm.StringParameter(this, 'CloudFrontDistributionIdParameter', {
       parameterName: `/synapse/${environment}/cloudfront-distribution-id`,
       stringValue: this.distribution.distributionId,
-      description: `CloudFront distribution ID for Synapse SPA ${environment}`,
+      description: `CloudFront distribution ID for Synapse SPA ${environment}`
     });
 
     // Outputs
     new cdk.CfnOutput(this, 'BucketName', {
       value: this.bucket.bucketName,
       description: 'S3 Bucket Name',
-      exportName: `${this.stackName}-BucketName`,
+      exportName: `${this.stackName}-BucketName`
     });
 
     new cdk.CfnOutput(this, 'DistributionId', {
       value: this.distribution.distributionId,
       description: 'CloudFront Distribution ID',
-      exportName: `${this.stackName}-DistributionId`,
+      exportName: `${this.stackName}-DistributionId`
     });
 
     new cdk.CfnOutput(this, 'DomainName', {
       value: this.distribution.distributionDomainName,
       description: 'CloudFront Domain Name',
-      exportName: `${this.stackName}-DomainName`,
+      exportName: `${this.stackName}-DomainName`
     });
 
     new cdk.CfnOutput(this, 'WebsiteURL', {
       value: `https://${this.distribution.distributionDomainName}`,
       description: 'Website URL',
-      exportName: `${this.stackName}-WebsiteURL`,
+      exportName: `${this.stackName}-WebsiteURL`
     });
   }
 }

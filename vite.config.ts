@@ -35,10 +35,15 @@ export default defineConfig(({ mode }) => ({
     // Optimize chunk size warnings
     chunkSizeWarningLimit: 1000
   },
-  // Environment variable validation
+  // Environment variable validation and injection
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '0.0.0'),
-    __BUILD_TIME__: JSON.stringify(new Date().toISOString())
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    // CDK will inject these during deployment
+    'import.meta.env.VITE_API_BASE_URL': JSON.stringify(
+      process.env.VITE_API_BASE_URL || 'http://localhost:3000'
+    ),
+    'import.meta.env.VITE_API_TIMEOUT': JSON.stringify(process.env.VITE_API_TIMEOUT || '30000')
   },
   // Performance optimizations
   esbuild: {

@@ -18,11 +18,13 @@ This CDK application deploys a Single Page Application (SPA) for Synapse using A
 ## Setup
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Bootstrap CDK (first time only):
+
    ```bash
    npm run bootstrap
    ```
@@ -36,16 +38,19 @@ This CDK application deploys a Single Page Application (SPA) for Synapse using A
 ## Deployment
 
 ### Development Environment
+
 ```bash
 npm run deploy:dev
 ```
 
 ### Staging Environment
+
 ```bash
 npm run deploy:staging
 ```
 
 ### Production Environment
+
 ```bash
 npm run deploy:prod
 ```

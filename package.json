@@ -14,7 +14,13 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "prepare": "husky install",
-    "quality:check": "npm run format:check && npm run lint && npm test"
+    "quality:check": "npm run format:check && npm run lint && npm test",
+    "deploy:dev": "npm run build && cd infrastructure && npm run deploy:dev",
+    "deploy:staging": "npm run build && cd infrastructure && npm run deploy:staging",
+    "deploy:prod": "npm run build && cd infrastructure && npm run deploy:prod",
+    "infra:install": "cd infrastructure && npm install",
+    "infra:build": "cd infrastructure && npm run build",
+    "infra:synth": "cd infrastructure && npm run synth"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
