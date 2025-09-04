@@ -2,6 +2,8 @@
 
 This guide explains how to deploy the Synapse SPA using AWS CDK.
 
+> 🚀 **Want fully automated deployment?** Check out [DEPLOYMENT-AUTOMATED.md](./DEPLOYMENT-AUTOMATED.md) for zero-touch deployment via GitHub Actions!
+
 ## Domain Configuration
 
 The SPA will be available at:

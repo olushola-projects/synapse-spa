@@ -76,6 +76,26 @@ jobs:
           cd infrastructure
           npm ci
 
+      - name: Verify prerequisites
+        run: |
+          echo "🔍 Verifying AWS setup for development deployment..."
+          aws sts get-caller-identity
+
+          echo "🔍 Checking for *.digitalpasshub.com certificate..."
+          CERT_ARN=$(aws acm list-certificates --region us-east-1 --query 'CertificateSummaryList[?DomainName==`*.digitalpasshub.com`].CertificateArn' --output text)
+          if [ -z "$CERT_ARN" ]; then
+            echo "⚠️ Warning: No wildcard certificate found for *.digitalpasshub.com"
+            echo "Deployment may continue but custom domain won't work without certificate"
+          else
+            echo "✅ Certificate found: $CERT_ARN"
+          fi
+
+      - name: Bootstrap CDK (if needed)
+        run: |
+          cd infrastructure
+          # Check if CDK is already bootstrapped, if not bootstrap it
+          npx cdk bootstrap --region ${{ vars.AWS_REGION || 'us-east-1' }} || echo "Bootstrap may have already been done"
+
       - name: Set up SSM parameters
         run: |
           aws ssm put-parameter --name "/synapse/dev/api-base-url" --value "${{ secrets.VITE_API_BASE_URL }}" --type "String" --overwrite
@@ -90,7 +110,10 @@ jobs:
       - name: Deploy CDK stack
         run: |
           cd infrastructure
+          echo "🚀 Deploying to development environment..."
           npm run deploy:dev
+          echo "✅ Development deployment complete!"
+          echo "🌍 Your app will be available at: https://synapse-dev.digitalpasshub.com"
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
           CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
@@ -129,6 +152,27 @@ jobs:
           cd infrastructure
           npm ci
 
+      - name: Verify prerequisites
+        run: |
+          echo "🔍 Verifying AWS setup for production deployment..."
+          aws sts get-caller-identity
+
+          echo "🔍 Checking for *.digitalpasshub.com certificate..."
+          CERT_ARN=$(aws acm list-certificates --region us-east-1 --query 'CertificateSummaryList[?DomainName==`*.digitalpasshub.com`].CertificateArn' --output text)
+          if [ -z "$CERT_ARN" ]; then
+            echo "❌ Error: No wildcard certificate found for *.digitalpasshub.com"
+            echo "Production deployment requires SSL certificate"
+            exit 1
+          else
+            echo "✅ Certificate found: $CERT_ARN"
+          fi
+
+      - name: Bootstrap CDK (if needed)
+        run: |
+          cd infrastructure
+          # Check if CDK is already bootstrapped, if not bootstrap it
+          npx cdk bootstrap --region ${{ vars.AWS_REGION || 'us-east-1' }} || echo "Bootstrap may have already been done"
+
       - name: Set up SSM parameters
         run: |
           aws ssm put-parameter --name "/synapse/prod/api-base-url" --value "${{ secrets.VITE_API_BASE_URL }}" --type "String" --overwrite
@@ -143,7 +187,11 @@ jobs:
       - name: Deploy CDK stack
         run: |
           cd infrastructure
+          echo "🚀 Deploying to production environment..."
           npm run deploy:prod
+          echo "✅ Production deployment complete!"
+          echo "🌍 Your app is now live at: https://synapse.digitalpasshub.com"
+          echo "🎉 Deployment successful!"
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
           CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
