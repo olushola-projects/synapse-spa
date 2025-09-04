@@ -39,7 +39,7 @@ export class SynapseSpaStack extends cdk.Stack {
     const certificate = new acm.Certificate(this, 'SynapseCertificate', {
       domainName: domainName,
       subjectAlternativeNames: [`*.${hostedZoneName}`],
-      validation: acm.CertificateValidation.fromDns(hostedZone),
+      validation: acm.CertificateValidation.fromDns(hostedZone)
     });
 
     // S3 Bucket for hosting the SPA
@@ -53,17 +53,17 @@ export class SynapseSpaStack extends cdk.Stack {
       encryption: s3.BucketEncryption.S3_MANAGED
     });
 
-    // Origin Access Control for CloudFront
-    const originAccessControl = new cloudfront.OriginAccessControl(this, 'OriginAccessControl', {
-      description: `OAC for Synapse SPA ${environment}`,
-      originAccessControlOriginType: cloudfront.OriginAccessControlOriginType.S3,
-      signing: cloudfront.Signing.SIGV4_ALWAYS
+    // Origin Access Identity for CloudFront (simpler approach)
+    const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OriginAccessIdentity', {
+      comment: `OAI for Synapse SPA ${environment}`
     });
 
     // CloudFront Distribution
     this.distribution = new cloudfront.Distribution(this, 'SynapseSpaDistribution', {
       defaultBehavior: {
-        origin: new origins.S3Origin(this.bucket),
+        origin: new origins.S3Origin(this.bucket, {
+          originAccessIdentity: originAccessIdentity
+        }),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
@@ -94,21 +94,8 @@ export class SynapseSpaStack extends cdk.Stack {
       comment: `Synapse SPA CloudFront Distribution - ${environment}`
     });
 
-    // Update bucket policy to allow CloudFront OAC access
-    this.bucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        sid: 'AllowCloudFrontServicePrincipal',
-        effect: iam.Effect.ALLOW,
-        principals: [new iam.ServicePrincipal('cloudfront.amazonaws.com')],
-        actions: ['s3:GetObject'],
-        resources: [this.bucket.arnForObjects('*')],
-        conditions: {
-          StringEquals: {
-            'AWS:SourceArn': `arn:aws:cloudfront::${this.account}:distribution/${this.distribution.distributionId}`
-          }
-        }
-      })
-    );
+    // Grant CloudFront OAI access to S3 bucket
+    this.bucket.grantRead(originAccessIdentity);
 
     // Route53 A record to point domain to CloudFront
     new route53.ARecord(this, 'SynapseAliasRecord', {
