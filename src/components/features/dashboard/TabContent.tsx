@@ -33,25 +33,5 @@ export const TabContent = ({ activeTab, chatRef }: TabContentProps) => {
     );
   }
 
-  if (activeTab === 'testing') {
-    return (
-      <div className='space-y-6'>
-        <div className='bg-background border border-border rounded-lg shadow-sm p-6'>
-          <h3 className='text-lg font-semibold text-foreground mb-4'>
-            User Acceptance Testing Suite
-          </h3>
-          <p className='text-muted-foreground mb-6'>
-            Execute comprehensive testing scenarios to validate SFDR Navigator functionality across
-            different regulatory use cases and compliance requirements.
-          </p>
-
-          <Suspense fallback={<EnhancedSkeleton className='h-32 w-full' />}>
-            <NexusTestExecutor />
-          </Suspense>
-        </div>
-      </div>
-    );
-  }
-
   return null;
 };

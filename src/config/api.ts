@@ -1,7 +1,7 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
-  TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT || '30000', 10),
+  BASE_URL: import.meta.env.VITE_API_BASE_URL,
+  TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT, 10),
   ENDPOINTS: {
     // Chat endpoints
     CHAT: {

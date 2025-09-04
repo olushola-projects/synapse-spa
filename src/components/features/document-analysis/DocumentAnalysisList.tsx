@@ -251,59 +251,8 @@ const DocumentAnalysisItem: React.FC<DocumentAnalysisItemProps> = ({ analysis })
             className={`text-sm text-gray-700 ${showFullSummary ? '' : 'max-h-16 overflow-hidden'} relative`}
           >
             {analysis.summary ? (
-              <div className='prose prose-sm max-w-none'>
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    p: ({ children }) => (
-                      <p className='text-sm text-gray-700 leading-relaxed mb-1 last:mb-0'>{children}</p>
-                    ),
-                    strong: ({ children }) => (
-                      <strong className='font-semibold text-gray-900'>{children}</strong>
-                    ),
-                    em: ({ children }) => <em className='italic text-gray-700'>{children}</em>,
-                    br: () => <br />,
-                    // Keep headings smaller for summary
-                    h1: ({ children }) => (
-                      <h4 className='text-sm font-semibold text-gray-900 mb-1 mt-1 first:mt-0'>{children}</h4>
-                    ),
-                    h2: ({ children }) => (
-                      <h4 className='text-sm font-semibold text-gray-900 mb-1 mt-1 first:mt-0'>{children}</h4>
-                    ),
-                    h3: ({ children }) => (
-                      <h4 className='text-sm font-semibold text-gray-900 mb-1 mt-1 first:mt-0'>{children}</h4>
-                    ),
-                    ul: ({ children }) => (
-                      <ul className='list-disc list-inside text-sm text-gray-700 mb-1 space-y-0 ml-2'>
-                        {children}
-                      </ul>
-                    ),
-                    ol: ({ children }) => (
-                      <ol className='list-decimal list-inside text-sm text-gray-700 mb-1 space-y-0 ml-2'>
-                        {children}
-                      </ol>
-                    ),
-                    li: ({ children }) => <li className='text-sm text-gray-700'>{children}</li>,
-                    div: ({ children, ...props }) => {
-                      // Handle HTML divs that might have styling
-                      const style = props.style as React.CSSProperties | undefined;
-                      const hasBackgroundColor = style?.backgroundColor || 
-                        (typeof props.style === 'string' && props.style.includes('background-color'));
-                      
-                      if (hasBackgroundColor) {
-                        return (
-                          <div className='bg-orange-50 border border-orange-200 rounded-lg p-2 mb-1'>
-                            <div className='font-medium text-orange-800 text-sm'>{children}</div>
-                          </div>
-                        );
-                      }
-                      return <div className='text-sm text-gray-700'>{children}</div>;
-                    }
-                  }}
-                >
-                  {cleanTextContent(analysis.summary)}
-                </ReactMarkdown>
+              <div className='text-sm text-gray-700 leading-relaxed whitespace-pre-line'>
+                {cleanTextContent(analysis.summary)}
               </div>
             ) : (
               <span className='text-gray-500 italic'>No summary available</span>

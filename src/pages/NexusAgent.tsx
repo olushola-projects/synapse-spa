@@ -369,7 +369,7 @@ const NexusAgent = () => {
       {/* Main Content */}
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
         <Tabs value={activeTab} onValueChange={handleTabChange}>
-          <TabsList className='grid w-full grid-cols-3 mb-6'>
+          <TabsList className='grid w-full grid-cols-2 mb-6'>
             <TabsTrigger
               value='chat'
               className='flex items-center space-x-2'
@@ -397,18 +397,6 @@ const NexusAgent = () => {
                 <FileText className='w-4 h-4' />
               )}
               <span>Document Analysis</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value='testing'
-              className='flex items-center space-x-2'
-              disabled={isLoadingTab}
-            >
-              {isLoadingTab && activeTab === 'testing' ? (
-                <Loader2 className='w-4 h-4 animate-spin' />
-              ) : (
-                <Target className='w-4 h-4' />
-              )}
-              <span>UAT Testing</span>
             </TabsTrigger>
           </TabsList>
 
