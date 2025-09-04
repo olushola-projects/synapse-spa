@@ -49,8 +49,8 @@ VITE_API_TIMEOUT=30000
 ### First Time Setup:
 
 1. Configure GitHub secrets and variables (above)
-2. Ensure `*.digitalpasshub.com` SSL certificate exists in AWS ACM (us-east-1)
-3. Push to `develop` or `main` branch
+2. Ensure `digitalpasshub.com` hosted zone exists in Route 53
+3. Push to `develop` or `main` branch (SSL certificate created automatically)
 
 ### Every Subsequent Deployment:
 
@@ -63,7 +63,7 @@ VITE_API_TIMEOUT=30000
 Before deployment, GitHub Actions checks:
 
 - ✅ AWS credentials are valid
-- ✅ SSL certificate for `*.digitalpasshub.com` exists
+- ✅ SSL certificate will be created automatically
 - ✅ CDK is properly bootstrapped
 - ✅ All dependencies are installed
 - ✅ Tests pass

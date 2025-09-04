@@ -97,15 +97,7 @@ jobs:
         run: |
           echo "🔍 Verifying AWS setup for development deployment..."
           aws sts get-caller-identity
-
-          echo "🔍 Checking for *.digitalpasshub.com certificate..."
-          CERT_ARN=$(aws acm list-certificates --region us-east-1 --query 'CertificateSummaryList[?DomainName==`*.digitalpasshub.com`].CertificateArn' --output text)
-          if [ -z "$CERT_ARN" ]; then
-            echo "⚠️ Warning: No wildcard certificate found for *.digitalpasshub.com"
-            echo "Deployment may continue but custom domain won't work without certificate"
-          else
-            echo "✅ Certificate found: $CERT_ARN"
-          fi
+          echo "✅ AWS credentials verified"
 
       - name: Bootstrap CDK (if needed)
         run: |
@@ -173,16 +165,8 @@ jobs:
         run: |
           echo "🔍 Verifying AWS setup for production deployment..."
           aws sts get-caller-identity
-
-          echo "🔍 Checking for *.digitalpasshub.com certificate..."
-          CERT_ARN=$(aws acm list-certificates --region us-east-1 --query 'CertificateSummaryList[?DomainName==`*.digitalpasshub.com`].CertificateArn' --output text)
-          if [ -z "$CERT_ARN" ]; then
-            echo "❌ Error: No wildcard certificate found for *.digitalpasshub.com"
-            echo "Production deployment requires SSL certificate"
-            exit 1
-          else
-            echo "✅ Certificate found: $CERT_ARN"
-          fi
+          echo "✅ AWS credentials verified"
+          echo "📜 SSL certificate will be created automatically by CDK"
 
       - name: Bootstrap CDK (if needed)
         run: |

@@ -35,10 +35,11 @@ export class SynapseSpaStack extends cdk.Stack {
       domainName: hostedZoneName
     });
 
-    // Lookup existing certificate automatically
-    const certificate = acm.Certificate.fromLookup(this, 'Certificate', {
-      domainName: '*.digitalpasshub.com',
-      region: 'us-east-1' // ACM certificates for CloudFront must be in us-east-1
+    // Create certificate for the specific domain
+    const certificate = new acm.Certificate(this, 'SynapseCertificate', {
+      domainName: domainName,
+      subjectAlternativeNames: [`*.${hostedZoneName}`],
+      validation: acm.CertificateValidation.fromDns(hostedZone),
     });
 
     // S3 Bucket for hosting the SPA
