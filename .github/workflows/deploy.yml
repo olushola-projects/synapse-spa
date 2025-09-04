@@ -39,8 +39,8 @@ jobs:
       - name: Build application
         run: npm run build
         env:
-          VITE_API_BASE_URL: ${{ github.ref == 'refs/heads/main' && secrets.VITE_API_BASE_URL_PROD || secrets.VITE_API_BASE_URL_DEV }}
-          VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_API_TIMEOUT: ${{ vars.VITE_API_TIMEOUT || '30000' }}
 
   deploy-dev:
     name: Deploy to Development
@@ -78,14 +78,14 @@ jobs:
 
       - name: Set up SSM parameters
         run: |
-          aws ssm put-parameter --name "/synapse/dev/api-base-url" --value "${{ secrets.VITE_API_BASE_URL_DEV }}" --type "String" --overwrite
-          aws ssm put-parameter --name "/synapse/dev/api-timeout" --value "${{ secrets.VITE_API_TIMEOUT }}" --type "String" --overwrite
+          aws ssm put-parameter --name "/synapse/dev/api-base-url" --value "${{ secrets.VITE_API_BASE_URL }}" --type "String" --overwrite
+          aws ssm put-parameter --name "/synapse/dev/api-timeout" --value "${{ vars.VITE_API_TIMEOUT || '30000' }}" --type "String" --overwrite
 
       - name: Build application
         run: npm run build
         env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL_DEV }}
-          VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_API_TIMEOUT: ${{ vars.VITE_API_TIMEOUT || '30000' }}
 
       - name: Deploy CDK stack
         run: |
@@ -114,8 +114,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
 
       - name: Install CDK
@@ -131,19 +131,19 @@ jobs:
 
       - name: Set up SSM parameters
         run: |
-          aws ssm put-parameter --name "/synapse/prod/api-base-url" --value "${{ secrets.VITE_API_BASE_URL_PROD }}" --type "String" --overwrite
-          aws ssm put-parameter --name "/synapse/prod/api-timeout" --value "${{ secrets.VITE_API_TIMEOUT }}" --type "String" --overwrite
+          aws ssm put-parameter --name "/synapse/prod/api-base-url" --value "${{ secrets.VITE_API_BASE_URL }}" --type "String" --overwrite
+          aws ssm put-parameter --name "/synapse/prod/api-timeout" --value "${{ vars.VITE_API_TIMEOUT || '30000' }}" --type "String" --overwrite
 
       - name: Build application
         run: npm run build
         env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL_PROD }}
-          VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_API_TIMEOUT: ${{ vars.VITE_API_TIMEOUT || '30000' }}
 
       - name: Deploy CDK stack
         run: |
           cd infrastructure
           npm run deploy:prod
         env:
-          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID_PROD }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
           CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}

@@ -5,6 +5,9 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
 
 export interface SynapseSpaStackProps extends cdk.StackProps {
@@ -19,6 +22,27 @@ export class SynapseSpaStack extends cdk.Stack {
     super(scope, id, props);
 
     const { environment } = props;
+
+    // Domain configuration
+    const domainName = environment === 'prod' ? 'synapse.digitalpasshub.com' : `synapse-${environment}.digitalpasshub.com`;
+    const hostedZoneName = 'digitalpasshub.com';
+
+    // Lookup existing hosted zone
+    const hostedZone = route53.HostedZone.fromLookup(this, 'HostedZone', {
+      domainName: hostedZoneName
+    });
+
+    // Lookup existing certificate (assuming wildcard cert exists)
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      'Certificate',
+      // This should be the ARN of the existing certificate for *.digitalpasshub.com
+      // You can get this from ACM console or by looking up the certificate
+      ssm.StringParameter.valueForStringParameter(
+        this,
+        '/synapse/certificate-arn'
+      )
+    );
 
     // S3 Bucket for hosting the SPA
     this.bucket = new s3.Bucket(this, 'SynapseSpaS3Bucket', {
@@ -50,6 +74,8 @@ export class SynapseSpaStack extends cdk.Stack {
         originRequestPolicy: cloudfront.OriginRequestPolicy.CORS_S3_ORIGIN,
         responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS
       },
+      domainNames: [domainName],
+      certificate: certificate,
       defaultRootObject: 'index.html',
       errorResponses: [
         {
@@ -85,6 +111,16 @@ export class SynapseSpaStack extends cdk.Stack {
         }
       })
     );
+
+    // Route53 A record to point domain to CloudFront
+    new route53.ARecord(this, 'SynapseAliasRecord', {
+      zone: hostedZone,
+      recordName: domainName,
+      target: route53.RecordTarget.fromAlias(
+        new targets.CloudFrontTarget(this.distribution)
+      ),
+      comment: `A record for Synapse SPA ${environment}`
+    });
 
     // Get environment-specific configuration from SSM parameters
     const apiBaseUrl = ssm.StringParameter.valueForStringParameter(
@@ -165,9 +201,15 @@ export class SynapseSpaStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, 'WebsiteURL', {
-      value: `https://${this.distribution.distributionDomainName}`,
+      value: `https://${domainName}`,
       description: 'Website URL',
       exportName: `${this.stackName}-WebsiteURL`
+    });
+
+    new cdk.CfnOutput(this, 'CloudFrontURL', {
+      value: `https://${this.distribution.distributionDomainName}`,
+      description: 'CloudFront Distribution URL',
+      exportName: `${this.stackName}-CloudFrontURL`
     });
   }
 }

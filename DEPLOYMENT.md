@@ -2,6 +2,17 @@
 
 This guide explains how to deploy the Synapse SPA using AWS CDK.
 
+## Domain Configuration
+
+The SPA will be available at:
+- **Production**: `https://synapse.digitalpasshub.com`
+- **Development**: `https://synapse-dev.digitalpasshub.com`
+
+This setup assumes:
+- The `digitalpasshub.com` hosted zone exists in Route 53
+- A wildcard SSL certificate for `*.digitalpasshub.com` exists in ACM
+- The backend API is available at `https://aichatbe.digitalpasshub.com`
+
 ## Prerequisites
 
 1. **AWS Account**: You need an AWS account with appropriate permissions
@@ -43,13 +54,15 @@ For each environment (dev, staging, prod), create SSM parameters:
 
 ```bash
 # Development
-aws ssm put-parameter --name "/synapse/dev/api-base-url" --value "https://dev-api.example.com" --type "String"
+aws ssm put-parameter --name "/synapse/dev/api-base-url" --value "https://aichatbe.digitalpasshub.com" --type "String"
 aws ssm put-parameter --name "/synapse/dev/api-timeout" --value "30000" --type "String"
 
-
 # Production
-aws ssm put-parameter --name "/synapse/prod/api-base-url" --value "https://api.example.com" --type "String"
+aws ssm put-parameter --name "/synapse/prod/api-base-url" --value "https://aichatbe.digitalpasshub.com" --type "String"
 aws ssm put-parameter --name "/synapse/prod/api-timeout" --value "30000" --type "String"
+
+# Certificate ARN (required for custom domain)
+aws ssm put-parameter --name "/synapse/certificate-arn" --value "arn:aws:acm:us-east-1:ACCOUNT:certificate/CERTIFICATE-ID" --type "String"
 ```
 
 ### 4. Bootstrap CDK
@@ -92,15 +105,8 @@ AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_ACCOUNT_ID
 
-# Production AWS Credentials (separate account recommended)
-AWS_ACCESS_KEY_ID_PROD
-AWS_SECRET_ACCESS_KEY_PROD
-AWS_ACCOUNT_ID_PROD
-
 # Environment Variables
-VITE_API_BASE_URL_DEV
-VITE_API_BASE_URL_PROD
-VITE_API_TIMEOUT
+VITE_API_BASE_URL
 ```
 
 #### GitHub Variables
@@ -109,6 +115,7 @@ Set these variables in your GitHub repository:
 
 ```
 AWS_REGION=us-east-1
+VITE_API_TIMEOUT=30000
 ```
 
 ## Infrastructure Components
