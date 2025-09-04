@@ -24,7 +24,10 @@ export class SynapseSpaStack extends cdk.Stack {
     const { environment } = props;
 
     // Domain configuration
-    const domainName = environment === 'prod' ? 'synapse.digitalpasshub.com' : `synapse-${environment}.digitalpasshub.com`;
+    const domainName =
+      environment === 'prod'
+        ? 'synapse.digitalpasshub.com'
+        : `synapse-${environment}.digitalpasshub.com`;
     const hostedZoneName = 'digitalpasshub.com';
 
     // Lookup existing hosted zone
@@ -32,17 +35,11 @@ export class SynapseSpaStack extends cdk.Stack {
       domainName: hostedZoneName
     });
 
-    // Lookup existing certificate (assuming wildcard cert exists)
-    const certificate = acm.Certificate.fromCertificateArn(
-      this,
-      'Certificate',
-      // This should be the ARN of the existing certificate for *.digitalpasshub.com
-      // You can get this from ACM console or by looking up the certificate
-      ssm.StringParameter.valueForStringParameter(
-        this,
-        '/synapse/certificate-arn'
-      )
-    );
+    // Lookup existing certificate automatically
+    const certificate = acm.Certificate.fromLookup(this, 'Certificate', {
+      domainName: '*.digitalpasshub.com',
+      region: 'us-east-1' // ACM certificates for CloudFront must be in us-east-1
+    });
 
     // S3 Bucket for hosting the SPA
     this.bucket = new s3.Bucket(this, 'SynapseSpaS3Bucket', {
@@ -116,9 +113,7 @@ export class SynapseSpaStack extends cdk.Stack {
     new route53.ARecord(this, 'SynapseAliasRecord', {
       zone: hostedZone,
       recordName: domainName,
-      target: route53.RecordTarget.fromAlias(
-        new targets.CloudFrontTarget(this.distribution)
-      ),
+      target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(this.distribution)),
       comment: `A record for Synapse SPA ${environment}`
     });
 

@@ -20,7 +20,9 @@
     "deploy:prod": "npm run build && cd infrastructure && npm run deploy:prod",
     "infra:install": "cd infrastructure && npm install",
     "infra:build": "cd infrastructure && npm run build",
-    "infra:synth": "cd infrastructure && npm run synth"
+    "infra:synth": "cd infrastructure && npm run synth",
+    "setup:ssm": "./scripts/setup-ssm-parameters.sh",
+    "find:cert": "./scripts/find-certificate.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

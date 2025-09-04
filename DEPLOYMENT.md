@@ -5,10 +5,12 @@ This guide explains how to deploy the Synapse SPA using AWS CDK.
 ## Domain Configuration
 
 The SPA will be available at:
+
 - **Production**: `https://synapse.digitalpasshub.com`
 - **Development**: `https://synapse-dev.digitalpasshub.com`
 
 This setup assumes:
+
 - The `digitalpasshub.com` hosted zone exists in Route 53
 - A wildcard SSL certificate for `*.digitalpasshub.com` exists in ACM
 - The backend API is available at `https://aichatbe.digitalpasshub.com`
@@ -50,7 +52,14 @@ VITE_ENVIRONMENT=development
 
 ### 3. Set up AWS SSM Parameters
 
-For each environment (dev, staging, prod), create SSM parameters:
+Run the automated setup script:
+
+```bash
+# Set up all required SSM parameters
+npm run setup:ssm
+```
+
+Or manually create SSM parameters:
 
 ```bash
 # Development
@@ -60,9 +69,6 @@ aws ssm put-parameter --name "/synapse/dev/api-timeout" --value "30000" --type "
 # Production
 aws ssm put-parameter --name "/synapse/prod/api-base-url" --value "https://aichatbe.digitalpasshub.com" --type "String"
 aws ssm put-parameter --name "/synapse/prod/api-timeout" --value "30000" --type "String"
-
-# Certificate ARN (required for custom domain)
-aws ssm put-parameter --name "/synapse/certificate-arn" --value "arn:aws:acm:us-east-1:ACCOUNT:certificate/CERTIFICATE-ID" --type "String"
 ```
 
 ### 4. Bootstrap CDK
